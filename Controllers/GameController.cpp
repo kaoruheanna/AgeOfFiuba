@@ -44,5 +44,6 @@ void GameController::play() {
 		}
 		renderer->draw();
 	}
+	renderer->close();
 	delete renderer;
 }
