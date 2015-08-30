@@ -15,7 +15,9 @@ public:
 	void play();
 
 private:
+	bool shouldQuit;
 
+	void pollEvents();
 };
 
 #endif /* GAMECONTROLLER_H_ */

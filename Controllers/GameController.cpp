@@ -8,10 +8,11 @@
 #include "GameController.h"
 #include <stdio.h>
 #include <string>
+#include <iostream>
 #include "../Views/Renderer.h"
 
 GameController::GameController() {
-	// TODO Auto-generated constructor stub
+	this->shouldQuit = false;
 }
 
 GameController::~GameController() {
@@ -26,24 +27,29 @@ void GameController::play() {
 		return;
 	}
 
-	//Main loop flag
-	bool quit = false;
-
-	//Event handler
-	SDL_Event e;
-
 	//While application is running
-	while( !quit ) {
-		//Handle events on queue
-		while( SDL_PollEvent( &e ) != 0 ) {
-			//User requests quit
-			if( e.type == SDL_QUIT ) {
-				printf("tengo que cerrar");
-				quit = true;
-			}
-		}
+	while( !this->shouldQuit ) {
+		this->pollEvents();
 		renderer->draw();
 	}
 	renderer->close();
 	delete renderer;
+}
+
+void GameController::pollEvents(){
+	SDL_Event e;
+	while( SDL_PollEvent( &e ) != 0 ) {
+		if( e.type == SDL_QUIT ) {
+			printf("tengo que cerrarlo");
+			this->shouldQuit = true;
+		}
+
+		if (e.type == SDL_MOUSEBUTTONDOWN){
+			cout << "hice click con el mouse \n";
+			//Get mouse position
+			int x, y;
+			SDL_GetMouseState( &x, &y );
+			cout << "mouse x: " << x << " y; " << y << endl;
+		}
+	}
 }
