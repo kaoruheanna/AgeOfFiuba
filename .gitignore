@@ -1,28 +1,39 @@
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+*.pydevproject
+.metadata
+.gradle
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
 
-# Precompiled Headers
-*.gch
-*.pch
+# Eclipse Core
+.project
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
+# External tool builders
+.externalToolBuilders/
 
-# Fortran module files
-*.mod
+# Locally stored "Eclipse launch configurations"
+*.launch
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
+# CDT-specific
+.cproject
 
-# Executables
-*.exe
-*.out
-*.app
+# JDT-specific (Eclipse Java Development Tools)
+.classpath
+
+# Java annotation processor (APT)
+.factorypath
+
+# PDT-specific
+.buildpath
+
+# sbteclipse plugin
+.target
+
+# TeXlipse plugin
+.texlipse
