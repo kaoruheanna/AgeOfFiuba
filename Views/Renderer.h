@@ -12,6 +12,7 @@
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <string>
+#include "Texture.h"
 using namespace std;
 
 class Renderer {
@@ -23,14 +24,13 @@ public:
 	bool canDraw();
 
 private:
-	SDL_Surface* gScreenSurface;
-	SDL_Window* gWindow;
-	SDL_Surface* gPNGSurface;
 	bool successfullInit;
+	SDL_Window* window;
+	SDL_Renderer* sdlRenderer;
+	Texture* marioTexture;
 
 	bool initSDL();
 	bool loadMedia();
-	SDL_Surface* loadSurface(string path);
 };
 
 #endif /* RENDERER_H_ */

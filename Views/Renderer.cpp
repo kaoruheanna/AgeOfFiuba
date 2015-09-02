@@ -12,9 +12,10 @@ const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 
 Renderer::Renderer() {
-	this->gWindow = NULL;
-	this->gScreenSurface = NULL;
-	this->gPNGSurface = NULL;
+	this->window = NULL;
+	this->sdlRenderer = NULL;
+	this->marioTexture = NULL;
+
 	bool didInitSDL = this->initSDL();
 	bool didLoadMedia = this->loadMedia();
 	this->successfullInit = (didInitSDL && didLoadMedia);
@@ -31,11 +32,20 @@ bool Renderer::initSDL() {
 	}
 
 	//Create window
-	this->gWindow = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
-	if (this->gWindow == NULL) {
+	this->window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+	if (this->window == NULL) {
 		printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
 		return false;
 	}
+
+	this->sdlRenderer = SDL_CreateRenderer( this->window, -1, SDL_RENDERER_ACCELERATED );
+	if( this->sdlRenderer == NULL ) {
+		printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
+		return false;
+	}
+
+	//Initialize renderer color
+	SDL_SetRenderDrawColor( this->sdlRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
 
 	//Initialize PNG loading
 	int imgFlags = IMG_INIT_PNG;
@@ -45,51 +55,30 @@ bool Renderer::initSDL() {
 	}
 
 	//Get window surface
-	this->gScreenSurface = SDL_GetWindowSurface( gWindow );
+//	this->gScreenSurface = SDL_GetWindowSurface( window );
 	return true;
 }
 
 bool Renderer::loadMedia() {
-	//Load PNG surface
-	this->gPNGSurface = loadSurface( "img/Mario-Mapache.png" );
-	if (this->gPNGSurface == NULL) {
-		printf( "Failed to load PNG image!\n" );
-		return false;
-	}
-	return true;
-}
-
-SDL_Surface* Renderer::loadSurface(string path) {
-	//The final optimized image
-	SDL_Surface* optimizedSurface = NULL;
-
-	//Load image at specified path
-	SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
-	if( loadedSurface == NULL ) {
-		printf("Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError());
-		return NULL;
+	bool success = true;
+	this->marioTexture = new Texture();
+	if (!this->marioTexture->loadFromFile("img/Mario-Mapache.png",this->sdlRenderer)){
+		printf( "Failed to load Foo' texture image!\n" );
+		success = false;
 	}
 
-	//Convert surface to screen format
-	optimizedSurface = SDL_ConvertSurface( loadedSurface, gScreenSurface->format, 0 );
-	if (optimizedSurface == NULL){
-		printf( "Unable to optimize image %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
-	}
-
-	//Get rid of old loaded surface
-	SDL_FreeSurface( loadedSurface );
-
-	return optimizedSurface;
+	return success;
 }
 
 void Renderer::close() {
-	//Free loaded image
-	SDL_FreeSurface(this->gPNGSurface);
-	this->gPNGSurface = NULL;
+	//Free loaded images
+	this->marioTexture->free();
 
 	//Destroy window
-	SDL_DestroyWindow(this->gWindow);
-	this->gWindow = NULL;
+	SDL_DestroyRenderer(this->sdlRenderer);
+	SDL_DestroyWindow(this->window);
+	this->window = NULL;
+	this->sdlRenderer = NULL;
 
 	//Quit SDL subsystems
 	IMG_Quit();
@@ -97,11 +86,14 @@ void Renderer::close() {
 }
 
 void Renderer::draw() {
-	//Apply the PNG image
-	SDL_BlitSurface( this->gPNGSurface, NULL, this->gScreenSurface, NULL );
+	//Clear screen
+	SDL_SetRenderDrawColor(this->sdlRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+	SDL_RenderClear(this->sdlRenderer);
 
-	//Update the surface
-	SDL_UpdateWindowSurface( this->gWindow );
+	this->marioTexture->render( 100, 300, this->sdlRenderer);
+
+	//Update screen
+	SDL_RenderPresent(this->sdlRenderer);
 }
 
 bool Renderer::canDraw() {
