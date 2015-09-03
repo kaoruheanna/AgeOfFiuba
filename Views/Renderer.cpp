@@ -90,7 +90,7 @@ void Renderer::draw() {
 	SDL_SetRenderDrawColor(this->sdlRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
 	SDL_RenderClear(this->sdlRenderer);
 
-	this->marioTexture->render( 100, 300, this->sdlRenderer);
+	this->marioTexture->render( 100, 400, this->sdlRenderer);
 
 	//Update screen
 	SDL_RenderPresent(this->sdlRenderer);
