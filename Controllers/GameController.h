@@ -8,6 +8,12 @@
 #ifndef GAMECONTROLLER_H_
 #define GAMECONTROLLER_H_
 
+#include "../Views/View.h"
+#include "../Views/Renderer.h"
+#include "../Models/MobileModel.h"
+#include <list>
+using namespace std;
+
 class GameController {
 public:
 	GameController();
@@ -16,8 +22,12 @@ public:
 
 private:
 	bool shouldQuit;
+	list<View*> views;
+	Renderer *renderer;
+	MobileModel *model;
 
 	void pollEvents();
+	void close();
 };
 
 #endif /* GAMECONTROLLER_H_ */

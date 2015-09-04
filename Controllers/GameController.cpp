@@ -9,11 +9,12 @@
 #include <stdio.h>
 #include <string>
 #include <iostream>
-#include "../Views/Renderer.h"
-#include "../Views/View.h"
+#include "../Views/MobileView.h"
 
 GameController::GameController() {
 	this->shouldQuit = false;
+	this->renderer = NULL;
+	this->model = NULL;
 }
 
 GameController::~GameController() {
@@ -21,41 +22,66 @@ GameController::~GameController() {
 }
 
 void GameController::play() {
-	Renderer *renderer = new Renderer();
-	if (!renderer->canDraw()){
+	this->renderer = new Renderer();
+	if (!this->renderer->canDraw()){
 		printf( "Failed to initialize!\n" );
-		delete renderer;
+		this->close();
 		return;
 	}
 
-	View *marioView = new View();
-	SDL_Point origin = {200,100};
-	marioView->origin = origin;
-	renderer->addView(marioView);
+	this->model = new MobileModel();
+	this->model->setX(200);
+	this->model->setY(100);
+
+	MobileView *marioView = new MobileView();
+	marioView->setModel(model);
+	this->views.push_back(marioView);
+	this->renderer->addView(marioView);
 
 	//While application is running
 	while( !this->shouldQuit ) {
 		this->pollEvents();
-		renderer->draw();
+		this->renderer->draw();
 	}
-	renderer->close();
-	delete renderer;
+
+	this->close();
 }
 
 void GameController::pollEvents(){
 	SDL_Event e;
 	while( SDL_PollEvent( &e ) != 0 ) {
 		if( e.type == SDL_QUIT ) {
-			printf("tengo que cerrarlo");
+			printf("tengo que cerrarlo \n");
 			this->shouldQuit = true;
 		}
 
 		if (e.type == SDL_MOUSEBUTTONDOWN){
-			cout << "hice click con el mouse \n";
 			//Get mouse position
 			int x, y;
 			SDL_GetMouseState( &x, &y );
 			cout << "mouse x: " << x << " y; " << y << endl;
+			this->model->setX(x);
+			this->model->setY(y);
 		}
 	}
+
+}
+
+void GameController::close() {
+	if (this->renderer){
+		this->renderer->close();
+		delete this->renderer;
+	}
+
+	if (this->model){
+		delete this->model;
+	}
+
+	list<View*>::iterator i;
+	for(i=this->views.begin(); i != this->views.end(); ++i) {
+		printf("limpio una vista");
+		View* view = *i;
+		delete view;
+	}
+	this->views.clear();
 }

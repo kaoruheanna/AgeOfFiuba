@@ -8,8 +8,10 @@
 #include "View.h"
 
 View::View() {
+	printf("entro al consturctor de view\n");
 	this->texture = NULL;
-	this->origin = {0,0};
+	SDL_Point origin = {0,0};
+	this->origin = origin;
 }
 
 View::~View() {
@@ -17,9 +19,20 @@ View::~View() {
 }
 
 void View::render(SDL_Renderer* sdlRenderer ) {
-	this->texture->render(this->origin,sdlRenderer);
+	SDL_Point point = this->getOrigin();
+	this->texture->render(point,sdlRenderer);
 }
 
 void View::setTexture(Texture *texture){
 	this->texture = texture;
+}
+
+SDL_Point View::getOrigin(){
+//	printf("uso el getOrigin de View\n");
+	return this->origin;
+}
+
+void View::setOrigin(int x, int y) {
+	SDL_Point origin = {x,y};
+	this->origin = origin;
 }
