@@ -15,20 +15,20 @@
 
 class Texture {
 public:
-
-	Texture();
+	Texture(std::string path,SDL_Renderer* sdlRenderer);
 	~Texture();
-	bool loadFromFile( std::string path,SDL_Renderer* sdlRenderer );
+
 	void free();
-	void render( int x, int y,SDL_Renderer* sdlRenderer ); //ver si esta sigue asi o lo renderiza otro
-	int getWidth();
-	int getHeight();
+	void render(SDL_Point origin,SDL_Renderer* sdlRenderer );
 
 private:
 	SDL_Texture* sdlTexture;
 	int width;
 	int height;
 
+	bool loadFromFile(std::string path,SDL_Renderer* sdlRenderer);
+	int getWidth();
+	int getHeight();
 };
 
 #endif /* TEXTURE_H_ */

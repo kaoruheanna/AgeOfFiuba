@@ -10,6 +10,7 @@
 #include <string>
 #include <iostream>
 #include "../Views/Renderer.h"
+#include "../Views/View.h"
 
 GameController::GameController() {
 	this->shouldQuit = false;
@@ -26,6 +27,11 @@ void GameController::play() {
 		delete renderer;
 		return;
 	}
+
+	View *marioView = new View();
+	SDL_Point origin = {200,100};
+	marioView->origin = origin;
+	renderer->addView(marioView);
 
 	//While application is running
 	while( !this->shouldQuit ) {

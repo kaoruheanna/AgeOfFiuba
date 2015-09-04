@@ -7,21 +7,24 @@
 
 #include "Texture.h"
 
-Texture::Texture() {
-	this->sdlTexture = NULL;
+Texture::Texture(std::string path,SDL_Renderer* sdlRenderer) {
 	this->width = 0;
 	this->height = 0;
+	this->sdlTexture = NULL;
+
+	if (!this->loadFromFile(path,sdlRenderer)){
+		//falta la parte de cargar una imagen default
+	}
 }
 
 Texture::~Texture() {
 	this->free();
 }
 
-
 bool Texture::loadFromFile( std::string path,SDL_Renderer* sdlRenderer )
 {
 	//Get rid of preexisting texture
-	free();
+	this->free();
 
 	//The final texture
 	SDL_Texture* newTexture = NULL;
@@ -32,9 +35,6 @@ bool Texture::loadFromFile( std::string path,SDL_Renderer* sdlRenderer )
 		printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
 		return false;
 	}
-
-	//Color key image
-//	SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, 0, 0xFF, 0xFF ) );
 
 	//Create texture from surface pixels
     newTexture = SDL_CreateTextureFromSurface( sdlRenderer, loadedSurface );
@@ -64,8 +64,8 @@ void Texture::free() {
 	this->height = 0;
 }
 
-void Texture::render( int x, int y,SDL_Renderer* sdlRenderer ) {
-	SDL_Rect renderQuad = { x, y, this->width, this->height };
+void Texture::render(SDL_Point origin,SDL_Renderer* sdlRenderer ) {
+	SDL_Rect renderQuad = { origin.x, origin.y, this->width, this->height };
 	SDL_RenderCopy( sdlRenderer, this->sdlTexture, NULL, &renderQuad );
 }
 

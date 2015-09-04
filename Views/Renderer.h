@@ -13,6 +13,8 @@
 #include <stdio.h>
 #include <string>
 #include "Texture.h"
+#include "View.h"
+#include <list>
 using namespace std;
 
 class Renderer {
@@ -22,12 +24,14 @@ public:
 	void close();
 	void draw();
 	bool canDraw();
+	void addView(View* view);
 
 private:
 	bool successfullInit;
 	SDL_Window* window;
 	SDL_Renderer* sdlRenderer;
 	Texture* marioTexture;
+	list<View*> views;
 
 	bool initSDL();
 	bool loadMedia();

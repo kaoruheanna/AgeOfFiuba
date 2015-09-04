@@ -54,18 +54,12 @@ bool Renderer::initSDL() {
 		return false;
 	}
 
-	//Get window surface
-//	this->gScreenSurface = SDL_GetWindowSurface( window );
 	return true;
 }
 
 bool Renderer::loadMedia() {
 	bool success = true;
-	this->marioTexture = new Texture();
-	if (!this->marioTexture->loadFromFile("img/Mario-Mapache.png",this->sdlRenderer)){
-		printf( "Failed to load Foo' texture image!\n" );
-		success = false;
-	}
+	this->marioTexture = new Texture("img/Mario-Mapache.png",this->sdlRenderer);
 
 	return success;
 }
@@ -90,7 +84,11 @@ void Renderer::draw() {
 	SDL_SetRenderDrawColor(this->sdlRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
 	SDL_RenderClear(this->sdlRenderer);
 
-	this->marioTexture->render( 100, 400, this->sdlRenderer);
+	list<View*>::iterator i;
+	for(i=this->views.begin(); i != this->views.end(); ++i) {
+		View* view = *i;
+		view->render(this->sdlRenderer);
+	}
 
 	//Update screen
 	SDL_RenderPresent(this->sdlRenderer);
@@ -98,4 +96,9 @@ void Renderer::draw() {
 
 bool Renderer::canDraw() {
 	return this->successfullInit;
+}
+
+void Renderer::addView(View* view) {
+	view->setTexture(this->marioTexture);
+	this->views.push_back(view);
 }
