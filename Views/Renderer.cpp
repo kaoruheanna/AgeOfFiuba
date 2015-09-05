@@ -14,6 +14,7 @@ const int SCREEN_HEIGHT = 480;
 Renderer::Renderer() {
 	this->window = NULL;
 	this->sdlRenderer = NULL;
+	this->missingImageDrawable = NULL;
 
 	bool didInitSDL = this->initSDL();
 	bool didLoadMedia = this->loadMedia();
@@ -58,12 +59,16 @@ bool Renderer::initSDL() {
 
 bool Renderer::loadMedia() {
 	bool success = true;
-	this->drawablesByInstanceName.insert(
-		std::pair<std::string,Drawable*>(
-			"mario",
-			new Drawable(0,0,1,1,this->loadTextureFromFile("img/Mario-Mapache.png"))
-		)
-	);
+	this->missingImageDrawable = new Drawable(64,0,1,1, this->loadTextureFromFile("img/missingImage.png"));
+	SDL_Texture* loaded = this->loadTextureFromFile("img/Mario-Mapache.png");
+	if(loaded != NULL){
+		this->drawablesByInstanceName.insert(
+			std::pair<std::string,Drawable*>(
+				"mario",
+				new Drawable(0,0,1,1,loaded)
+			)
+		);
+	}
 	return success;
 }
 
@@ -98,6 +103,10 @@ void Renderer::close() {
 	  SDL_DestroyTexture( it->second->getTexture() );
 	  delete it->second;
 	}
+
+	SDL_DestroyTexture( this->missingImageDrawable->getTexture() );
+	delete this->missingImageDrawable;
+
 
 	//Destroy window
 	SDL_DestroyRenderer(this->sdlRenderer);
@@ -140,6 +149,9 @@ void Renderer::addView(View* view) {
 	Drawable* drawable = NULL;
 	if(found != this->drawablesByInstanceName.end()){
 		drawable = found->second;
+	} else {
+		printf("Cannot find image for view %s will use the default\n", view->getType().c_str());
+		drawable = this->missingImageDrawable;
 	}
 	view->setDrawable(drawable);
 	this->views.push_back(view);

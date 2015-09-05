@@ -37,6 +37,7 @@ private:
 	SDL_Renderer* sdlRenderer;
 	list<View*> views;
 	std::map<std::string, Drawable*> drawablesByInstanceName;
+	Drawable* missingImageDrawable;
 
 	bool initSDL();
 	bool loadMedia();
