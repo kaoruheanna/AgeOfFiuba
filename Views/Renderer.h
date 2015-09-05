@@ -15,6 +15,7 @@
 #include "View.h"
 #include "Drawable.h"
 #include <list>
+#include <map>
 using namespace std;
 
 class View;
@@ -34,13 +35,12 @@ private:
 	bool successfullInit;
 	SDL_Window* window;
 	SDL_Renderer* sdlRenderer;
-	SDL_Texture* marioTexture;
-	Drawable* marioDrawable;
 	list<View*> views;
+	std::map<std::string, Drawable*> drawablesByInstanceName;
 
 	bool initSDL();
 	bool loadMedia();
-	bool loadTextureFromFile(std::string path, std::string name);
+	SDL_Texture* loadTextureFromFile(std::string path);
 };
 
 #endif /* RENDERER_H_ */

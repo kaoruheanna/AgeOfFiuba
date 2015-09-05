@@ -14,8 +14,6 @@ const int SCREEN_HEIGHT = 480;
 Renderer::Renderer() {
 	this->window = NULL;
 	this->sdlRenderer = NULL;
-	this->marioTexture = NULL;
-	this->marioDrawable = NULL;
 
 	bool didInitSDL = this->initSDL();
 	bool didLoadMedia = this->loadMedia();
@@ -60,14 +58,17 @@ bool Renderer::initSDL() {
 
 bool Renderer::loadMedia() {
 	bool success = true;
-	this->loadTextureFromFile("img/Mario-Mapache.png", "mario");
-	this->marioDrawable = new Drawable(0,0,1,1,this->marioTexture);
+	this->drawablesByInstanceName.insert(
+		std::pair<std::string,Drawable*>(
+			"mario",
+			new Drawable(0,0,1,1,this->loadTextureFromFile("img/Mario-Mapache.png"))
+		)
+	);
 	return success;
 }
 
-bool Renderer::loadTextureFromFile( std::string path, std::string name )
+SDL_Texture* Renderer::loadTextureFromFile( std::string path )
 {
-	// TODO add texture to a map
 	//The final texture
 	SDL_Texture* newTexture = NULL;
 
@@ -75,28 +76,28 @@ bool Renderer::loadTextureFromFile( std::string path, std::string name )
 	SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
 	if( loadedSurface == NULL ) {
 		printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
-		return false;
+		return NULL;
 	}
 
 	//Create texture from surface pixels
     newTexture = SDL_CreateTextureFromSurface( sdlRenderer, loadedSurface );
 	if( newTexture == NULL ){
 		printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
-		return false;
+		return NULL;
 	}
 
 	//Get rid of old loaded surface
 	SDL_FreeSurface( loadedSurface );
 
-	this->marioTexture = newTexture;
-	return true;
+	return newTexture;
 }
 
 void Renderer::close() {
 	//Free loaded images
-	SDL_DestroyTexture( this->marioTexture );
-	this->marioTexture = NULL;
-	this->marioDrawable = NULL;
+	for(map<std::string, Drawable*>::iterator it = this->drawablesByInstanceName.begin(); it != this->drawablesByInstanceName.end(); ++it) {
+	  SDL_DestroyTexture( it->second->getTexture() );
+	  delete it->second;
+	}
 
 	//Destroy window
 	SDL_DestroyRenderer(this->sdlRenderer);
@@ -135,6 +136,7 @@ bool Renderer::canDraw() {
 }
 
 void Renderer::addView(View* view) {
-	view->setDrawable(this->marioDrawable);
+	Drawable* drawable = this->drawablesByInstanceName.at("mario");
+	view->setDrawable(drawable);
 	this->views.push_back(view);
 }
