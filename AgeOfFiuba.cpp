@@ -7,11 +7,13 @@ and may not be redistributed without written permission.*/
 #include <stdio.h>
 #include <string>
 #include "Controllers/GameController.h"
-
+#include "Utils/Log.h"
 
 
 int main( int argc, char* args[] )
 {
+	Log::Debug("Tag","message");
+
 	GameController *gameController = new GameController();
 	gameController->play();
 
