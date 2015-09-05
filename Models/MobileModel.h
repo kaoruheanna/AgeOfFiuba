@@ -17,10 +17,16 @@ public:
 	int getY();
 	void setX(int x);
 	void setY(int y);
+	void setDestination(int destinationX, int destionationY);
+	void updatePosition();
 
 private:
 	int x;
 	int y;
+	int destinationX;
+	int destinationY;
+
+	int getSpeed();
 };
 
 #endif /* MOBILEMODEL_H_ */

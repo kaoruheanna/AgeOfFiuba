@@ -10,6 +10,7 @@
 #include <string>
 #include <iostream>
 #include "../Views/MobileView.h"
+#include <unistd.h>
 
 GameController::GameController() {
 	this->shouldQuit = false;
@@ -41,7 +42,9 @@ void GameController::play() {
 	//While application is running
 	while( !this->shouldQuit ) {
 		this->pollEvents();
+		this->model->updatePosition();
 		this->renderer->draw();
+		this->sleep();
 	}
 
 	this->close();
@@ -59,9 +62,8 @@ void GameController::pollEvents(){
 			//Get mouse position
 			int x, y;
 			SDL_GetMouseState( &x, &y );
-			cout << "mouse x: " << x << " y; " << y << endl;
-			this->model->setX(x);
-			this->model->setY(y);
+			this->model->setDestination(x,y);
+//			this->model->updatePosition();
 		}
 	}
 
@@ -84,4 +86,10 @@ void GameController::close() {
 		delete view;
 	}
 	this->views.clear();
+}
+
+void GameController::sleep(){
+	int millisec = 20;
+	int microsec = millisec * 1000;
+	usleep(microsec);
 }

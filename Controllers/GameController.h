@@ -28,6 +28,7 @@ private:
 
 	void pollEvents();
 	void close();
+	void sleep();
 };
 
 #endif /* GAMECONTROLLER_H_ */
