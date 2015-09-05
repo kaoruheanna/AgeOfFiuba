@@ -9,22 +9,27 @@
 #define UTILS_LOG_H_
 
 #include <string>
+#include <ctime>
+
+using namespace std;
 
 class Log {
 public:
 	Log();
 
 	//Message
-	static void Message(std::string tag,std::string msg);
+	static void Message(string tag,string msg);
 	//Debug
-	static void Debug(std::string tag,std::string msg);
+	static void Debug(string tag,string msg);
 	//Warning
-	static void Warning(std::string tag,std::string msg);
+	static void Warning(string tag,string msg);
 	//Error
-	static void Error(std::string tag,std::string msg);
+	static void Error(string tag,string msg);
 
 	virtual ~Log();
 private:
+	static time_t GetExecutionTime();
+	static string TimeToString(time_t time);
 	static void Save(std::string type, std::string tag,std::string msg);
 };
 

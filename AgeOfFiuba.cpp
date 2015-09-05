@@ -12,8 +12,7 @@ and may not be redistributed without written permission.*/
 
 int main( int argc, char* args[] )
 {
-	Log::Debug("Tag","message");
-
+	Log::Debug("main","inicia");
 	GameController *gameController = new GameController();
 	gameController->play();
 

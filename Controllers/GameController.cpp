@@ -11,6 +11,7 @@
 #include <iostream>
 #include "../Views/MobileView.h"
 #include <unistd.h>
+#include "../Utils/Log.h"
 
 GameController::GameController() {
 	this->shouldQuit = false;
@@ -23,6 +24,8 @@ GameController::~GameController() {
 }
 
 void GameController::play() {
+	Log::Debug("GameController","play");
+
 	this->renderer = new Renderer();
 	if (!this->renderer->canDraw()){
 		printf( "Failed to initialize!\n" );
@@ -41,6 +44,7 @@ void GameController::play() {
 
 	//While application is running
 	while( !this->shouldQuit ) {
+
 		this->pollEvents();
 		this->model->updatePosition();
 		this->renderer->draw();
