@@ -64,12 +64,7 @@ double MobileModel::getAngle() {
 		angle = (3.0 * M_PI_2);
 	}
 
-	std::ostringstream buff;
-	buff<<(angle * 180.0 / M_PI);
-	string angulo = buff.str();
-
-	string message = "angulo: "+angulo;
-	Log::Message("MobileModel",message);
+	Log().Get(logINFO) << "angulo: " << (angle * 180.0 / M_PI);
 	return angle;
 }
 

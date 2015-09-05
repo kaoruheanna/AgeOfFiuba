@@ -12,7 +12,7 @@ and may not be redistributed without written permission.*/
 
 int main( int argc, char* args[] )
 {
-	Log::Debug("main","inicia");
+	Log().Get(logINFO) << "Hello " << "asas";
 	GameController *gameController = new GameController();
 	gameController->play();
 

@@ -24,7 +24,7 @@ GameController::~GameController() {
 }
 
 void GameController::play() {
-	Log::Debug("GameController","play");
+	Log().Get(logDEBUG) << "[GameController] " << "play";
 
 	this->renderer = new Renderer();
 	if (!this->renderer->canDraw()){

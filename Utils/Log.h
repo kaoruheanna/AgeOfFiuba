@@ -1,36 +1,30 @@
-/*
- * Log.h
- *
- *  Created on: Sep 4, 2015
- *      Author: dario
- */
-
-#ifndef UTILS_LOG_H_
-#define UTILS_LOG_H_
-
+#include <iostream>
+#include <sstream>
 #include <string>
-#include <ctime>
+#include <fstream>
 
 using namespace std;
 
-class Log {
+enum TLogLevel {logERROR, logWARNING, logINFO, logDEBUG};
+class Log
+{
 public:
-	Log();
+   Log();
+   virtual ~Log();
+   ostringstream& Get(TLogLevel level = logINFO);
+public:
+   static TLogLevel ReportingLevel();
+protected:
+   ostringstream os;
 
-	//Message
-	static void Message(string tag,string msg);
-	//Debug
-	static void Debug(string tag,string msg);
-	//Warning
-	static void Warning(string tag,string msg);
-	//Error
-	static void Error(string tag,string msg);
-
-	virtual ~Log();
 private:
-	static time_t GetExecutionTime();
-	static string TimeToString(time_t time);
-	static void Save(std::string type, std::string tag,std::string msg);
+   Log(const Log&);
+   Log& operator =(const Log&);
+   ofstream fout;
+
+   TLogLevel messageLevel;
+   time_t GetExecutionTime();
+   time_t NowTime();
+   string TimeToString(time_t time);
 };
 
-#endif /* UTILS_LOG_H_ */

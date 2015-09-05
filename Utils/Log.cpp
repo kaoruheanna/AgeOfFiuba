@@ -6,36 +6,43 @@
  */
 
 #include "Log.h"
+#include <stdio.h>
 #include <iostream>
 #include <sstream>
 
 Log::Log() {
 	// TODO Auto-generated constructor stub
-
+	fout.open("coutfout.dat");
+	messageLevel = logDEBUG;
 }
 
-Log::~Log() {
-	// TODO Auto-generated destructor stub
+Log::~Log()
+{
+	/*
+   if (messageLevel <= Log::ReportingLevel())
+   {
+      os << std::endl;
+      fprintf(stderr, "%s", os.str().c_str());
+      fflush(stderr);
+   }*/
+	cout << os.str() << endl;
+	fout << os.str() << endl;
 }
 
-void Log::Message(std::string tag,std::string msg) {
-	Save("[Message]",tag,msg);
+std::ostringstream& Log::Get(TLogLevel level)
+{
+	os << TimeToString(NowTime()) << " - ";
+	//os << " " << ToString(level) << ": ";
+	//os << std::string(level > logDEBUG ? 0 : level - logDEBUG, '\t');
+	messageLevel = level;
+	return os;
 }
 
-void Log::Debug(std::string tag,std::string msg) {
-	Save("[Debug]",tag,msg);
+TLogLevel Log::ReportingLevel() {
+	return logINFO;
 }
-
-void Log::Warning(std::string tag,std::string msg) {
-	Save("[Warning]",tag,msg);
-}
-
-void Log::Error(std::string tag,std::string msg) {
-	Save("[Error]",tag,msg);
-}
-
-void Log::Save(std::string type, std::string tag,std::string msg) {
-	std::cout << TimeToString(time(0)) << "-" <<  type << "-[" << tag << "]- " << msg << std::endl;
+time_t Log::NowTime() {
+	return time(0);
 }
 
 time_t Log::GetExecutionTime() {
@@ -51,7 +58,8 @@ string Log::TimeToString(time_t time) {
 	   tm *ltm = localtime(&time);
 
 	   std::ostringstream oss;
-	   oss << 1900 + ltm->tm_year << "-" << 1 + ltm->tm_mon << "-" << ltm->tm_mday << " " << 1 + ltm->tm_min << ":" << 1 + ltm->tm_sec;
+	   oss << 1900 + ltm->tm_year << "-" << 1 + ltm->tm_mon << "-" << ltm->tm_mday << " " << ltm->tm_hour << ":" << 1 + ltm->tm_min << ":" << 1 + ltm->tm_sec;
 
 	   return oss.str();
 }
+
