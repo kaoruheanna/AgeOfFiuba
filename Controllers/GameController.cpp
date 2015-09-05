@@ -47,7 +47,7 @@ void GameController::play() {
 
 		this->pollEvents();
 		this->model->updatePosition();
-		this->renderer->draw();
+		this->renderer->drawViews();
 		this->sleep();
 	}
 

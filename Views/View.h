@@ -8,14 +8,17 @@
 #ifndef VIEW_H_
 #define VIEW_H_
 
-#include "Texture.h"
+#include "Renderer.h"
+#include "Drawable.h"
+
+class Renderer;
 
 class View {
 public:
 	View();
 	virtual ~View();
-	void render(SDL_Renderer* sdlRenderer );
-	void setTexture(Texture *texture);
+	void render(Renderer* renderer );
+	void setDrawable(Drawable *drawable);
 	void setOrigin(int x, int y);
 
 protected:
@@ -24,7 +27,7 @@ protected:
 	SDL_Point origin;
 
 private:
-	Texture *texture;
+	Drawable *drawable;
 };
 
 #endif /* VIEW_H_ */

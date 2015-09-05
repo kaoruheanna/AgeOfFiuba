@@ -9,22 +9,22 @@
 
 View::View() {
 	printf("entro al consturctor de view\n");
-	this->texture = NULL;
+	this->drawable = NULL;
 	SDL_Point origin = {0,0};
 	this->origin = origin;
 }
 
 View::~View() {
-	this->texture = NULL;
+	this->drawable = NULL;
 }
 
-void View::render(SDL_Renderer* sdlRenderer ) {
+void View::render(Renderer* renderer ) {
 	SDL_Point point = this->getOrigin();
-	this->texture->render(point,sdlRenderer);
+	renderer->draw(point.x, point.y, this->drawable);
 }
 
-void View::setTexture(Texture *texture){
-	this->texture = texture;
+void View::setDrawable(Drawable *drawable){
+	this->drawable = drawable;
 }
 
 SDL_Point View::getOrigin(){
