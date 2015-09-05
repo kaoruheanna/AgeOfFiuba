@@ -7,7 +7,7 @@
 
 #include "MobileView.h"
 
-MobileView::MobileView() {
+MobileView::MobileView(std::string type): View(type) {
 	printf("entro al consturctor de MobileView\n");
 	this->model = NULL;
 }

@@ -136,7 +136,11 @@ bool Renderer::canDraw() {
 }
 
 void Renderer::addView(View* view) {
-	Drawable* drawable = this->drawablesByInstanceName.at("mario");
+	std::map<std::string,Drawable *>::iterator found = this->drawablesByInstanceName.find(view->getType());
+	Drawable* drawable = NULL;
+	if(found != this->drawablesByInstanceName.end()){
+		drawable = found->second;
+	}
 	view->setDrawable(drawable);
 	this->views.push_back(view);
 }

@@ -7,11 +7,12 @@
 
 #include "View.h"
 
-View::View() {
+View::View(std::string name) {
 	printf("entro al consturctor de view\n");
 	this->drawable = NULL;
 	SDL_Point origin = {0,0};
 	this->origin = origin;
+	this->type = name;
 }
 
 View::~View() {
@@ -35,4 +36,8 @@ SDL_Point View::getOrigin(){
 void View::setOrigin(int x, int y) {
 	SDL_Point origin = {x,y};
 	this->origin = origin;
+}
+
+std::string View::getType() {
+	return this->type;
 }

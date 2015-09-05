@@ -15,18 +15,19 @@ class Renderer;
 
 class View {
 public:
-	View();
+	View(std::string type);
 	virtual ~View();
 	void render(Renderer* renderer );
 	void setDrawable(Drawable *drawable);
 	void setOrigin(int x, int y);
-
+	std::string getType();
 protected:
 	virtual SDL_Point getOrigin();
 
 	SDL_Point origin;
 
 private:
+	std::string type;
 	Drawable *drawable;
 };
 

@@ -37,7 +37,7 @@ void GameController::play() {
 	this->model->setX(200);
 	this->model->setY(100);
 
-	MobileView *marioView = new MobileView();
+	MobileView *marioView = new MobileView("mario");
 	marioView->setModel(model);
 	this->views.push_back(marioView);
 	this->renderer->addView(marioView);

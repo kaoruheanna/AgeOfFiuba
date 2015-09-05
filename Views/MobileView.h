@@ -13,7 +13,7 @@
 
 class MobileView: public View {
 public:
-	MobileView();
+	MobileView(std::string type);
 	virtual ~MobileView();
 	void setModel(MobileModel *model);
 
