@@ -15,6 +15,7 @@ Renderer::Renderer() {
 	this->window = NULL;
 	this->sdlRenderer = NULL;
 	this->missingImageDrawable = NULL;
+	this->mainTilePosition = {0,0};
 
 	bool didInitSDL = this->initSDL();
 	bool didLoadMedia = this->loadMedia();
@@ -134,9 +135,39 @@ void Renderer::drawViews() {
 	SDL_RenderPresent(this->sdlRenderer);
 }
 
+SDL_Point Renderer::mapToWindowPoint(SDL_Point mapPoint){
+	SDL_Point windowPoint = {0,0};
+	// Rotar punto 45 grados
+	windowPoint.x = mapPoint.x * 0.707 - mapPoint.y * 0.707;
+	windowPoint.y = mapPoint.x * 0.707 + mapPoint.y * 0.707;
+	// Ajustar a la posicion del 0,0 en la pantalla
+	windowPoint.x += this->mainTilePosition.x;
+	windowPoint.y += this->mainTilePosition.y;
+	return windowPoint;
+}
+SDL_Point Renderer::windowToMapPoint(SDL_Point windowPoint){
+	SDL_Point centeredWindow = {windowPoint.x, windowPoint.y};
+	// Ajustar la pantalla a la posicion del 0,0
+	centeredWindow.x -= this->mainTilePosition.x;
+	centeredWindow.y -= this->mainTilePosition.y;
+	SDL_Point mapPoint = {0,0};
+	// Rotar punto -45 grados
+	mapPoint.x = centeredWindow.x * 0.707 + centeredWindow.y * 0.707;
+	mapPoint.y = -centeredWindow.x * 0.707 + centeredWindow.y * 0.707;
+	return mapPoint;
+}
+
 void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable) {
-	// TODO translate mapPositionX and mapPositionY to the window cordinates
-	SDL_Rect renderQuad = drawable->getRectToDraw(mapPositionX, mapPositionY);
+	SDL_Point windowPoint = {mapPositionX, mapPositionY};
+	if(ISOMETRIC_DRAW){
+		windowPoint = this->mapToWindowPoint({mapPositionX, mapPositionY});
+	} else {
+		windowPoint = {mapPositionX, mapPositionY};
+	}
+	SDL_Rect renderQuad = drawable->getRectToDraw(windowPoint.x, windowPoint.y);
+	//printf("mapPoint: %i:%i windowPoint: %i:%i\n", mapPositionX, mapPositionY, windowPoint.x, windowPoint.y);
+	//SDL_Point mapPoint = this->windowToMapPoint(windowPoint);
+	//printf("windowPoint: %i:%i mapPoint: %i:%i\n", windowPoint.x, windowPoint.y, mapPoint.x, mapPoint.y);
 	SDL_RenderCopy(sdlRenderer, drawable->getTexture(), NULL, &renderQuad);
 }
 

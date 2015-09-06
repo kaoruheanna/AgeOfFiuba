@@ -23,7 +23,11 @@ Drawable::Drawable(int mainTilePositionX, int mainTilePositionY,
 SDL_Rect Drawable::getRectToDraw(int windowMainTilePositionX, int windowMainTilePositionY){
 	int w, h;
 	SDL_QueryTexture(this->texture, NULL, NULL, &w, &h);
-	return {windowMainTilePositionX,windowMainTilePositionY,w,h};
+	return {
+		windowMainTilePositionX - this->mainTilePosition.x,
+		windowMainTilePositionY - this->mainTilePosition.y,
+		w,h
+	};
 }
 
 SDL_Texture* Drawable::getTexture(){

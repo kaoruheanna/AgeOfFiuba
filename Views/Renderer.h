@@ -8,6 +8,8 @@
 #ifndef RENDERER_H_
 #define RENDERER_H_
 
+#define ISOMETRIC_DRAW false
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
@@ -28,6 +30,8 @@ public:
 	void close();
 	void drawViews();
 	void draw(int mapPositionX, int mapPositionY, Drawable* drawable);
+	SDL_Point mapToWindowPoint(SDL_Point mapPoint);
+	SDL_Point windowToMapPoint(SDL_Point windowPoint);
 	bool canDraw();
 	void addView(View* view);
 
