@@ -27,6 +27,7 @@ private:
 	int destinationY;
 
 	int getSpeed();
+	double getAngle();
 };
 
 #endif /* MOBILEMODEL_H_ */

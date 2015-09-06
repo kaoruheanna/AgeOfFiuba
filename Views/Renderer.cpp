@@ -66,7 +66,7 @@ bool Renderer::loadMedia() {
 		this->drawablesByInstanceName.insert(
 			std::pair<std::string,Drawable*>(
 				"mario",
-				new Drawable(0,0,1,1,loaded)
+				new Drawable(10,25,1,1,loaded)
 			)
 		);
 	}

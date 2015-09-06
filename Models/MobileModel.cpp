@@ -9,6 +9,8 @@
 #include <cmath>
 #include <string>
 #include <iostream>
+#include <sstream>
+#include "../Utils/Log.h"
 using namespace std;
 
 MobileModel::MobileModel() {
@@ -46,14 +48,36 @@ void MobileModel::setDestination(int destinationX, int destionationY) {
 }
 
 int MobileModel::getSpeed() {
-	return 10;
+	return 5;
+}
+
+double MobileModel::getAngle() {
+	double deltaX = (double)(this->destinationX - this->x);
+	double deltaY = (double)(this->destinationY - this->y);
+	double angle = 0;
+
+	if (deltaX != 0){
+		angle = atan2(deltaY,deltaX);
+	} else if (deltaY > 0) {
+		angle = M_PI_2;
+	} else if (deltaY < 0) {
+		angle = (3.0 * M_PI_2);
+	}
+
+	std::ostringstream buff;
+	buff<<(angle * 180.0 / M_PI);
+	string angulo = buff.str();
+
+	string message = "angulo: "+angulo;
+	Log::Message("MobileModel",message);
+	return angle;
 }
 
 void MobileModel::updatePosition() {
-	float speed = (float)this->getSpeed();
+	float speed = (double)this->getSpeed();
 
-	float deltaX = (float)(this->destinationX - this->x);
-	float deltaY = (float)(this->destinationY - this->y);
+	float deltaX = (double)(this->destinationX - this->x);
+	float deltaY = (double)(this->destinationY - this->y);
 
 	// si ya estoy en el destino, no hago nada
 	if ((deltaX == 0) && (deltaY == 0)){
@@ -61,21 +85,13 @@ void MobileModel::updatePosition() {
 	}
 
 	float hypotenuse = sqrt (pow(deltaX,2) + pow(deltaY,2.0));
-//	cout << "deltaX=" << deltaX << ", deltaY=" << deltaY << " hipotenusa=" << hypotenuse << endl;
 	hypotenuse = fmin(speed,hypotenuse);
-	hypotenuse = 1;
-//	cout << "entonces me quedo hypotenusa: " << hypotenuse << endl;
 
-	// si delta X es cero, no puedo calcular el angulo
-	if (deltaX == 0){
-		this->y += (int)hypotenuse;
-		return;
-	}
+	double angle = this->getAngle();
+	double displacementX = round(hypotenuse * cos(angle));
+	double displacementY = round(hypotenuse * sin(angle));
 
-	float angle =atan2(deltaY,deltaX);
-	float displacementX = round(hypotenuse * cos(angle));
-	float displacementY = round(hypotenuse * sin(angle));
-//	cout << "angulo: " << (angle * 180 / 3.14159265) << endl;
+	//	cout << "angulo: " << (angle * 180 / 3.14159265) << endl;
 //	cout << "angulo: " << angle << " displacementX: " << displacementX << " displacementY: " << displacementY << endl << endl;
 
 	this->x += (int)displacementX;
