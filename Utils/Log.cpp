@@ -12,8 +12,22 @@
 
 Log::Log() {
 	// TODO Auto-generated constructor stub
-	fout.open("coutfout.dat");
+	Init();
 	messageLevel = logDEBUG;
+}
+
+void Log::Init() {
+	static time_t executionTime;
+
+	if (!executionTime) {
+		executionTime = time(0);
+	}
+	tm *ltm = localtime(&executionTime);
+	std::ostringstream oss;
+	oss << 1900 + ltm->tm_year << 1 + ltm->tm_mon << ltm->tm_mday << "_" << ltm->tm_hour << ":" << 1 + ltm->tm_min << ":" << 1 + ltm->tm_sec;
+
+
+	fout.open(oss.str().c_str(), ios::out | ios::app);
 }
 
 Log::~Log()
@@ -26,7 +40,10 @@ Log::~Log()
       fflush(stderr);
    }*/
 	cout << os.str() << endl;
-	fout << os.str() << endl;
+	if (fout.is_open()) {
+		fout << os.str() << "\n";
+		fout.close();
+	}
 }
 
 std::ostringstream& Log::Get(TLogLevel level)
@@ -43,15 +60,6 @@ TLogLevel Log::ReportingLevel() {
 }
 time_t Log::NowTime() {
 	return time(0);
-}
-
-time_t Log::GetExecutionTime() {
-	static time_t executionTime;
-
-	if (!executionTime) {
-		executionTime = time(0);
-	}
-	return executionTime;
 }
 
 string Log::TimeToString(time_t time) {

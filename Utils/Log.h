@@ -19,6 +19,7 @@ protected:
 
 private:
    Log(const Log&);
+   void Init();
    Log& operator =(const Log&);
    ofstream fout;
 
@@ -27,4 +28,3 @@ private:
    time_t NowTime();
    string TimeToString(time_t time);
 };
-
