@@ -12,7 +12,7 @@ and may not be redistributed without written permission.*/
 
 int main( int argc, char* args[] )
 {
-	Log().Get(logINFO) << "Hello " << "asas";
+	Log().Get(logERROR) << "Hello " << "asas";
 	GameController *gameController = new GameController();
 	gameController->play();
 

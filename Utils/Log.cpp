@@ -24,7 +24,7 @@ void Log::Init() {
 	}
 	tm *ltm = localtime(&executionTime);
 	std::ostringstream oss;
-	oss << 1900 + ltm->tm_year << 1 + ltm->tm_mon << ltm->tm_mday << "_" << ltm->tm_hour << ":" << 1 + ltm->tm_min << ":" << 1 + ltm->tm_sec;
+	oss  << 1900 + ltm->tm_year << 1 + ltm->tm_mon << ltm->tm_mday << "_" << ltm->tm_hour << ":" << 1 + ltm->tm_min << ":" << 1 + ltm->tm_sec;
 
 
 	fout.open(oss.str().c_str(), ios::out | ios::app);
@@ -49,7 +49,7 @@ Log::~Log()
 std::ostringstream& Log::Get(TLogLevel level)
 {
 	os << TimeToString(NowTime()) << " - ";
-	//os << " " << ToString(level) << ": ";
+	os << GetTextForEnum(level) << " - ";
 	//os << std::string(level > logDEBUG ? 0 : level - logDEBUG, '\t');
 	messageLevel = level;
 	return os;
@@ -70,4 +70,3 @@ string Log::TimeToString(time_t time) {
 
 	   return oss.str();
 }
-

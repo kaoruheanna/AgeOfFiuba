@@ -6,6 +6,7 @@
 using namespace std;
 
 enum TLogLevel {logERROR, logWARNING, logINFO, logDEBUG};
+
 class Log
 {
 public:
@@ -27,4 +28,11 @@ private:
    time_t GetExecutionTime();
    time_t NowTime();
    string TimeToString(time_t time);
+
+   const char * GetTextForEnum( int enumVal ) {
+	   static const char * EnumStrings[] = {"[ERROR]","[WARNING]","[INFO]","[DEBUG]"};
+	   return EnumStrings[enumVal];
+   }
+
+
 };
