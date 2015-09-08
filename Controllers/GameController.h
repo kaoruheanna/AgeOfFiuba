@@ -27,8 +27,17 @@ private:
 	MobileModel *model;
 
 	void pollEvents();
+	void updateWindow();
+
 	void close();
 	void sleep();
+
+	// Entre -1 y 1
+	float scrollingSpeedX(int x);
+	float scrollingSpeedY(int y);
+	float scrollingSpeed(int x, int large);
+
+	void moveToPoint(SDL_Point point);
 };
 
 #endif /* GAMECONTROLLER_H_ */
