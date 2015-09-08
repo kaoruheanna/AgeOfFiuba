@@ -38,4 +38,3 @@ local.properties
 # TeXlipse plugin
 .texlipse
 /Debug/
-/Logs/*
