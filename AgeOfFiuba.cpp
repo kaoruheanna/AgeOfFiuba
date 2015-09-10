@@ -14,7 +14,7 @@ and may not be redistributed without written permission.*/
 int main( int argc, char* args[] )
 {
 	GameConfiguration *configuration = new GameConfiguration();
-	GameController *gameController = new GameController();
+	GameController *gameController = new GameController(configuration);
 	gameController->play();
 
 	delete gameController;
