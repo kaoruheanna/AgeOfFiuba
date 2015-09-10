@@ -36,6 +36,14 @@ void GameController::play() {
 		return;
 	}
 
+	//Agrego el mapa
+	Map* mapModel = new Map(100,100,128,64);
+	MapView *mapView = new MapView("tileDefault");
+	mapView->setModel(mapModel);
+	this->views.push_back(mapView);
+	this->renderer->addView(mapView);
+
+
 	this->model = new MobileModel();
 	this->model->setX(200);
 	this->model->setY(100);
@@ -45,13 +53,7 @@ void GameController::play() {
 	this->views.push_back(marioView);
 	this->renderer->addView(marioView);
 
-	//Agrego el mapa
-	Map* mapModel = new Map(100,100,128,64);
 
-	MapView *mapView = new MapView("tileDefault");
-	mapView->setModel(mapModel);
-	this->views.push_back(mapView);
-	this->renderer->addView(mapView);
 
 
 	//While application is running
@@ -97,8 +99,8 @@ void GameController::updateWindow() {
 	int x, y, newY, newX;
 	SDL_GetMouseState(&x, &y);
 
-	newX = (scrollingSpeedX(x)*SCROLL_SPEED) + this->renderer->mainTilePosition.x;
-	newY = (scrollingSpeedY(y)*SCROLL_SPEED) + this->renderer->mainTilePosition.y;
+	newX = -(scrollingSpeedX(x)*SCROLL_SPEED) + this->renderer->mainTilePosition.x;
+	newY = -(scrollingSpeedY(y)*SCROLL_SPEED) + this->renderer->mainTilePosition.y;
 
 	if ((newX != this->renderer->mainTilePosition.x) || (newY != this->renderer->mainTilePosition.y)) {
 		moveToPoint({newX,newY});

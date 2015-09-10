@@ -20,14 +20,20 @@ void MapView::setModel(Map *model) {
 }
 
 SDL_Point MapView::getOrigin(){
-	SDL_Point origin = {0,0}; //el origen sera siempre 0?
 	return origin;
 }
 
 void MapView::render(Renderer* renderer ){
-	// aca habria que dibujar todos los tiles visibles;
-
-	View::render(renderer);
+	int width = this -> model -> getWidth();
+	int height = this -> model-> getHeight();
+	int tw = 64; //ancho del tile
+	int th = 32; //alto del tile
+	for (int i=0; i<width ; i++){
+		for (int j=0; j<height; j++){
+			this -> origin = {-j*tw+i*tw,j*th+i*th};
+			View::render(renderer,false);
+		}
+	}
 }
 
 
