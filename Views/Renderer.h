@@ -45,7 +45,6 @@ private:
 
 	bool initSDL();
 	bool loadMedia();
-	SDL_Texture* loadTextureFromFile(std::string path);
 };
 
 #endif /* RENDERER_H_ */

@@ -6,6 +6,7 @@
  */
 
 #include "Renderer.h"
+#include "../Utils/Log.h"
 
 //Screen dimension constants
 const int SCREEN_WIDTH = 640;
@@ -60,42 +61,21 @@ bool Renderer::initSDL() {
 
 bool Renderer::loadMedia() {
 	bool success = true;
-	this->missingImageDrawable = new Drawable(64,0,1,1, this->loadTextureFromFile("img/missingImage.png"));
-	SDL_Texture* loaded = this->loadTextureFromFile("img/Mario-Mapache.png");
-	if(loaded != NULL){
+
+	// drawable default
+	this->missingImageDrawable = new Drawable(64,0,1,1);
+	this->missingImageDrawable->loadTextureFromFile("img/missingImage.png",this->sdlRenderer);
+
+	// soldado
+	string soldierPath = "img/Mario-Mapache.png";
+	Drawable *soldierDrawable = new Drawable(10,25,1,1);
+	if (soldierDrawable->loadTextureFromFile(soldierPath,this->sdlRenderer)){
 		this->drawablesByInstanceName.insert(
-			std::pair<std::string,Drawable*>(
-				"mario",
-				new Drawable(10,25,1,1,loaded)
-			)
+			std::pair<std::string,Drawable*>("soldier",	soldierDrawable)
 		);
 	}
+
 	return success;
-}
-
-SDL_Texture* Renderer::loadTextureFromFile( std::string path )
-{
-	//The final texture
-	SDL_Texture* newTexture = NULL;
-
-	//Load image at specified path
-	SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
-	if( loadedSurface == NULL ) {
-		printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
-		return NULL;
-	}
-
-	//Create texture from surface pixels
-    newTexture = SDL_CreateTextureFromSurface( sdlRenderer, loadedSurface );
-	if( newTexture == NULL ){
-		printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
-		return NULL;
-	}
-
-	//Get rid of old loaded surface
-	SDL_FreeSurface( loadedSurface );
-
-	return newTexture;
 }
 
 void Renderer::close() {
@@ -181,7 +161,7 @@ void Renderer::addView(View* view) {
 	if(found != this->drawablesByInstanceName.end()){
 		drawable = found->second;
 	} else {
-		printf("Cannot find image for view %s will use the default\n", view->getType().c_str());
+		Log().Get(logWARNING) << "No se pudo cargar la imagen: '"<<view->getType().c_str()<<"', usa la imagen default";
 		drawable = this->missingImageDrawable;
 	}
 	view->setDrawable(drawable);

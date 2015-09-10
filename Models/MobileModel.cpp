@@ -74,7 +74,7 @@ void MobileModel::updatePosition() {
 	double displacementX = round(speed * (deltaX / hypotenuse));
 	double displacementY = round(speed * (deltaY / hypotenuse));
 
-	Log().Get(logINFO) << "displacementX: " << displacementX << " displacementY: " << displacementY;
+//	Log().Get(logINFO) << "displacementX: " << displacementX << " displacementY: " << displacementY;
 
 	this->x += (int)displacementX;
 	this->y += (int)displacementY;
