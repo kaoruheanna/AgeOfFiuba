@@ -110,9 +110,8 @@ void GameController::pollEvents(){
 			//Get mouse position
 			int x, y;
 			SDL_GetMouseState(&x, &y);
-
-			this->model->setDestination(x,y);
-//			this->model->updatePosition();
+			SDL_Point mapPoint = this->renderer->windowToMapPoint({x,y});
+			this->model->setDestination(mapPoint.x,mapPoint.y);
 		}
 
 

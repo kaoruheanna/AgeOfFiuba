@@ -8,7 +8,7 @@
 #ifndef RENDERER_H_
 #define RENDERER_H_
 
-#define ISOMETRIC_DRAW false
+#define ISOMETRIC_DRAW true
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
