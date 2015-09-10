@@ -27,6 +27,7 @@ public:
 	void setTodoConstruible();
 	bool setTileConstruible(SDL_Point);
 	bool setTileInconstruible(SDL_Point);
+	bool sectorEstaBloqueado(SDL_Point, SDL_Point);
 	virtual ~TileSet();
 };
 
