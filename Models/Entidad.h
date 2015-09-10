@@ -34,6 +34,7 @@ public:
 	string toString();
 
 	Entidad(string,SDL_Point,int,int);
+	Entidad(string,int,int);
 	~Entidad();
 
 

@@ -1,6 +1,7 @@
 #include "Mundo.h"
 
 Mundo::Mundo(int alto, int ancho, int tile_alto, int tile_ancho){
+	//el ancho y alto del tile se puede determinar con las dimensiones del tile default.
 	this -> alto = alto;
 	this -> ancho = ancho;
 	this -> tile_alto = tile_alto;
@@ -61,4 +62,17 @@ bool Mundo::puedoConstruir(Entidad* entidad, SDL_Point posicion){
 
 	//verificar que los tiles sean construibles.
 	return true;
+}
+
+bool Mundo::construirEntidad(Entidad* entidad, SDL_Point posicion){
+	if (this->puedoConstruir(entidad,posicion)){
+		for (int i = 0; i < posicion.x + entidad->getAnchoBase(); i++){
+			for (int j = 0; j < posicion.y + entidad->getAnchoBase(); j++){
+				SDL_Point tile = {i,j};
+				this -> baldosas -> setTileInconstruible(tile);
+			}
+		}
+		return true;
+	}
+	return false;
 }

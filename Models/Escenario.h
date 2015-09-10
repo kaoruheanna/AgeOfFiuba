@@ -6,6 +6,7 @@
 #include <iostream>
 
 #include "Entidad.h"
+#include "Mundo.h"
 
 using namespace std;
 
@@ -13,18 +14,19 @@ class Escenario {
 	private:
 		string name;
 		list<Entidad*> entidades;
-		//mundo
+		Mundo* mundo;
 		//entidades
 	public:
 
 		string toString ();
 
 		bool agregarEntidad(Entidad*);
+		bool construirEntidad(Entidad*,SDL_Point);
 
 		void imprimirEntidades();
 		list<Entidad*> getListaEntidades();
 
-		Escenario(string);//deberia entregarle un mapa o algo para construir el mapa;
+		Escenario(string,int,int,int,int);//deberia entregarle un mapa o algo para construir el mapa;
 		~Escenario();
 };
 

@@ -1,7 +1,8 @@
 #include "Escenario.h"
 
-Escenario::Escenario(string name){
+Escenario::Escenario(string name, int ancho, int alto, int tile_ancho, int tile_alto){
 	this -> name = name;
+	this -> mundo = new Mundo(ancho, alto, tile_ancho, tile_alto);
 }
 
 Escenario::~Escenario(){
@@ -18,6 +19,14 @@ bool Escenario::agregarEntidad(Entidad* entidad){
 	it = this->entidades.end();
 	this->entidades.insert(it,entidad);
 	return true;
+}
+
+bool Escenario::construirEntidad(Entidad* entidad,SDL_Point posicion){
+	if (this->mundo->construirEntidad(entidad,posicion)){
+		entidad->setPosicion(posicion);
+		this->agregarEntidad(entidad);
+		return true;
+	}else return false;
 }
 
 void Escenario::imprimirEntidades(){

@@ -1,3 +1,7 @@
+
+#ifndef MUNDO_H_
+#define MUNDO_H_
+
 #include <SDL2/SDL.h>
 #include "Entidad.h"
 #include "TileSet.h"
@@ -13,7 +17,7 @@ class Mundo {
 		int alto;
 		int ancho;
 		//matriz de tiles
-		//informacion de tiles, alto, ancho
+		//tile default -> es la baldosa que se va a dibujar en todo el mapa.
 		int tile_ancho;//estos tienen que estar definidos por el tile default
 		int tile_alto;
 		TileSet* baldosas;
@@ -32,7 +36,7 @@ class Mundo {
 		PointL transformarAL(SDL_Point);
 		SDL_Point transformarLA(PointL);
 
-		bool agregarEntidad(Entidad*);
+		bool construirEntidad(Entidad*,SDL_Point);
 		bool puedoConstruir(Entidad*,SDL_Point);
 		Entidad* sacarEntidad(Entidad*);
 
@@ -41,4 +45,4 @@ class Mundo {
 };
 
 
-
+#endif

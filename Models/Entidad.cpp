@@ -13,6 +13,15 @@ Entidad::Entidad(string nombre, SDL_Point posicion, int ancho_base, int alto_bas
 	this->alto_base = alto_base;
 }
 
+Entidad::Entidad(string nombre, int ancho_base, int alto_base){
+
+	this->nombre = nombre;
+	this->posicion = {-1,-1}; // posicion invalida hace referencia a que no tiene posicion en el mapa.
+	this->ancho_base = ancho_base;
+	this->alto_base = alto_base;
+
+}
+
 string Entidad::toString(){
 	string n ="Entidad con nombre: ";
 	n.append(this->nombre);
