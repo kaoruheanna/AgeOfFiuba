@@ -1,7 +1,7 @@
 ---
 pantalla:
- - alto: 800
- - ancho: 555
+ - alto: 640
+ - ancho: 800
 
 configuracion:
  - vel_personaje: 3

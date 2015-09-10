@@ -29,7 +29,7 @@ GameController::~GameController() {
 void GameController::play() {
 	Log().Get(logDEBUG) << "[GameController] " << "play";
 
-	this->renderer = new Renderer();
+	this->renderer = new Renderer(this->config->getPantallaAncho(),this->config->getPantallaAlto());
 	if (!this->renderer->canDraw()){
 		printf( "Failed to initialize!\n" );
 		this->close();
@@ -99,8 +99,8 @@ void GameController::updateWindow() {
 	int x, y, newY, newX;
 	SDL_GetMouseState(&x, &y);
 
-	newX = -(scrollingSpeedX(x)*SCROLL_SPEED) + this->renderer->mainTilePosition.x;
-	newY = -(scrollingSpeedY(y)*SCROLL_SPEED) + this->renderer->mainTilePosition.y;
+	newX = (scrollingSpeedX(x)*SCROLL_SPEED) + this->renderer->mainTilePosition.x;
+	newY = (scrollingSpeedY(y)*SCROLL_SPEED) + this->renderer->mainTilePosition.y;
 
 	if ((newX != this->renderer->mainTilePosition.x) || (newY != this->renderer->mainTilePosition.y)) {
 		moveToPoint({newX,newY});
