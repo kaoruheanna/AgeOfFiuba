@@ -6,6 +6,7 @@
  */
 
 #include "Renderer.h"
+#include "Sprite.h"
 #include "../Utils/Log.h"
 
 //Screen dimension constants
@@ -67,8 +68,8 @@ bool Renderer::loadMedia() {
 	this->missingImageDrawable->loadTextureFromFile("img/missingImage.png",this->sdlRenderer);
 
 	// soldado
-	string soldierPath = "img/Mario-Mapache.png";
-	Drawable *soldierDrawable = new Drawable(10,25,1,1);
+	string soldierPath = "img/hero.png";
+	Drawable *soldierDrawable = new Sprite(10,25,1,1,32,45,10);
 	if (soldierDrawable->loadTextureFromFile(soldierPath,this->sdlRenderer)){
 		this->drawablesByInstanceName.insert(
 			std::pair<std::string,Drawable*>("soldier",	soldierDrawable)
@@ -148,7 +149,7 @@ void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable) {
 	//printf("mapPoint: %i:%i windowPoint: %i:%i\n", mapPositionX, mapPositionY, windowPoint.x, windowPoint.y);
 	//SDL_Point mapPoint = this->windowToMapPoint(windowPoint);
 	//printf("windowPoint: %i:%i mapPoint: %i:%i\n", windowPoint.x, windowPoint.y, mapPoint.x, mapPoint.y);
-	SDL_RenderCopy(sdlRenderer, drawable->getTexture(), NULL, &renderQuad);
+	SDL_RenderCopy(sdlRenderer, drawable->getTexture(), drawable->getClipRect(), &renderQuad);
 }
 
 bool Renderer::canDraw() {

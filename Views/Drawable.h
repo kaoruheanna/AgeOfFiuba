@@ -15,18 +15,25 @@ class Drawable {
 public:
 	Drawable(int mainTilePositionX, int mainTilePositionY, int baseTileWidth, int baseTileHeight);
 	virtual ~Drawable();
-	SDL_Rect getRectToDraw(int windowMainTilePositionX, int windowMainTilePositionY);
+	virtual SDL_Rect getRectToDraw(int windowMainTilePositionX, int windowMainTilePositionY);
 	SDL_Texture* getTexture();
 	bool loadTextureFromFile(std::string path,SDL_Renderer* sdlRenderer);
+	virtual SDL_Rect* getClipRect();
+	virtual void animate();
+protected:
+	bool loadTextureFromSurface(SDL_Renderer* renderer, SDL_Surface* surface);
+	virtual void onTextureChange();
 
+	SDL_Texture *texture;
+	SDL_Point mainTilePosition;
+	int height;
+	int width;
 private:
 	/*
 	 * Hay que aclarar que es cada cosa
 	 */
-	SDL_Point mainTilePosition;
 	int baseTileWidth;
 	int baseTileHeight;
-	SDL_Texture *texture;
 
 
 };
