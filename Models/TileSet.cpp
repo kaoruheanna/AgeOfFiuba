@@ -55,3 +55,20 @@ bool TileSet::setTileInconstruible(SDL_Point tile_pos){
 	}
 	else return false; //deberia tirar un error
 }
+
+/*analiza si el sector comprendido por el rectangulo formado por los puntos,
+ * origen y fin hay alguna baldosa que este bloqueada.
+ */
+bool TileSet::sectorEstaBloqueado(SDL_Point origen, SDL_Point fin){
+	int x_inicio = min(origen.x, fin.x);
+	int y_inicio = min(origen.y, fin.y);
+	int x_fin = max(origen.x, fin.x);
+	int y_fin = max(origen.y, fin.y);
+
+	for (int i=x_inicio; i<x_fin; i++){
+		for (int j=y_inicio; j<y_fin; j++){
+			if (this->matriz[i][j]) return true;
+		}
+	}
+	return false;
+}

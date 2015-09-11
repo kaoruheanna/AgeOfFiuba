@@ -58,10 +58,9 @@ bool Mundo::puedoConstruir(Entidad* entidad, SDL_Point posicion){
 	}else if ((posicion.x + size_x) > this->ancho || (posicion.y + size_y) > this->alto){
 		return false;
 	}
-	//verificar que en todos los tiles que va a ocupar la entidad no haya nada
-
-	//verificar que los tiles sean construibles.
-	return true;
+	//verificar que en todos los tiles que va a ocupar la entidad se pueda construir
+	SDL_Point fin = {size_x+posicion.x, size_y+posicion.y};
+	return !(this -> baldosas->sectorEstaBloqueado(posicion,fin));
 }
 
 bool Mundo::construirEntidad(Entidad* entidad, SDL_Point posicion){
