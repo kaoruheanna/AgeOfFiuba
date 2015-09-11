@@ -82,11 +82,11 @@ bool Renderer::loadMedia() {
 void Renderer::close() {
 	//Free loaded images
 	for(map<std::string, Drawable*>::iterator it = this->drawablesByInstanceName.begin(); it != this->drawablesByInstanceName.end(); ++it) {
-	  SDL_DestroyTexture( it->second->getTexture() );
+	  it->second->free();
 	  delete it->second;
 	}
 
-	SDL_DestroyTexture( this->missingImageDrawable->getTexture() );
+	this->missingImageDrawable->free();
 	delete this->missingImageDrawable;
 
 

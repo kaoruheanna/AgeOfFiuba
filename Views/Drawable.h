@@ -20,6 +20,7 @@ public:
 	bool loadTextureFromFile(std::string path,SDL_Renderer* sdlRenderer);
 	virtual SDL_Rect* getClipRect();
 	virtual void animate();
+	void free();
 protected:
 	bool loadTextureFromSurface(SDL_Renderer* renderer, SDL_Surface* surface);
 	virtual void onTextureChange();

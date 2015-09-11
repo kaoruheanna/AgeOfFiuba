@@ -75,3 +75,8 @@ SDL_Rect Drawable::getRectToDraw(int windowMainTilePositionX, int windowMainTile
 SDL_Texture* Drawable::getTexture(){
 	return this->texture;
 }
+
+void Drawable::free(){
+	SDL_DestroyTexture( this-> texture );
+	this->texture = NULL;
+}
