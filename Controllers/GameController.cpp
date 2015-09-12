@@ -12,6 +12,7 @@
 #include "../Views/MobileView.h"
 #include <unistd.h>
 #include "../Utils/Log.h"
+#include "../Configuration/GameConfiguration.h"
 
 GameController::GameController() {
 	this->shouldQuit = false;

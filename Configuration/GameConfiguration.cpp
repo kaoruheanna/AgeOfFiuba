@@ -5,20 +5,18 @@
  *      Author: die89
  */
 
-
-
-
 #include "GameConfiguration.h"
-
+#include "../Utils/Log.h"
 
 
 GameConfiguration::GameConfiguration(const char* archivoAParsear){
-	this->defaultFile = "configuracion.yaml";//ARCHIVO_DEFAULT;
+	this->defaultFile = "yaml-files/configuracion.yaml";//ARCHIVO_DEFAULT;
 	this->parseYAML(archivoAParsear);
 }
 
 GameConfiguration::GameConfiguration(){
-	this->defaultFile = "configuracion.yaml";
+	Log().Get(logINFO) << "voy a parsear un archivo";
+	this->defaultFile = "yaml-files/configuracion.yaml";
 	this->loadDefaultConfiguration();
 }
 
@@ -41,7 +39,11 @@ bool GameConfiguration::loadFile(const char* archivoAParsear){
 
 
 void GameConfiguration::loadDefaultConfiguration(){
-	this->nodoRaiz = YAML::LoadFile(this->defaultFile);
+//	this->nodoRaiz = YAML::LoadFile(this->defaultFile);
+	YAML::Node  nodos = YAML::LoadFile(this->defaultFile);
+	YAML::Node nodoPantalla = nodos["pantalla"];
+	int anchoPantalla = nodoPantalla[1]["ancho"].as<int>();
+	Log().Get(logINFO) << "del archivo de configuracion saque que el ancho es: " << anchoPantalla;
 }
 
 void GameConfiguration::parseYAML(const char* archivoAParsear){

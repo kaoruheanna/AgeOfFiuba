@@ -8,14 +8,16 @@ and may not be redistributed without written permission.*/
 #include <string>
 #include "Controllers/GameController.h"
 #include "Utils/Log.h"
+#include "Configuration/GameConfiguration.h"
 
 
 int main( int argc, char* args[] )
 {
-	Log().Get(logERROR) << "Hello " << "asas";
+	GameConfiguration *configuration = new GameConfiguration();
 	GameController *gameController = new GameController();
 	gameController->play();
 
 	delete gameController;
+	delete configuration;
 	return 0;
 }
