@@ -27,6 +27,14 @@ int Map::getWidth(){
 	return this->ancho;
 }
 
+int Map::getTileHeight(){
+	return this->tile_ancho;
+}
+
+int Map::getTileWidth(){
+	return this->tile_ancho;
+}
+
 /* posicion relativa. Rect refiere a la pantalla,
  * punto_m es un punto en las coordenadas del mapa (coordenadas absolutas).
  * Devuelve punto_v que seria el mismo punto pero respecto del mapa.*/

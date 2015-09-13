@@ -147,9 +147,9 @@ SDL_Point Renderer::windowToMapPoint(SDL_Point windowPoint){
 	return mapPoint;
 }
 
-void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable) {
+void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable, bool iso) {
 	SDL_Point windowPoint = {mapPositionX, mapPositionY};
-	if(ISOMETRIC_DRAW){
+	if(iso){
 		windowPoint = this->mapToWindowPoint({mapPositionX, mapPositionY});
 	} else {
 		windowPoint = {mapPositionX, mapPositionY};
