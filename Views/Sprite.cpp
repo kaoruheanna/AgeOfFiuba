@@ -7,6 +7,9 @@
 
 #include "Sprite.h"
 
+#define STANDING_SPRITE_INDEX 	5
+#define START_MOVING_INDEX 		0
+
 Sprite::Sprite(int mainTilePositionX, int mainTilePositionY,int baseTileWidth, int baseTileHeight, int spriteWidth, int spriteHeight, int fps)
 : Drawable(mainTilePositionX, mainTilePositionY, baseTileWidth, baseTileHeight){
 	this->currentFrame = 0;
@@ -16,6 +19,7 @@ Sprite::Sprite(int mainTilePositionX, int mainTilePositionY,int baseTileWidth, i
 	this->width = spriteWidth;
 	this->animationCount = 0;
 	this->framesPerAnimation = 0;
+	this->isMoving = false;
 	this->clipRect = {
 		0, 0,
 		this->width,
@@ -34,13 +38,19 @@ void Sprite::onTextureChange(){
 	this->framesPerAnimation = w / this->width;
 }
 
-void Sprite::selectAnimation(MotionDirection direction){
-	if(direction > this->animationCount){
-		this->currentAnimation = SOUTH;
-	} else {
-		this->currentAnimation = direction;
+void Sprite::selectAnimation(MotionDirection direction,bool isMoving){
+	MotionDirection oldDirection = this->currentAnimation;
+	this->currentAnimation = direction;
+	this->isMoving = isMoving;
+
+	if (!isMoving){
+		this->currentFrame = STANDING_SPRITE_INDEX * this->fps;
+		return;
 	}
-//	this->currentFrame = 0;
+
+	if (oldDirection != this->currentAnimation){
+		this->currentFrame = START_MOVING_INDEX;
+	}
 }
 
 SDL_Rect* Sprite::getClipRect(){
@@ -49,11 +59,14 @@ SDL_Rect* Sprite::getClipRect(){
 
 void Sprite::animate(){
 	// Count frame
-	this->currentFrame ++;
-	if(this->currentFrame >= (this->framesPerAnimation * this->fps)){
-		// If frame is over animation restart it
-		this->currentFrame = 0;
+	if (this->isMoving){
+		this->currentFrame ++;
+		if(this->currentFrame >= (this->framesPerAnimation * this->fps)){
+			// If frame is over animation restart it
+			this->currentFrame = 0;
+		}
 	}
+
 	// Move clip to animation frame
 	int currentAnimationFrame = this->currentFrame / this->fps;
 	this->clipRect.x = currentAnimationFrame * this->width;

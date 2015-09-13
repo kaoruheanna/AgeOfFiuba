@@ -12,6 +12,7 @@
 MobileView::MobileView(std::string type): View(type) {
 	this->model = NULL;
 	this->lastOrigin = this->origin;
+	this->lastDirection = SOUTH;
 }
 
 MobileView::~MobileView() {
@@ -36,7 +37,8 @@ SDL_Point MobileView::getOrigin(){
 }
 
 void MobileView::render(Renderer* renderer) {
-	this->drawable->selectAnimation(this->getMotionDirection());
+	this->lastDirection = this->getMotionDirection();
+	this->drawable->selectAnimation(this->lastDirection,this->model->isMoving());
 	View::render(renderer);
 }
 
@@ -46,7 +48,7 @@ MotionDirection MobileView::getMotionDirection() {
 	double deltaY = (this->origin.y - this->lastOrigin.y);
 
 	if ((deltaX == 0) && (deltaY == 0)){
-		return SOUTH;
+		return this->lastDirection;
 	}
 
 	double angle = (atan2(deltaY,deltaX) * 180.0 / M_PI);
@@ -62,39 +64,29 @@ MotionDirection MobileView::getMotionDirection() {
 
 	if (angle >= 0){
 		if (angle < 23){
-//			Log().Get(logINFO) << "direccion ESTE";
 			return EAST;
 		} else if (angle < 68){
-//			Log().Get(logINFO) << "direccion SUDESTE";
 			return SOUTH_EAST;
 		} else if (angle < 113){
-//			Log().Get(logINFO) << "direccion sur";
 			return SOUTH;
 		} else if (angle < 158){
-//			Log().Get(logINFO) << "direccion sudoeste";
 			return SOUTH_WEST;
 		} else if (angle <= 180){
-//			Log().Get(logINFO) << "direccion oeste";
 			return WEST;
 		}
 	}
 
 	if (angle >= -23){
-//		Log().Get(logINFO) << "----direccion ESTE";
 		return EAST;
 	} else if (angle >= -68){
-//		Log().Get(logINFO) << "----direccion NORESTE";
 		return NORTH_EAST;
 	} else if (angle >= -113){
-//		Log().Get(logINFO) << "-----direccion norte";
 		return NORTH;
 	} else if (angle >= -158){
-//		Log().Get(logINFO) << "-----direccion noroeste";
 		return NORTH_WEST;
 	} else if (angle >= -180){
-//		Log().Get(logINFO) << "----direccion oeste";
 		return WEST;
 	}
 
-	return SOUTH;
+	return this->lastDirection;
 }

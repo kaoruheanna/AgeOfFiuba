@@ -18,19 +18,20 @@ public:
 	Sprite(int mainTilePositionX, int mainTilePositionY,int baseTileWidth, int baseTileHeight, int spriteWidth, int spriteHeight, int fps);
 	virtual ~Sprite();
 	SDL_Rect* getClipRect();
-	void selectAnimation(MotionDirection direction);
+	void selectAnimation(MotionDirection direction,bool isMoving);
 	void animate();
 
 protected:
 	void onTextureChange();
 
 private:
-	int currentFrame;
-	MotionDirection currentAnimation;
+	int currentFrame; //columna del sprite
+	MotionDirection currentAnimation; //fila del sprite
 	int fps;
 	int animationCount;
 	int framesPerAnimation;
 	SDL_Rect clipRect;
+	bool isMoving;
 };
 
 #endif /* VIEWS_SPRITE_H_ */

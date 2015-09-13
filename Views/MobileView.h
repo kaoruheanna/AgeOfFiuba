@@ -25,6 +25,7 @@ protected:
 private:
 	MobileModel *model;
 	SDL_Point lastOrigin;
+	MotionDirection lastDirection;
 };
 
 #endif /* MOBILEVIEW_H_ */

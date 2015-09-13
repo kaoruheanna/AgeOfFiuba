@@ -81,6 +81,6 @@ void Drawable::free(){
 void Drawable::animate(){
 }
 
-void Drawable::selectAnimation(MotionDirection direction) {
+void Drawable::selectAnimation(MotionDirection direction,bool isMoving) {
 }
 

@@ -32,7 +32,7 @@ public:
 	bool loadTextureFromFile(std::string path,SDL_Renderer* sdlRenderer);
 	virtual SDL_Rect* getClipRect();
 	virtual void animate();
-	virtual void selectAnimation(MotionDirection direction);
+	virtual void selectAnimation(MotionDirection direction,bool isMoving);
 	void free();
 
 protected:

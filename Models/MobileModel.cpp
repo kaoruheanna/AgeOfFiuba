@@ -18,7 +18,7 @@ MobileModel::MobileModel() {
 	this->y = 0;
 	this->destinationX = 0;
 	this->destinationY = 0;
-	this->motionStatus = STANDING;
+	this->moving = false;
 }
 
 MobileModel::~MobileModel() {
@@ -60,11 +60,11 @@ void MobileModel::updatePosition() {
 
 	// si ya estoy en el destino, no hago nada
 	if ((deltaX == 0) && (deltaY == 0)){
-		this->motionStatus = STANDING;
+		this->moving = false;
 		return;
 	}
 
-	this->motionStatus = MOVING;
+	this->moving = true;
 
 	double hypotenuse = sqrt (pow(deltaX,2) + pow(deltaY,2.0));
 	// si estoy mas cerca que la velocidad, llegue al destino
@@ -77,14 +77,12 @@ void MobileModel::updatePosition() {
 	double displacementX = round(speed * (deltaX / hypotenuse));
 	double displacementY = round(speed * (deltaY / hypotenuse));
 
-//	Log().Get(logINFO) << "displacementX: " << displacementX << " displacementY: " << displacementY;
-
 	this->x += (int)displacementX;
 	this->y += (int)displacementY;
 }
 
-MotionStatus MobileModel::getMotionStatus() {
-	return this->motionStatus;
+bool MobileModel::isMoving() {
+	return this->moving;
 }
 
 
