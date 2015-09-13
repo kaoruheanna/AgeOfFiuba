@@ -17,18 +17,20 @@ class View {
 public:
 	View(std::string type);
 	virtual ~View();
-	void render(Renderer* renderer );
+	virtual void render(Renderer* renderer);
 	void setDrawable(Drawable *drawable);
 	void setOrigin(int x, int y);
 	std::string getType();
+
 protected:
 	virtual SDL_Point getOrigin();
 
 	SDL_Point origin;
+	Drawable *drawable;
 
 private:
 	std::string type;
-	Drawable *drawable;
+
 };
 
 #endif /* VIEW_H_ */

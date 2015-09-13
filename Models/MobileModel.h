@@ -8,6 +8,11 @@
 #ifndef MOBILEMODEL_H_
 #define MOBILEMODEL_H_
 
+enum MotionStatus {
+	STANDING = 0,
+	MOVING
+};
+
 class MobileModel {
 public:
 	MobileModel();
@@ -19,12 +24,14 @@ public:
 	void setY(int y);
 	void setDestination(int destinationX, int destionationY);
 	void updatePosition();
+	MotionStatus getMotionStatus();
 
 private:
 	int x;
 	int y;
 	int destinationX;
 	int destinationY;
+	MotionStatus motionStatus;
 
 	int getSpeed();
 };

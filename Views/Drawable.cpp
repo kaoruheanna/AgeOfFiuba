@@ -30,10 +30,10 @@ bool Drawable::loadTextureFromFile(std::string path,SDL_Renderer* sdlRenderer){
 		return false;
 	}
 
-	bool textureLoaded = this->loadTextureFromSurface(sdlRenderer, loadedSurface);
+	bool result = this->loadTextureFromSurface(sdlRenderer, loadedSurface);
 	//Get rid of old loaded surface
 	SDL_FreeSurface( loadedSurface );
-	return true;
+	return result;
 }
 
 SDL_Rect* Drawable::getClipRect(){
@@ -59,10 +59,6 @@ void Drawable::onTextureChange(){
 	this->width = w;
 }
 
-void Drawable::animate(){
-
-}
-
 SDL_Rect Drawable::getRectToDraw(int windowMainTilePositionX, int windowMainTilePositionY){
 	return {
 		windowMainTilePositionX - this->mainTilePosition.x,
@@ -80,3 +76,11 @@ void Drawable::free(){
 	SDL_DestroyTexture( this-> texture );
 	this->texture = NULL;
 }
+
+// dummy functions
+void Drawable::animate(){
+}
+
+void Drawable::selectAnimation(MotionDirection direction) {
+}
+

@@ -16,12 +16,15 @@ public:
 	MobileView(std::string type);
 	virtual ~MobileView();
 	void setModel(MobileModel *model);
+	MotionDirection getMotionDirection();
+	void render(Renderer* renderer );
 
 protected:
 	SDL_Point getOrigin();
 
 private:
 	MobileModel *model;
+	SDL_Point lastOrigin;
 };
 
 #endif /* MOBILEVIEW_H_ */

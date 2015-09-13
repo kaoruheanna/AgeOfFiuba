@@ -10,7 +10,6 @@
 #include <string>
 #include <iostream>
 #include "../Views/MobileView.h"
-#include <unistd.h>
 #include "../Utils/Log.h"
 #include "../Configuration/GameConfiguration.h"
 
@@ -55,7 +54,7 @@ void GameController::play() {
 	this->close();
 }
 
-const int SCROLL_SPEED = 10;
+const int SCROLL_SPEED = 2;
 const int SCROLL_WINDOW_WIDTH = 50;
 //Screen dimension constants
 const int SCREEN_WIDTH = 640;
@@ -82,7 +81,7 @@ float GameController::scrollingSpeedY(int y) {
 
 void GameController::moveToPoint(SDL_Point point) {
 	this->renderer->mainTilePosition = point;
-	Log().Get(logDEBUG) << "NewPoint: " << this->renderer->mainTilePosition.x << "," << this->renderer->mainTilePosition.y;
+//	Log().Get(logDEBUG) << "NewPoint: " << this->renderer->mainTilePosition.x << "," << this->renderer->mainTilePosition.y;
 }
 
 void GameController::updateWindow() {
@@ -141,6 +140,5 @@ void GameController::close() {
 
 void GameController::sleep(){
 	int millisec = 20;
-	int microsec = millisec * 1000;
-	usleep(microsec);
+	SDL_Delay(millisec);
 }

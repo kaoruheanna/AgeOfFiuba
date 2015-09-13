@@ -11,6 +11,18 @@
 #include <SDL2/SDL.h>
 #include "string"
 
+enum MotionDirection {
+	SOUTH = 0,
+	SOUTH_EAST,
+	EAST,
+	NORTH_EAST,
+	NORTH,
+	NORTH_WEST,
+	WEST,
+	SOUTH_WEST,
+};
+
+
 class Drawable {
 public:
 	Drawable(int mainTilePositionX, int mainTilePositionY, int baseTileWidth, int baseTileHeight);
@@ -20,7 +32,9 @@ public:
 	bool loadTextureFromFile(std::string path,SDL_Renderer* sdlRenderer);
 	virtual SDL_Rect* getClipRect();
 	virtual void animate();
+	virtual void selectAnimation(MotionDirection direction);
 	void free();
+
 protected:
 	bool loadTextureFromSurface(SDL_Renderer* renderer, SDL_Surface* surface);
 	virtual void onTextureChange();
@@ -29,13 +43,10 @@ protected:
 	SDL_Point mainTilePosition;
 	int height;
 	int width;
+
 private:
-	/*
-	 * Hay que aclarar que es cada cosa
-	 */
 	int baseTileWidth;
 	int baseTileHeight;
-
 
 };
 

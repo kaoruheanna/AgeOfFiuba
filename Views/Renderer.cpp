@@ -68,8 +68,8 @@ bool Renderer::loadMedia() {
 	this->missingImageDrawable->loadTextureFromFile("img/missingImage.png",this->sdlRenderer);
 
 	// soldado
-	string soldierPath = "img/hero.png";
-	Drawable *soldierDrawable = new Sprite(10,25,1,1,32,45,10);
+	string soldierPath = "img/ManSprite.png";
+	Drawable *soldierDrawable = new Sprite(25,50,1,1,50,50,10);
 	if (soldierDrawable->loadTextureFromFile(soldierPath,this->sdlRenderer)){
 		this->drawablesByInstanceName.insert(
 			std::pair<std::string,Drawable*>("soldier",	soldierDrawable)
@@ -119,8 +119,8 @@ void Renderer::drawViews() {
 SDL_Point Renderer::mapToWindowPoint(SDL_Point mapPoint){
 	SDL_Point windowPoint = {0,0};
 	// Rotar punto 45 grados
-	windowPoint.x = mapPoint.x * 0.707 - mapPoint.y * 0.707;
-	windowPoint.y = mapPoint.x * 0.707 + mapPoint.y * 0.707;
+	windowPoint.x = mapPoint.x * ISOMETRIC_ROTATION_FACTOR - mapPoint.y * ISOMETRIC_ROTATION_FACTOR;
+	windowPoint.y = mapPoint.x * ISOMETRIC_ROTATION_FACTOR + mapPoint.y * ISOMETRIC_ROTATION_FACTOR;
 	// Ajustar a la posicion del 0,0 en la pantalla
 	windowPoint.x += this->mainTilePosition.x;
 	windowPoint.y += this->mainTilePosition.y;
@@ -133,8 +133,8 @@ SDL_Point Renderer::windowToMapPoint(SDL_Point windowPoint){
 	centeredWindow.y -= this->mainTilePosition.y;
 	SDL_Point mapPoint = {0,0};
 	// Rotar punto -45 grados
-	mapPoint.x = centeredWindow.x * 0.707 + centeredWindow.y * 0.707;
-	mapPoint.y = -centeredWindow.x * 0.707 + centeredWindow.y * 0.707;
+	mapPoint.x = centeredWindow.x * ISOMETRIC_ROTATION_FACTOR + centeredWindow.y * ISOMETRIC_ROTATION_FACTOR;
+	mapPoint.y = -centeredWindow.x * ISOMETRIC_ROTATION_FACTOR + centeredWindow.y * ISOMETRIC_ROTATION_FACTOR;
 	return mapPoint;
 }
 

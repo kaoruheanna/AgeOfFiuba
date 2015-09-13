@@ -18,6 +18,7 @@ MobileModel::MobileModel() {
 	this->y = 0;
 	this->destinationX = 0;
 	this->destinationY = 0;
+	this->motionStatus = STANDING;
 }
 
 MobileModel::~MobileModel() {
@@ -59,11 +60,13 @@ void MobileModel::updatePosition() {
 
 	// si ya estoy en el destino, no hago nada
 	if ((deltaX == 0) && (deltaY == 0)){
+		this->motionStatus = STANDING;
 		return;
 	}
 
-	double hypotenuse = sqrt (pow(deltaX,2) + pow(deltaY,2.0));
+	this->motionStatus = MOVING;
 
+	double hypotenuse = sqrt (pow(deltaX,2) + pow(deltaY,2.0));
 	// si estoy mas cerca que la velocidad, llegue al destino
 	if (hypotenuse < speed){
 		this->x = this->destinationX;
@@ -80,6 +83,8 @@ void MobileModel::updatePosition() {
 	this->y += (int)displacementY;
 }
 
-
+MotionStatus MobileModel::getMotionStatus() {
+	return this->motionStatus;
+}
 
 

@@ -10,7 +10,7 @@
 Sprite::Sprite(int mainTilePositionX, int mainTilePositionY,int baseTileWidth, int baseTileHeight, int spriteWidth, int spriteHeight, int fps)
 : Drawable(mainTilePositionX, mainTilePositionY, baseTileWidth, baseTileHeight){
 	this->currentFrame = 0;
-	this->currentAnimation = 0;
+	this->currentAnimation = SOUTH;
 	this->fps = fps;
 	this->height = spriteHeight;
 	this->width = spriteWidth;
@@ -34,14 +34,13 @@ void Sprite::onTextureChange(){
 	this->framesPerAnimation = w / this->width;
 }
 
-void Sprite::selectAnimation(int animation){
-	if(animation > this->animationCount){
-		this->currentAnimation = 0;
-		printf("Selected unexisting animation!!");
+void Sprite::selectAnimation(MotionDirection direction){
+	if(direction > this->animationCount){
+		this->currentAnimation = SOUTH;
 	} else {
-		this->currentAnimation = animation;
+		this->currentAnimation = direction;
 	}
-	this->currentFrame = 0;
+//	this->currentFrame = 0;
 }
 
 SDL_Rect* Sprite::getClipRect(){

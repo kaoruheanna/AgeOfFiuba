@@ -10,6 +10,7 @@
 
 #include <list>
 #include "Drawable.h"
+#include "MobileView.h"
 using namespace std;
 
 class Sprite: public Drawable {
@@ -17,13 +18,15 @@ public:
 	Sprite(int mainTilePositionX, int mainTilePositionY,int baseTileWidth, int baseTileHeight, int spriteWidth, int spriteHeight, int fps);
 	virtual ~Sprite();
 	SDL_Rect* getClipRect();
-	void selectAnimation(int animation);
+	void selectAnimation(MotionDirection direction);
 	void animate();
+
 protected:
 	void onTextureChange();
+
 private:
 	int currentFrame;
-	int currentAnimation;
+	MotionDirection currentAnimation;
 	int fps;
 	int animationCount;
 	int framesPerAnimation;

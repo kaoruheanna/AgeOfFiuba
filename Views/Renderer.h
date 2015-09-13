@@ -9,6 +9,7 @@
 #define RENDERER_H_
 
 #define ISOMETRIC_DRAW true
+#define ISOMETRIC_ROTATION_FACTOR 0.707
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>

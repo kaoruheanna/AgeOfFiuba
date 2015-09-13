@@ -30,7 +30,6 @@ void View::setDrawable(Drawable *drawable){
 }
 
 SDL_Point View::getOrigin(){
-//	printf("uso el getOrigin de View\n");
 	return this->origin;
 }
 
