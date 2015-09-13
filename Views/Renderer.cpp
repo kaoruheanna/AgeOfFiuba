@@ -76,6 +76,14 @@ bool Renderer::loadMedia() {
 		);
 	}
 
+	// tile mapa
+	string tileDefault = "img/grass1.png";
+	Drawable *tileDefDrawable = new Drawable(0,0,1,1);//nose si esta bien
+	if (tileDefDrawable -> loadTextureFromFile(tileDefault,this->sdlRenderer)){
+		this->drawablesByInstanceName.insert(
+				std::pair<std::string,Drawable*>("tileDefault", tileDefDrawable));
+	}
+
 	return success;
 }
 

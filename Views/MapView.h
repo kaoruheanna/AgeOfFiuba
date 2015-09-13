@@ -17,6 +17,7 @@ public:
 	MapView(std::string type);
 	virtual ~MapView();
 	void setModel(Map *model);
+	void render(Renderer* renderer );
 
 protected:
 	SDL_Point getOrigin();

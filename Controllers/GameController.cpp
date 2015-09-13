@@ -42,6 +42,7 @@ void GameController::play() {
 	this->views.push_back(marioView);
 	this->renderer->addView(marioView);
 
+
 	//While application is running
 	while( !this->shouldQuit ) {
 		this->updateWindow();

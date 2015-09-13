@@ -24,3 +24,9 @@ SDL_Point MapView::getOrigin(){
 	return origin;
 }
 
+void MapView::render(Renderer* renderer ){
+	// aca habria que dibujar todos los tiles visibles;
+}
+
+
+
