@@ -152,7 +152,7 @@ void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable, bool
 	if(iso){
 		windowPoint = this->mapToWindowPoint({mapPositionX, mapPositionY});
 	} else {
-		windowPoint = {mapPositionX, mapPositionY};
+		windowPoint = {mapPositionX+this->mainTilePosition.x, mapPositionY + this->mainTilePosition.y};
 	}
 	SDL_Rect renderQuad = drawable->getRectToDraw(windowPoint.x, windowPoint.y);
 	//printf("mapPoint: %i:%i windowPoint: %i:%i\n", mapPositionX, mapPositionY, windowPoint.x, windowPoint.y);
