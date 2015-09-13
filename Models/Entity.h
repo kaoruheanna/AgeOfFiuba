@@ -13,7 +13,7 @@
 
 using namespace std;
 
-class Entidad{
+class Entity{
 private:
 	//int id;
 	//imagen ?
@@ -33,11 +33,9 @@ public:
 
 	string toString();
 
-	Entidad(string,SDL_Point,int,int);
-	Entidad(string,int,int);
-	~Entidad();
-
-
+	Entity(string,SDL_Point,int,int);
+	Entity(string,int,int);
+	~Entity();
 };
 
 #endif /* ENTIDAD_H_ */

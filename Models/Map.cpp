@@ -1,6 +1,6 @@
-#include "Mundo.h"
+#include "Map.h"
 
-Mundo::Mundo(int alto, int ancho, int tile_alto, int tile_ancho){
+Map::Map(int alto, int ancho, int tile_alto, int tile_ancho){
 	//el ancho y alto del tile se puede determinar con las dimensiones del tile default.
 	this -> alto = alto;
 	this -> ancho = ancho;
@@ -9,10 +9,10 @@ Mundo::Mundo(int alto, int ancho, int tile_alto, int tile_ancho){
 	this -> baldosas = new TileSet(ancho,alto);
 }
 
-Mundo::~Mundo(){
+Map::~Map(){
 }
 
-void Mundo::setAll(int alto, int ancho, int tile_alto, int tile_ancho){
+void Map::setAll(int alto, int ancho, int tile_alto, int tile_ancho){
 	this -> alto = alto;
 	this -> ancho = ancho;
 	this -> tile_alto = tile_alto;
@@ -22,7 +22,7 @@ void Mundo::setAll(int alto, int ancho, int tile_alto, int tile_ancho){
 /* posicion relativa. Rect refiere a la pantalla,
  * punto_m es un punto en las coordenadas del mapa (coordenadas absolutas).
  * Devuelve punto_v que seria el mismo punto pero respecto del mapa.*/
-SDL_Point Mundo::posicionRelativaRect(SDL_Rect rect, SDL_Point punto_m){
+SDL_Point Map::posicionRelativaRect(SDL_Rect rect, SDL_Point punto_m){
 	SDL_Point punto_v;
 	punto_v.x = punto_m.x - rect.x;
 	punto_v.y = punto_m.y - rect.y;
@@ -30,7 +30,7 @@ SDL_Point Mundo::posicionRelativaRect(SDL_Rect rect, SDL_Point punto_m){
 }
 /*Devuelve la coordenada del tile donde se encuentra el punto.
  * Transforma coordenadas absolutas en logicas*/
-PointL Mundo::transformarAL(SDL_Point punto_absoluto){
+PointL Map::transformarAL(SDL_Point punto_absoluto){
 	PointL punto_logico;
 	float xa = punto_absoluto.x;
 	float ya = punto_absoluto.y;
@@ -39,7 +39,7 @@ PointL Mundo::transformarAL(SDL_Point punto_absoluto){
 	return punto_logico;
 }
 
-SDL_Point Mundo::transformarLA(PointL punto_logico){
+SDL_Point Map::transformarLA(PointL punto_logico){
 	SDL_Point punto_absoluto;
 	float xl = punto_logico.x;
 	float yl = punto_logico.y;
@@ -48,7 +48,7 @@ SDL_Point Mundo::transformarLA(PointL punto_logico){
 	return punto_absoluto;
 }
 
-bool Mundo::puedoConstruir(Entidad* entidad, SDL_Point posicion){
+bool Map::puedoConstruir(Entity* entidad, SDL_Point posicion){
 	int size_x = entidad->getAnchoBase();
 	int size_y = entidad->getAltoBase();
 
@@ -63,7 +63,7 @@ bool Mundo::puedoConstruir(Entidad* entidad, SDL_Point posicion){
 	return !(this -> baldosas->sectorEstaBloqueado(posicion,fin));
 }
 
-bool Mundo::construirEntidad(Entidad* entidad, SDL_Point posicion){
+bool Map::construirEntidad(Entity* entidad, SDL_Point posicion){
 	if (this->puedoConstruir(entidad,posicion)){
 		for (int i = 0; i < posicion.x + entidad->getAnchoBase(); i++){
 			for (int j = 0; j < posicion.y + entidad->getAnchoBase(); j++){

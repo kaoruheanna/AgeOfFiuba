@@ -2,7 +2,7 @@
 
 Escenario::Escenario(string name, int ancho, int alto, int tile_ancho, int tile_alto){
 	this -> name = name;
-	this -> mundo = new Mundo(ancho, alto, tile_ancho, tile_alto);
+	this -> mundo = new Map(ancho, alto, tile_ancho, tile_alto);
 }
 
 Escenario::~Escenario(){
@@ -14,14 +14,14 @@ string Escenario::toString(){
 	return n.append(this-> name);
 }
 
-bool Escenario::agregarEntidad(Entidad* entidad){
-	list<Entidad*>::iterator it;
+bool Escenario::agregarEntidad(Entity* entidad){
+	list<Entity*>::iterator it;
 	it = this->entidades.end();
 	this->entidades.insert(it,entidad);
 	return true;
 }
 
-bool Escenario::construirEntidad(Entidad* entidad,SDL_Point posicion){
+bool Escenario::construirEntidad(Entity* entidad,SDL_Point posicion){
 	if (this->mundo->construirEntidad(entidad,posicion)){
 		entidad->setPosicion(posicion);
 		this->agregarEntidad(entidad);
@@ -30,16 +30,22 @@ bool Escenario::construirEntidad(Entidad* entidad,SDL_Point posicion){
 }
 
 void Escenario::imprimirEntidades(){
-	list<Entidad*>::iterator it;
+	list<Entity*>::iterator it;
 	for (it=this->entidades.begin(); it != this->entidades.end(); ++it){
-		Entidad* e = *it;
+		Entity* e = *it;
 		cout<< e->toString()<<endl;
 	}
 }
 
-list<Entidad*> Escenario::getListaEntidades(){
+list<Entity*> Escenario::getListaEntidades(){
 	return this->entidades;
 }
 
 
-
+void Escenario::vaciarEntidades(){
+	while (!this->entidades.empty()){
+		Entity* e = this->entidades.front();
+		this->entidades.pop_front();
+		delete e;
+	}
+}

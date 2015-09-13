@@ -3,7 +3,7 @@
 #define MUNDO_H_
 
 #include <SDL2/SDL.h>
-#include "Entidad.h"
+#include "Entity.h"
 #include "TileSet.h"
 
 //PointL es una version del SDL_Point pero con sus coordenadas flotantes.
@@ -12,7 +12,7 @@ typedef struct PointL{
 	float y;
 }PointL;
 
-class Mundo {
+class Map {
 	private:
 		int alto;
 		int ancho;
@@ -36,12 +36,12 @@ class Mundo {
 		PointL transformarAL(SDL_Point);
 		SDL_Point transformarLA(PointL);
 
-		bool construirEntidad(Entidad*,SDL_Point);
-		bool puedoConstruir(Entidad*,SDL_Point);
-		Entidad* sacarEntidad(Entidad*);
+		bool construirEntidad(Entity*,SDL_Point);
+		bool puedoConstruir(Entity*,SDL_Point);
+		Entity* sacarEntidad(Entity*);
 
-		Mundo(int, int, int, int);
-		virtual ~Mundo();
+		Map(int, int, int, int);
+		virtual ~Map();
 };
 
 
