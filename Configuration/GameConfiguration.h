@@ -21,7 +21,7 @@
 #include <fstream>
 #include <string>
 
-//const char* ARCHIVO_DEFAULT = "configuracion.yaml";
+//const char* ARCHIVOPORDEFECTO = "configuracion.yaml";
 
 class GameConfiguration {
 
@@ -29,13 +29,16 @@ public:
 	GameConfiguration();
 	GameConfiguration(const char* archivoAParsear);
 	~GameConfiguration();
+	int getPantallaAlto();
+	int getPantallaAncho();
 
 
 private:
 	void parseYAML(const char* archivoAParsear);
 	void loadDefaultConfiguration();
 	bool loadFile(const char* archivoAParsear);
-	//bool NodoVacio(YAML::Node& nodo);
+	void auxiliar();
+	bool verificarPantalla(YAML::Node& nodo);
 	const char* defaultFile;
 	YAML::Node nodoRaiz;
 };
