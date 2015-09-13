@@ -31,7 +31,7 @@ void MapView::render(Renderer* renderer ){
 	for (int i=0; i<width ; i++){
 		for (int j=0; j<height; j++){
 			this -> origin = {-j*tw+i*tw,j*th+i*th};
-			View::render(renderer);
+			View::render(renderer,false);
 		}
 	}
 }
