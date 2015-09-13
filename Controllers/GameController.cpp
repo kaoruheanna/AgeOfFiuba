@@ -12,12 +12,14 @@
 #include "../Views/MobileView.h"
 #include "../Views/MapView.h"
 #include "../Utils/Log.h"
-#include "../Configuration/GameConfiguration.h"
 
-GameController::GameController() {
+
+
+GameController::GameController(GameConfiguration *config) {
 	this->shouldQuit = false;
 	this->renderer = NULL;
 	this->model = NULL;
+	this->config = config;
 }
 
 GameController::~GameController() {
@@ -27,7 +29,7 @@ GameController::~GameController() {
 void GameController::play() {
 	Log().Get(logDEBUG) << "[GameController] " << "play";
 
-	this->renderer = new Renderer();
+	this->renderer = new Renderer(this->config->getPantallaAncho(),this->config->getPantallaAlto());
 	if (!this->renderer->canDraw()){
 		printf( "Failed to initialize!\n" );
 		this->close();
@@ -66,11 +68,8 @@ void GameController::play() {
 	this->close();
 }
 
-const int SCROLL_SPEED = 2;
+const int SCROLL_SPEED = 4;
 const int SCROLL_WINDOW_WIDTH = 50;
-//Screen dimension constants
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
 
 
 float GameController::scrollingSpeed(int x, int large) {
@@ -84,16 +83,15 @@ float GameController::scrollingSpeed(int x, int large) {
 }
 
 float GameController::scrollingSpeedX(int x) {
-	return scrollingSpeed(x,SCREEN_WIDTH);
+	return scrollingSpeed(x,this->config->getPantallaAncho())*-1;
 }
 
 float GameController::scrollingSpeedY(int y) {
-	return scrollingSpeed(y,SCREEN_HEIGHT);
+	return scrollingSpeed(y,this->config->getPantallaAlto())*-1;
 }
 
 void GameController::moveToPoint(SDL_Point point) {
 	this->renderer->mainTilePosition = point;
-//	Log().Get(logDEBUG) << "NewPoint: " << this->renderer->mainTilePosition.x << "," << this->renderer->mainTilePosition.y;
 }
 
 void GameController::updateWindow() {
@@ -101,8 +99,8 @@ void GameController::updateWindow() {
 	int x, y, newY, newX;
 	SDL_GetMouseState(&x, &y);
 
-	newX = -(scrollingSpeedX(x)*SCROLL_SPEED) + this->renderer->mainTilePosition.x;
-	newY = -(scrollingSpeedY(y)*SCROLL_SPEED) + this->renderer->mainTilePosition.y;
+	newX = (scrollingSpeedX(x)*SCROLL_SPEED) + this->renderer->mainTilePosition.x;
+	newY = (scrollingSpeedY(y)*SCROLL_SPEED) + this->renderer->mainTilePosition.y;
 
 	if ((newX != this->renderer->mainTilePosition.x) || (newY != this->renderer->mainTilePosition.y)) {
 		moveToPoint({newX,newY});

@@ -9,15 +9,13 @@
 #include "Sprite.h"
 #include "../Utils/Log.h"
 
-//Screen dimension constants
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
-
-Renderer::Renderer() {
+Renderer::Renderer(int screenWidth, int screenHeight) {
 	this->window = NULL;
 	this->sdlRenderer = NULL;
 	this->missingImageDrawable = NULL;
 	this->mainTilePosition = {0,0};
+	this->screenWidth = screenWidth;
+	this->screenHeight = screenHeight;
 
 	bool didInitSDL = this->initSDL();
 	bool didLoadMedia = this->loadMedia();
@@ -35,7 +33,7 @@ bool Renderer::initSDL() {
 	}
 
 	//Create window
-	this->window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+	this->window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, this->screenWidth, this->screenHeight, SDL_WINDOW_SHOWN );
 	if (this->window == NULL) {
 		printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
 		return false;

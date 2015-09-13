@@ -26,7 +26,7 @@ class View;
 class Renderer {
 public:
 	SDL_Point mainTilePosition;
-	Renderer();
+	Renderer(int screenWidth, int screenHeight);
 	virtual ~Renderer();
 	void close();
 	void drawViews();
@@ -43,6 +43,9 @@ private:
 	list<View*> views;
 	std::map<std::string, Drawable*> drawablesByInstanceName;
 	Drawable* missingImageDrawable;
+
+	int screenWidth;
+	int screenHeight;
 
 	bool initSDL();
 	bool loadMedia();

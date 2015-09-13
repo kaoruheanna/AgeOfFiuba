@@ -12,11 +12,13 @@
 #include "../Views/Renderer.h"
 #include "../Models/MobileModel.h"
 #include <list>
+#include "../Configuration/GameConfiguration.h"
+
 using namespace std;
 
 class GameController {
 public:
-	GameController();
+	GameController(GameConfiguration *config);
 	virtual ~GameController();
 	void play();
 
@@ -25,6 +27,7 @@ private:
 	list<View*> views;
 	Renderer *renderer;
 	MobileModel *model;
+	GameConfiguration *config;
 
 	void pollEvents();
 	void updateWindow();
