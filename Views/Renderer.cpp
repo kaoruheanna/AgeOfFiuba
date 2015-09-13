@@ -67,6 +67,14 @@ bool Renderer::loadMedia() {
 	this->missingImageDrawable = new Drawable(64,0,1,1);
 	this->missingImageDrawable->loadTextureFromFile("img/missingImage.png",this->sdlRenderer);
 
+	// Mapa
+	string tileDefault = "img/grass1.png";
+	Drawable *tileDefDrawable = new Drawable(0,0,128,64);//nose si esta bien
+	if (tileDefDrawable -> loadTextureFromFile(tileDefault,this->sdlRenderer)){
+		this->drawablesByInstanceName.insert(
+				std::pair<std::string,Drawable*>("tileDefault", tileDefDrawable));
+	}
+
 	// soldado
 	string soldierPath = "img/ManSprite.png";
 	Drawable *soldierDrawable = new Sprite(25,50,1,1,50,50,10);
@@ -76,13 +84,6 @@ bool Renderer::loadMedia() {
 		);
 	}
 
-	// tile mapa
-	string tileDefault = "img/grass1.png";
-	Drawable *tileDefDrawable = new Drawable(0,0,1,1);//nose si esta bien
-	if (tileDefDrawable -> loadTextureFromFile(tileDefault,this->sdlRenderer)){
-		this->drawablesByInstanceName.insert(
-				std::pair<std::string,Drawable*>("tileDefault", tileDefDrawable));
-	}
 
 	return success;
 }

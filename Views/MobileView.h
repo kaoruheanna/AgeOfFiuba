@@ -17,7 +17,7 @@ public:
 	virtual ~MobileView();
 	void setModel(MobileModel *model);
 	MotionDirection getMotionDirection();
-	void render(Renderer* renderer );
+	void render(Renderer* renderer);
 
 protected:
 	SDL_Point getOrigin();

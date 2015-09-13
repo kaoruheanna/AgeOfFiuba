@@ -25,8 +25,8 @@ class Map {
 
 	public:
 
-		int getAlto();
-		int getAncho();
+		int getHeight();
+		int getWidth();
 		void setAlto(int);
 		void setAncho(int);
 		void setAll(int,int,int,int);
