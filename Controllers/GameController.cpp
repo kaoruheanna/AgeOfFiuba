@@ -10,6 +10,7 @@
 #include <string>
 #include <iostream>
 #include "../Views/MobileView.h"
+#include "../Views/MapView.h"
 #include "../Utils/Log.h"
 #include "../Configuration/GameConfiguration.h"
 
@@ -41,6 +42,14 @@ void GameController::play() {
 	marioView->setModel(model);
 	this->views.push_back(marioView);
 	this->renderer->addView(marioView);
+
+	//Agrego el mapa
+	Map* mapModel = new Map(100,100,128,64);
+
+	MapView *mapView = new MapView("tileDefault");
+	mapView->setModel(mapModel);
+	this->views.push_back(mapView);
+	this->renderer->addView(mapView);
 
 
 	//While application is running

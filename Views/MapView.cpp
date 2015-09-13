@@ -26,6 +26,8 @@ SDL_Point MapView::getOrigin(){
 
 void MapView::render(Renderer* renderer ){
 	// aca habria que dibujar todos los tiles visibles;
+
+	View::render(renderer);
 }
 
 
