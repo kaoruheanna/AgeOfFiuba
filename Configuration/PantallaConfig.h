@@ -12,8 +12,8 @@
 #include <yaml-cpp/yaml.h>
 
 
-const int ALTO_PANTALLA_DEFAULT = 800;
-const int ANCHO_PANTALLA_DEFAULT = 600;
+const int ALTO_PANTALLA_DEFAULT = 600;
+const int ANCHO_PANTALLA_DEFAULT = 800;
 
 class PantallaConfig {
 public:
