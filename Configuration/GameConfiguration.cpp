@@ -32,11 +32,19 @@ GameConfiguration::~GameConfiguration(){
 }
 
 int GameConfiguration::getPantallaAlto(){
-	return this->nodoRaiz["pantalla"][0]["alto"].as<int>();
+	return this->pantalla.getAlto();
 }
 
 int GameConfiguration::getPantallaAncho(){
-	return this->nodoRaiz["pantalla"][1]["ancho"].as<int>();
+	return this->pantalla.getAncho();
+}
+
+int GameConfiguration::getVelocidadPersonaje(){
+	return this->configuracion.getVelocidad();
+}
+
+int GameConfiguration::getMargenScroll(){
+	return this->configuracion.getScroll();
 }
 
 //ESTA FUNCION VA A COMPROBAR QUE EL ARCHIVO RESPETE LAS ESPECIFICACIONES DE YAML, NO VERIFICA LA VALIDACION DE VALORES
@@ -57,51 +65,27 @@ void GameConfiguration::loadDefaultConfiguration(){
 	this->nodoRaiz = YAML::LoadFile(this->defaultFile);
 }
 
-bool GameConfiguration::verificarPantalla (YAML::Node& nodo){
-	bool altura , ancho = false;
-	//CANTIDAD DE ELEMENTOS CORRECTA
-	if (nodo.size() == 2){
-			if (nodo[0]["alto"] && nodo[0]["alto"].IsScalar() && nodo[0]["alto"].as<int>() > 0){
-				altura = true;
-			}
-			if (nodo[1]["ancho"] && nodo[1]["ancho"].IsScalar() && nodo[1]["ancho"].as<int>() > 0){
-				ancho = true;
-			}
-
-    }
-	return (altura && ancho);
-}
 
 void GameConfiguration::parseYAML(const char* archivoAParsear){
 	//VERIFICA SI ARCHIVO ESTA CORRUPTO O TIENE FORMATO VALIDO DE YAML, EN ESE CASO PARSEA DIRECTAMENTE EL ARCHIVO POR DEFECTO
 	if ( !this->loadFile(archivoAParsear) ){
 		//DEBE LOGUEAR QUE EL ARCHIVO PASADO POR PARAMETRO ESTA CORRUPTO Y POR ENDE SE CARGARON LOS VALORES DEL ARCHIVO DEFAULT
 		this->loadDefaultConfiguration();
-		//SI ES EL DEFAULT NO HAY QUE HACER EL TRABAJO QUE VIENE DESPUES
-		return;
 	}
-	YAML::Node nodoPantalla = this->nodoRaiz["pantalla"];
+	this->pantalla = PantallaConfig(this->nodoRaiz["pantalla"]);
+	this->configuracion = ConfiguracionConfig(this->nodoRaiz["configuracion"]);
 	YAML::Node nodoTipos = this->nodoRaiz["tipos"];
-	YAML::Node nodoConfiguracion = this->nodoRaiz["configuracion"];
 	YAML::Node nodoEscenario = this->nodoRaiz["escenario"];
-
-	//SI FALLA ALGUNO DE LOS CAMPOS SE QUEDA CON EL ARCHIVO DEFAULT
-	if (!nodoPantalla || !nodoTipos || !nodoConfiguracion || !nodoEscenario){
-		this->loadDefaultConfiguration();
-		return;
-	}
-
-	if (this->verificarPantalla(nodoPantalla)){
-		std::cout <<  this->getPantallaAlto() << std::endl;
-	}
-
-
 }
 
 
 //SOLO CON FINES AUXILIARES!!!!!!!
 void GameConfiguration::auxiliar(){
-	std::cout << this->nodoRaiz << std::endl ;
+	std::cout << this->pantalla.getAlto() << std::endl;
+	std::cout << this->pantalla.getAncho() << std::endl;
+	std::cout << this->configuracion.getVelocidad() << std::endl;
+	std::cout << this->configuracion.getScroll() << std::endl;
+	//std::cout << this->nodoRaiz << std::endl ;
 }
 
 

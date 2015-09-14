@@ -20,6 +20,9 @@
 #include <yaml-cpp/yaml.h>
 #include <fstream>
 #include <string>
+#include "PantallaConfig.h"
+#include "ConfiguracionConfig.h"
+
 
 //const char* ARCHIVOPORDEFECTO = "configuracion.yaml";
 
@@ -31,6 +34,8 @@ public:
 	~GameConfiguration();
 	int getPantallaAlto();
 	int getPantallaAncho();
+	int getVelocidadPersonaje();
+	int getMargenScroll();
 
 
 private:
@@ -38,9 +43,10 @@ private:
 	void loadDefaultConfiguration();
 	bool loadFile(const char* archivoAParsear);
 	void auxiliar();
-	bool verificarPantalla(YAML::Node& nodo);
 	const char* defaultFile;
 	YAML::Node nodoRaiz;
+	PantallaConfig pantalla;
+	ConfiguracionConfig configuracion;
 };
 
 #endif /* GAMECONFIGURATION_H_ */
