@@ -33,7 +33,7 @@ bool Renderer::initSDL() {
 	}
 
 	//Create window
-	this->window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, this->screenWidth, this->screenHeight, SDL_WINDOW_SHOWN );
+	this->window = SDL_CreateWindow( "Age Of FIUBA", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, this->screenWidth, this->screenHeight, SDL_WINDOW_SHOWN );
 	if (this->window == NULL) {
 		printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
 		return false;

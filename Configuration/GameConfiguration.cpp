@@ -24,7 +24,7 @@ GameConfiguration::GameConfiguration(const char* archivoAParsear){
 GameConfiguration::GameConfiguration(){
 	Log().Get(logINFO) << "voy a parsear un archivo";	
 	this->defaultFile = "yaml-files/configuracion.yaml";
-	this->loadDefaultConfiguration();
+	this->parseYAML(this->defaultFile);
 }
 
 GameConfiguration::~GameConfiguration(){
