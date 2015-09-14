@@ -29,7 +29,7 @@ GameController::~GameController() {
 void GameController::play() {
 	Log().Get(logDEBUG) << "[GameController] " << "play";
 
-	this->renderer = new Renderer(this->config->getPantallaAncho(),this->config->getPantallaAlto());
+	this->renderer = new Renderer(this->config->getPantallaAncho(),this->config->getPantallaAlto(), this->config->getTipos());
 	if (!this->renderer->canDraw()){
 		printf( "Failed to initialize!\n" );
 		this->close();
@@ -37,7 +37,7 @@ void GameController::play() {
 	}
 
 	//Agrego el mapa
-	Map* mapModel = new Map(100,100,128,64);
+	Map* mapModel = new Map(5,5,128,64);
 	MapView *mapView = new MapView("tileDefault");
 	mapView->setModel(mapModel);
 	this->views.push_back(mapView);
@@ -48,7 +48,7 @@ void GameController::play() {
 	this->model->setX(200);
 	this->model->setY(100);
 
-	MobileView *marioView = new MobileView("soldier");
+	MobileView *marioView = new MobileView("soldado");
 	marioView->setModel(model);
 	this->views.push_back(marioView);
 	this->renderer->addView(marioView);

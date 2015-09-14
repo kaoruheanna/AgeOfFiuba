@@ -19,6 +19,7 @@
 #include "Drawable.h"
 #include <list>
 #include <map>
+#include "../Configuration/TipoConfig.h"
 using namespace std;
 
 class View;
@@ -26,7 +27,7 @@ class View;
 class Renderer {
 public:
 	SDL_Point mainTilePosition;
-	Renderer(int screenWidth, int screenHeight);
+	Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos);
 	virtual ~Renderer();
 	void close();
 	void drawViews();
@@ -48,7 +49,7 @@ private:
 	int screenHeight;
 
 	bool initSDL();
-	bool loadMedia();
+	bool loadMedia(list<TipoConfig> tipos);
 };
 
 #endif /* RENDERER_H_ */

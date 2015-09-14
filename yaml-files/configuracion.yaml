@@ -19,13 +19,19 @@ tipos:
    pixel_ref_y: 40
 
  - nombre: soldado
-   imagen: path/a/soldado.png
+   imagen: img/ManSprite.png
+   ancho_base: 1
+   alto_base : 1
+   pixel_ref_x: 25
+   pixel_ref_y: 50
    fps: 10
-   delay: 5
+   alto_frame: 50
+   ancho_frame: 50
  
  - nombre: juana_de_arco
    imagen: path/a/juanadearco.png
    fps: 10
+   delay: 5
 
  - nombre: tierra
    imagen: path/a/tierra.png
@@ -35,8 +41,8 @@ tipos:
 
 escenario:
  - nombre: orleans
-   size_x: 100
-   size_y: 100
+   size_x: 5
+   size_y: 5
    entidades:
    - [x: 10, y: 15, tipo: tierra]
    - [x: 15, y: 20, tipo: tierra]

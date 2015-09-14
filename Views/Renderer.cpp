@@ -9,7 +9,7 @@
 #include "Sprite.h"
 #include "../Utils/Log.h"
 
-Renderer::Renderer(int screenWidth, int screenHeight) {
+Renderer::Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos) {
 	this->window = NULL;
 	this->sdlRenderer = NULL;
 	this->missingImageDrawable = NULL;
@@ -18,7 +18,7 @@ Renderer::Renderer(int screenWidth, int screenHeight) {
 	this->screenHeight = screenHeight;
 
 	bool didInitSDL = this->initSDL();
-	bool didLoadMedia = this->loadMedia();
+	bool didLoadMedia = this->loadMedia(tipos);
 	this->successfullInit = (didInitSDL && didLoadMedia);
 }
 
@@ -58,30 +58,75 @@ bool Renderer::initSDL() {
 	return true;
 }
 
-bool Renderer::loadMedia() {
+bool Renderer::loadMedia(list<TipoConfig> tipos) {
 	bool success = true;
 
-	// drawable default
+	// Imagen Default
+	Log().Get(logINFO) << "Cargando drawable default";
 	this->missingImageDrawable = new Drawable(64,0,1,1);
-	this->missingImageDrawable->loadTextureFromFile("img/missingImage.png",this->sdlRenderer);
-
+	success = this->missingImageDrawable->loadTextureFromFile("img/missingImage.png",this->sdlRenderer);
+	if(!success){
+		Log().Get(logERROR) << "No se pudo cargar el drawable default";
+	} else {
+		Log().Get(logINFO) << "Cargado drawable default";
+	}
 	// Mapa
+	Log().Get(logINFO) << "Cargando tile default";
 	string tileDefault = "img/grass1.png";
 	Drawable *tileDefDrawable = new Drawable(0,0,128,64);//nose si esta bien
 	if (tileDefDrawable -> loadTextureFromFile(tileDefault,this->sdlRenderer)){
+		Log().Get(logINFO) << "Cargado tile default";
 		this->drawablesByInstanceName.insert(
 				std::pair<std::string,Drawable*>("tileDefault", tileDefDrawable));
+	} else {
+		Log().Get(logERROR) << "No se pudo cargar el drawable default";
 	}
 
-	// soldado
-	string soldierPath = "img/ManSprite.png";
+	// soldado => Esta en el YAML (Lo dejo por si le craseha a alguno)
+	/*string soldierPath = "img/ManSprite.png";
 	Drawable *soldierDrawable = new Sprite(25,50,1,1,50,50,10);
 	if (soldierDrawable->loadTextureFromFile(soldierPath,this->sdlRenderer)){
 		this->drawablesByInstanceName.insert(
 			std::pair<std::string,Drawable*>("soldier",	soldierDrawable)
 		);
-	}
+	}*/
 
+	// Cargar los tipos pasados por el YAML
+	int i = 0;
+	for (list<TipoConfig>::iterator it = tipos.begin(); it != tipos.end(); ++it) {
+	  Log().Get(logDEBUG) << "Parseando tipo: " << i;
+	  TipoConfig newNodo = *it;
+	  if(newNodo.getNombre() == "" || newNodo.getImagen() == ""){
+		  Log().Get(logERROR) << "Tipo N°" << i << " es incorrecto. Deberia tener nombre e imagen.";
+	  } else {
+		  Drawable *nodoDrawable = NULL;
+		  if(newNodo.getFPS() > 0){
+			  Log().Get(logINFO) << "Tipo N°" << i << " es un sprite.";
+			  nodoDrawable = new Sprite(
+				newNodo.getPixelRefX(), newNodo.getPixelRefY(),
+				newNodo.getAnchoBase(), newNodo.getAltoBase(),
+				newNodo.getAnchoFrame(), newNodo.getAltoFrame(),
+				newNodo.getFPS()
+			  );
+			  // TODO agregar el campo delay a Sprite
+		  } else {
+			  Log().Get(logINFO) << "Tipo N°" << i << " es un drawable.";
+			  nodoDrawable = new Drawable(
+				newNodo.getPixelRefX(), newNodo.getPixelRefY(),
+				newNodo.getAnchoBase(), newNodo.getAltoBase()
+			  );
+		  }
+		  if(nodoDrawable->loadTextureFromFile(newNodo.getImagen(), this->sdlRenderer)){
+			  Log().Get(logINFO) << "Tipo N°" << i << " se cargo correctamente bajo el nombre " << newNodo.getNombre();
+			  this->drawablesByInstanceName.insert(
+				std::pair<std::string,Drawable*>(newNodo.getNombre(), nodoDrawable)
+			  );
+		  } else {
+			  Log().Get(logINFO) << "Tipo N°" << i << " no se pudo cargar la imagen.";
+		  }
+	  }
+	  i++;
+	}
 
 	return success;
 }

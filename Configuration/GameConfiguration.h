@@ -22,6 +22,7 @@
 #include <string>
 #include "PantallaConfig.h"
 #include "ConfiguracionConfig.h"
+#include "TipoConfig.h"
 
 
 //const char* ARCHIVOPORDEFECTO = "configuracion.yaml";
@@ -36,7 +37,7 @@ public:
 	int getPantallaAncho();
 	int getVelocidadPersonaje();
 	int getMargenScroll();
-
+	list<TipoConfig> getTipos();
 
 private:
 	void parseYAML(const char* archivoAParsear);
@@ -47,6 +48,7 @@ private:
 	YAML::Node nodoRaiz;
 	PantallaConfig pantalla;
 	ConfiguracionConfig configuracion;
+	list<TipoConfig> tipos;
 };
 
 #endif /* GAMECONFIGURATION_H_ */

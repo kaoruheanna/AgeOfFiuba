@@ -14,7 +14,8 @@
 
 
 GameConfiguration::GameConfiguration(const char* archivoAParsear){
-	Log().Get(logINFO) << "voy a parsear un archivo";	
+	Log().Get(logINFO) << "voy a parsear un archivo";
+	this->tipos.clear();
 	this->defaultFile = "yaml-files/configuracion.yaml";//ARCHIVO_DEFAULT;
 	this->parseYAML(archivoAParsear);
 	//QUITAR ESTA INVOCACION EN LA VERSION FINAL
@@ -22,13 +23,13 @@ GameConfiguration::GameConfiguration(const char* archivoAParsear){
 }
 
 GameConfiguration::GameConfiguration(){
-	Log().Get(logINFO) << "voy a parsear un archivo";	
+	Log().Get(logINFO) << "voy a parsear un archivo";
+	this->tipos.clear();
 	this->defaultFile = "yaml-files/configuracion.yaml";
 	this->parseYAML(this->defaultFile);
 }
 
 GameConfiguration::~GameConfiguration(){
-
 }
 
 int GameConfiguration::getPantallaAlto(){
@@ -76,6 +77,19 @@ void GameConfiguration::parseYAML(const char* archivoAParsear){
 	this->configuracion = ConfiguracionConfig(this->nodoRaiz["configuracion"]);
 	YAML::Node nodoTipos = this->nodoRaiz["tipos"];
 	YAML::Node nodoEscenario = this->nodoRaiz["escenario"];
+	if(!nodoTipos.IsSequence()){
+		Log().Get(logERROR) << "Nodo tipos tiene que ser una secuencia";
+	} else {
+		for (std::size_t i=0;i < nodoTipos.size();i++) {
+		  Log().Get(logDEBUG) << "Parseando tipo: " << i;
+		  TipoConfig* newNodo = new TipoConfig(nodoTipos[i]);
+		  tipos.push_back(*newNodo);
+		}
+	}
+}
+
+list<TipoConfig> GameConfiguration::getTipos() {
+	return this->tipos;
 }
 
 
