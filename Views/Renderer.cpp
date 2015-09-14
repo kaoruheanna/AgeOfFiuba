@@ -201,7 +201,19 @@ void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable, bool
 	//printf("mapPoint: %i:%i windowPoint: %i:%i\n", mapPositionX, mapPositionY, windowPoint.x, windowPoint.y);
 	//SDL_Point mapPoint = this->windowToMapPoint(windowPoint);
 	//printf("windowPoint: %i:%i mapPoint: %i:%i\n", windowPoint.x, windowPoint.y, mapPoint.x, mapPoint.y);
-	SDL_RenderCopy(sdlRenderer, drawable->getTexture(), drawable->getClipRect(), &renderQuad);
+	if(this->isInsideWindow(&renderQuad)){
+		Log().Get(logDEBUG) << "Drawable inside window with rect { " << renderQuad.x << ", " << renderQuad.y << ", " << renderQuad.w << ", " << renderQuad.h << " }";
+		SDL_RenderCopy(sdlRenderer, drawable->getTexture(), drawable->getClipRect(), &renderQuad);
+	} else {
+		Log().Get(logDEBUG) << "Drawable outside window with rect { " << renderQuad.x << ", " << renderQuad.y << ", " << renderQuad.w << ", " << renderQuad.h << " }";
+	}
+}
+
+bool Renderer::isInsideWindow(SDL_Rect* rect){
+	return (rect->x < this->screenWidth &&
+			rect->x + rect->w > 0 &&
+		    rect->y < this->screenHeight &&
+			rect->y + rect->h > 0);
 }
 
 bool Renderer::canDraw() {
