@@ -31,7 +31,8 @@ void MapView::render(Renderer* renderer ){
 	for (int i=0; i<width ; i++){
 		for (int j=0; j<height; j++){
 			this -> origin = {-j*tw+i*tw,j*th+i*th};
-			View::render(renderer,false);
+			//evaluar si origin esta dentro de la pantalla
+				View::render(renderer,false);
 		}
 	}
 }
