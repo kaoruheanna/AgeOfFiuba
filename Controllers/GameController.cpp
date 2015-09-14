@@ -68,16 +68,13 @@ void GameController::play() {
 	this->close();
 }
 
-const int SCROLL_SPEED = 4;
-const int SCROLL_WINDOW_WIDTH = 50;
-
 
 float GameController::scrollingSpeed(int x, int large) {
-	if ((x < SCROLL_WINDOW_WIDTH) && (x>0)) {
-		return ((float)(x-SCROLL_WINDOW_WIDTH)/SCROLL_WINDOW_WIDTH);
+	if ((x < this->config->getMargenScroll()) && (x>0)) {
+		return ((float)(x-this->config->getMargenScroll())/this->config->getMargenScroll());
 	}
-	if ((x > (large - SCROLL_WINDOW_WIDTH)) && (x < large)) {
-		return ((float)(x - large + SCROLL_WINDOW_WIDTH)/SCROLL_WINDOW_WIDTH);
+	if ((x > (large - this->config->getMargenScroll())) && (x < large)) {
+		return ((float)(x - large + this->config->getMargenScroll())/this->config->getMargenScroll());
 	}
 	return 0;
 }
@@ -95,6 +92,8 @@ void GameController::moveToPoint(SDL_Point point) {
 }
 
 void GameController::updateWindow() {
+	const int SCROLL_SPEED = 10;
+
 	//Get mouse position
 	int x, y, newY, newX;
 	SDL_GetMouseState(&x, &y);
