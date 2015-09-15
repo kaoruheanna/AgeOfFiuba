@@ -14,7 +14,6 @@
 
 
 GameConfiguration::GameConfiguration(const char* archivoAParsear){
-	Log().Get(logINFO) << "voy a parsear un archivo";
 	this->tipos.clear();
 	this->defaultFile = "yaml-files/configuracion.yaml";//ARCHIVO_DEFAULT;
 	this->parseYAML(archivoAParsear);
@@ -23,7 +22,6 @@ GameConfiguration::GameConfiguration(const char* archivoAParsear){
 }
 
 GameConfiguration::GameConfiguration(){
-	Log().Get(logINFO) << "voy a parsear un archivo";
 	this->tipos.clear();
 	this->defaultFile = "yaml-files/configuracion.yaml";
 	this->parseYAML(this->defaultFile);
@@ -72,6 +70,7 @@ void GameConfiguration::parseYAML(const char* archivoAParsear){
 	if ( !this->loadFile(archivoAParsear) ){
 		//DEBE LOGUEAR QUE EL ARCHIVO PASADO POR PARAMETRO ESTA CORRUPTO Y POR ENDE SE CARGARON LOS VALORES DEL ARCHIVO DEFAULT
 		this->loadDefaultConfiguration();
+		Log().Get(logDEBUG) << "El archivo indicado como parametro no existe o no respeta la sintaxis de YAML, se carga el archivo por defecto";
 	}
 	this->pantalla = PantallaConfig(this->nodoRaiz["pantalla"]);
 	this->configuracion = ConfiguracionConfig(this->nodoRaiz["configuracion"]);

@@ -6,6 +6,7 @@
  */
 
 #include "PantallaConfig.h"
+#include "../Utils/Log.h"
 
 PantallaConfig::PantallaConfig(YAML::Node nodo) {
 	this->nodoPantalla = nodo;
@@ -21,13 +22,12 @@ PantallaConfig::~PantallaConfig() {
 }
 
 void PantallaConfig::verificarAltoYAncho(){
-	if (this->nodoPantalla.size() == 2){
+	if (this->nodoPantalla.IsSequence() && this->nodoPantalla.size() == 2){
 		if (this->verificarAlto() && this->verificarAncho()){
-			std::cout << "ALTO Y ANCHO CORRECTOS" << std::endl;
 			return;
 		}
 	}
-	std::cout << "ALTO Y ANCHO INVALIDOS" << std::endl;
+	Log().Get(logDEBUG) << "Alto y ancho de pantalla incorrectos, utilizando valores por defecto";
 	this->nodoPantalla[0]["alto"] = ALTO_PANTALLA_DEFAULT;
 	this->nodoPantalla[1]["ancho"] = ANCHO_PANTALLA_DEFAULT;
 	return;
@@ -35,15 +35,27 @@ void PantallaConfig::verificarAltoYAncho(){
 
 //Verifica que los valores no sean negativos, falta verificar que no sean de otro tipo
 bool PantallaConfig::verificarAlto(){
-	if (this->nodoPantalla[0]["alto"] && this->nodoPantalla[0]["alto"].IsScalar() && this->nodoPantalla[0]["alto"].as<int>() > 0){
-		return true;
+	if (this->nodoPantalla[0]["alto"] && this->nodoPantalla[0]["alto"].IsScalar()){
+		try{
+			if(nodoPantalla[0]["alto"].as<int>() > 0){
+			return true;
+			}
+		}catch(YAML::RepresentationException& error){
+		return false;
+		}
 	}
 	return false;
 }
 
 bool PantallaConfig::verificarAncho(){
-	if (this->nodoPantalla[1]["ancho"] && this->nodoPantalla[1]["ancho"].IsScalar() && this->nodoPantalla[1]["ancho"].as<int>() > 0){
-		return true;
+	if (this->nodoPantalla[1]["ancho"] && this->nodoPantalla[1]["ancho"].IsScalar()){
+		try{
+				if(nodoPantalla[1]["ancho"].as<int>() > 0){
+					return true;
+				}
+		} catch(YAML::RepresentationException& error){
+		return false;
+		}
 	}
 	return false;
 }
