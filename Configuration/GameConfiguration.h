@@ -41,8 +41,7 @@ public:
 
 private:
 	void parseYAML(const char* archivoAParsear);
-	void loadDefaultConfiguration();
-	bool loadFile(const char* archivoAParsear);
+	void loadFile(const char* archivoAParsear);
 	void auxiliar();
 	const char* defaultFile;
 	YAML::Node nodoRaiz;

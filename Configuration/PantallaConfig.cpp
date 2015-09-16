@@ -35,7 +35,7 @@ void PantallaConfig::verificarAltoYAncho(){
 
 //Verifica que los valores no sean negativos, falta verificar que no sean de otro tipo
 bool PantallaConfig::verificarAlto(){
-	if (this->nodoPantalla[0]["alto"] && this->nodoPantalla[0]["alto"].IsScalar()){
+	if (this->nodoPantalla[0]["alto"] && !this->nodoPantalla[0]["alto"].IsNull() && this->nodoPantalla[0]["alto"].IsScalar()){
 		try{
 			if(nodoPantalla[0]["alto"].as<int>() > 0){
 			return true;
@@ -48,7 +48,7 @@ bool PantallaConfig::verificarAlto(){
 }
 
 bool PantallaConfig::verificarAncho(){
-	if (this->nodoPantalla[1]["ancho"] && this->nodoPantalla[1]["ancho"].IsScalar()){
+	if (this->nodoPantalla[1]["ancho"] && !this->nodoPantalla[1]["ancho"].IsNull() && this->nodoPantalla[1]["ancho"].IsScalar()){
 		try{
 				if(nodoPantalla[1]["ancho"].as<int>() > 0){
 					return true;

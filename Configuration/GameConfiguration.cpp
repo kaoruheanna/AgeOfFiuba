@@ -47,35 +47,27 @@ int GameConfiguration::getMargenScroll(){
 }
 
 //ESTA FUNCION VA A COMPROBAR QUE EL ARCHIVO RESPETE LAS ESPECIFICACIONES DE YAML, NO VERIFICA LA VALIDACION DE VALORES
-bool GameConfiguration::loadFile(const char* archivoAParsear){
+void GameConfiguration::loadFile(const char* archivoAParsear){
 	try{
 	this->nodoRaiz = YAML::LoadFile(archivoAParsear);
 	}
 	catch ( YAML::BadFile& archivoCorrupto){
-		this->nodoRaiz = NULL;
-		return false;
+		this->nodoRaiz = YAML::LoadFile(this->defaultFile);
+		Log().Get(logDEBUG) << "El archivo indicado como parametro no existe o no respeta la sintaxis de YAML, se carga el archivo por defecto";
 	}
-	return true;
-}
-
-
-
-void GameConfiguration::loadDefaultConfiguration(){
-	this->nodoRaiz = YAML::LoadFile(this->defaultFile);
 }
 
 
 void GameConfiguration::parseYAML(const char* archivoAParsear){
 	//VERIFICA SI ARCHIVO ESTA CORRUPTO O TIENE FORMATO VALIDO DE YAML, EN ESE CASO PARSEA DIRECTAMENTE EL ARCHIVO POR DEFECTO
-	if ( !this->loadFile(archivoAParsear) ){
-		//DEBE LOGUEAR QUE EL ARCHIVO PASADO POR PARAMETRO ESTA CORRUPTO Y POR ENDE SE CARGARON LOS VALORES DEL ARCHIVO DEFAULT
-		this->loadDefaultConfiguration();
-		Log().Get(logDEBUG) << "El archivo indicado como parametro no existe o no respeta la sintaxis de YAML, se carga el archivo por defecto";
-	}
+	this->loadFile(archivoAParsear);
+
 	this->pantalla = PantallaConfig(this->nodoRaiz["pantalla"]);
 	this->configuracion = ConfiguracionConfig(this->nodoRaiz["configuracion"]);
 	YAML::Node nodoTipos = this->nodoRaiz["tipos"];
 	YAML::Node nodoEscenario = this->nodoRaiz["escenario"];
+
+
 	if(!nodoTipos.IsSequence()){
 		Log().Get(logERROR) << "Nodo tipos tiene que ser una secuencia";
 	} else {
