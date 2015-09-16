@@ -5,14 +5,6 @@
  *      Author: die89
  */
 
-
-/*
- * GameConfiguration.h
- *
- *  Created on: 08/09/2015
- *      Author: die89
- */
-
 #ifndef GAMECONFIGURATION_H_
 #define GAMECONFIGURATION_H_
 
@@ -23,6 +15,7 @@
 #include "PantallaConfig.h"
 #include "ConfiguracionConfig.h"
 #include "TipoConfig.h"
+#include "EscenarioConfig.h"
 
 
 //const char* ARCHIVOPORDEFECTO = "configuracion.yaml";
@@ -48,6 +41,7 @@ private:
 	PantallaConfig pantalla;
 	ConfiguracionConfig configuracion;
 	list<TipoConfig> tipos;
+	EscenarioConfig escenario;
 };
 
 #endif /* GAMECONFIGURATION_H_ */
