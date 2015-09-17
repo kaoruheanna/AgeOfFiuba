@@ -8,7 +8,6 @@
 #include "View.h"
 
 View::View(std::string name) {
-	printf("entro al consturctor de view\n");
 	this->drawable = NULL;
 	SDL_Point origin = {0,0};
 	this->origin = origin;

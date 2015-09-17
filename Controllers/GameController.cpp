@@ -152,6 +152,6 @@ void GameController::close() {
 }
 
 void GameController::sleep(){
-	int millisec = 20;
+	int millisec = 20; //50 frames por segundo
 	SDL_Delay(millisec);
 }
