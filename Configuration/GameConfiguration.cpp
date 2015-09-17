@@ -11,7 +11,7 @@
 #include "GameConfiguration.h"
 #include "../Utils/Log.h"
 
-
+const std::string TAG = "GameConfiguration";
 
 GameConfiguration::GameConfiguration(const char* archivoAParsear){
 	this->tipos.clear();
@@ -51,7 +51,7 @@ void GameConfiguration::loadFile(const char* archivoAParsear){
 	}
 	catch ( YAML::BadFile& archivoCorrupto){
 		this->nodoRaiz = YAML::LoadFile(this->defaultFile);
-		Log().Get(logDEBUG) << "El archivo indicado como parametro no existe o no respeta la sintaxis de YAML, se carga el archivo por defecto";
+		Log().Get(TAG,logDEBUG) << "El archivo indicado como parametro no existe o no respeta la sintaxis de YAML, se carga el archivo por defecto";
 	}
 }
 
@@ -67,10 +67,10 @@ void GameConfiguration::parseYAML(const char* archivoAParsear){
 
 
 	if(!nodoTipos.IsSequence()){
-		Log().Get(logERROR) << "Nodo tipos tiene que ser una secuencia";
+		Log().Get(TAG,logERROR) << "Nodo tipos tiene que ser una secuencia";
 	} else {
 		for (std::size_t i=0;i < nodoTipos.size();i++) {
-		  Log().Get(logDEBUG) << "Parseando tipo: " << i;
+		  Log().Get(TAG,logDEBUG) << "Parseando tipo: " << i;
 		  TipoConfig* newNodo = new TipoConfig(nodoTipos[i]);
 		  tipos.push_back(*newNodo);
 		}

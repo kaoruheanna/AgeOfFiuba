@@ -13,7 +13,7 @@
 #include "../Views/MapView.h"
 #include "../Utils/Log.h"
 
-
+const std::string TAG = "GameController";
 
 GameController::GameController(GameConfiguration *config) {
 	this->shouldQuit = false;
@@ -27,7 +27,7 @@ GameController::~GameController() {
 }
 
 void GameController::play() {
-	Log().Get(logDEBUG) << "[GameController] " << "play";
+	Log().Get(TAG,logDEBUG) << "[GameController] " << "play";
 
 	this->renderer = new Renderer(this->config->getPantallaAncho(),this->config->getPantallaAlto(), this->config->getTipos());
 	if (!this->renderer->canDraw()){

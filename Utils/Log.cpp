@@ -46,11 +46,11 @@ Log::~Log()
 	}
 }
 
-std::ostringstream& Log::Get(TLogLevel level)
+std::ostringstream& Log::Get(string tag, TLogLevel level)
 {
+	this->tag = tag;
 	os << TimeToString(NowTime()) << " - ";
-	os << GetTextForEnum(level) << " - ";
-	//os << std::string(level > logDEBUG ? 0 : level - logDEBUG, '\t');
+	os << GetTextForEnum(level) << " - " << "{" << this->tag << "} - ";
 	messageLevel = level;
 	return os;
 }

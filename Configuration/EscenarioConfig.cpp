@@ -8,6 +8,8 @@
 #include "EscenarioConfig.h"
 #include "../Utils/Log.h"
 
+const std::string TAG = "EscenarioConfig";
+
 EscenarioConfig::EscenarioConfig() {
 	// TODO Auto-generated constructor stub
 
@@ -26,7 +28,7 @@ EscenarioConfig::~EscenarioConfig() {
 void EscenarioConfig::validarContenido(){
 	if (this->nodoEscenario.IsNull() || !this->nodoEscenario.IsSequence() || this->nodoEscenario.size() != 1){
 		this->cargarEscenarioPorDefecto();
-		Log().Get(logDEBUG) << "No existe campo Escenario, Se carga una configuracion por Defecto";
+		Log().Get(TAG,logDEBUG) << "No existe campo Escenario, Se carga una configuracion por Defecto";
 		return;
 	}
 

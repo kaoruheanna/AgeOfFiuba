@@ -12,7 +12,7 @@ class Log
 public:
    Log();
    virtual ~Log();
-   ostringstream& Get(TLogLevel level = logINFO);
+   ostringstream& Get(string tag, TLogLevel level = logINFO);
 public:
    static TLogLevel ReportingLevel();
 protected:
@@ -23,6 +23,7 @@ private:
    void Init();
    Log& operator =(const Log&);
    ofstream fout;
+   string tag;
 
    TLogLevel messageLevel;
    time_t GetExecutionTime();

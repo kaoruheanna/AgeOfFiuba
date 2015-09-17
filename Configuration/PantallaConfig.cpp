@@ -8,6 +8,8 @@
 #include "PantallaConfig.h"
 #include "../Utils/Log.h"
 
+const std::string TAG = "PantallaConfig";
+
 PantallaConfig::PantallaConfig(YAML::Node nodo) {
 	this->nodoPantalla = nodo;
 	this->verificarAltoYAncho();
@@ -27,7 +29,7 @@ void PantallaConfig::verificarAltoYAncho(){
 			return;
 		}
 	}
-	Log().Get(logDEBUG) << "Alto y ancho de pantalla incorrectos, utilizando valores por defecto";
+	Log().Get(TAG,logDEBUG) << "Alto y ancho de pantalla incorrectos, utilizando valores por defecto";
 	this->nodoPantalla[0]["alto"] = ALTO_PANTALLA_DEFAULT;
 	this->nodoPantalla[1]["ancho"] = ANCHO_PANTALLA_DEFAULT;
 	return;
