@@ -11,6 +11,9 @@
 
 const std::string TAG = "Renderer";
 
+const int TILE_WIDTH = 128;//hay que ver de donde sacamos esto
+const int TILE_HEIGHT = 64;//deberia ser info que tiene el renderer
+
 Renderer::Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos) {
 	this->window = NULL;
 	this->sdlRenderer = NULL;
@@ -193,6 +196,7 @@ SDL_Point Renderer::mapToWindowPoint(SDL_Point mapPoint){
 	windowPoint.y += this->mainTilePosition.y;
 	return windowPoint;
 }
+
 SDL_Point Renderer::windowToMapPoint(SDL_Point windowPoint){
 	SDL_Point centeredWindow = {windowPoint.x, windowPoint.y};
 	// Ajustar la pantalla a la posicion del 0,0
@@ -205,12 +209,36 @@ SDL_Point Renderer::windowToMapPoint(SDL_Point windowPoint){
 	return mapPoint;
 }
 
+SDL_Point Renderer::windowToMapPoint2(SDL_Point windowPoint){
+	SDL_Point centeredWindow = {windowPoint.x, windowPoint.y};
+	// Ajustar la pantalla a la posicion del 0,0
+	centeredWindow.x -= this->mainTilePosition.x;
+	centeredWindow.y -= this->mainTilePosition.y;
+	SDL_Point mapPoint = {0,0};
+	// Rotar punto -45 grados
+	mapPoint.x = ((centeredWindow.x/TILE_WIDTH) + (centeredWindow.y/TILE_HEIGHT));
+	mapPoint.y = ((-centeredWindow.x/TILE_WIDTH) + (centeredWindow.y/TILE_HEIGHT));
+	return mapPoint;
+}
+
+SDL_Point Renderer::mapToWindowPoint2(SDL_Point mapPoint){
+	SDL_Point windowPoint = {0,0};
+
+	windowPoint.x = (mapPoint.x  - mapPoint.y) * (TILE_WIDTH/2);
+	windowPoint.y = (mapPoint.x  + mapPoint.y) * (TILE_HEIGHT/2);
+
+	windowPoint.x += this->mainTilePosition.x;
+	windowPoint.y += this->mainTilePosition.y;
+	return windowPoint;
+}
+
 void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable, bool iso) {
 	SDL_Point windowPoint = {mapPositionX, mapPositionY};
 	if(iso){
 		windowPoint = this->mapToWindowPoint({mapPositionX, mapPositionY});
 	} else {
-		windowPoint = {mapPositionX+this->mainTilePosition.x, mapPositionY + this->mainTilePosition.y};
+		windowPoint = this->mapToWindowPoint2({mapPositionX, mapPositionY});
+		//windowPoint = {mapPositionX+this->mainTilePosition.x, mapPositionY + this->mainTilePosition.y};
 	}
 	SDL_Rect renderQuad = drawable->getRectToDraw(windowPoint.x, windowPoint.y);
 	//printf("mapPoint: %i:%i windowPoint: %i:%i\n", mapPositionX, mapPositionY, windowPoint.x, windowPoint.y);

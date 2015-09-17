@@ -30,7 +30,8 @@ void MapView::render(Renderer* renderer ){
 	int th = this->model->getTileHeight()/2; //alto del tile
 	for (int i=0; i<width ; i++){
 		for (int j=0; j<height; j++){
-			SDL_Point point = {-j*tw+i*tw,j*th+i*th};
+			//SDL_Point point = {(i-j)*tw,(i+j)*th};
+			SDL_Point point = {i,j};
 			//evaluar si point esta dentro de la pantalla
 			renderer->draw(point.x, point.y, this->drawable, false);
 		}

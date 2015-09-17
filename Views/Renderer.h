@@ -33,7 +33,9 @@ public:
 	void drawViews();
 	void draw(int mapPositionX, int mapPositionY, Drawable* drawable, bool iso);
 	SDL_Point mapToWindowPoint(SDL_Point mapPoint);
+	SDL_Point mapToWindowPoint2(SDL_Point mapPoint);
 	SDL_Point windowToMapPoint(SDL_Point windowPoint);
+	SDL_Point windowToMapPoint2(SDL_Point windowPoint);
 	bool canDraw();
 	void addView(View* view);
 
