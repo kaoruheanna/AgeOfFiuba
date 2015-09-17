@@ -19,16 +19,24 @@ EntityView::~EntityView() {
 
 void EntityView::setModel(Entity *model) {
 	this->model = model;
-	SDL_Point entityPosition = this->model->getPosicion(); //ojo esto esta en coordenadas logicas
-	SDL_Point origin = {entityPosition.x*64 + this->pixelRef.x, entityPosition.y*32 + this->pixelRef.y};
-	//aca ojo que a la posicion hay que multiplicarle el ancho y alto del tile
+	int pX = this->model->getPosicion().x; //ojo esto esta en coordenadas logicas
+	int pY = this->model->getPosicion().y;
+	int tw = 64;
+	int th = 32;
+	SDL_Point origin =
+
+	{(pX-pY)*tw,
+			(pX+pY)*th};
+
 	this->origin = origin;
 }
 
 SDL_Point EntityView::getOrigin(){
-	//esto se podria optimizar si evitamos calcularlo cada vez que lo pedimos.
-	//todas las entities son estaticas?
 	return this->origin;
 }
 
+void EntityView::render(Renderer* renderer) {
+	SDL_Point point = this->getOrigin();
+	renderer->draw(point.x, point.y, this->drawable,false);
+}
 
