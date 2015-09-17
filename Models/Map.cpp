@@ -44,6 +44,8 @@ SDL_Point Map::posicionRelativaRect(SDL_Rect rect, SDL_Point punto_m){
 	punto_v.y = punto_m.y - rect.y;
 	return punto_v;
 }
+
+
 /*Devuelve la coordenada del tile donde se encuentra el punto.
  * Transforma coordenadas absolutas en logicas*/
 PointL Map::transformarAL(SDL_Point punto_absoluto){

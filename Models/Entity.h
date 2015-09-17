@@ -16,9 +16,6 @@ using namespace std;
 class Entity{
 private:
 	//int id;
-	//imagen ?
-	//pixel_ref_x
-	//pixel_ref_y
 	string nombre;
 	SDL_Point posicion;  // posicion en el mapa (coordenadas logicas)
 	int ancho_base; //x

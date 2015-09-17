@@ -30,7 +30,7 @@ SDL_Point EntityView::getOrigin(){
 
 void EntityView::render(Renderer* renderer) {
 	//hace falta actualizar aca?
-	SDL_Point entityPosition = this->model->getPosicion(); //ojo esto esta en coordenadas logicas
+	SDL_Point entityPosition = this-> model ->getPosicion(); //ojo esto esta en coordenadas logicas
 	SDL_Point origin = {entityPosition.x - this->pixelRef.x,entityPosition.y - this->pixelRef.y};
 	this -> origin = origin;
 	//habria que animar la entidad.
