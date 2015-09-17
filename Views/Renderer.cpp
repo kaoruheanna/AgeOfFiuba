@@ -87,8 +87,7 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 
 	//imagen casa
 	Log().Get(TAG,logINFO) << "Cargando dibujo de casa";
-	//string casa = "img/casa2x2.png";
-	string casa = "img/testIm.png";
+	string casa = "img/casa2x2.png";
 	Drawable *casaDrawable = new Drawable(153,31,2,2);//nose si esta bien
 	if (casaDrawable -> loadTextureFromFile(casa,this->sdlRenderer)){
 		Log().Get(TAG,logINFO) << "Cargado tile default";

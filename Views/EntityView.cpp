@@ -21,12 +21,14 @@ void EntityView::setModel(Entity *model) {
 	this->model = model;
 	int pX = this->model->getPosicion().x; //ojo esto esta en coordenadas logicas
 	int pY = this->model->getPosicion().y;
+	//esto es horrible, lo deberia hacer el renderer
 	int tw = 64;
 	int th = 32;
-	SDL_Point origin =
 
-	{(pX-pY)*tw,
-			(pX+pY)*th};
+	// esto seria,  x = (posicion.x - posicion.y) * anchoDelTile/2
+	//				y = (poscion.x + posicion.y)* altoDelTile/2
+
+	SDL_Point origin =	{(pX-pY)*tw,(pX+pY)*th};
 
 	this->origin = origin;
 }
