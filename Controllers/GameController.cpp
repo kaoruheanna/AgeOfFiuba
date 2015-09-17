@@ -10,6 +10,7 @@
 #include <string>
 #include <iostream>
 #include "../Views/MobileView.h"
+#include "../Views/EntityView.h"
 #include "../Views/MapView.h"
 #include "../Utils/Log.h"
 
@@ -37,11 +38,19 @@ void GameController::play() {
 	}
 
 	//Agrego el mapa
-	Map* mapModel = new Map(5,5,128,64);
+	Map* mapModel = new Map(100,100,128,64);
 	MapView *mapView = new MapView("tileDefault");
 	mapView->setModel(mapModel);
 	this->views.push_back(mapView);
 	this->renderer->addView(mapView);
+
+	//Agrego una casa
+	SDL_Point pos = {4,3};
+	Entity* casa = new Entity("casa",pos,2,2);
+	EntityView* casaView = new EntityView("casa");
+	casaView -> setModel(casa);
+	this->views.push_back(casaView);
+	this->renderer->addView(casaView);
 
 
 	this->model = new MobileModel();
@@ -52,8 +61,6 @@ void GameController::play() {
 	marioView->setModel(model);
 	this->views.push_back(marioView);
 	this->renderer->addView(marioView);
-
-
 
 
 	//While application is running
@@ -122,10 +129,7 @@ void GameController::pollEvents(){
 			SDL_Point mapPoint = this->renderer->windowToMapPoint({x,y});
 			this->model->setDestination(mapPoint.x,mapPoint.y);
 		}
-
-
 	}
-
 }
 
 void GameController::close() {

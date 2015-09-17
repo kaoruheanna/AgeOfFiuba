@@ -16,13 +16,12 @@ public:
 	EntityView(std::string type);
 	virtual ~EntityView();
 	void setModel(Entity *model);
-	void render(Renderer* renderer);
 
 protected:
 	SDL_Point getOrigin();
 
 private:
-	Entity *model;
+	Entity* model;
 	SDL_Point pixelRef;
 };
 

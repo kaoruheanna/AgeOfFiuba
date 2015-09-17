@@ -26,13 +26,13 @@ SDL_Point MapView::getOrigin(){
 void MapView::render(Renderer* renderer ){
 	int width = this -> model -> getWidth();
 	int height = this -> model-> getHeight();
-	int tw = 64; //ancho del tile
-	int th = 32; //alto del tile
+	int tw = this->model->getTileWidth()/2; //ancho del tile
+	int th = this->model->getTileHeight()/2; //alto del tile
 	for (int i=0; i<width ; i++){
 		for (int j=0; j<height; j++){
-			this -> origin = {-j*tw+i*tw,j*th+i*th};
-			//evaluar si origin esta dentro de la pantalla
-				View::render(renderer,false);
+			SDL_Point point = {-j*tw+i*tw,j*th+i*th};
+			//evaluar si point esta dentro de la pantalla
+			renderer->draw(point.x, point.y, this->drawable, false);
 		}
 	}
 }

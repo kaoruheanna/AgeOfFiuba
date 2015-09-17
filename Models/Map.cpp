@@ -1,6 +1,6 @@
 #include "Map.h"
 
-Map::Map(int alto, int ancho, int tile_alto, int tile_ancho){
+Map::Map(int alto, int ancho, int tile_ancho, int tile_alto){
 	//el ancho y alto del tile se puede determinar con las dimensiones del tile default.
 	this -> alto = alto;
 	this -> ancho = ancho;
@@ -28,7 +28,7 @@ int Map::getWidth(){
 }
 
 int Map::getTileHeight(){
-	return this->tile_ancho;
+	return this->tile_alto;
 }
 
 int Map::getTileWidth(){

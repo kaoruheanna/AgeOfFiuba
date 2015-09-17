@@ -24,9 +24,10 @@ class Escenario {
 		bool construirEntidad(Entity*,SDL_Point);
 		void vaciarEntidades();
 		void imprimirEntidades();
-		list<Entity*> getListaEntidades();
+		list<Entity*> getListaEntidades(); //no deberia porque usarse
 
-		Escenario(string,int,int,int,int);//deberia entregarle un mapa o algo para construir el mapa;
+		Escenario(string,int,int,int,int);//construye un mapa vacio
+		Escenario();//Este constructor deberia recibir un game config
 		~Escenario();
 };
 

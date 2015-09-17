@@ -15,7 +15,7 @@ Renderer::Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos) {
 	this->window = NULL;
 	this->sdlRenderer = NULL;
 	this->missingImageDrawable = NULL;
-	this->mainTilePosition = {0,0};
+	this->mainTilePosition = {screenWidth/2,0}; // para que el mapa este en la mitad
 	this->screenWidth = screenWidth;
 	this->screenHeight = screenHeight;
 
@@ -72,10 +72,11 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 	} else {
 		Log().Get(TAG,logINFO) << "Cargado drawable default";
 	}
+
 	// Mapa
 	Log().Get(TAG,logINFO) << "Cargando tile default";
 	string tileDefault = "img/grass1.png";
-	Drawable *tileDefDrawable = new Drawable(0,0,1,1);//nose si esta bien
+	Drawable *tileDefDrawable = new Drawable(64,0,1,1);//nose si esta bien
 	if (tileDefDrawable -> loadTextureFromFile(tileDefault,this->sdlRenderer)){
 		Log().Get(TAG,logINFO) << "Cargado tile default";
 		this->drawablesByInstanceName.insert(
@@ -83,6 +84,19 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 	} else {
 		Log().Get(TAG,logERROR) << "No se pudo cargar el drawable default";
 	}
+
+	//imagen casa
+	Log().Get(TAG,logINFO) << "Cargando dibujo de casa";
+	string casa = "img/casa2x2.png";
+	Drawable *casaDrawable = new Drawable(150,30,2,2);//nose si esta bien
+	if (casaDrawable -> loadTextureFromFile(casa,this->sdlRenderer)){
+		Log().Get(TAG,logINFO) << "Cargado tile default";
+		this->drawablesByInstanceName.insert(
+				std::pair<std::string,Drawable*>("casa", casaDrawable));
+	} else {
+		Log().Get(TAG,logERROR) << "No se pudo cargar el drawable default";
+	}
+
 
 	// soldado => Esta en el YAML (Lo dejo por si le craseha a alguno)
 	/*string soldierPath = "img/ManSprite.png";
@@ -129,7 +143,6 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 	  }
 	  i++;
 	}
-
 	return success;
 }
 
@@ -204,10 +217,10 @@ void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable, bool
 	//SDL_Point mapPoint = this->windowToMapPoint(windowPoint);
 	//printf("windowPoint: %i:%i mapPoint: %i:%i\n", windowPoint.x, windowPoint.y, mapPoint.x, mapPoint.y);
 	if(this->isInsideWindow(&renderQuad)){
-		Log().Get(TAG,logDEBUG) << "Drawable inside window with rect { " << renderQuad.x << ", " << renderQuad.y << ", " << renderQuad.w << ", " << renderQuad.h << " }";
+		//Log().Get(TAG,logDEBUG) << "Drawable inside window with rect { " << renderQuad.x << ", " << renderQuad.y << ", " << renderQuad.w << ", " << renderQuad.h << " }";
 		SDL_RenderCopy(sdlRenderer, drawable->getTexture(), drawable->getClipRect(), &renderQuad);
 	} else {
-		Log().Get(TAG,logDEBUG) << "Drawable outside window with rect { " << renderQuad.x << ", " << renderQuad.y << ", " << renderQuad.w << ", " << renderQuad.h << " }";
+		//Log().Get(TAG,logDEBUG) << "Drawable outside window with rect { " << renderQuad.x << ", " << renderQuad.y << ", " << renderQuad.w << ", " << renderQuad.h << " }";
 	}
 }
 

@@ -17,25 +17,18 @@ EntityView::~EntityView() {
 	// TODO Auto-generated destructor stub
 }
 
+void EntityView::setModel(Entity *model) {
+	this->model = model;
+	SDL_Point entityPosition = this->model->getPosicion(); //ojo esto esta en coordenadas logicas
+	SDL_Point origin = {entityPosition.x*64 + this->pixelRef.x, entityPosition.y*32 + this->pixelRef.y};
+	//aca ojo que a la posicion hay que multiplicarle el ancho y alto del tile
+	this->origin = origin;
+}
+
 SDL_Point EntityView::getOrigin(){
 	//esto se podria optimizar si evitamos calcularlo cada vez que lo pedimos.
 	//todas las entities son estaticas?
-	SDL_Point entityPosition = this->model->getPosicion(); //ojo esto esta en coordenadas logicas
-	SDL_Point origin = {entityPosition.x - this->pixelRef.x,entityPosition.y - this->pixelRef.y};
-	this -> origin = origin;
 	return this->origin;
-}
-
-
-
-void EntityView::render(Renderer* renderer) {
-	//hace falta actualizar aca?
-	SDL_Point entityPosition = this-> model ->getPosicion(); //ojo esto esta en coordenadas logicas
-	SDL_Point origin = {entityPosition.x - this->pixelRef.x,entityPosition.y - this->pixelRef.y};
-	this -> origin = origin;
-	//habria que animar la entidad.
-
-	View::render(renderer);
 }
 
 
