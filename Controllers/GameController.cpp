@@ -45,12 +45,36 @@ void GameController::play() {
 	this->renderer->addView(mapView);
 
 	//Agrego una casa
-	SDL_Point pos = {4,3};
-	Entity* casa = new Entity("casa",pos,2,2);
-	EntityView* casaView = new EntityView("casa");
-	casaView -> setModel(casa);
-	this->views.push_back(casaView);
-	this->renderer->addView(casaView);
+	SDL_Point pos1 = {4,3};
+	Entity* casa1 = new Entity("casa",pos1,2,2);
+	EntityView* casa1View = new EntityView("casa");
+	casa1View -> setModel(casa1);
+	this->views.push_back(casa1View);
+	this->renderer->addView(casa1View);
+
+	//Agrego otra casa
+	SDL_Point pos2 = {10,4};
+	Entity* casa2 = new Entity("casa",pos2,2,2);
+	EntityView* casa2View = new EntityView("casa");
+	casa2View -> setModel(casa2);
+	this->views.push_back(casa2View);
+	this->renderer->addView(casa2View);
+
+	//Agrego otra casa
+	SDL_Point pos3 = {1,1};
+	Entity* casa3 = new Entity("casa",pos3,2,2);
+	EntityView* casa3View = new EntityView("casa");
+	casa3View -> setModel(casa3);
+	this->views.push_back(casa3View);
+	this->renderer->addView(casa3View);
+
+	//Agrego otra casa
+	SDL_Point pos4 = {3,7};
+	Entity* casa4 = new Entity("casa",pos4,2,2);
+	EntityView* casa4View = new EntityView("casa");
+	casa4View -> setModel(casa4);
+	this->views.push_back(casa4View);
+	this->renderer->addView(casa4View);
 
 
 	this->model = new MobileModel();
