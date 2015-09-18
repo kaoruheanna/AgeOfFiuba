@@ -39,7 +39,7 @@ bool GameController::play() {
 	}
 
 	//Agrego el mapa
-	Map* mapModel = new Map(100,100,128,64);
+	Map* mapModel = new Map(this->config->getTamanioX(),this->config->getTamanioY(),128,64);
 	MapView *mapView = new MapView("tileDefault");
 	mapView->setModel(mapModel);
 	this->views.push_back(mapView);

@@ -44,6 +44,18 @@ int GameConfiguration::getMargenScroll(){
 	return this->configuracion.getScroll();
 }
 
+std::string GameConfiguration::getNombreEscenario(){
+	return this->escenario.getNombre();
+}
+
+int GameConfiguration::getTamanioX(){
+	return this->escenario.getSizeX();
+}
+
+int GameConfiguration::getTamanioY(){
+	return this->escenario.getSizeY();
+}
+
 //ESTA FUNCION VA A COMPROBAR QUE EL ARCHIVO RESPETE LAS ESPECIFICACIONES DE YAML, NO VERIFICA LA VALIDACION DE VALORES
 void GameConfiguration::loadFile(const char* archivoAParsear){
 	try{

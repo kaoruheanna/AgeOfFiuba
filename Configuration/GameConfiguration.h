@@ -31,6 +31,9 @@ public:
 	int getVelocidadPersonaje();
 	int getMargenScroll();
 	list<TipoConfig> getTipos();
+	std::string getNombreEscenario();
+	int getTamanioX();
+	int getTamanioY();
 
 private:
 	void parseYAML(const char* archivoAParsear);
