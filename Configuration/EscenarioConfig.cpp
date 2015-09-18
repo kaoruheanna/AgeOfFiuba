@@ -39,3 +39,24 @@ void EscenarioConfig::cargarEscenarioPorDefecto(){
 
 }
 
+std::list<EntidadConfig> EscenarioConfig::getEntidades() {
+	std::list<EntidadConfig> lista;
+	lista.push_back(EntidadConfig(10, 15, "tierra"));
+	lista.push_back(EntidadConfig(15, 20, "tierra"));
+	lista.push_back(EntidadConfig(10, 15, "agua"));
+	lista.push_back(EntidadConfig(30, 55, "castillo"));
+	return lista;
+}
+std::string EscenarioConfig::getNombre() {
+	return "nombre";
+}
+int EscenarioConfig::getSizeX() {
+	return 50;
+}
+int EscenarioConfig::getSizeY() {
+	return 50;
+}
+EntidadConfig EscenarioConfig::getProtagonista() {
+	return EntidadConfig(50,50, "juana");
+}
+
