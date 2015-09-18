@@ -20,8 +20,8 @@ const std::string TAG = "GameController";
 GameController::GameController(GameConfiguration *config) {
 	this->shouldQuit = false;
 	this->renderer = NULL;
-	this->model = NULL;
 	this->config = config;
+	this->escenario = NULL;
 }
 
 GameController::~GameController() {
@@ -38,41 +38,60 @@ bool GameController::play() {
 		return false;
 	}
 
-	//Agrego el mapa
-	Map* mapModel = new Map(100,100,128,64);
+	// Crear modelos a partir de la configuracion
+	this->escenario = new Escenario(this->config->getEscenario(), this->config->getTipos());
+	if(!this->escenario->inicializacionCorrecta){
+		delete this->escenario;
+		delete this->config;
+		// Cargar configuracion default
+		this->config = new GameConfiguration();
+		this->escenario = new Escenario(this->config->getEscenario(), this->config->getTipos());
+		if(!this->escenario->inicializacionCorrecta){
+			Log().Get("GameController", logERROR) << "La configuracion default es incorrecta.";
+			this->close();
+			return false;
+		}
+	}
+
+	// Crear vistas a partir de la configuracion
 	MapView *mapView = new MapView("tileDefault");
-	mapView->setModel(mapModel);
+	mapView->setModel(this->escenario->mundo);
 	this->views.push_back(mapView);
 	this->renderer->addView(mapView);
 
-	//Agrego una casa
-	SDL_Point pos = {4,3};
-	Entity* casa = new Entity("casa",pos,2,2);
-	EntityView* casaView = new EntityView("casa");
-	casaView -> setModel(casa);
-	this->views.push_back(casaView);
-	this->renderer->addView(casaView);
-
-
-	this->model = new MobileModel();
-	this->model->setX(200);
-	this->model->setY(100);
-
-	MobileView *marioView = new MobileView("soldado");
-	marioView->setModel(model);
+	// Agrego todas las vistas (siempre que no sean el protagonista)
+	list<Entity*>::iterator entidad;
+	list<Entity*> entidades = escenario->getListaEntidades();
+	int indice = 0;
+	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad){
+		Entity* entidadReal = (*entidad);
+		printf("indice: %i %s \n", indice, entidadReal->getNombre().c_str());
+		if(entidadReal != this->escenario->getProtagonista()){
+			EntityView* entityView = new EntityView(entidadReal->getNombre());
+			entityView->setModel(entidadReal);
+			this->views.push_back(entityView);
+			this->renderer->addView(entityView);
+		}
+		indice++;
+	}
+	printf("created views");
+	// Agrego vista del personaje
+	MobileView *marioView = new MobileView(this->escenario->getProtagonista()->getNombre());
+	marioView->setModel(this->escenario->getProtagonista());
 	this->views.push_back(marioView);
 	this->renderer->addView(marioView);
 
+	printf("created player");
 	bool shouldRestart = false;
 	//While application is running
 	while( !this->shouldQuit && !shouldRestart ) {
 		this->updateWindow();
 		shouldRestart = this->pollEvents();
-		this->model->updatePosition();
+		this->escenario->getProtagonista()->updatePosition();
 		this->renderer->drawViews();
 		this->sleep();
 	}
-
+	printf("closing controller");
 	this->close();
 	return shouldRestart;
 }
@@ -136,7 +155,7 @@ bool GameController::pollEvents(){
 			int x, y;
 			SDL_GetMouseState(&x, &y);
 			SDL_Point mapPoint = this->renderer->windowToMapPoint({x,y});
-			this->model->setDestination(mapPoint.x,mapPoint.y);
+			this->escenario->getProtagonista()->setDestination(mapPoint.x,mapPoint.y);
 		}
 	}
 	return pressedR;
@@ -146,10 +165,6 @@ void GameController::close() {
 	if (this->renderer){
 		this->renderer->close();
 		delete this->renderer;
-	}
-
-	if (this->model){
-		delete this->model;
 	}
 
 	list<View*>::iterator i;

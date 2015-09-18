@@ -80,3 +80,7 @@ void GameConfiguration::parseYAML(const char* archivoAParsear){
 list<TipoConfig> GameConfiguration::getTipos() {
 	return this->tipos;
 }
+
+EscenarioConfig GameConfiguration::getEscenario() {
+	return this->escenario;
+}

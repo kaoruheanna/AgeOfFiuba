@@ -88,19 +88,6 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 		Log().Get(TAG,logERROR) << "No se pudo cargar el drawable default";
 	}
 
-	//imagen casa
-	Log().Get(TAG,logINFO) << "Cargando dibujo de casa";
-	string casa = "img/casa2x2.png";
-	Drawable *casaDrawable = new Drawable(153,31);//nose si esta bien
-	if (casaDrawable -> loadTextureFromFile(casa,this->sdlRenderer)){
-		Log().Get(TAG,logINFO) << "Cargado tile default";
-		this->drawablesByInstanceName.insert(
-				std::pair<std::string,Drawable*>("casa", casaDrawable));
-	} else {
-		Log().Get(TAG,logERROR) << "No se pudo cargar el drawable default";
-	}
-
-
 	// Cargar los tipos pasados por el YAML
 	int i = 0;
 	for (list<TipoConfig>::iterator it = tipos.begin(); it != tipos.end(); ++it) {

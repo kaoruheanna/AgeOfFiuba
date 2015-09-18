@@ -8,9 +8,16 @@
 #ifndef MOBILEMODEL_H_
 #define MOBILEMODEL_H_
 
-class MobileModel {
+#include <string>
+#include "Entity.h"
+
+using namespace std;
+
+
+class MobileModel: public Entity {
 public:
 	MobileModel();
+	MobileModel(string nombre, SDL_Point posicion, int ancho_base, int alto_base);
 	virtual ~MobileModel();
 
 	int getX();
@@ -22,8 +29,6 @@ public:
 	bool isMoving();
 
 private:
-	int x;
-	int y;
 	int destinationX;
 	int destinationY;
 	bool moving;

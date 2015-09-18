@@ -17,15 +17,17 @@ class Entity{
 private:
 	//int id;
 	string nombre;
-	SDL_Point posicion;  // posicion en el mapa (coordenadas logicas)
 	int ancho_base; //x
 	int alto_base; //y
 
+protected:
+	SDL_Point posicion;  // posicion en el mapa (coordenadas logicas)
 
 public:
 	SDL_Point getPosicion();
 	int getAnchoBase();
 	int getAltoBase();
+	string getNombre();
 	void setPosicion(SDL_Point);
 
 	string toString();

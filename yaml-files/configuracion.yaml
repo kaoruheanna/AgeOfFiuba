@@ -11,6 +11,13 @@ tipos:
  - nombre: arbol
    imagen: path/a/imagen.png
 
+ - nombre: casa
+   imagen: img/casa2x2.png
+   ancho_base: 1
+   alto_base : 1
+   pixel_ref_x: 153
+   pixel_ref_y: 31
+
  - nombre: castillo
    imagen: path/a/castillo.png
    ancho_base: 2

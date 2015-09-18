@@ -13,6 +13,7 @@
 #include "../Models/MobileModel.h"
 #include <list>
 #include "../Configuration/GameConfiguration.h"
+#include "../Models/Escenario.h"
 
 using namespace std;
 
@@ -26,7 +27,7 @@ private:
 	bool shouldQuit;
 	list<View*> views;
 	Renderer *renderer;
-	MobileModel *model;
+	Escenario* escenario;
 	GameConfiguration *config;
 
 	bool pollEvents();

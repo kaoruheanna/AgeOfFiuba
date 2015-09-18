@@ -31,6 +31,7 @@ public:
 	int getVelocidadPersonaje();
 	int getMargenScroll();
 	list<TipoConfig> getTipos();
+	EscenarioConfig getEscenario();
 
 private:
 	void parseYAML(const char* archivoAParsear);

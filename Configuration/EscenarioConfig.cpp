@@ -41,6 +41,7 @@ void EscenarioConfig::cargarEscenarioPorDefecto(){
 
 std::list<EntidadConfig> EscenarioConfig::getEntidades() {
 	std::list<EntidadConfig> lista;
+	lista.push_back(EntidadConfig(4, 3, "casa"));
 	lista.push_back(EntidadConfig(10, 15, "tierra"));
 	lista.push_back(EntidadConfig(15, 20, "tierra"));
 	lista.push_back(EntidadConfig(10, 15, "agua"));
@@ -57,6 +58,6 @@ int EscenarioConfig::getSizeY() {
 	return 50;
 }
 EntidadConfig EscenarioConfig::getProtagonista() {
-	return EntidadConfig(50,50, "juana");
+	return EntidadConfig(2,2, "soldado");
 }
 
