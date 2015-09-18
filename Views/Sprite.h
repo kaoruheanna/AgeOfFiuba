@@ -25,7 +25,8 @@ protected:
 	void onTextureChange();
 
 private:
-	int fps;
+	int repeatTimes;
+	float fps;
 	int animationCount;
 	int framesPerAnimation;
 	SDL_Rect clipRect;
