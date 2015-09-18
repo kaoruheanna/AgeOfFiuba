@@ -12,6 +12,9 @@ View::View(std::string name) {
 	SDL_Point origin = {0,0};
 	this->origin = origin;
 	this->type = name;
+	this->animationStatus.direction = SOUTH;
+	this->animationStatus.animationIndex = 0;
+	this->animationStatus.isMoving = false;
 }
 
 View::~View() {
@@ -20,13 +23,13 @@ View::~View() {
 
 void View::render(Renderer* renderer ) {
 	SDL_Point point = this->getOrigin();
-	this->drawable->animate();
+	this->drawable->animate(this->animationStatus);
 	renderer->draw(point.x, point.y, this->drawable,true);
 }
 
 void View::render(Renderer* renderer, bool iso) {
 	SDL_Point point = this->getOrigin();
-	this->drawable->animate();
+	this->drawable->animate(this->animationStatus);
 	renderer->draw(point.x, point.y, this->drawable, iso);
 }
 

@@ -28,6 +28,7 @@ protected:
 
 	SDL_Point origin;
 	Drawable *drawable;
+	AnimationStatus animationStatus;
 
 private:
 	std::string type;

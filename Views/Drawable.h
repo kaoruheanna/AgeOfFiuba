@@ -22,6 +22,12 @@ enum MotionDirection {
 	SOUTH_WEST,
 };
 
+struct AnimationStatus {
+	MotionDirection direction;
+	int animationIndex;
+	bool isMoving;
+};
+
 
 class Drawable {
 public:
@@ -31,8 +37,8 @@ public:
 	SDL_Texture* getTexture();
 	bool loadTextureFromFile(std::string path,SDL_Renderer* sdlRenderer);
 	virtual SDL_Rect* getClipRect();
-	virtual void animate();
-	virtual void selectAnimation(MotionDirection direction,bool isMoving);
+	virtual void animate(AnimationStatus status);
+	virtual AnimationStatus getAnimation(MotionDirection currentDirection, bool currentlyMoving, AnimationStatus lastStatus);
 	void free();
 
 protected:

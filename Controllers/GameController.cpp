@@ -13,6 +13,7 @@
 #include "../Views/EntityView.h"
 #include "../Views/MapView.h"
 #include "../Utils/Log.h"
+#include "../GlobalConstants.h"
 
 const std::string TAG = "GameController";
 
@@ -152,6 +153,5 @@ void GameController::close() {
 }
 
 void GameController::sleep(){
-	int millisec = 20; //50 frames por segundo
-	SDL_Delay(millisec);
+	SDL_Delay(DELAY_MILISEC);
 }
