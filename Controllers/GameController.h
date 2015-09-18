@@ -13,6 +13,7 @@
 #include "../Models/MobileModel.h"
 #include <list>
 #include "../Configuration/GameConfiguration.h"
+#include "../Models/Escenario.h"
 
 using namespace std;
 
@@ -20,16 +21,16 @@ class GameController {
 public:
 	GameController(GameConfiguration *config);
 	virtual ~GameController();
-	void play();
+	bool play();
 
 private:
 	bool shouldQuit;
 	list<View*> views;
 	Renderer *renderer;
-	MobileModel *model;
+	Escenario* escenario;
 	GameConfiguration *config;
 
-	void pollEvents();
+	bool pollEvents();
 	void updateWindow();
 
 	void close();

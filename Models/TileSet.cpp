@@ -17,6 +17,7 @@ TileSet::TileSet(int ancho, int alto) {
 		matriz[x] = new bool[alto];
 	}
 	this -> matriz = matriz;
+	this->setTodoConstruible();
 }
 
 TileSet::~TileSet() {

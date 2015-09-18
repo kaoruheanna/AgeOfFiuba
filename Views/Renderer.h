@@ -53,6 +53,7 @@ private:
 	bool initSDL();
 	bool loadMedia(list<TipoConfig> tipos);
 	bool isInsideWindow(SDL_Rect* rect);
+	Drawable* getDrawableFromTipoConfig(TipoConfig tipo);
 };
 
 #endif /* RENDERER_H_ */

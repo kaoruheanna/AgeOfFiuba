@@ -27,7 +27,7 @@ void EntityView::setModel(Entity *model) {
 }
 
 SDL_Point EntityView::getOrigin(){
-	return this->origin;
+	return this->model->getPosicion();
 }
 
 void EntityView::render(Renderer* renderer) {

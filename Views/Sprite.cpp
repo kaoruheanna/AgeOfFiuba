@@ -6,14 +6,17 @@
  */
 
 #include "Sprite.h"
+#include "../GlobalConstants.h"
+#include "../Utils/Log.h"
 
 #define STANDING_SPRITE_INDEX 	5
 #define START_MOVING_INDEX 		0
 
-Sprite::Sprite(int mainTilePositionX, int mainTilePositionY,int baseTileWidth, int baseTileHeight, int spriteWidth, int spriteHeight, int fps)
-: Drawable(mainTilePositionX, mainTilePositionY, baseTileWidth, baseTileHeight){
-	this->currentFrame = 0;
-	this->currentAnimation = SOUTH;
+const std::string TAG = "Sprite";
+
+Sprite::Sprite(int mainTilePositionX, int mainTilePositionY, int spriteWidth, int spriteHeight, int fps)
+: Drawable(mainTilePositionX, mainTilePositionY){
+	this->repeatTimes = 1;
 	this->fps = fps;
 	this->height = spriteHeight;
 	this->width = spriteWidth;
@@ -36,39 +39,40 @@ void Sprite::onTextureChange(){
 	SDL_QueryTexture(this->texture, NULL, NULL, &w, &h);
 	this->animationCount = h / this->height;
 	this->framesPerAnimation = w / this->width;
+	this->repeatTimes = DELAY_MILISEC * this->fps / this->framesPerAnimation;
+	Log().Get(TAG,logINFO) << "repeatTimes: "<< this->repeatTimes;
 }
 
-void Sprite::selectAnimation(MotionDirection direction,bool isMoving){
-	MotionDirection oldDirection = this->currentAnimation;
-	this->currentAnimation = direction;
-	this->isMoving = isMoving;
+AnimationStatus Sprite::getAnimation(MotionDirection currentDirection, bool currentlyMoving, AnimationStatus lastStatus) {
+	AnimationStatus newStatus;
+	newStatus.direction = currentDirection;
+	newStatus.isMoving = currentlyMoving;
 
-	if (!isMoving){
-		this->currentFrame = STANDING_SPRITE_INDEX * this->fps;
-		return;
+	if (!currentlyMoving){
+		newStatus.animationIndex = STANDING_SPRITE_INDEX * this->repeatTimes;
+		return newStatus;
 	}
 
-	if (oldDirection != this->currentAnimation){
-		this->currentFrame = START_MOVING_INDEX;
+	if (lastStatus.direction != currentDirection){
+		newStatus.animationIndex = START_MOVING_INDEX;
+		return newStatus;
 	}
+
+	int index = lastStatus.animationIndex;
+	index++;
+	if (index >= (this->framesPerAnimation * this->repeatTimes)){
+		index = 0;
+	}
+	newStatus.animationIndex = index;
+	return newStatus;
+}
+
+void Sprite::animate(AnimationStatus status){
+	int currentAnimationFrame = status.animationIndex / this->repeatTimes;
+	this->clipRect.x = currentAnimationFrame * this->width;
+	this->clipRect.y = status.direction * this->height;
 }
 
 SDL_Rect* Sprite::getClipRect(){
 	return &this->clipRect;
-}
-
-void Sprite::animate(){
-	// Count frame
-	if (this->isMoving){
-		this->currentFrame ++;
-		if(this->currentFrame >= (this->framesPerAnimation * this->fps)){
-			// If frame is over animation restart it
-			this->currentFrame = 0;
-		}
-	}
-
-	// Move clip to animation frame
-	int currentAnimationFrame = this->currentFrame / this->fps;
-	this->clipRect.x = currentAnimationFrame * this->width;
-	this->clipRect.y = currentAnimation * this->height;
 }

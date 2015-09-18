@@ -13,9 +13,7 @@ Drawable::~Drawable() {
 	// TODO Auto-generated destructor stub
 }
 
-Drawable::Drawable(int mainTilePositionX, int mainTilePositionY,int baseTileWidth, int baseTileHeight){
-	this->baseTileHeight = baseTileHeight;
-	this->baseTileWidth = baseTileWidth;
+Drawable::Drawable(int mainTilePositionX, int mainTilePositionY){
 	this->mainTilePosition = {mainTilePositionX,mainTilePositionY};
 	this->texture = NULL;
 	this->height = 0;
@@ -77,10 +75,13 @@ void Drawable::free(){
 	this->texture = NULL;
 }
 
-// dummy functions
-void Drawable::animate(){
+void Drawable::animate(AnimationStatus status){
 }
 
-void Drawable::selectAnimation(MotionDirection direction,bool isMoving) {
+AnimationStatus Drawable::getAnimation(MotionDirection currentDirection, bool currentlyMoving, AnimationStatus lastStatus){
+	AnimationStatus nextStatus;
+	nextStatus.direction = SOUTH;
+	nextStatus.animationIndex = 0;
+	nextStatus.isMoving = false;
+	return nextStatus;
 }
-

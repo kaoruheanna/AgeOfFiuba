@@ -22,17 +22,23 @@ enum MotionDirection {
 	SOUTH_WEST,
 };
 
+struct AnimationStatus {
+	MotionDirection direction;
+	int animationIndex;
+	bool isMoving;
+};
+
 
 class Drawable {
 public:
-	Drawable(int mainTilePositionX, int mainTilePositionY, int baseTileWidth, int baseTileHeight);
+	Drawable(int mainTilePositionX, int mainTilePositionY);
 	virtual ~Drawable();
 	virtual SDL_Rect getRectToDraw(int windowMainTilePositionX, int windowMainTilePositionY);
 	SDL_Texture* getTexture();
 	bool loadTextureFromFile(std::string path,SDL_Renderer* sdlRenderer);
 	virtual SDL_Rect* getClipRect();
-	virtual void animate();
-	virtual void selectAnimation(MotionDirection direction,bool isMoving);
+	virtual void animate(AnimationStatus status);
+	virtual AnimationStatus getAnimation(MotionDirection currentDirection, bool currentlyMoving, AnimationStatus lastStatus);
 	void free();
 
 protected:
@@ -43,10 +49,6 @@ protected:
 	SDL_Point mainTilePosition;
 	int height;
 	int width;
-
-private:
-	int baseTileWidth;
-	int baseTileHeight;
 
 };
 

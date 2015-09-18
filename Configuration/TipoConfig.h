@@ -35,12 +35,13 @@ private:
 	int altoBase;
 	int pixelRefX;
 	int pixelRefY;
-	int fps;
+	float fps;
 	int delay;
 	int altoFrame;
 	int anchoFrame;
 
 	static int getIntAttribute(YAML::Node nodo, string attributeName, int defaultValue);
 	static string getStringAttribute(YAML::Node nodo, string attributeName, string defaultValue);
+	static float getFloatAttribute(YAML::Node nodo, string attributeName, float defaultValue);
 };
 #endif /* CONFIGURATION_TIPOCONFIG_H_ */

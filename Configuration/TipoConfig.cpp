@@ -28,7 +28,7 @@ TipoConfig::TipoConfig(YAML::Node nodo): TipoConfig(){
 	this->altoBase = TipoConfig::getIntAttribute(nodo, "alto_base", this->altoBase);
 	this->anchoBase = TipoConfig::getIntAttribute(nodo, "ancho_base", this->anchoBase);
 	this->delay = TipoConfig::getIntAttribute(nodo, "delay", this->delay);
-	this->fps = TipoConfig::getIntAttribute(nodo, "fps", this->fps);
+	this->fps = TipoConfig::getFloatAttribute(nodo, "fps", this->fps);
 	this->pixelRefX = TipoConfig::getIntAttribute(nodo, "pixel_ref_x", this->pixelRefX);
 	this->pixelRefY = TipoConfig::getIntAttribute(nodo, "pixel_ref_y", this->pixelRefY);
 	this->anchoFrame = TipoConfig::getIntAttribute(nodo, "ancho_frame", this->anchoFrame);
@@ -70,6 +70,29 @@ string TipoConfig::getStringAttribute(YAML::Node nodo, string attributeName, str
 	}
 	return defaultValue;
 }
+
+float TipoConfig::getFloatAttribute(YAML::Node nodo, string attributeName, float defaultValue) {
+	if(!nodo[attributeName] || nodo[attributeName].IsNull() || !nodo[attributeName].IsDefined()){
+			Log().Get(TAG,logDEBUG) << attributeName << " no esta definido para este tipo. Usando valor default: " << defaultValue;
+		} else if(!nodo[attributeName].IsScalar()){
+			Log().Get(TAG,logDEBUG) << attributeName << " no es del tipo float. Usando valor default: " << defaultValue;
+		} else {
+			try{
+				if (nodo[attributeName].as<float>() > 0){
+					return nodo[attributeName].as<float>();
+				}
+				else {
+					Log().Get(TAG,logDEBUG) << "El valor de fps es menor a invalido, usando valor default ";
+					return defaultValue;
+				}
+			} catch(YAML::RepresentationException& error){
+				Log().Get(TAG,logDEBUG) << attributeName << " no se puede castear a float. Error YAML: " << error.msg << ". Usando valor default: " << defaultValue;
+			}
+		}
+		return defaultValue;
+	}
+
+
 
 TipoConfig::~TipoConfig() {
 }

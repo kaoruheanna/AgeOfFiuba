@@ -68,7 +68,7 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 
 	// Imagen Default
 	Log().Get(TAG,logINFO) << "Cargando drawable default";
-	this->missingImageDrawable = new Drawable(64,0,1,1);
+	this->missingImageDrawable = new Drawable(64,0);
 	success = this->missingImageDrawable->loadTextureFromFile("img/missingImage.png",this->sdlRenderer);
 	if(!success){
 		Log().Get(TAG,logERROR) << "No se pudo cargar el drawable default";
@@ -79,7 +79,7 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 	// Mapa
 	Log().Get(TAG,logINFO) << "Cargando tile default";
 	string tileDefault = "img/grass1.png";
-	Drawable *tileDefDrawable = new Drawable(64,0,1,1);//nose si esta bien
+	Drawable *tileDefDrawable = new Drawable(64,0);
 	if (tileDefDrawable -> loadTextureFromFile(tileDefault,this->sdlRenderer)){
 		Log().Get(TAG,logINFO) << "Cargado tile default";
 		this->drawablesByInstanceName.insert(
@@ -88,57 +88,22 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 		Log().Get(TAG,logERROR) << "No se pudo cargar el drawable default";
 	}
 
-	//imagen casa
-	Log().Get(TAG,logINFO) << "Cargando dibujo de casa";
-	string casa = "img/casa2x2.png";
-	Drawable *casaDrawable = new Drawable(153,31,2,2);//nose si esta bien
-	if (casaDrawable -> loadTextureFromFile(casa,this->sdlRenderer)){
-		Log().Get(TAG,logINFO) << "Cargado tile default";
-		this->drawablesByInstanceName.insert(
-				std::pair<std::string,Drawable*>("casa", casaDrawable));
-	} else {
-		Log().Get(TAG,logERROR) << "No se pudo cargar el drawable default";
-	}
-
-
-	// soldado => Esta en el YAML (Lo dejo por si le craseha a alguno)
-	/*string soldierPath = "img/ManSprite.png";
-	Drawable *soldierDrawable = new Sprite(25,50,1,1,50,50,10);
-	if (soldierDrawable->loadTextureFromFile(soldierPath,this->sdlRenderer)){
-		this->drawablesByInstanceName.insert(
-			std::pair<std::string,Drawable*>("soldier",	soldierDrawable)
-		);
-	}*/
-
 	// Cargar los tipos pasados por el YAML
 	int i = 0;
 	for (list<TipoConfig>::iterator it = tipos.begin(); it != tipos.end(); ++it) {
 	  Log().Get(TAG,logDEBUG) << "Parseando tipo: " << i;
-	  TipoConfig newNodo = *it;
-	  if(newNodo.getNombre() == "" || newNodo.getImagen() == ""){
+	  TipoConfig tipo = *it;
+
+	  if((tipo.getNombre() == "") || (tipo.getImagen() == "")){
 		  Log().Get(TAG,logERROR) << "Tipo N°" << i << " es incorrecto. Deberia tener nombre e imagen.";
+
 	  } else {
-		  Drawable *nodoDrawable = NULL;
-		  if(newNodo.getFPS() > 0){
-			  Log().Get(TAG,logINFO) << "Tipo N°" << i << " es un sprite.";
-			  nodoDrawable = new Sprite(
-				newNodo.getPixelRefX(), newNodo.getPixelRefY(),
-				newNodo.getAnchoBase(), newNodo.getAltoBase(),
-				newNodo.getAnchoFrame(), newNodo.getAltoFrame(),
-				newNodo.getFPS()
-			  );
-			  // TODO agregar el campo delay a Sprite
-		  } else {
-			  Log().Get(TAG,logINFO) << "Tipo N°" << i << " es un drawable.";
-			  nodoDrawable = new Drawable(
-				newNodo.getPixelRefX(), newNodo.getPixelRefY(),
-				newNodo.getAnchoBase(), newNodo.getAltoBase()
-			  );
-		  }
-		  if(nodoDrawable->loadTextureFromFile(newNodo.getImagen(), this->sdlRenderer)){
-			  Log().Get(TAG,logINFO) << "Tipo N°" << i << " se cargo correctamente bajo el nombre " << newNodo.getNombre();
+		  Drawable *nodoDrawable = this->getDrawableFromTipoConfig(tipo);
+		  bool textureLoaded = nodoDrawable->loadTextureFromFile(tipo.getImagen(), this->sdlRenderer);
+		  if(textureLoaded){
+			  Log().Get(TAG,logINFO) << "Tipo N°" << i << " se cargo correctamente bajo el nombre " << tipo.getNombre();
 			  this->drawablesByInstanceName.insert(
-				std::pair<std::string,Drawable*>(newNodo.getNombre(), nodoDrawable)
+				std::pair<std::string,Drawable*>(tipo.getNombre(), nodoDrawable)
 			  );
 		  } else {
 			  Log().Get(TAG,logINFO) << "Tipo N°" << i << " no se pudo cargar la imagen.";
@@ -147,6 +112,25 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 	  i++;
 	}
 	return success;
+}
+
+Drawable* Renderer::getDrawableFromTipoConfig(TipoConfig tipo){
+	if(tipo.getFPS() > 0){
+		Log().Get(TAG,logINFO) << "Tipo " << tipo.getNombre() << " es un sprite.";
+		Sprite *sprite = new Sprite(
+			tipo.getPixelRefX(), tipo.getPixelRefY(),
+			tipo.getAnchoFrame(), tipo.getAltoFrame(),
+			tipo.getFPS()
+		);
+	// TODO agregar el campo delay a Sprite
+		return sprite;
+	}
+
+	Log().Get(TAG,logINFO) << "Tipo " << tipo.getNombre() << " es un drawable.";
+	Drawable *drawable = new Drawable(
+		tipo.getPixelRefX(), tipo.getPixelRefY()
+	);
+	return drawable;
 }
 
 void Renderer::close() {

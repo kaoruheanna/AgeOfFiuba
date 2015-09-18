@@ -31,6 +31,10 @@ string Entity::toString(){
 	return n;
 }
 
+string Entity::getNombre() {
+	return this->nombre;
+}
+
 SDL_Point Entity::getPosicion(){
 	return this->posicion;
 }

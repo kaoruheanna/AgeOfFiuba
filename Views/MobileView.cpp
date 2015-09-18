@@ -12,7 +12,6 @@
 MobileView::MobileView(std::string type): View(type) {
 	this->model = NULL;
 	this->lastOrigin = this->origin;
-	this->lastDirection = SOUTH;
 }
 
 MobileView::~MobileView() {
@@ -37,8 +36,8 @@ SDL_Point MobileView::getOrigin(){
 }
 
 void MobileView::render(Renderer* renderer) {
-	this->lastDirection = this->getMotionDirection();
-	this->drawable->selectAnimation(this->lastDirection,this->model->isMoving());
+	MotionDirection currentDirection = this->getMotionDirection();
+	this->animationStatus = this->drawable->getAnimation(currentDirection,this->model->isMoving(),this->animationStatus);
 	View::render(renderer);
 }
 
@@ -48,7 +47,7 @@ MotionDirection MobileView::getMotionDirection() {
 	double deltaY = (this->origin.y - this->lastOrigin.y);
 
 	if ((deltaX == 0) && (deltaY == 0)){
-		return this->lastDirection;
+		return this->animationStatus.direction;
 	}
 
 	double angle = (atan2(deltaY,deltaX) * 180.0 / M_PI);
@@ -88,5 +87,5 @@ MotionDirection MobileView::getMotionDirection() {
 		return WEST;
 	}
 
-	return this->lastDirection;
+	return this->animationStatus.direction;
 }
