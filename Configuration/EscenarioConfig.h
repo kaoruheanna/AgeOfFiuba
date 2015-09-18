@@ -12,6 +12,7 @@
 #include <list>
 #include "EntidadConfig.h"
 
+const int TAMANIO_DEFAULT = 100;
 
 class EscenarioConfig {
 public:
@@ -29,6 +30,14 @@ private:
 	YAML::Node nodoEscenario;
 	void validarContenido();
 	void cargarEscenarioPorDefecto();
+	void validarTamanio();
+	bool verificarNombre();
+	bool validarINT(std::string);
+
+
+	int sizeX;
+	int sizeY;
+	std::string nombre;
 };
 
 #endif /* ESCENARIOCONFIG_H_ */

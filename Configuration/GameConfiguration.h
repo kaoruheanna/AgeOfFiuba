@@ -33,6 +33,10 @@ public:
 	list<TipoConfig> getTipos();
 	EscenarioConfig getEscenario();
 
+	std::string getNombreEscenario();
+	int getTamanioX();
+	int getTamanioY();
+
 private:
 	void parseYAML(const char* archivoAParsear);
 	void loadFile(const char* archivoAParsear);
