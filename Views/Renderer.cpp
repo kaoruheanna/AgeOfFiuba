@@ -68,7 +68,7 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 
 	// Imagen Default
 	Log().Get(TAG,logINFO) << "Cargando drawable default";
-	this->missingImageDrawable = new Drawable(64,0,1,1);
+	this->missingImageDrawable = new Drawable(64,0);
 	success = this->missingImageDrawable->loadTextureFromFile("img/missingImage.png",this->sdlRenderer);
 	if(!success){
 		Log().Get(TAG,logERROR) << "No se pudo cargar el drawable default";
@@ -79,7 +79,7 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 	// Mapa
 	Log().Get(TAG,logINFO) << "Cargando tile default";
 	string tileDefault = "img/grass1.png";
-	Drawable *tileDefDrawable = new Drawable(64,0,1,1);//nose si esta bien
+	Drawable *tileDefDrawable = new Drawable(64,0);
 	if (tileDefDrawable -> loadTextureFromFile(tileDefault,this->sdlRenderer)){
 		Log().Get(TAG,logINFO) << "Cargado tile default";
 		this->drawablesByInstanceName.insert(
@@ -91,7 +91,7 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 	//imagen casa
 	Log().Get(TAG,logINFO) << "Cargando dibujo de casa";
 	string casa = "img/casa2x2.png";
-	Drawable *casaDrawable = new Drawable(153,31,2,2);//nose si esta bien
+	Drawable *casaDrawable = new Drawable(153,31);//nose si esta bien
 	if (casaDrawable -> loadTextureFromFile(casa,this->sdlRenderer)){
 		Log().Get(TAG,logINFO) << "Cargado tile default";
 		this->drawablesByInstanceName.insert(
@@ -132,7 +132,6 @@ Drawable* Renderer::getDrawableFromTipoConfig(TipoConfig tipo){
 		Log().Get(TAG,logINFO) << "Tipo " << tipo.getNombre() << " es un sprite.";
 		Sprite *sprite = new Sprite(
 			tipo.getPixelRefX(), tipo.getPixelRefY(),
-			tipo.getAnchoBase(), tipo.getAltoBase(),
 			tipo.getAnchoFrame(), tipo.getAltoFrame(),
 			tipo.getFPS()
 		);
@@ -142,8 +141,7 @@ Drawable* Renderer::getDrawableFromTipoConfig(TipoConfig tipo){
 
 	Log().Get(TAG,logINFO) << "Tipo " << tipo.getNombre() << " es un drawable.";
 	Drawable *drawable = new Drawable(
-		tipo.getPixelRefX(), tipo.getPixelRefY(),
-		tipo.getAnchoBase(), tipo.getAltoBase()
+		tipo.getPixelRefX(), tipo.getPixelRefY()
 	);
 	return drawable;
 }

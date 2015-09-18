@@ -15,7 +15,7 @@ using namespace std;
 
 class Sprite: public Drawable {
 public:
-	Sprite(int mainTilePositionX, int mainTilePositionY,int baseTileWidth, int baseTileHeight, int spriteWidth, int spriteHeight, int fps);
+	Sprite(int mainTilePositionX, int mainTilePositionY, int spriteWidth, int spriteHeight, int fps);
 	virtual ~Sprite();
 	SDL_Rect* getClipRect();
 	AnimationStatus getAnimation(MotionDirection currentDirection, bool currentlyMoving, AnimationStatus lastStatus);

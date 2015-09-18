@@ -14,8 +14,8 @@
 
 const std::string TAG = "Sprite";
 
-Sprite::Sprite(int mainTilePositionX, int mainTilePositionY,int baseTileWidth, int baseTileHeight, int spriteWidth, int spriteHeight, int fps)
-: Drawable(mainTilePositionX, mainTilePositionY, baseTileWidth, baseTileHeight){
+Sprite::Sprite(int mainTilePositionX, int mainTilePositionY, int spriteWidth, int spriteHeight, int fps)
+: Drawable(mainTilePositionX, mainTilePositionY){
 	this->repeatTimes = 1;
 	this->fps = fps;
 	this->height = spriteHeight;

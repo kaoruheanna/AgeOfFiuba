@@ -31,7 +31,7 @@ struct AnimationStatus {
 
 class Drawable {
 public:
-	Drawable(int mainTilePositionX, int mainTilePositionY, int baseTileWidth, int baseTileHeight);
+	Drawable(int mainTilePositionX, int mainTilePositionY);
 	virtual ~Drawable();
 	virtual SDL_Rect getRectToDraw(int windowMainTilePositionX, int windowMainTilePositionY);
 	SDL_Texture* getTexture();
@@ -49,10 +49,6 @@ protected:
 	SDL_Point mainTilePosition;
 	int height;
 	int width;
-
-private:
-	int baseTileWidth;
-	int baseTileHeight;
 
 };
 

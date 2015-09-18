@@ -13,9 +13,7 @@ Drawable::~Drawable() {
 	// TODO Auto-generated destructor stub
 }
 
-Drawable::Drawable(int mainTilePositionX, int mainTilePositionY,int baseTileWidth, int baseTileHeight){
-	this->baseTileHeight = baseTileHeight;
-	this->baseTileWidth = baseTileWidth;
+Drawable::Drawable(int mainTilePositionX, int mainTilePositionY){
 	this->mainTilePosition = {mainTilePositionX,mainTilePositionY};
 	this->texture = NULL;
 	this->height = 0;
