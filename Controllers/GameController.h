@@ -20,7 +20,7 @@ class GameController {
 public:
 	GameController(GameConfiguration *config);
 	virtual ~GameController();
-	void play();
+	bool play();
 
 private:
 	bool shouldQuit;
@@ -29,7 +29,7 @@ private:
 	MobileModel *model;
 	GameConfiguration *config;
 
-	void pollEvents();
+	bool pollEvents();
 	void updateWindow();
 
 	void close();

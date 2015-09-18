@@ -13,11 +13,14 @@ and may not be redistributed without written permission.*/
 
 int main( int argc, char* args[] )
 {
-	GameConfiguration *configuration = new GameConfiguration();
-	GameController *gameController = new GameController(configuration);
-	gameController->play();
+	bool shouldRestart = false;
+	do {
+		GameConfiguration *configuration = new GameConfiguration();
+		GameController *gameController = new GameController(configuration);
+		shouldRestart = gameController->play();
 
-	delete gameController;
-	delete configuration;
+		delete gameController;
+		delete configuration;
+	} while(shouldRestart);
 	return 0;
 }

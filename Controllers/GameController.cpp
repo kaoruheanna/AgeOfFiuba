@@ -28,14 +28,14 @@ GameController::~GameController() {
 	// TODO Auto-generated destructor stub
 }
 
-void GameController::play() {
+bool GameController::play() {
 	Log().Get(TAG,logDEBUG) << "[GameController] " << "play";
 
 	this->renderer = new Renderer(this->config->getPantallaAncho(),this->config->getPantallaAlto(), this->config->getTipos());
 	if (!this->renderer->canDraw()){
 		printf( "Failed to initialize!\n" );
 		this->close();
-		return;
+		return false;
 	}
 
 	//Agrego el mapa
@@ -63,17 +63,18 @@ void GameController::play() {
 	this->views.push_back(marioView);
 	this->renderer->addView(marioView);
 
-
+	bool shouldRestart = false;
 	//While application is running
-	while( !this->shouldQuit ) {
+	while( !this->shouldQuit && !shouldRestart ) {
 		this->updateWindow();
-		this->pollEvents();
+		shouldRestart = this->pollEvents();
 		this->model->updatePosition();
 		this->renderer->drawViews();
 		this->sleep();
 	}
 
 	this->close();
+	return shouldRestart;
 }
 
 
@@ -114,13 +115,20 @@ void GameController::updateWindow() {
 	}
 }
 
-void GameController::pollEvents(){
+bool GameController::pollEvents(){
+	bool pressedR = false;
 	SDL_Event e;
 	while( SDL_PollEvent( &e ) != 0 ) {
 
 		if( e.type == SDL_QUIT ) {
 			printf("tengo que cerrarlo \n");
 			this->shouldQuit = true;
+		}
+
+		if( e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_r) {
+			printf("tengo que reiniciarlo \n");
+			this->shouldQuit = true;
+			pressedR = true;
 		}
 
 		if (e.type == SDL_MOUSEBUTTONDOWN){
@@ -131,6 +139,7 @@ void GameController::pollEvents(){
 			this->model->setDestination(mapPoint.x,mapPoint.y);
 		}
 	}
+	return pressedR;
 }
 
 void GameController::close() {
