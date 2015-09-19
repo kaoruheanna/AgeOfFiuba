@@ -122,9 +122,8 @@ Drawable* Renderer::getDrawableFromTipoConfig(TipoConfig tipo){
 		Sprite *sprite = new Sprite(
 			tipo.getPixelRefX(), tipo.getPixelRefY(),
 			tipo.getAnchoFrame(), tipo.getAltoFrame(),
-			tipo.getFPS()
+			tipo.getFPS(), tipo.getDelay()
 		);
-	// TODO agregar el campo delay a Sprite
 		return sprite;
 	}
 
@@ -241,9 +240,7 @@ void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable, bool
 		windowPoint = this->mapToWindowPoint2({mapPositionX, mapPositionY});
 	}
 	SDL_Rect renderQuad = drawable->getRectToDraw(windowPoint.x, windowPoint.y);
-	//printf("mapPoint: %i:%i windowPoint: %i:%i\n", mapPositionX, mapPositionY, windowPoint.x, windowPoint.y);
-	//SDL_Point mapPoint = this->windowToMapPoint(windowPoint);
-	//printf("windowPoint: %i:%i mapPoint: %i:%i\n", windowPoint.x, windowPoint.y, mapPoint.x, mapPoint.y);
+
 	if(this->isInsideWindow(&renderQuad)){
 		//Log().Get(TAG,logDEBUG) << "Drawable inside window with rect { " << renderQuad.x << ", " << renderQuad.y << ", " << renderQuad.w << ", " << renderQuad.h << " }";
 		SDL_RenderCopy(sdlRenderer, drawable->getTexture(), drawable->getClipRect(), &renderQuad);

@@ -8,14 +8,14 @@
 #ifndef VIEWS_SPRITE_H_
 #define VIEWS_SPRITE_H_
 
-#include <list>
+#include <vector>
 #include "Drawable.h"
 #include "MobileView.h"
 using namespace std;
 
 class Sprite: public Drawable {
 public:
-	Sprite(int mainTilePositionX, int mainTilePositionY, int spriteWidth, int spriteHeight, int fps);
+	Sprite(int mainTilePositionX, int mainTilePositionY, int spriteWidth, int spriteHeight, float fps, float delay);
 	virtual ~Sprite();
 	SDL_Rect* getClipRect();
 	AnimationStatus getAnimation(MotionDirection currentDirection, bool currentlyMoving, AnimationStatus lastStatus);
@@ -25,12 +25,10 @@ protected:
 	void onTextureChange();
 
 private:
-	int repeatTimes;
 	float fps;
-	int animationCount;
-	int framesPerAnimation;
+	float delay;
 	SDL_Rect clipRect;
-	bool isMoving;
+	vector<int> frameIndexes;
 };
 
 #endif /* VIEWS_SPRITE_H_ */
