@@ -77,7 +77,8 @@ void EscenarioConfig::cargarEscenarioPorDefecto(){
 
 std::list<EntidadConfig> EscenarioConfig::getEntidades() {
 	std::list<EntidadConfig> lista;
-	lista.push_back(EntidadConfig(4, 3, "casa"));
+//	lista.push_back(EntidadConfig(4, 3, "casa"));
+	lista.push_back(EntidadConfig(4, 3, "molino"));
 	lista.push_back(EntidadConfig(10, 15, "tierra"));
 	lista.push_back(EntidadConfig(15, 20, "tierra"));
 	lista.push_back(EntidadConfig(10, 15, "agua"));

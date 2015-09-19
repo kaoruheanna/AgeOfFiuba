@@ -32,9 +32,20 @@ tipos:
    pixel_ref_x: 25
    pixel_ref_y: 50
    fps: 2
-   delay: 2
+   delay: 1
    alto_frame: 50
    ancho_frame: 50
+ 
+ - nombre: molino
+   imagen: img/windmills-240x100.png
+   ancho_base: 1
+   alto_base : 1
+   pixel_ref_x: 30
+   pixel_ref_y: 100
+   fps: 2
+   delay: 1
+   alto_frame: 100
+   ancho_frame: 60
  
  - nombre: juana_de_arco
    imagen: path/a/juanadearco.png
@@ -55,7 +66,8 @@ escenario:
    - [x: 10, y: 15, tipo: tierra]
    - [x: 15, y: 20, tipo: tierra]
    - [x: 10, y: 15, tipo: agua]
-   - [x: 30, y: 55, tipo: castillo]
+   - [x: 100, y: 100, tipo: castillo]
+   - [x: 30, y: 55, tipo: molino]
    protagonista:
    - tipo: juana_de_arco
      x: 50

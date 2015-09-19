@@ -8,7 +8,6 @@
 #ifndef VIEWS_SPRITE_H_
 #define VIEWS_SPRITE_H_
 
-#include <list>
 #include <vector>
 #include "Drawable.h"
 #include "MobileView.h"

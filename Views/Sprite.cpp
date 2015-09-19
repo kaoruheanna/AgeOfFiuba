@@ -19,6 +19,7 @@ Sprite::Sprite(int mainTilePositionX, int mainTilePositionY, int spriteWidth, in
 
 	this->fps = fps;
 	this->delay = delay;
+
 	this->height = spriteHeight;
 	this->width = spriteWidth;
 	this->clipRect = {
@@ -39,7 +40,6 @@ void Sprite::onTextureChange(){
 	int framesPerAnimation = w / this->width;
 
 	int repeatTimes = DELAY_MILISEC * this->fps / framesPerAnimation;
-	Log().Get(TAG,logINFO) << "repeatTimes: "<< repeatTimes;
 
 	// guarda las coordenadas en x de cada frame de animacion
 	for (int i = START_MOVING_INDEX ; i < framesPerAnimation ; i++){
@@ -49,6 +49,14 @@ void Sprite::onTextureChange(){
 				Log().Get(TAG,logINFO) << "agrego el indice de la animacion: "<< i;
 			}
 		}
+	}
+
+	int delayFrames = ((this->delay * 1000) / DELAY_MILISEC);
+
+	Log().Get(TAG,logINFO) << "repeatTimes: "<< repeatTimes;
+	Log().Get(TAG,logINFO) << "delay frames: "<< delayFrames;
+	for (int i = 0; i < delayFrames; i++){
+		this->frameIndexes.push_back(START_MOVING_INDEX);
 	}
 }
 
@@ -63,7 +71,7 @@ AnimationStatus Sprite::getAnimation(MotionDirection currentDirection, bool curr
 	}
 
 	if (lastStatus.direction != currentDirection){
-		newStatus.animationIndex = START_MOVING_INDEX;
+		newStatus.animationIndex = 0;
 		return newStatus;
 	}
 
@@ -78,7 +86,9 @@ AnimationStatus Sprite::getAnimation(MotionDirection currentDirection, bool curr
 
 void Sprite::animate(AnimationStatus status){
 	int frameIndex = (status.isMoving) ? this->frameIndexes[status.animationIndex] : STANDING_SPRITE_INDEX ;
-//	Log().Get(TAG,logINFO) << "indice de la animacion: "<< frameIndex;
+	if (status.isMoving){
+		Log().Get(TAG,logINFO) << "indice de la animacion: "<< frameIndex;
+	}
 	this->clipRect.x = frameIndex * this->width;
 	this->clipRect.y = status.direction * this->height;
 }
