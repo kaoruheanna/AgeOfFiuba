@@ -31,7 +31,8 @@ tipos:
    alto_base : 1
    pixel_ref_x: 25
    pixel_ref_y: 50
-   fps: 1
+   fps: 2
+   delay: 2
    alto_frame: 50
    ancho_frame: 50
  

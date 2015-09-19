@@ -77,14 +77,13 @@ bool GameController::play() {
 		}
 		indice++;
 	}
-	printf("created views");
+
 	// Agrego vista del personaje
 	MobileView *marioView = new MobileView(this->escenario->getProtagonista()->getNombre());
 	marioView->setModel(this->escenario->getProtagonista());
 	this->views.push_back(marioView);
 	this->renderer->addView(marioView);
 
-	printf("created player");
 	bool shouldRestart = false;
 	//While application is running
 	while( !this->shouldQuit && !shouldRestart ) {

@@ -120,7 +120,7 @@ Drawable* Renderer::getDrawableFromTipoConfig(TipoConfig tipo){
 		Sprite *sprite = new Sprite(
 			tipo.getPixelRefX(), tipo.getPixelRefY(),
 			tipo.getAnchoFrame(), tipo.getAltoFrame(),
-			tipo.getFPS()
+			tipo.getFPS(), tipo.getDelay()
 		);
 	// TODO agregar el campo delay a Sprite
 		return sprite;
