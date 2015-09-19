@@ -60,8 +60,6 @@ bool GameController::play() {
 	this->views.push_back(mapView);
 	this->renderer->addView(mapView);
 
-
-
 	// Agrego todas las vistas (siempre que no sean el protagonista)
 	list<Entity*>::iterator entidad;
 	list<Entity*> entidades = escenario->getListaEntidades();
@@ -77,6 +75,7 @@ bool GameController::play() {
 		}
 		indice++;
 	}
+
 	printf("created views");
 	// Agrego vista del personaje
 	MobileView *marioView = new MobileView(this->escenario->getProtagonista()->getNombre());
@@ -157,12 +156,28 @@ bool GameController::pollEvents(){
 			//Get mouse position
 			int x, y;
 			SDL_GetMouseState(&x, &y);
-			SDL_Point mapPoint = this->renderer->windowToMapPoint({x,y});
+			SDL_Point mapPoint; // = this->renderer->windowToMapPoint({x,y});
+			PointL point = this->renderer->windowToMapPoint2({x,y});
+
+			cout<<"____"<<endl;
+			cout << mapPoint.x<<","<<mapPoint.y<<endl;
+			cout << point.x<<","<<point.y<<endl;
+
+			point = this->renderer->proyectedPoint(point, this->escenario->getSize());
+
+			//paso de las coordenadas del mapa a las coordenadas del tipo.
+			//es medio feo esto pero funciona, todavia nose como
+			mapPoint.x = (3*point.x - point.y)*22.624; //nose de donde salio este numero pero funciona
+			mapPoint.y = (3*point.y - point.x)*22.624;
+
+			cout << mapPoint.x<<","<<mapPoint.y<<endl;
+
 			this->escenario->getProtagonista()->setDestination(mapPoint.x,mapPoint.y);
 		}
 	}
 	return pressedR;
 }
+
 
 void GameController::close() {
 	if (this->renderer){

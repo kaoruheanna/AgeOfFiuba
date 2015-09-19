@@ -5,12 +5,12 @@
 #include <SDL2/SDL.h>
 #include "Entity.h"
 #include "TileSet.h"
-
+/*
 //PointL es una version del SDL_Point pero con sus coordenadas flotantes.
 typedef struct PointL{
 	float x;
 	float y;
-}PointL;
+}PointL;*/
 
 class Map {
 	private:
@@ -35,8 +35,8 @@ class Map {
 		void setTileDimensions(int,int);
 
 		SDL_Point posicionRelativaRect(SDL_Rect,SDL_Point);
-		PointL transformarAL(SDL_Point);
-		SDL_Point transformarLA(PointL);
+		//PointL transformarAL(SDL_Point);
+		//SDL_Point transformarLA(PointL);
 
 		bool construirEntidad(Entity*,SDL_Point);
 		bool puedoConstruir(Entity*,SDL_Point);

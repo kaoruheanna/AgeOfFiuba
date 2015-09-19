@@ -22,6 +22,12 @@
 #include "../Configuration/TipoConfig.h"
 using namespace std;
 
+//estructura creada para manejar puntos mas exactos
+typedef struct PointL{
+	float x;
+	float y;
+}PointL;
+
 class View;
 
 class Renderer {
@@ -33,9 +39,10 @@ public:
 	void drawViews();
 	void draw(int mapPositionX, int mapPositionY, Drawable* drawable, bool iso);
 	SDL_Point mapToWindowPoint(SDL_Point mapPoint);
-	SDL_Point mapToWindowPoint2(SDL_Point mapPoint);
+	SDL_Point mapToWindowPoint2(PointL mapPoint);
 	SDL_Point windowToMapPoint(SDL_Point windowPoint);
-	SDL_Point windowToMapPoint2(SDL_Point windowPoint);
+	PointL windowToMapPoint2(SDL_Point windowPoint);
+	PointL proyectedPoint(PointL mapPoint, SDL_Point plano);
 	bool canDraw();
 	void addView(View* view);
 

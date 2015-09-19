@@ -142,3 +142,8 @@ void Escenario::vaciarEntidades(){
 		delete e;
 	}
 }
+
+
+SDL_Point Escenario::getSize(){
+	return {this->mundo->getHeight(),this->mundo->getWidth()};
+}

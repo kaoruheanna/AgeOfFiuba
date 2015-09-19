@@ -30,6 +30,7 @@ class Escenario {
 		bool construirEntidad(Entity*,SDL_Point);
 		void vaciarEntidades();
 		void imprimirEntidades();
+		SDL_Point getSize();
 		Entity* crearEntidad(EntidadConfig config, map<string, SDL_Point> sizeByType, bool esProtagonista);
 		list<Entity*> getListaEntidades(); // Se usa para agregar las vistas de las entidades
 		MobileModel* getProtagonista();

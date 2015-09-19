@@ -1,0 +1,61 @@
+---
+pantalla:
+ - alto: 640
+ - ancho: 800
+
+configuracion:
+ - vel_personaje: 3
+ - margen_scroll: 30
+
+tipos:
+ - nombre: arbol
+   imagen: path/a/imagen.png
+
+ - nombre: casa
+   imagen: img/casa2x2.png
+   ancho_base: 1
+   alto_base : 1
+   pixel_ref_x: 153
+   pixel_ref_y: 31
+
+ - nombre: castillo
+   imagen: path/a/castillo.png
+   ancho_base: 2
+   alto_base : 2
+   pixel_ref_x: 30
+   pixel_ref_y: 40
+
+ - nombre: soldado
+   imagen: img/ManSprite.png
+   ancho_base: 1
+   alto_base : 1
+   pixel_ref_x: 25
+   pixel_ref_y: 50
+   fps: 1
+   alto_frame: 50
+   ancho_frame: 50
+ 
+ - nombre: juana_de_arco
+   imagen: path/a/juanadearco.png
+   fps: 10
+   delay: 5
+
+ - nombre: tierra
+   imagen: path/a/tierra.png
+
+ - nombre: agua
+   imagen: path/a/agua.png
+
+escenario:
+ - nombre: orleans
+   size_x: 5
+   size_y: 5
+   entidades:
+   - [x: 10, y: 15, tipo: tierra]
+   - [x: 15, y: 20, tipo: tierra]
+   - [x: 10, y: 15, tipo: agua]
+   - [x: 30, y: 55, tipo: castillo]
+   protagonista:
+   - tipo: juana_de_arco
+     x: 50
+     y: 50

@@ -45,9 +45,9 @@ SDL_Point Map::posicionRelativaRect(SDL_Rect rect, SDL_Point punto_m){
 	return punto_v;
 }
 
-
+/*
 /*Devuelve la coordenada del tile donde se encuentra el punto.
- * Transforma coordenadas absolutas en logicas*/
+ * Transforma coordenadas absolutas en logicas*
 PointL Map::transformarAL(SDL_Point punto_absoluto){
 	PointL punto_logico;
 	float xa = punto_absoluto.x;
@@ -65,7 +65,7 @@ SDL_Point Map::transformarLA(PointL punto_logico){
 	punto_absoluto.x = (this->tile_ancho/2.0)*(xl-yl);
 	return punto_absoluto;
 }
-
+*/
 bool Map::puedoConstruir(Entity* entidad, SDL_Point posicion){
 	int size_x = entidad->getAnchoBase();
 	int size_y = entidad->getAltoBase();

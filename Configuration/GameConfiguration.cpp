@@ -5,9 +5,6 @@
  *      Author: die89
  */
 
-
-
-
 #include "GameConfiguration.h"
 #include "../Utils/Log.h"
 
