@@ -60,15 +60,29 @@ void EscenarioConfig::validarTamanio(){
 		this->sizeX = TAMANIO_DEFAULT;
 		Log().Get(TAG,logDEBUG) << "Se cargo el tamanio en X por defecto";
 	}
+	else{
+			this->sizeX = this->nodoEscenario[0]["size_x"].as<int>();
+	}
 	if (!this->validarINT("size_y")){
 		this->sizeY = TAMANIO_DEFAULT;
 		Log().Get(TAG,logDEBUG) << "Se cargo el tamanio en Y por defecto";
+	}
+	else{
+			this->sizeY = this->nodoEscenario[0]["size_y"].as<int>();
 	}
 	return;
 }
 
 bool EscenarioConfig::validarINT(std::string atributo){
-	return false;
+	if (this->nodoEscenario[0][atributo].IsScalar() && !this->nodoEscenario[0].IsNull() && this->nodoEscenario[0][atributo].IsDefined()){
+			try{
+				if (this->nodoEscenario[0][atributo].as<int>() > 0){
+					return true;
+				}
+				else { return false; }
+			}catch(YAML::RepresentationException& error) {return false;}
+		}
+		return false;
 }
 
 void EscenarioConfig::cargarEscenarioPorDefecto(){
