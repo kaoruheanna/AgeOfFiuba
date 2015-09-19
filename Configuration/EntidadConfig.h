@@ -12,6 +12,7 @@
 
 class EntidadConfig {
 public:
+	EntidadConfig();
 	EntidadConfig(int x, int y, std::string tipo); // TODO Borrar y parsearlo del YAML
 	virtual ~EntidadConfig();
 

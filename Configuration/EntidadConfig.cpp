@@ -7,6 +7,12 @@
 
 #include "EntidadConfig.h"
 
+EntidadConfig::EntidadConfig(){
+
+
+}
+
+
 EntidadConfig::EntidadConfig(int x, int y, std::string tipo) {
 	this->x = x;
 	this->y = y;

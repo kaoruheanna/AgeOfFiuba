@@ -33,11 +33,14 @@ private:
 	void validarTamanio();
 	bool verificarNombre();
 	bool validarINT(std::string);
+	void parsearProtagonista();
+	bool parsearEntidad(YAML::Node nodo, EntidadConfig &entidad);
 
 
 	int sizeX;
 	int sizeY;
 	std::string nombre;
+	EntidadConfig protagonista;
 };
 
 #endif /* ESCENARIOCONFIG_H_ */

@@ -11,7 +11,7 @@
 const std::string TAG = "EscenarioConfig";
 
 EscenarioConfig::EscenarioConfig() {
-	// TODO Auto-generated constructor stub
+	//this->protagonista = EntidadConfig(0,0,"soldado");// TODO Auto-generated constructor stub
 
 }
 
@@ -37,6 +37,8 @@ void EscenarioConfig::validarContenido(){
 				Log().Get(TAG,logDEBUG) << "El nombre del escenario es incorrecto, se carga un nombre por defecto";
 			}
 			this->validarTamanio();
+			this->parsearProtagonista();
+			Log().Get(TAG,logDEBUG) << "datos del protagonista " << this->protagonista.getTipo() << this->protagonista.getX() << this->protagonista.getY();
 			Log().Get(TAG,logDEBUG) << "el nombre usado es: " << this->getNombre();// HAY QUE SACARLO LUEGO
 			return;
 		}
@@ -85,6 +87,58 @@ bool EscenarioConfig::validarINT(std::string atributo){
 		return false;
 }
 
+bool EscenarioConfig::parsearEntidad(YAML::Node nodo, EntidadConfig &entidad){
+	std::string nombre;
+		int posX;
+		int posY;
+
+			if (nodo["x"] && nodo["x"].IsDefined() && nodo["x"].IsScalar()){
+				try {
+					if (nodo["x"].as<int>() >= 0){
+						posX = nodo["x"].as<int>();
+					}
+					else {return false;}
+				}catch(YAML::RepresentationException& error){
+						return false;
+					}
+				}
+			else {return false;}
+			if (nodo["y"] && nodo["y"].IsDefined() && nodo["y"].IsScalar()){
+					try {
+						if (nodo["y"].as<int>() >= 0){
+							posY = nodo["y"].as<int>();
+						}
+						else {return false;}
+					}catch(YAML::RepresentationException& error){
+							return false;
+						}
+			}
+			else {return false;}
+			if (nodo["tipo"] && nodo["tipo"].IsDefined() && nodo["tipo"].IsScalar()){
+							try {
+								if (nodo["y"].as<std::string>() != ""){
+									nombre = nodo["tipo"].as<std::string>();
+								}
+								else {return false;}
+							}catch(YAML::RepresentationException& error){
+									return false;
+								}
+					}
+			else {return false;}
+			entidad = EntidadConfig(posX,posY,nombre);
+			return true;
+}
+
+void EscenarioConfig::parsearProtagonista(){
+	EntidadConfig personajeParseado = EntidadConfig(0,0,"soldado");
+	YAML::Node nodoProtagonista = this->nodoEscenario[0]["protagonista"];
+	if (nodoProtagonista.IsSequence() && nodoProtagonista.size() == 1 && !nodoProtagonista[0].IsNull()){
+		this->parsearEntidad(nodoProtagonista[0], personajeParseado);}
+	else {
+		Log().Get(TAG,logDEBUG) << "Se cargo el protagonista por defecto";
+	}
+	this->protagonista = personajeParseado;
+}
 void EscenarioConfig::cargarEscenarioPorDefecto(){
 
 }
@@ -120,6 +174,6 @@ int EscenarioConfig::getSizeY() {
 	return (this->sizeY);
 }
 EntidadConfig EscenarioConfig::getProtagonista() {
-	return EntidadConfig(0,0, "soldado");
+	return this->protagonista;
 }
 
