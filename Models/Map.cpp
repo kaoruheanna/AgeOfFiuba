@@ -77,14 +77,15 @@ bool Map::puedoConstruir(Entity* entidad, SDL_Point posicion){
 		return false;
 	}
 	//verificar que en todos los tiles que va a ocupar la entidad se pueda construir
-	SDL_Point fin = {size_x+posicion.x, size_y+posicion.y};
+	SDL_Point fin = {size_x+posicion.x-1, size_y+posicion.y-1};
 	return !(this -> baldosas->sectorEstaBloqueado(posicion,fin));
+	//return true;
 }
 
 bool Map::construirEntidad(Entity* entidad, SDL_Point posicion){
 	if (this->puedoConstruir(entidad,posicion)){
-		for (int i = 0; i < posicion.x + entidad->getAnchoBase(); i++){
-			for (int j = 0; j < posicion.y + entidad->getAnchoBase(); j++){
+		for (int i = 0; i < (posicion.x + entidad->getAnchoBase()); i++){
+			for (int j = 0; (j < posicion.y + entidad->getAnchoBase()); j++){
 				SDL_Point tile = {i,j};
 				this -> baldosas -> setTileInconstruible(tile);
 			}

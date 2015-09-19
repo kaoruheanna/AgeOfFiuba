@@ -24,7 +24,7 @@ Escenario::Escenario(EscenarioConfig escenario, list<TipoConfig> tipos) {
 		Entity* protagonista = this->crearEntidad(escenario.getProtagonista(), sizeByType, true);
 		if(protagonista == NULL){
 			Log().Get("Escenario", logERROR) << "El escenario " << this->name << " no pudo crear al protagonista. Cargando escenario default.";
-		} else if(!this->construirEntidad(protagonista, protagonista->getPosicion())){
+		} else if(!this->agregarEntidad(protagonista)){
 			Log().Get("Escenario", logERROR) << "El escenario " << this->name << " no pudo agregar el protagonista al mapa. Cargando escenario default.";
 			delete this->protagonista;
 		} else {
@@ -63,9 +63,6 @@ string Escenario::toString(){
 }
 
 bool Escenario::agregarEntidad(Entity* entidad){
-/*	list<Entity*>::iterator it;
-	it = this->entidades.end();
-	this->entidades.insert(it,entidad);*/
 	this->entidades.push_back(entidad);
 	return true;
 }
@@ -93,6 +90,7 @@ void Escenario::imprimirEntidades(){
 list<Entity*> Escenario::getListaEntidades(){
 	return this->entidades;
 }
+
 
 Entity* Escenario::crearEntidad(EntidadConfig config, map<string, SDL_Point> sizeByType, bool esProtagonista) {
 	Entity* entidad = NULL;

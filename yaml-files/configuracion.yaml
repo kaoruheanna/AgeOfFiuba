@@ -13,8 +13,8 @@ tipos:
 
  - nombre: casa
    imagen: img/casa2x2.png
-   ancho_base: 1
-   alto_base : 1
+   ancho_base: 2
+   alto_base : 2
    pixel_ref_x: 153
    pixel_ref_y: 31
 

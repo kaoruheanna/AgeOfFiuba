@@ -156,11 +156,6 @@ bool GameController::pollEvents(){
 			SDL_GetMouseState(&x, &y);
 			SDL_Point mapPoint; // = this->renderer->windowToMapPoint({x,y});
 			PointL point = this->renderer->windowToMapPoint2({x,y});
-
-			cout<<"____"<<endl;
-			cout << mapPoint.x<<","<<mapPoint.y<<endl;
-			cout << point.x<<","<<point.y<<endl;
-
 			point = this->renderer->proyectedPoint(point, this->escenario->getSize());
 
 			//paso de las coordenadas del mapa a las coordenadas del tipo.
