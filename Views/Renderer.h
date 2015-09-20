@@ -51,6 +51,7 @@ private:
 	SDL_Window* window;
 	SDL_Renderer* sdlRenderer;
 	list<View*> views;
+	list< pair<SDL_Rect,Drawable*> > drawablesToPaint;
 	std::map<std::string, Drawable*> drawablesByInstanceName;
 	Drawable* missingImageDrawable;
 

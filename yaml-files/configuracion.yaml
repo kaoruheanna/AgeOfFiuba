@@ -63,6 +63,8 @@ escenario:
    size_x: 50
    size_y: 50
    entidades:
+   - [x: 2, y: 4, tipo: casa]
+   - [x: 2, y: 2, tipo: casa]
    - [x: 10, y: 15, tipo: tierra]
    - [x: 15, y: 20, tipo: tierra]
    - [x: 10, y: 15, tipo: agua]

@@ -156,6 +156,16 @@ void Renderer::close() {
 	SDL_Quit();
 }
 
+// Start drawing from left to right scaning from top to bottom
+bool drawOrder (pair<SDL_Rect, Drawable*> first,pair<SDL_Rect, Drawable*> second) {
+	SDL_Rect firstPoint = first.first;
+	SDL_Rect secondPoint = second.first;
+	if(firstPoint.y < secondPoint.y){
+		return true;
+	}
+	return (firstPoint.x < secondPoint.x);
+}
+
 void Renderer::drawViews() {
 	//Clear screen
 	SDL_SetRenderDrawColor(this->sdlRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
@@ -166,6 +176,17 @@ void Renderer::drawViews() {
 		View* view = *i;
 		view->render(this);
 	}
+
+	// Order the views in the "paintor style" drawing
+	this->drawablesToPaint.sort(drawOrder);
+
+	list< pair<SDL_Rect, Drawable*> >::iterator toPaint;
+	for(toPaint = this->drawablesToPaint.begin(); toPaint != this->drawablesToPaint.end(); ++toPaint) {
+		Drawable* drawable = toPaint->second;
+		SDL_Rect renderQuad = toPaint->first;
+		SDL_RenderCopy(sdlRenderer, drawable->getTexture(), drawable->getClipRect(), &renderQuad);
+	}
+	this->drawablesToPaint.clear();
 
 	//Update screen
 	SDL_RenderPresent(this->sdlRenderer);
@@ -243,7 +264,12 @@ void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable, bool
 
 	if(this->isInsideWindow(&renderQuad)){
 		//Log().Get(TAG,logDEBUG) << "Drawable inside window with rect { " << renderQuad.x << ", " << renderQuad.y << ", " << renderQuad.w << ", " << renderQuad.h << " }";
-		SDL_RenderCopy(sdlRenderer, drawable->getTexture(), drawable->getClipRect(), &renderQuad);
+		// Only postpone drawing if its not the tiles
+		if(this->drawablesByInstanceName.find("tileDefault")->second != drawable){
+			this->drawablesToPaint.push_back(pair<SDL_Rect, Drawable*>(renderQuad, drawable));
+		} else {
+			SDL_RenderCopy(sdlRenderer, drawable->getTexture(), drawable->getClipRect(), &renderQuad);
+		}
 	} else {
 		//Log().Get(TAG,logDEBUG) << "Drawable outside window with rect { " << renderQuad.x << ", " << renderQuad.y << ", " << renderQuad.w << ", " << renderQuad.h << " }";
 	}
