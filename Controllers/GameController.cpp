@@ -163,8 +163,6 @@ bool GameController::pollEvents(){
 			mapPoint.x = (3*point.x - point.y)*22.624; //nose de donde salio este numero pero funciona
 			mapPoint.y = (3*point.y - point.x)*22.624;
 
-			cout << mapPoint.x<<","<<mapPoint.y<<endl;
-
 			this->escenario->getProtagonista()->setDestination(mapPoint.x,mapPoint.y);
 		}
 	}

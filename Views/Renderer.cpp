@@ -223,7 +223,7 @@ PointL Renderer::proyectedPoint(PointL mapPoint, SDL_Point plano){
 	int width = plano.x;
 	int height = plano.y;
 
-	if (x < 0) {cout<<"a"<<endl;x = 0;}
+	if (x < 0) {x = 0;}
 	if (y < 0) {y = 0;}
 	if (x > width) {x = width;}
 	if (y > height) {y = height;}

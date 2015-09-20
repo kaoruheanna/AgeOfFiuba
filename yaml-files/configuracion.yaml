@@ -53,21 +53,21 @@ tipos:
    delay: 5
 
  - nombre: tierra
-   imagen: path/a/tierra.png
+   imagen: img/tierra.png
 
  - nombre: agua
-   imagen: path/a/agua.png
+   imagen: img/agua.png
 
 escenario:
  - nombre: orleans
-   size_x: 50
-   size_y: 50
+   size_x: 30
+   size_y: 40
    entidades:
    - [x: 10, y: 15, tipo: tierra]
    - [x: 15, y: 20, tipo: tierra]
    - [x: 10, y: 15, tipo: agua]
    - [x: 100, y: 100, tipo: castillo]
-   - [x: 30, y: 55, tipo: molino]
+   - [x: 2, y: 2, tipo: molino]
    protagonista:
    - tipo: soldado
      x: 12
