@@ -28,18 +28,18 @@ EscenarioConfig::~EscenarioConfig() {
 void EscenarioConfig::validarContenido(){
 	if (this->nodoEscenario.IsNull() || !this->nodoEscenario.IsSequence() || this->nodoEscenario.size() != 1){
 			this->cargarEscenarioPorDefecto();
-			Log().Get(TAG,logDEBUG) << "No existe campo Escenario o es invalido, Se carga una configuracion por Defecto";
+			Log().Get(TAG,logERROR) << "No existe campo Escenario o es invalido, Se carga una configuracion por Defecto";
 			return;
 		}
 		else{
 			if (!this->verificarNombre()){
 				this->nombre = "NombreDefault";
-				Log().Get(TAG,logDEBUG) << "El nombre del escenario es incorrecto, se carga un nombre por defecto";
+				Log().Get(TAG,logERROR) << "El nombre del escenario es incorrecto, se carga un nombre por defecto";
 			}
 			this->validarTamanio();
 			this->parsearProtagonista();
 			this->parsearEntidades();
-			Log().Get(TAG,logDEBUG) << "el nombre usado es: " << this->getNombre();// HAY QUE SACARLO LUEGO
+
 			return;
 		}
 }
@@ -60,14 +60,14 @@ bool EscenarioConfig::verificarNombre(){
 void EscenarioConfig::validarTamanio(){
 	if (!this->validarINT("size_x")){
 		this->sizeX = TAMANIO_DEFAULT;
-		Log().Get(TAG,logDEBUG) << "Se cargo el tamanio en X por defecto";
+		Log().Get(TAG,logERROR) << "Tamanio X de pantalla invalido, se cargo el tamanio en X por defecto";
 	}
 	else{
 			this->sizeX = this->nodoEscenario[0]["size_x"].as<int>();
 	}
 	if (!this->validarINT("size_y")){
 		this->sizeY = TAMANIO_DEFAULT;
-		Log().Get(TAG,logDEBUG) << "Se cargo el tamanio en Y por defecto";
+		Log().Get(TAG,logERROR) << "Tamanio Y de pantalla invalido, se cargo el tamanio en X por defecto";
 	}
 	else{
 			this->sizeY = this->nodoEscenario[0]["size_y"].as<int>();
@@ -135,18 +135,16 @@ void EscenarioConfig::parsearProtagonista(){
 	if (nodoProtagonista.IsSequence() && nodoProtagonista.size() == 1 && !nodoProtagonista[0].IsNull()){
 		this->parsearEntidad(nodoProtagonista[0], personajeParseado);}
 	else {
-		Log().Get(TAG,logDEBUG) << "Se cargo el protagonista por defecto";
+		Log().Get(TAG,logERROR) << "El protagonista no existe o se encuentra mal definido, se cargo el protagonista por defecto";
 	}
 	this->protagonista = personajeParseado;
-	Log().Get(TAG,logDEBUG) << "datos del protagonista " << this->protagonista.getTipo() << this->protagonista.getX() << this->protagonista.getY();
-
 }
 
 bool EscenarioConfig::parsearEntidad2 (YAML::Node nodo, EntidadConfig &entidad){
 		std::string nombre;
 			int posX;
 			int posY;
-
+			if (nodo.size() == 3){
 				if (nodo[0]["x"] && nodo[0]["x"].IsDefined() && nodo[0]["x"].IsScalar()){
 					try {
 						if (nodo[0]["x"].as<int>() >= 0){
@@ -182,6 +180,8 @@ bool EscenarioConfig::parsearEntidad2 (YAML::Node nodo, EntidadConfig &entidad){
 				else {return false;}
 				entidad = EntidadConfig(posX,posY,nombre);
 				return true;
+			}
+			else{return false;}
 }
 
 void EscenarioConfig::parsearEntidades(){
