@@ -54,8 +54,6 @@ tipos:
 
  - nombre: tierra
    imagen: img/tierra.png
-   pixel_ref_x: 64
-   pixel_ref_y: 0
 
  - nombre: agua
    imagen: img/agua.png
