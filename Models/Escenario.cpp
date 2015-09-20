@@ -20,7 +20,7 @@ Escenario::Escenario(EscenarioConfig escenario, list<TipoConfig> tipos) {
 	} else if(escenario.getSizeY() < 1){
 		Log().Get("Escenario", logERROR) << "El escenario " << this->name << " tiene que ser al menos una unidad de alto. Cargando escenario default.";
 	} else {
-		this->mundo = new Map(escenario.getSizeX(), escenario.getSizeY(), 128,64); // TODO Cambiar ancho y alto de tile hardcodeados
+		this->mundo = new Map(escenario.getSizeX(), escenario.getSizeY(),128,64); // TODO Cambiar ancho y alto de tile hardcodeados
 		Entity* protagonista = this->crearEntidad(escenario.getProtagonista(), sizeByType, true);
 		if(protagonista == NULL){
 			Log().Get("Escenario", logERROR) << "El escenario " << this->name << " no pudo crear al protagonista. Cargando escenario default.";
@@ -143,5 +143,5 @@ void Escenario::vaciarEntidades(){
 
 
 SDL_Point Escenario::getSize(){
-	return {this->mundo->getHeight(),this->mundo->getWidth()};
+	return {this->mundo->getHeight(), this->mundo->getWidth()};
 }

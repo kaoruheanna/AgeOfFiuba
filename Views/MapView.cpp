@@ -31,7 +31,7 @@ void MapView::render(Renderer* renderer ){
 	for (int i=0; i<width ; i++){
 		for (int j=0; j<height; j++){
 			//SDL_Point point = {(i-j)*tw,(i+j)*th};
-			SDL_Point point = {i,j};
+			SDL_Point point = {j,i};
 			//evaluar si point esta dentro de la pantalla
 			renderer->draw(point.x, point.y, this->drawable, false);
 		}

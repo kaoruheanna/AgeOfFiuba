@@ -13,8 +13,8 @@ tipos:
 
  - nombre: casa
    imagen: img/casa2x2.png
-   ancho_base: 1
-   alto_base : 1
+   ancho_base: 2
+   alto_base : 2
    pixel_ref_x: 153
    pixel_ref_y: 31
 
@@ -53,22 +53,24 @@ tipos:
    delay: 5
 
  - nombre: tierra
-   imagen: path/a/tierra.png
+   imagen: img/tierra.png
+   pixel_ref_x: 64
+   pixel_ref_y: 0
 
  - nombre: agua
-   imagen: path/a/agua.png
+   imagen: img/agua.png
 
 escenario:
  - nombre: orleans
-   size_x: 5
-   size_y: 5
+   size_x: 30
+   size_y: 40
    entidades:
    - [x: 10, y: 15, tipo: tierra]
    - [x: 15, y: 20, tipo: tierra]
    - [x: 10, y: 15, tipo: agua]
    - [x: 100, y: 100, tipo: castillo]
-   - [x: 30, y: 55, tipo: molino]
+   - [x: 2, y: 2, tipo: molino]
    protagonista:
-   - tipo: juana_de_arco
-     x: 50
-     y: 50
+   - tipo: soldado
+     x: 12
+     y: 12

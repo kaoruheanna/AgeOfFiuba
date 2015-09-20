@@ -12,9 +12,9 @@ Map::Map(int alto, int ancho, int tile_ancho, int tile_alto){
 Map::~Map(){
 }
 
-void Map::setAll(int alto, int ancho, int tile_alto, int tile_ancho){
-	this -> alto = alto;
+void Map::setAll(int ancho, int alto, int tile_ancho, int tile_alto){
 	this -> ancho = ancho;
+	this -> alto = alto;
 	this -> tile_alto = tile_alto;
 	this -> tile_ancho = tile_ancho;
 }
