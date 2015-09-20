@@ -84,9 +84,9 @@ bool Map::puedoConstruir(Entity* entidad, SDL_Point posicion){
 
 bool Map::construirEntidad(Entity* entidad, SDL_Point posicion){
 	if (this->puedoConstruir(entidad,posicion)){
-		for (int i = 0; i < (posicion.x + entidad->getAnchoBase()); i++){
-			for (int j = 0; (j < posicion.y + entidad->getAnchoBase()); j++){
-				SDL_Point tile = {i,j};
+		for (int i = 0; i < entidad->getAnchoBase(); i++){
+			for (int j = 0; j < entidad->getAnchoBase(); j++){
+				SDL_Point tile = {i+posicion.x,j+posicion.y};
 				this -> baldosas -> setTileInconstruible(tile);
 			}
 		}

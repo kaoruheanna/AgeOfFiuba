@@ -71,5 +71,13 @@ bool TileSet::sectorEstaBloqueado(SDL_Point origen, SDL_Point fin){
 			if (this->matriz[i][j]) return true;
 		}
 	}
+/*
+	for (int x = 0; x < this->ancho; x++){
+		for (int y = 0; y < this->alto; y++){
+			cout<< this->matriz[x][y]<<",";
+		}
+		cout<<endl;
+	}
+	*/
 	return false;
 }
