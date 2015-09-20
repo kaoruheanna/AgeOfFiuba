@@ -17,6 +17,13 @@ tipos:
    alto_base : 2
    pixel_ref_x: 153
    pixel_ref_y: 31
+   
+ - nombre: archeryRange
+   imagen: img/archeryRange.png
+   ancho_base: 3
+   alto_base : 3
+   pixel_ref_x: 159
+   pixel_ref_y: 77
 
  - nombre: castillo
    imagen: path/a/castillo.png
@@ -75,12 +82,14 @@ escenario:
    size_y: 40
    
    entidades:
+   - [x: 6, y: 4, tipo: archeryRange]
+   - [x: 2, y: 3, tipo: casa]
    - [x: 10, y: 15, tipo: tierra]
-   - [x: 15, y: 20, tipo: tierra]
    - [x: 10, y: 15, tipo: agua]
    - [x: 100, y: 100, tipo: castillo]
    - [x: 2, y: 2, tipo: molino]
    - [x: 4, y: 2, tipo: arbol]
+
    
    protagonista:
    - tipo: soldado
