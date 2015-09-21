@@ -108,6 +108,8 @@ Entity* Escenario::crearEntidad(EntidadConfig config, map<string, SDL_Point> siz
 			posicion.y = 0;
 			Log().Get("Escenario", logERROR) << "La entidad " << config.getTipo() << " esta fuera del mapa en alto. Asumida posicion y = 0.";
 		}
+		// Cambia de coordenadas tile a coordenadas mapa "pixel"
+		posicion = this->mundo->getPositionForTile(posicion);
 		map<string, SDL_Point>::iterator found = sizeByType.find(config.getTipo());
 		SDL_Point size = { 1, 1 };
 		if(found != sizeByType.end()){
@@ -143,5 +145,5 @@ void Escenario::vaciarEntidades(){
 
 
 SDL_Point Escenario::getSize(){
-	return {this->mundo->getHeight(), this->mundo->getWidth()};
+	return this->mundo->getPositionForTile({this->mundo->getHeight(), this->mundo->getWidth()});
 }

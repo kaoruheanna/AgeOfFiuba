@@ -194,10 +194,10 @@ void Renderer::drawViews() {
 
 SDL_Point Renderer::mapToWindowPoint(SDL_Point mapPoint){
 	SDL_Point windowPoint = {0,0};
-	// Rotar punto 45 grados
-	windowPoint.x = mapPoint.x * ISOMETRIC_ROTATION_FACTOR - mapPoint.y * ISOMETRIC_ROTATION_FACTOR;
-	windowPoint.y = mapPoint.x * ISOMETRIC_ROTATION_FACTOR + mapPoint.y * ISOMETRIC_ROTATION_FACTOR;
-	// Ajustar a la posicion del 0,0 en la pantalla
+	// Cambio a coordenadas isometricas
+	windowPoint.x = (mapPoint.x  - mapPoint.y);
+	windowPoint.y = (mapPoint.x  + mapPoint.y) / 2;
+	// Ajusta al punto de la pantalla
 	windowPoint.x += this->mainTilePosition.x;
 	windowPoint.y += this->mainTilePosition.y;
 	return windowPoint;
@@ -209,38 +209,15 @@ SDL_Point Renderer::windowToMapPoint(SDL_Point windowPoint){
 	centeredWindow.x -= this->mainTilePosition.x;
 	centeredWindow.y -= this->mainTilePosition.y;
 	SDL_Point mapPoint = {0,0};
-	// Rotar punto -45 grados
-	mapPoint.x = centeredWindow.x * ISOMETRIC_ROTATION_FACTOR + centeredWindow.y * ISOMETRIC_ROTATION_FACTOR;
-	mapPoint.y = -centeredWindow.x * ISOMETRIC_ROTATION_FACTOR + centeredWindow.y * ISOMETRIC_ROTATION_FACTOR;
+	// Cambio a coordenadas ventana
+	mapPoint.x = centeredWindow.y + (centeredWindow.x / 2);
+	mapPoint.y = centeredWindow.y - (centeredWindow.x / 2);
 	return mapPoint;
 }
 
-PointL Renderer::windowToMapPoint2(SDL_Point windowPoint){
-	PointL centeredWindow = {windowPoint.x, windowPoint.y};
-	// Ajustar la pantalla a la posicion del 0,0
-	centeredWindow.x -= this->mainTilePosition.x;
-	centeredWindow.y -= this->mainTilePosition.y;
-	PointL mapPoint = {0,0};
-	// Rotar punto -45 grados
-	mapPoint.x = ((centeredWindow.x/TILE_WIDTH) + (centeredWindow.y/TILE_HEIGHT));
-	mapPoint.y = ((-centeredWindow.x/TILE_WIDTH) + (centeredWindow.y/TILE_HEIGHT));
-	return mapPoint;
-}
-
-SDL_Point Renderer::mapToWindowPoint2(PointL mapPoint){
-	SDL_Point windowPoint = {0,0};
-
-	windowPoint.x = (mapPoint.x  - mapPoint.y) * (TILE_WIDTH/2);
-	windowPoint.y = (mapPoint.x  + mapPoint.y) * (TILE_HEIGHT/2);
-
-	windowPoint.x += this->mainTilePosition.x;
-	windowPoint.y += this->mainTilePosition.y;
-	return windowPoint;
-}
-
-PointL Renderer::proyectedPoint(PointL mapPoint, SDL_Point plano){
-	float x = mapPoint.x;
-	float y = mapPoint.y;
+SDL_Point Renderer::proyectedPoint(SDL_Point mapPoint, SDL_Point plano){
+	int x = mapPoint.x;
+	int y = mapPoint.y;
 	int width = plano.x;
 	int height = plano.y;
 
@@ -254,12 +231,10 @@ PointL Renderer::proyectedPoint(PointL mapPoint, SDL_Point plano){
 }
 
 void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable, bool iso) {
-	SDL_Point windowPoint = {mapPositionX, mapPositionY};
-	if(iso){
-		windowPoint = this->mapToWindowPoint({mapPositionX, mapPositionY});
-	} else {
-		windowPoint = this->mapToWindowPoint2({mapPositionX, mapPositionY});
-	}
+	SDL_Point windowPoint = this->mapToWindowPoint({mapPositionX, mapPositionY});
+	/*Log().Get("Renderer", logDEBUG) << " map: "<< " {" << mapPositionX <<"," << mapPositionY <<"}" << " window: "<< " {" << windowPoint.x <<"," << windowPoint.y <<"}";
+	SDL_Point mapPoint = this->windowToMapPoint2(windowPoint);
+	Log().Get("Renderer", logDEBUG) << " window: "<< " {" << windowPoint.x <<"," << windowPoint.y <<"}" << " window: "<< " {" << mapPoint.x <<"," << mapPoint.y <<"}";*/
 	SDL_Rect renderQuad = drawable->getRectToDraw(windowPoint.x, windowPoint.y);
 
 	if(this->isInsideWindow(&renderQuad)){

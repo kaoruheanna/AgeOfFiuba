@@ -5,12 +5,6 @@
 #include <SDL2/SDL.h>
 #include "Entity.h"
 #include "TileSet.h"
-/*
-//PointL es una version del SDL_Point pero con sus coordenadas flotantes.
-typedef struct PointL{
-	float x;
-	float y;
-}PointL;*/
 
 class Map {
 	private:
@@ -35,14 +29,15 @@ class Map {
 		void setTileDimensions(int,int);
 
 		SDL_Point posicionRelativaRect(SDL_Rect,SDL_Point);
-		//PointL transformarAL(SDL_Point);
-		//SDL_Point transformarLA(PointL);
 
 		bool construirEntidad(Entity*,SDL_Point);
 		bool puedoConstruir(Entity*,SDL_Point);
 		Entity* sacarEntidad(Entity*);
 
-		Map(int, int, int, int);
+		SDL_Point getTileForPosition(SDL_Point point);
+		SDL_Point getPositionForTile(SDL_Point point);
+
+		Map(int alto, int ancho, int tile_ancho, int tile_alto);
 		virtual ~Map();
 };
 

@@ -154,16 +154,13 @@ bool GameController::pollEvents(){
 			//Get mouse position
 			int x, y;
 			SDL_GetMouseState(&x, &y);
-			SDL_Point mapPoint; // = this->renderer->windowToMapPoint({x,y});
-			PointL point = this->renderer->windowToMapPoint2({x,y});
+			SDL_Point point = this->renderer->windowToMapPoint({x,y});
+			//Log().Get("Renderer", logDEBUG) << " window: "<< " {" << x <<"," << y <<"}" << " window: "<< " {" << mapPoint.x <<"," << mapPoint.y <<"}";
+
+
 			point = this->renderer->proyectedPoint(point, this->escenario->getSize());
 
-			//paso de las coordenadas del mapa a las coordenadas del tipo.
-			//es medio feo esto pero funciona, todavia nose como
-			mapPoint.x = (3*point.x - point.y)*22.624; //nose de donde salio este numero pero funciona
-			mapPoint.y = (3*point.y - point.x)*22.624;
-
-			this->escenario->getProtagonista()->setDestination(mapPoint.x,mapPoint.y);
+			this->escenario->getProtagonista()->setDestination(point.x,point.y);
 		}
 	}
 	return pressedR;
