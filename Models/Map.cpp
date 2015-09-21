@@ -45,52 +45,41 @@ SDL_Point Map::posicionRelativaRect(SDL_Rect rect, SDL_Point punto_m){
 	return punto_v;
 }
 
-/*
-/*Devuelve la coordenada del tile donde se encuentra el punto.
- * Transforma coordenadas absolutas en logicas*
-PointL Map::transformarAL(SDL_Point punto_absoluto){
-	PointL punto_logico;
-	float xa = punto_absoluto.x;
-	float ya = punto_absoluto.y;
-	punto_logico.x = (xa/(this->tile_ancho))+(ya/(this->tile_alto));
-	punto_logico.y = -(xa/(this->tile_ancho))+(ya/(this->tile_alto));
-	return punto_logico;
-}
-
-SDL_Point Map::transformarLA(PointL punto_logico){
-	SDL_Point punto_absoluto;
-	float xl = punto_logico.x;
-	float yl = punto_logico.y;
-	punto_absoluto.y = (this->tile_alto/2.0)*(xl+yl);
-	punto_absoluto.x = (this->tile_ancho/2.0)*(xl-yl);
-	return punto_absoluto;
-}
-*/
-bool Map::puedoConstruir(Entity* entidad, SDL_Point posicion){
+bool Map::puedoConstruir(Entity* entidad, SDL_Point tile){
 	int size_x = entidad->getAnchoBase();
 	int size_y = entidad->getAltoBase();
 
 	//evaluo si el objeto entra en el mapa
-	if (posicion.x < 0 || posicion.y < 0){
+	if (tile.x < 0 || tile.y < 0){
 		return false;
-	}else if ((posicion.x + size_x) > this->ancho || (posicion.y + size_y) > this->alto){
+	}else if ((tile.x + size_x) > this->ancho || (tile.y + size_y) > this->alto){
 		return false;
 	}
 	//verificar que en todos los tiles que va a ocupar la entidad se pueda construir
-	SDL_Point fin = {size_x+posicion.x-1, size_y+posicion.y-1};
-	return !(this -> baldosas->sectorEstaBloqueado(posicion,fin));
+	SDL_Point fin = {size_x+tile.x-1, size_y+tile.y-1};
+	return !(this -> baldosas->sectorEstaBloqueado(tile,fin));
 	//return true;
 }
 
 bool Map::construirEntidad(Entity* entidad, SDL_Point posicion){
-	if (this->puedoConstruir(entidad,posicion)){
+	SDL_Point tilePos = this->getTileForPosition(posicion);
+	if (this->puedoConstruir(entidad,tilePos)){
 		for (int i = 0; i < entidad->getAnchoBase(); i++){
 			for (int j = 0; j < entidad->getAnchoBase(); j++){
-				SDL_Point tile = {i+posicion.x,j+posicion.y};
+				SDL_Point tile = {i+tilePos.x,j+tilePos.y};
 				this -> baldosas -> setTileInconstruible(tile);
 			}
 		}
 		return true;
 	}
 	return false;
+}
+
+const int TILE_SIZE = 64;
+
+SDL_Point Map::getTileForPosition(SDL_Point point) {
+	return { point.x / TILE_SIZE, point.y / TILE_SIZE };
+}
+SDL_Point Map::getPositionForTile(SDL_Point point) {
+	return { point.x * TILE_SIZE, point.y * TILE_SIZE };
 }
