@@ -275,6 +275,8 @@ void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable, bool
 	}
 }
 
+
+
 bool Renderer::isInsideWindow(SDL_Rect* rect){
 	return (rect->x < this->screenWidth &&
 			rect->x + rect->w > 0 &&

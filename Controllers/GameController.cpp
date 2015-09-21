@@ -29,8 +29,13 @@ GameController::~GameController() {
 	// TODO Auto-generated destructor stub
 }
 
+SDL_Point intialPointWindowWrapper;
+SDL_Point finalPointWindowWrapper;
+
 bool GameController::play() {
 	Log().Get(TAG,logDEBUG) << "[GameController] " << "play";
+
+
 
 	this->renderer = new Renderer(this->config->getPantallaAncho(),this->config->getPantallaAlto(), this->config->getTipos());
 	if (!this->renderer->canDraw()){
@@ -82,6 +87,36 @@ bool GameController::play() {
 	this->views.push_back(marioView);
 	this->renderer->addView(marioView);
 
+	SDL_Point intialWindowWrapperTop;
+	SDL_Point intialWindowWrapperBottom;
+	SDL_Point intialWindowWrapperLeft;
+	SDL_Point intialWindowWrapperRight;
+
+	PointL pointL;
+	pointL.x = 0;
+	pointL.y = 0;
+	intialWindowWrapperTop = this->renderer->mapToWindowPoint2(pointL);
+
+	pointL.x = this->config->getTamanioX();
+	pointL.y = this->config->getTamanioY();
+	intialWindowWrapperBottom = this->renderer->mapToWindowPoint2(pointL);
+
+	pointL.x = this->config->getTamanioX();
+	pointL.y = 0;
+	intialWindowWrapperRight = this->renderer->mapToWindowPoint2(pointL);
+
+	pointL.x = 0;
+	pointL.y = this->config->getTamanioY();
+	intialWindowWrapperLeft = this->renderer->mapToWindowPoint2(pointL);
+
+	intialPointWindowWrapper.x = intialWindowWrapperLeft.x - (this->config->getPantallaAncho()/2);
+	intialPointWindowWrapper.y = intialWindowWrapperTop.y;
+
+	finalPointWindowWrapper.x = intialWindowWrapperRight.x;
+	finalPointWindowWrapper.y = intialWindowWrapperBottom.y;
+
+
+
 	bool shouldRestart = false;
 	//While application is running
 	while( !this->shouldQuit && !shouldRestart ) {
@@ -116,6 +151,20 @@ float GameController::scrollingSpeedY(int y) {
 }
 
 void GameController::moveToPoint(SDL_Point point) {
+	Log().Get(TAG,logDEBUG) << "inicial " << intialPointWindowWrapper.x << "," << intialPointWindowWrapper.y;
+	Log().Get(TAG,logDEBUG) << "final " << finalPointWindowWrapper.x << "," << finalPointWindowWrapper.y;
+	Log().Get(TAG,logDEBUG) << "point " << point.x << "," << point.y;
+
+	if (
+		(point.y > intialPointWindowWrapper.y)
+		|| ((point.y - this->config->getPantallaAlto()) < (finalPointWindowWrapper.y*-1))
+		|| (point.x > (intialPointWindowWrapper.x*-1))
+		|| ((point.x - (1.5*(this->config->getPantallaAncho()))) < (finalPointWindowWrapper.x*-1))
+		) {
+		//Se esta yendo del mapa
+		return;
+	}
+
 	this->renderer->mainTilePosition = point;
 }
 
