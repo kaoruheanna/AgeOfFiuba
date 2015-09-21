@@ -39,21 +39,19 @@ void Sprite::onTextureChange(){
 
 	int framesPerAnimation = w / this->width;
 
-	int repeatTimes = DELAY_MILISEC * this->fps / framesPerAnimation;
+	// Calcula cuanto tiempo se queda en un frame la animacion
+	float framesPerDraw = this->fps * DELAY_MILISEC / 1000;
+	float currentFrames = 0; // Frames actuales para una llamada de draw
 
-	// guarda las coordenadas en x de cada frame de animacion
-	for (int i = START_MOVING_INDEX ; i < framesPerAnimation ; i++){
-		if (i != STANDING_SPRITE_INDEX){
-			for (int j = 0; j < repeatTimes; j++){
-				this->frameIndexes.push_back(i);
-				Log().Get(TAG,logINFO) << "agrego el indice de la animacion: "<< i;
-			}
-		}
+	// Simula llamadas de draw hasta que llega al frame final de la animacion
+	while(currentFrames < framesPerAnimation){
+		this->frameIndexes.push_back(floor(currentFrames));
+		Log().Get(TAG,logINFO) << "agrego el indice de la animacion: "<< floor(currentFrames);
+		currentFrames += framesPerDraw;
 	}
 
 	int delayFrames = ((this->delay * 1000) / DELAY_MILISEC);
 
-	Log().Get(TAG,logINFO) << "repeatTimes: "<< repeatTimes;
 	Log().Get(TAG,logINFO) << "delay frames: "<< delayFrames;
 	for (int i = 0; i < delayFrames; i++){
 		this->frameIndexes.push_back(START_MOVING_INDEX);
