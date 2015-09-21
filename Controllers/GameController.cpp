@@ -29,12 +29,8 @@ GameController::~GameController() {
 	// TODO Auto-generated destructor stub
 }
 
-SDL_Point intialPointWindowWrapper;
-SDL_Point finalPointWindowWrapper;
-
 bool GameController::play() {
 	Log().Get(TAG,logDEBUG) << "[GameController] " << "play";
-
 
 
 	this->renderer = new Renderer(this->config->getPantallaAncho(),this->config->getPantallaAlto(), this->config->getTipos());
@@ -87,35 +83,7 @@ bool GameController::play() {
 	this->views.push_back(marioView);
 	this->renderer->addView(marioView);
 
-	SDL_Point intialWindowWrapperTop;
-	SDL_Point intialWindowWrapperBottom;
-	SDL_Point intialWindowWrapperLeft;
-	SDL_Point intialWindowWrapperRight;
-
-	PointL pointL;
-	pointL.x = 0;
-	pointL.y = 0;
-	intialWindowWrapperTop = this->renderer->mapToWindowPoint2(pointL);
-
-	pointL.x = this->config->getTamanioX();
-	pointL.y = this->config->getTamanioY();
-	intialWindowWrapperBottom = this->renderer->mapToWindowPoint2(pointL);
-
-	pointL.x = this->config->getTamanioX();
-	pointL.y = 0;
-	intialWindowWrapperRight = this->renderer->mapToWindowPoint2(pointL);
-
-	pointL.x = 0;
-	pointL.y = this->config->getTamanioY();
-	intialWindowWrapperLeft = this->renderer->mapToWindowPoint2(pointL);
-
-	intialPointWindowWrapper.x = intialWindowWrapperLeft.x - (this->config->getPantallaAncho()/2);
-	intialPointWindowWrapper.y = intialWindowWrapperTop.y;
-
-	finalPointWindowWrapper.x = intialWindowWrapperRight.x;
-	finalPointWindowWrapper.y = intialWindowWrapperBottom.y;
-
-
+	initWindowSizes();
 
 	bool shouldRestart = false;
 	//While application is running
@@ -131,7 +99,6 @@ bool GameController::play() {
 	return shouldRestart;
 }
 
-
 float GameController::scrollingSpeed(int x, int large) {
 	if ((x < this->config->getMargenScroll()) && (x>0)) {
 		return ((float)(x-this->config->getMargenScroll())/this->config->getMargenScroll());
@@ -140,6 +107,41 @@ float GameController::scrollingSpeed(int x, int large) {
 		return ((float)(x - large + this->config->getMargenScroll())/this->config->getMargenScroll());
 	}
 	return 0;
+}
+
+
+SDL_Point intialPointWindowWrapper;
+SDL_Point finalPointWindowWrapper;
+
+void GameController::initWindowSizes() {
+	SDL_Point intialWindowWrapperTop;
+	SDL_Point intialWindowWrapperBottom;
+	SDL_Point intialWindowWrapperLeft;
+	SDL_Point intialWindowWrapperRight;
+
+	SDL_Point pointL;
+	pointL.x = 0;
+	pointL.y = 0;
+	intialWindowWrapperTop = this->renderer->mapToWindowPoint(pointL);
+
+
+	pointL.x = this->escenario->getSize().x;
+	pointL.y = 0;
+	intialWindowWrapperRight = this->renderer->mapToWindowPoint(pointL);
+
+	pointL.x = 0;
+	pointL.y = this->escenario->getSize().y;
+	intialWindowWrapperLeft = this->renderer->mapToWindowPoint(pointL);
+
+
+	pointL = this->escenario->getSize();
+	intialWindowWrapperBottom = this->renderer->mapToWindowPoint(pointL);
+
+	intialPointWindowWrapper.x = -intialWindowWrapperLeft.x + (this->config->getPantallaAncho()/2);
+	intialPointWindowWrapper.y = -intialWindowWrapperTop.y;
+
+	finalPointWindowWrapper.x = -intialWindowWrapperRight.x;
+	finalPointWindowWrapper.y = -intialWindowWrapperBottom.y ;
 }
 
 float GameController::scrollingSpeedX(int x) {
@@ -155,15 +157,10 @@ void GameController::moveToPoint(SDL_Point point) {
 	Log().Get(TAG,logDEBUG) << "final " << finalPointWindowWrapper.x << "," << finalPointWindowWrapper.y;
 	Log().Get(TAG,logDEBUG) << "point " << point.x << "," << point.y;
 
-	if (
-		(point.y > intialPointWindowWrapper.y)
-		|| ((point.y - this->config->getPantallaAlto()) < (finalPointWindowWrapper.y*-1))
-		|| (point.x > (intialPointWindowWrapper.x*-1))
-		|| ((point.x - (1.5*(this->config->getPantallaAncho()))) < (finalPointWindowWrapper.x*-1))
-		) {
-		//Se esta yendo del mapa
-		return;
-	}
+	point.y = (point.y > intialPointWindowWrapper.y) ? intialPointWindowWrapper.y :point.y;
+	point.y = (point.y < (finalPointWindowWrapper.y + this->config->getPantallaAlto())) ? (finalPointWindowWrapper.y + this->config->getPantallaAlto()) : point.y;
+	point.x = (point.x > intialPointWindowWrapper.x) ? intialPointWindowWrapper.x : point.x;
+	point.x = (point.x < (finalPointWindowWrapper.x + (1.5*this->config->getPantallaAncho()))) ? (finalPointWindowWrapper.x + (1.5*this->config->getPantallaAncho())) :point.x;
 
 	this->renderer->mainTilePosition = point;
 }

@@ -42,6 +42,7 @@ private:
 	float scrollingSpeed(int x, int large);
 
 	void moveToPoint(SDL_Point point);
+	void initWindowSizes();
 };
 
 #endif /* GAMECONTROLLER_H_ */
