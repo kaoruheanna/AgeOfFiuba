@@ -76,6 +76,16 @@ tipos:
    alto_frame: 64
    ancho_frame: 72
 
+ - nombre: molino2
+   imagen: img/whatermill.png
+   ancho_base: 1
+   alto_base : 1
+   pixel_ref_x: 80
+   pixel_ref_y: 75
+   fps: 10
+   ancho_frame: 200
+   alto_frame: 145
+
 escenario:
  - nombre: orleans
    size_x: 30
@@ -89,7 +99,7 @@ escenario:
    - [x: 100, y: 100, tipo: castillo]
    - [x: 2, y: 2, tipo: molino]
    - [x: 4, y: 2, tipo: arbol]
-
+   - [x: 8, y: 2, tipo: molino2]
    
    protagonista:
    - tipo: soldado
