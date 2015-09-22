@@ -58,7 +58,7 @@ void GameConfiguration::loadFile(const char* archivoAParsear){
 	try{
 	this->nodoRaiz = YAML::LoadFile(archivoAParsear);
 	}
-	catch ( YAML::BadFile& archivoCorrupto){
+	catch ( YAML::ParserException& archivoCorrupto){
 		this->nodoRaiz = YAML::LoadFile(this->defaultFile);
 		Log().Get(TAG,logERROR) << "El archivo indicado como parametro no existe o no respeta la sintaxis de YAML, se carga el archivo por defecto";
 	}

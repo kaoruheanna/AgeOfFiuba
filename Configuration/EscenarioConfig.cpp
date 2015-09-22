@@ -202,6 +202,8 @@ void EscenarioConfig::parsearEntidades(){
 }
 
 void EscenarioConfig::cargarEscenarioPorDefecto(){
+	this->sizeX = TAMANIO_DEFAULT;
+	this->sizeY = TAMANIO_DEFAULT;
 
 }
 
