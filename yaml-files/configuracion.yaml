@@ -43,17 +43,6 @@ tipos:
    alto_frame: 50
    ancho_frame: 50
  
- - nombre: molino
-   imagen: img/windmills-240x100.png
-   ancho_base: 1
-   alto_base : 1
-   pixel_ref_x: 30
-   pixel_ref_y: 100
-   fps: 2
-   delay: 1
-   alto_frame: 100
-   ancho_frame: 60
- 
  - nombre: juana_de_arco
    imagen: path/a/juanadearco.png
    fps: 10
@@ -76,13 +65,14 @@ tipos:
    alto_frame: 64
    ancho_frame: 72
 
- - nombre: molino2
+ - nombre: molino
    imagen: img/whatermill.png
    ancho_base: 1
    alto_base : 1
    pixel_ref_x: 80
    pixel_ref_y: 75
    fps: 10
+   delay: 1
    ancho_frame: 200
    alto_frame: 145
 
@@ -93,13 +83,26 @@ escenario:
    
    entidades:
    - [x: 6, y: 4, tipo: archeryRange]
-   - [x: 2, y: 3, tipo: casa]
-   - [x: 10, y: 15, tipo: tierra]
+   - [x: 2, y: 5, tipo: casa]
+   - [x: 9, y: 15, tipo: tierra]
+   - [x: 9, y: 16, tipo: tierra]
+   - [x: 9, y: 17, tipo: tierra]
+   - [x: 9, y: 18, tipo: tierra]
    - [x: 10, y: 15, tipo: agua]
+   - [x: 10, y: 16, tipo: agua]
+   - [x: 10, y: 17, tipo: agua]
+   - [x: 10, y: 18, tipo: agua]
+   - [x: 11, y: 15, tipo: agua]
+   - [x: 11, y: 16, tipo: agua]
+   - [x: 11, y: 17, tipo: agua]
+   - [x: 11, y: 18, tipo: agua]
    - [x: 100, y: 100, tipo: castillo]
    - [x: 2, y: 2, tipo: molino]
    - [x: 4, y: 2, tipo: arbol]
-   - [x: 8, y: 2, tipo: molino2]
+   - [x: 8, y: 2, tipo: molino]
+   - [x: 8, y: 3, tipo: arbol]
+   - [x: 12, y: 17, tipo: arbol]
+   - [x: 20, y: 7, tipo: arbol]
    
    protagonista:
    - tipo: soldado
