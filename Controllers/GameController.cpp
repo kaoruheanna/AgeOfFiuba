@@ -197,7 +197,6 @@ bool GameController::pollEvents(){
 			int x, y;
 			SDL_GetMouseState(&x, &y);
 			SDL_Point point = this->renderer->windowToMapPoint({x,y});
-			//Log().Get("Renderer", logDEBUG) << " window: "<< " {" << x <<"," << y <<"}" << " window: "<< " {" << mapPoint.x <<"," << mapPoint.y <<"}";
 
 			point = this->renderer->proyectedPoint(point, this->escenario->getSize());
 

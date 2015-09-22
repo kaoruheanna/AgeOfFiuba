@@ -216,6 +216,7 @@ SDL_Point Renderer::windowToMapPoint(SDL_Point windowPoint){
 }
 
 SDL_Point Renderer::proyectedPoint(SDL_Point mapPoint, SDL_Point plano){
+	int padding = 8; //para que no se vaya para afuera del mapa por abajo
 	int x = mapPoint.x;
 	int y = mapPoint.y;
 	int width = plano.x;
@@ -223,8 +224,8 @@ SDL_Point Renderer::proyectedPoint(SDL_Point mapPoint, SDL_Point plano){
 
 	if (x < 0) {x = 0;}
 	if (y < 0) {y = 0;}
-	if (x > width) {x = width;}
-	if (y > height) {y = height;}
+	if (x > width) {x = width - padding;}
+	if (y > height) {y = height - padding;}
 
 	return {x,y};
 
