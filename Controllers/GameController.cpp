@@ -32,7 +32,6 @@ GameController::~GameController() {
 bool GameController::play() {
 	Log().Get(TAG,logDEBUG) << "[GameController] " << "play";
 
-
 	this->renderer = new Renderer(this->config->getPantallaAncho(),this->config->getPantallaAlto(), this->config->getTipos());
 	if (!this->renderer->canDraw()){
 		printf( "Failed to initialize!\n" );
@@ -153,10 +152,6 @@ float GameController::scrollingSpeedY(int y) {
 }
 
 void GameController::moveToPoint(SDL_Point point) {
-	Log().Get(TAG,logDEBUG) << "inicial " << intialPointWindowWrapper.x << "," << intialPointWindowWrapper.y;
-	Log().Get(TAG,logDEBUG) << "final " << finalPointWindowWrapper.x << "," << finalPointWindowWrapper.y;
-	Log().Get(TAG,logDEBUG) << "point " << point.x << "," << point.y;
-
 	point.y = (point.y > intialPointWindowWrapper.y) ? intialPointWindowWrapper.y :point.y;
 	point.y = (point.y < (finalPointWindowWrapper.y + this->config->getPantallaAlto())) ? (finalPointWindowWrapper.y + this->config->getPantallaAlto()) : point.y;
 	point.x = (point.x > intialPointWindowWrapper.x) ? intialPointWindowWrapper.x : point.x;

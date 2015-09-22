@@ -15,7 +15,7 @@ int main( int argc, char* args[] )
 {
 	bool shouldRestart = false;
 	do {
-		GameConfiguration *configuration = new GameConfiguration();
+		GameConfiguration *configuration = new GameConfiguration("yaml-files/configuracionMapa.yaml");
 		GameController *gameController = new GameController(configuration);
 		shouldRestart = gameController->play();
 
