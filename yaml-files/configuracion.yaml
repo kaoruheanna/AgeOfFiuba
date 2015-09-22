@@ -33,7 +33,7 @@ tipos:
    pixel_ref_y: 40
 
  - nombre: soldado
-   imagen: img/ManSprite.png
+   imagen: img/vlad.png
    ancho_base: 1
    alto_base : 1
    pixel_ref_x: 25

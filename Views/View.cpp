@@ -12,7 +12,7 @@ View::View(std::string name) {
 	SDL_Point origin = {0,0};
 	this->origin = origin;
 	this->type = name;
-	this->animationStatus.direction = SOUTH;
+	this->animationStatus.direction = MotionDirection(0);
 	this->animationStatus.animationIndex = 0;
 	this->animationStatus.isMoving = false;
 }

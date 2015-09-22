@@ -13,6 +13,8 @@
 #include "../Utils/Log.h"
 using namespace std;
 
+const std::string TAG = "MobileModel";
+
 MobileModel::MobileModel() : Entity("", {0, 0}, 1, 1){
 	this->posicion.x = 0;
 	this->posicion.y = 0;
@@ -56,7 +58,7 @@ void MobileModel::setDestination(int destinationX, int destionationY) {
 }
 
 int MobileModel::getSpeed() {
-	return 5;
+	return 2;
 }
 
 void MobileModel::updatePosition() {

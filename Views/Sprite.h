@@ -29,6 +29,7 @@ private:
 	float delay;
 	SDL_Rect clipRect;
 	vector<int> frameIndexes;
+	int framesPerAnimation;
 };
 
 #endif /* VIEWS_SPRITE_H_ */

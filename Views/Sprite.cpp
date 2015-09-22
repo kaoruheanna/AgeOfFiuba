@@ -9,7 +9,6 @@
 #include "../GlobalConstants.h"
 #include "../Utils/Log.h"
 
-#define STANDING_SPRITE_INDEX 	5
 #define START_MOVING_INDEX 		0
 
 const std::string TAG = "Sprite";
@@ -19,7 +18,7 @@ Sprite::Sprite(int mainTilePositionX, int mainTilePositionY, int spriteWidth, in
 
 	this->fps = fps;
 	this->delay = delay;
-
+	this->framesPerAnimation = 0;
 	this->height = spriteHeight;
 	this->width = spriteWidth;
 	this->clipRect = {
@@ -37,14 +36,14 @@ void Sprite::onTextureChange(){
 	int w, h;
 	SDL_QueryTexture(this->texture, NULL, NULL, &w, &h);
 
-	int framesPerAnimation = w / this->width;
+	this->framesPerAnimation = w / this->width;
 
 	// Calcula cuanto tiempo se queda en un frame la animacion
 	float framesPerDraw = this->fps * DELAY_MILISEC / 1000;
 	float currentFrames = 0; // Frames actuales para una llamada de draw
 
 	// Simula llamadas de draw hasta que llega al frame final de la animacion
-	while(currentFrames < framesPerAnimation){
+	while(currentFrames < this->framesPerAnimation){
 		this->frameIndexes.push_back(floor(currentFrames));
 		Log().Get(TAG,logINFO) << "agrego el indice de la animacion: "<< floor(currentFrames);
 		currentFrames += framesPerDraw;
@@ -83,7 +82,8 @@ AnimationStatus Sprite::getAnimation(MotionDirection currentDirection, bool curr
 }
 
 void Sprite::animate(AnimationStatus status){
-	int frameIndex = (status.isMoving) ? this->frameIndexes[status.animationIndex] : STANDING_SPRITE_INDEX ;
+	//por convencion, si no se esta parado usamos la ultima
+	int frameIndex = (status.isMoving) ? this->frameIndexes[status.animationIndex] : (this->framesPerAnimation - 1) ;
 	if (status.isMoving){
 		Log().Get(TAG,logINFO) << "indice de la animacion: "<< frameIndex;
 	}
