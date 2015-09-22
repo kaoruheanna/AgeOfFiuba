@@ -32,15 +32,8 @@ void Log::Init() {
 
 Log::~Log()
 {
-	/*
-   if (messageLevel <= Log::ReportingLevel())
-   {
-      os << std::endl;
-      fprintf(stderr, "%s", os.str().c_str());
-      fflush(stderr);
-   }*/
 	cout << os.str() << endl;
-	if (fout.is_open()) {
+	if (fout.is_open() && (messageLevel < Log::ReportingLevel())) {
 		fout << os.str() << "\n";
 		fout.close();
 	}
@@ -56,7 +49,7 @@ std::ostringstream& Log::Get(string tag, TLogLevel level)
 }
 
 TLogLevel Log::ReportingLevel() {
-	return logINFO;
+	return logDEBUG;
 }
 time_t Log::NowTime() {
 	return time(0);

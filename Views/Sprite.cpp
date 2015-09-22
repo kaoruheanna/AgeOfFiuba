@@ -84,9 +84,6 @@ AnimationStatus Sprite::getAnimation(MotionDirection currentDirection, bool curr
 void Sprite::animate(AnimationStatus status){
 	//por convencion, si no se esta parado usamos la ultima
 	int frameIndex = (status.isMoving) ? this->frameIndexes[status.animationIndex] : (this->framesPerAnimation - 1) ;
-	if (status.isMoving){
-		Log().Get(TAG,logINFO) << "indice de la animacion: "<< frameIndex;
-	}
 	this->clipRect.x = frameIndex * this->width;
 	this->clipRect.y = status.direction * this->height;
 }
