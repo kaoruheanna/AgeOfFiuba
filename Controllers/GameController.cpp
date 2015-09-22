@@ -166,8 +166,6 @@ void GameController::moveToPoint(SDL_Point point) {
 }
 
 void GameController::updateWindow() {
-	const int SCROLL_SPEED = 10;
-
 	//Get mouse position
 	int x, y, newY, newX;
 	SDL_GetMouseState(&x, &y);
@@ -186,12 +184,10 @@ bool GameController::pollEvents(){
 	while( SDL_PollEvent( &e ) != 0 ) {
 
 		if( e.type == SDL_QUIT ) {
-			printf("tengo que cerrarlo \n");
 			this->shouldQuit = true;
 		}
 
 		if( e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_r) {
-			printf("tengo que reiniciarlo \n");
 			this->shouldQuit = true;
 			pressedR = true;
 		}
@@ -202,7 +198,6 @@ bool GameController::pollEvents(){
 			SDL_GetMouseState(&x, &y);
 			SDL_Point point = this->renderer->windowToMapPoint({x,y});
 			//Log().Get("Renderer", logDEBUG) << " window: "<< " {" << x <<"," << y <<"}" << " window: "<< " {" << mapPoint.x <<"," << mapPoint.y <<"}";
-
 
 			point = this->renderer->proyectedPoint(point, this->escenario->getSize());
 
@@ -221,7 +216,6 @@ void GameController::close() {
 
 	list<View*>::iterator i;
 	for(i=this->views.begin(); i != this->views.end(); ++i) {
-		printf("limpio una vista");
 		View* view = *i;
 		delete view;
 	}

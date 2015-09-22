@@ -11,6 +11,7 @@
 #include <iostream>
 #include <sstream>
 #include "../Utils/Log.h"
+#include "../GlobalConstants.h"
 using namespace std;
 
 const std::string TAG = "MobileModel";
@@ -58,7 +59,7 @@ void MobileModel::setDestination(int destinationX, int destionationY) {
 }
 
 int MobileModel::getSpeed() {
-	return 2;
+	return PROTAGONISTA_SPEED;
 }
 
 void MobileModel::updatePosition() {
