@@ -59,6 +59,7 @@ AnimationStatus Sprite::getAnimation(MotionDirection currentDirection, bool curr
 	AnimationStatus newStatus;
 	newStatus.direction = currentDirection;
 	newStatus.isMoving = currentlyMoving;
+	newStatus.animationIndex = 0;
 
 	// si no se esta moviendo no importa el animationIndex
 	if (!currentlyMoving){
