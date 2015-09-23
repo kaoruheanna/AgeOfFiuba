@@ -69,21 +69,16 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 	bool success = true;
 
 	// Imagen Default
-	Log().Get(TAG,logINFO) << "Cargando drawable default";
 	this->missingImageDrawable = new Drawable(64,0);
 	success = this->missingImageDrawable->loadTextureFromFile("img/missingImage.png",this->sdlRenderer);
 	if(!success){
 		Log().Get(TAG,logERROR) << "No se pudo cargar el drawable default";
-	} else {
-		Log().Get(TAG,logINFO) << "Cargado drawable default";
 	}
 
 	// Mapa
-	Log().Get(TAG,logINFO) << "Cargando tile default";
 	string tileDefault = "img/grass1n.png";
 	Drawable *tileDefDrawable = new Drawable(64,0);
 	if (tileDefDrawable -> loadTextureFromFile(tileDefault,this->sdlRenderer)){
-		Log().Get(TAG,logINFO) << "Cargado tile default";
 		this->drawablesByInstanceName.insert(
 				std::pair<std::string,Drawable*>("tileDefault", tileDefDrawable));
 	} else {
@@ -93,22 +88,19 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 	// Cargar los tipos pasados por el YAML
 	int i = 0;
 	for (list<TipoConfig>::iterator it = tipos.begin(); it != tipos.end(); ++it) {
-	  Log().Get(TAG,logDEBUG) << "Parseando tipo: " << i;
 	  TipoConfig tipo = *it;
-
 	  if((tipo.getNombre() == "") || (tipo.getImagen() == "")){
-		  Log().Get(TAG,logERROR) << "Tipo N°" << i << " es incorrecto. Deberia tener nombre e imagen.";
+		  Log().Get(TAG,logWARNING) << "Tipo N°" << i << " es incorrecto. Deberia tener nombre e imagen.";
 
 	  } else {
 		  Drawable *nodoDrawable = this->getDrawableFromTipoConfig(tipo);
 		  bool textureLoaded = nodoDrawable->loadTextureFromFile(tipo.getImagen(), this->sdlRenderer);
 		  if(textureLoaded){
-			  Log().Get(TAG,logINFO) << "Tipo N°" << i << " se cargo correctamente bajo el nombre " << tipo.getNombre();
 			  this->drawablesByInstanceName.insert(
 				std::pair<std::string,Drawable*>(tipo.getNombre(), nodoDrawable)
 			  );
 		  } else {
-			  Log().Get(TAG,logINFO) << "Tipo N°" << i << " no se pudo cargar la imagen.";
+			  Log().Get(TAG,logWARNING) << "Tipo N°" << i << " no se pudo cargar la imagen.";
 		  }
 	  }
 	  i++;
@@ -118,7 +110,6 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 
 Drawable* Renderer::getDrawableFromTipoConfig(TipoConfig tipo){
 	if(tipo.getFPS() > 0){
-		Log().Get(TAG,logINFO) << "Tipo " << tipo.getNombre() << " es un sprite.";
 		Sprite *sprite = new Sprite(
 			tipo.getPixelRefX(), tipo.getPixelRefY(),
 			tipo.getAnchoFrame(), tipo.getAltoFrame(),
@@ -127,7 +118,6 @@ Drawable* Renderer::getDrawableFromTipoConfig(TipoConfig tipo){
 		return sprite;
 	}
 
-	Log().Get(TAG,logINFO) << "Tipo " << tipo.getNombre() << " es un drawable.";
 	Drawable *drawable = new Drawable(
 		tipo.getPixelRefX(), tipo.getPixelRefY()
 	);
@@ -235,21 +225,15 @@ SDL_Point Renderer::proyectedPoint(SDL_Point mapPoint, SDL_Point plano){
 void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable, bool iso) {
 	SDL_Point mapRect = { mapPositionX, mapPositionY };
 	SDL_Point windowPoint = this->mapToWindowPoint(mapRect);
-	/*Log().Get("Renderer", logDEBUG) << " map: "<< " {" << mapPositionX <<"," << mapPositionY <<"}" << " window: "<< " {" << windowPoint.x <<"," << windowPoint.y <<"}";
-	SDL_Point mapPoint = this->windowToMapPoint2(windowPoint);
-	Log().Get("Renderer", logDEBUG) << " window: "<< " {" << windowPoint.x <<"," << windowPoint.y <<"}" << " window: "<< " {" << mapPoint.x <<"," << mapPoint.y <<"}";*/
 	SDL_Rect renderQuad = drawable->getRectToDraw(windowPoint.x, windowPoint.y);
 
 	if(this->isInsideWindow(&renderQuad)){
-		//Log().Get(TAG,logDEBUG) << "Drawable inside window with rect { " << renderQuad.x << ", " << renderQuad.y << ", " << renderQuad.w << ", " << renderQuad.h << " }";
 		// Only postpone drawing if its not the tiles
 		if(this->drawablesByInstanceName.find("tileDefault")->second != drawable){
 			this->drawablesToPaint.push_back(pair<SDL_Point, Drawable*>(mapRect, drawable));
 		} else {
 			SDL_RenderCopy(sdlRenderer, drawable->getTexture(), drawable->getClipRect(), &renderQuad);
 		}
-	} else {
-		//Log().Get(TAG,logDEBUG) << "Drawable outside window with rect { " << renderQuad.x << ", " << renderQuad.y << ", " << renderQuad.w << ", " << renderQuad.h << " }";
 	}
 }
 
