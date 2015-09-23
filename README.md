@@ -1,6 +1,15 @@
 # AgeOfFiuba
 
-Juego Taller de Programacion 2do cuatri de 2015 
+Juego Taller de Programacion I
+Segundo cuatrimestre de 2015 
+
+Integrantes:
+Kaoru Martin Heanna; 91891
+Diego Juan Martins Forgan; 92290
+
+
+
+Sistema Operativo: Ubuntu
 
 Para poder usarlo el proyecto compilado tiene que estar en una carpeta junto con las carpetas img y yaml-files
 Se puede cambiar la configuracion del juego modificando el archivo configuracionMapa.yaml
