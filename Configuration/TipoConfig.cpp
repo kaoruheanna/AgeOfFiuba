@@ -51,7 +51,12 @@ int TipoConfig::getIntAttribute(YAML::Node nodo, string attributeName, int defau
 		Log().Get(TAG,logDEBUG) << attributeName << " no es del tipo int. Usando valor default: " << defaultValue;
 	} else {
 		try{
-			return nodo[attributeName].as<int>();
+			if (nodo[attributeName].as<int>() >= 0){
+				return nodo[attributeName].as<int>();
+			}else{
+				Log().Get(TAG,logERROR) << "El atributo: " << attributeName << " es negativo";
+				return defaultValue;
+			}
 		} catch(YAML::RepresentationException& error){
 			Log().Get(TAG,logDEBUG) << attributeName << " no se puede castear a int. Error YAML: " << error.msg << ". Usando valor default: " << defaultValue;
 		}
