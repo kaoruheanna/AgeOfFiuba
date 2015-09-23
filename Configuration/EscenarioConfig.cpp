@@ -196,7 +196,8 @@ void EscenarioConfig::parsearEntidades(){
 		}
 	}
 	else{
-		Log().Get(TAG,logDEBUG) << "El formato de las entidades no es correcto";
+		Log().Get(TAG,logERROR) << "El formato del campo entidades no es correcto o no existe";
+
 	}
 }
 
