@@ -157,10 +157,10 @@ void Renderer::close() {
 }
 
 // Start drawing from left to right scaning from top to bottom
-bool drawOrder (pair<SDL_Rect, Drawable*> first,pair<SDL_Rect, Drawable*> second) {
-	SDL_Rect firstPoint = first.first;
-	SDL_Rect secondPoint = second.first;
-	if(firstPoint.y < secondPoint.y){
+bool drawOrder (pair<SDL_Point, Drawable*> first,pair<SDL_Point, Drawable*> second) {
+	SDL_Point firstPoint = first.first;
+	SDL_Point secondPoint = second.first;
+	if((firstPoint.x + firstPoint.y) < (secondPoint.x + secondPoint.y)){
 		return true;
 	}
 	return (firstPoint.x < secondPoint.x);
@@ -168,7 +168,7 @@ bool drawOrder (pair<SDL_Rect, Drawable*> first,pair<SDL_Rect, Drawable*> second
 
 void Renderer::drawViews() {
 	//Clear screen
-	SDL_SetRenderDrawColor(this->sdlRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+	SDL_SetRenderDrawColor(this->sdlRenderer, 0x00, 0x00, 0x00, 0x00 );
 	SDL_RenderClear(this->sdlRenderer);
 
 	list<View*>::iterator i;
@@ -180,10 +180,11 @@ void Renderer::drawViews() {
 	// Order the views in the "paintor style" drawing
 	this->drawablesToPaint.sort(drawOrder);
 
-	list< pair<SDL_Rect, Drawable*> >::iterator toPaint;
+	list< pair<SDL_Point, Drawable*> >::iterator toPaint;
 	for(toPaint = this->drawablesToPaint.begin(); toPaint != this->drawablesToPaint.end(); ++toPaint) {
 		Drawable* drawable = toPaint->second;
-		SDL_Rect renderQuad = toPaint->first;
+		SDL_Point windowPoint = this->mapToWindowPoint(toPaint->first);
+		SDL_Rect renderQuad = drawable->getRectToDraw(windowPoint.x, windowPoint.y);
 		SDL_RenderCopy(sdlRenderer, drawable->getTexture(), drawable->getClipRect(), &renderQuad);
 	}
 	this->drawablesToPaint.clear();
@@ -232,7 +233,8 @@ SDL_Point Renderer::proyectedPoint(SDL_Point mapPoint, SDL_Point plano){
 }
 
 void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable, bool iso) {
-	SDL_Point windowPoint = this->mapToWindowPoint({mapPositionX, mapPositionY});
+	SDL_Point mapRect = { mapPositionX, mapPositionY };
+	SDL_Point windowPoint = this->mapToWindowPoint(mapRect);
 	/*Log().Get("Renderer", logDEBUG) << " map: "<< " {" << mapPositionX <<"," << mapPositionY <<"}" << " window: "<< " {" << windowPoint.x <<"," << windowPoint.y <<"}";
 	SDL_Point mapPoint = this->windowToMapPoint2(windowPoint);
 	Log().Get("Renderer", logDEBUG) << " window: "<< " {" << windowPoint.x <<"," << windowPoint.y <<"}" << " window: "<< " {" << mapPoint.x <<"," << mapPoint.y <<"}";*/
@@ -242,7 +244,7 @@ void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable, bool
 		//Log().Get(TAG,logDEBUG) << "Drawable inside window with rect { " << renderQuad.x << ", " << renderQuad.y << ", " << renderQuad.w << ", " << renderQuad.h << " }";
 		// Only postpone drawing if its not the tiles
 		if(this->drawablesByInstanceName.find("tileDefault")->second != drawable){
-			this->drawablesToPaint.push_back(pair<SDL_Rect, Drawable*>(renderQuad, drawable));
+			this->drawablesToPaint.push_back(pair<SDL_Point, Drawable*>(mapRect, drawable));
 		} else {
 			SDL_RenderCopy(sdlRenderer, drawable->getTexture(), drawable->getClipRect(), &renderQuad);
 		}

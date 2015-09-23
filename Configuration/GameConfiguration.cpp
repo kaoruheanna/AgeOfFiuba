@@ -57,8 +57,12 @@ int GameConfiguration::getTamanioY(){
 void GameConfiguration::loadFile(const char* archivoAParsear){
 	try{
 	this->nodoRaiz = YAML::LoadFile(archivoAParsear);
+		if (!nodoRaiz["pantalla"] && !nodoRaiz["configuracion"] && !nodoRaiz["tipos"] && !nodoRaiz["esceario"]){
+			this->nodoRaiz = YAML::LoadFile(this->defaultFile);
+			Log().Get(TAG,logERROR) << "El archivo no tiene ninguno de los campos necesarios";
+		}
 	}
-	catch ( YAML::BadFile& archivoCorrupto){
+	catch ( YAML::ParserException& archivoCorrupto){
 		this->nodoRaiz = YAML::LoadFile(this->defaultFile);
 		Log().Get(TAG,logERROR) << "El archivo indicado como parametro no existe o no respeta la sintaxis de YAML, se carga el archivo por defecto";
 	}

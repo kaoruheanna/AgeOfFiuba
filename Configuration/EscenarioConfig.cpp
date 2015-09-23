@@ -192,7 +192,7 @@ void EscenarioConfig::parsearEntidades(){
 				EntidadConfig newNodo = aux;
 				this->lista.push_back(newNodo);
 			}
-			Log().Get(TAG,logDEBUG) << "No se cargo la entidad N°: " << i;
+			else{Log().Get(TAG,logERROR) << "Mal formato de la entidad N°: " << i;}
 		}
 	}
 	else{
@@ -201,6 +201,8 @@ void EscenarioConfig::parsearEntidades(){
 }
 
 void EscenarioConfig::cargarEscenarioPorDefecto(){
+	this->sizeX = TAMANIO_DEFAULT;
+	this->sizeY = TAMANIO_DEFAULT;
 
 }
 
