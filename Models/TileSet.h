@@ -23,7 +23,6 @@ private:
 
 public:
 	TileSet(int,int);
-	void imprimir();
 	void setTodoConstruible();
 	bool setTileConstruible(SDL_Point);
 	bool setTileInconstruible(SDL_Point);

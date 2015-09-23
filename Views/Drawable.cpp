@@ -8,6 +8,9 @@
 #include "Drawable.h"
 #include <cstdio>
 #include <SDL2/SDL_image.h>
+#include "../Utils/Log.h"
+
+const std::string TAG = "Drawable";
 
 Drawable::~Drawable() {
 	// TODO Auto-generated destructor stub
@@ -24,7 +27,7 @@ bool Drawable::loadTextureFromFile(std::string path,SDL_Renderer* sdlRenderer){
 	//Load image at specified path
 	SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
 	if( loadedSurface == NULL ) {
-		printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
+		Log().Get(TAG,logWARNING) << "No se pudo cargar la imagen:'"<<path.c_str()<<"' - error: "<<IMG_GetError();
 		return false;
 	}
 
@@ -42,7 +45,6 @@ bool Drawable::loadTextureFromSurface(SDL_Renderer* renderer, SDL_Surface* surfa
 	// Create texture from surface pixels
 	SDL_Texture* newTexture = SDL_CreateTextureFromSurface( renderer, surface );
 	if( newTexture == NULL ){
-		printf( "Unable to create texture for drawable! SDL Error: %s\n", SDL_GetError() );
 		return false;
 	}
 	this->texture = newTexture;

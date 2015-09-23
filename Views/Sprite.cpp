@@ -45,7 +45,6 @@ void Sprite::onTextureChange(){
 	// Simula llamadas de draw hasta que llega al frame final de la animacion
 	while(currentFrames < this->framesPerAnimation){
 		this->frameIndexes.push_back(floor(currentFrames));
-		Log().Get(TAG,logINFO) << "agrego el indice de la animacion: "<< floor(currentFrames);
 		currentFrames += framesPerDraw;
 	}
 

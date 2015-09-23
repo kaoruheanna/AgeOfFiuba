@@ -79,14 +79,6 @@ MobileModel* Escenario::getProtagonista() {
 	return this->protagonista;
 }
 
-void Escenario::imprimirEntidades(){
-	list<Entity*>::iterator it;
-	for (it=this->entidades.begin(); it != this->entidades.end(); ++it){
-		Entity* e = *it;
-		cout<< e->toString()<<endl;
-	}
-}
-
 list<Entity*> Escenario::getListaEntidades(){
 	return this->entidades;
 }

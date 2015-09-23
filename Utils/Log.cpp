@@ -24,7 +24,7 @@ void Log::Init() {
 	}
 	tm *ltm = localtime(&executionTime);
 	std::ostringstream oss;
-	oss  << "Logs/" << 1900 + ltm->tm_year << 1 + ltm->tm_mon << ltm->tm_mday << "_" << ltm->tm_hour << ":" << 1 + ltm->tm_min << ":" << 1 + ltm->tm_sec;
+	oss  << "Logs/" << 1900 + ltm->tm_year <<"_" << 1 + ltm->tm_mon <<"_" << ltm->tm_mday << "_" << ltm->tm_hour << ":" << 1 + ltm->tm_min << ":" << 1 + ltm->tm_sec;
 
 
 	fout.open(oss.str().c_str(), ios::out | ios::app);
