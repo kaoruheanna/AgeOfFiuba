@@ -11,7 +11,6 @@
 const std::string TAG = "EscenarioConfig";
 
 EscenarioConfig::EscenarioConfig() {
-	//this->protagonista = EntidadConfig(0,0,"soldado");// TODO Auto-generated constructor stub
 
 }
 
@@ -197,7 +196,8 @@ void EscenarioConfig::parsearEntidades(){
 		}
 	}
 	else{
-		Log().Get(TAG,logDEBUG) << "El formato de las entidades no es correcto";
+		Log().Get(TAG,logERROR) << "El formato del campo entidades no es correcto o no existe";
+
 	}
 }
 
@@ -208,26 +208,6 @@ void EscenarioConfig::cargarEscenarioPorDefecto(){
 }
 
 std::list<EntidadConfig> EscenarioConfig::getEntidades() {
-	/*
-	std::list<EntidadConfig> lista;
-
-	lista.push_back(EntidadConfig(2, 2, "casa"));
-
-	lista.push_back(EntidadConfig(2, 3, "casa"));
-	lista.push_back(EntidadConfig(2, 4, "casa"));
-	lista.push_back(EntidadConfig(2, 5, "casa"));
-	lista.push_back(EntidadConfig(2, 6, "casa"));
-	lista.push_back(EntidadConfig(4, 2, "casa"));
-	lista.push_back(EntidadConfig(5, 2, "casa"));
-	lista.push_back(EntidadConfig(6, 2, "casa"));
-	lista.push_back(EntidadConfig(3, 2, "casa"));
-
-	lista.push_back(EntidadConfig(5, 3, "molino"));
-	lista.push_back(EntidadConfig(10, 5, "tierra"));
-	lista.push_back(EntidadConfig(15, 20, "tierra"));
-	lista.push_back(EntidadConfig(1, 1, "agua"));
-	lista.push_back(EntidadConfig(20, 10, "castillo"));
-	*/
 	return this->lista;
 }
 

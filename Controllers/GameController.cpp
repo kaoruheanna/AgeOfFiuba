@@ -30,11 +30,9 @@ GameController::~GameController() {
 }
 
 bool GameController::play() {
-	Log().Get(TAG,logDEBUG) << "[GameController] " << "play";
-
 	this->renderer = new Renderer(this->config->getPantallaAncho(),this->config->getPantallaAlto(), this->config->getTipos());
 	if (!this->renderer->canDraw()){
-		printf( "Failed to initialize!\n" );
+		Log().Get(TAG,logERROR) << "Failed to initialize Renderer!";
 		this->close();
 		return false;
 	}
@@ -66,7 +64,7 @@ bool GameController::play() {
 	int indice = 0;
 	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad){
 		Entity* entidadReal = (*entidad);
-		printf("indice: %i %s \n", indice, entidadReal->getNombre().c_str());
+		Log().Get(TAG,logDEBUG) << indice <<") Agrego la entidad "<<entidadReal->getNombre();
 		if(entidadReal != this->escenario->getProtagonista()){
 			EntityView* entityView = new EntityView(entidadReal->getNombre());
 			entityView->setModel(entidadReal);
@@ -93,7 +91,7 @@ bool GameController::play() {
 		this->renderer->drawViews();
 		this->sleep();
 	}
-	printf("closing controller");
+
 	this->close();
 	return shouldRestart;
 }

@@ -35,20 +35,20 @@ Renderer::~Renderer() {
 
 bool Renderer::initSDL() {
 	if( SDL_Init(SDL_INIT_VIDEO) < 0 ) {
-		printf( "SDL could not initialize! SDL Error: %s\n", SDL_GetError() );
+		Log().Get(TAG,logERROR) << "SDL no pudo inicializar: "<<SDL_GetError();
 		return false;
 	}
 
 	//Create window
 	this->window = SDL_CreateWindow( "Age Of FIUBA", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, this->screenWidth, this->screenHeight, SDL_WINDOW_SHOWN );
 	if (this->window == NULL) {
-		printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
+		Log().Get(TAG,logERROR) << "No se pudo crear la ventana: "<<SDL_GetError();
 		return false;
 	}
 
 	this->sdlRenderer = SDL_CreateRenderer( this->window, -1, SDL_RENDERER_ACCELERATED );
 	if( this->sdlRenderer == NULL ) {
-		printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
+		Log().Get(TAG,logERROR) << "No se pudo crear el SDL renderer: "<<SDL_GetError();
 		return false;
 	}
 
@@ -58,7 +58,7 @@ bool Renderer::initSDL() {
 	//Initialize PNG loading
 	int imgFlags = IMG_INIT_PNG;
 	if (!(IMG_Init( imgFlags ) & imgFlags))	{
-		printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
+		Log().Get(TAG,logERROR) << "SDL_image no pudo inicializar: "<<SDL_GetError();
 		return false;
 	}
 
@@ -80,7 +80,7 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 
 	// Mapa
 	Log().Get(TAG,logINFO) << "Cargando tile default";
-	string tileDefault = "img/grass1.png";
+	string tileDefault = "img/grass1n.png";
 	Drawable *tileDefDrawable = new Drawable(64,0);
 	if (tileDefDrawable -> loadTextureFromFile(tileDefault,this->sdlRenderer)){
 		Log().Get(TAG,logINFO) << "Cargado tile default";
