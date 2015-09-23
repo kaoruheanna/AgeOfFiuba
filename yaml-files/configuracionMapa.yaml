@@ -8,6 +8,9 @@ configuracion:
  - margen_scroll: 30
 
 tipos:
+ - nombre: agua
+   imagen: img/agua.png
+
  - nombre: arbol
    imagen: path/a/imagen.png
 
@@ -32,6 +35,16 @@ tipos:
    pixel_ref_x: 30
    pixel_ref_y: 40
 
+ - nombre: molino
+   imagen: img/whatermill.png
+   ancho_base: 1
+   alto_base : 1
+   pixel_ref_x: 80
+   pixel_ref_y: 75
+   fps: 10
+   ancho_frame: 200
+   alto_frame: 145
+
  - nombre: soldado
    imagen: img/vlad.png
    ancho_base: 1
@@ -50,9 +63,6 @@ tipos:
 
  - nombre: tierra
    imagen: img/tierra.png
-
- - nombre: agua
-   imagen: img/agua.png
  
  - nombre: arbol
    imagen: img/tree1.png
@@ -65,15 +75,7 @@ tipos:
    alto_frame: 64
    ancho_frame: 72
 
- - nombre: molino
-   imagen: img/whatermill.png
-   ancho_base: 1
-   alto_base : 1
-   pixel_ref_x: 80
-   pixel_ref_y: 75
-   fps: 10
-   ancho_frame: 200
-   alto_frame: 145
+
 
 escenario:
  - nombre: orleans

@@ -8,6 +8,9 @@ configuracion:
  - margen_scroll: 30
 
 tipos:
+ - nombre: agua
+   imagen: img/agua.png
+
  - nombre: arbol
    imagen: path/a/imagen.png
 
@@ -32,6 +35,16 @@ tipos:
    pixel_ref_x: 30
    pixel_ref_y: 40
 
+ - nombre: molino
+   imagen: img/whatermill.png
+   ancho_base: 1
+   alto_base : 1
+   pixel_ref_x: 80
+   pixel_ref_y: 75
+   fps: 10
+   ancho_frame: 200
+   alto_frame: 145
+
  - nombre: soldado
    imagen: img/vlad.png
    ancho_base: 1
@@ -50,30 +63,19 @@ tipos:
 
  - nombre: tierra
    imagen: img/tierra.png
-
- - nombre: agua
-   imagen: img/agua.png
  
  - nombre: arbol
    imagen: img/tree1.png
    ancho_base: 1
    alto_base : 1
-   pixel_ref_x: -40
-   pixel_ref_y: -5
+   pixel_ref_x: 25
+   pixel_ref_y: 25
    fps: 5
    delay: 1
    alto_frame: 64
    ancho_frame: 72
 
- - nombre: molino
-   imagen: img/whatermill.png
-   ancho_base: 1
-   alto_base : 1
-   pixel_ref_x: 80
-   pixel_ref_y: 75
-   fps: 10
-   ancho_frame: 200
-   alto_frame: 145
+
 
 escenario:
  - nombre: orleans
@@ -92,11 +94,16 @@ escenario:
    - [x: 1, y: 7, tipo: agua]
    - [x: 5, y: 5, tipo: castillo]
    - [x: 2, y: 2, tipo: molino]
+   - [x: 3, y: 2, tipo: agua]
+   - [x: 3, y: 1, tipo: agua]
    - [x: 4, y: 2, tipo: arbol]
    - [x: 8, y: 2, tipo: molino]
    - [x: 8, y: 3, tipo: arbol]
    - [x: 12, y: 17, tipo: arbol]
-   - [x: 20, y: 7, tipo: arbol]
+   - [x: 0, y: 0, tipo: arbol]
+   - [x: 0, y: 1, tipo: arbol]
+   - [x: 1, y: 0, tipo: arbol]
+   - [x: 0, y: 2, tipo: arbol]
    
    protagonista:
    - tipo: soldado
