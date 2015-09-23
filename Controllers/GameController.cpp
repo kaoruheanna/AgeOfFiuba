@@ -64,7 +64,6 @@ bool GameController::play() {
 	int indice = 0;
 	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad){
 		Entity* entidadReal = (*entidad);
-		Log().Get(TAG,logDEBUG) << indice <<") Agrego la entidad "<<entidadReal->getNombre();
 		if(entidadReal != this->escenario->getProtagonista()){
 			EntityView* entityView = new EntityView(entidadReal->getNombre());
 			entityView->setModel(entidadReal);

@@ -64,7 +64,7 @@ void GameConfiguration::loadFile(const char* archivoAParsear){
 	}
 	catch ( YAML::ParserException& archivoCorrupto){
 		this->nodoRaiz = YAML::LoadFile(this->defaultFile);
-		Log().Get(TAG,logERROR) << "El archivo indicado como parametro no existe o no respeta la sintaxis de YAML, se carga el archivo por defecto";
+		Log().Get(TAG,logWARNING) << "El archivo indicado como parametro no existe o no respeta la sintaxis de YAML, se carga el archivo por defecto";
 	}
 }
 
@@ -83,7 +83,6 @@ void GameConfiguration::parseYAML(const char* archivoAParsear){
 		Log().Get(TAG,logERROR) << "Nodo tipos tiene que ser una secuencia";
 	} else {
 		for (std::size_t i=0;i < nodoTipos.size();i++) {
-		  Log().Get(TAG,logDEBUG) << "Parseando tipo: " << i;
 		  TipoConfig* newNodo = new TipoConfig(nodoTipos[i]);
 		  tipos.push_back(*newNodo);
 		}

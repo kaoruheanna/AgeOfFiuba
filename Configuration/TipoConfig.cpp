@@ -46,26 +46,26 @@ TipoConfig::TipoConfig(YAML::Node nodo): TipoConfig(){
 
 int TipoConfig::getIntAttribute(YAML::Node nodo, string attributeName, int defaultValue) {
 	if(!nodo[attributeName] || nodo[attributeName].IsNull() || !nodo[attributeName].IsDefined()){
-		Log().Get(TAG,logDEBUG) << attributeName << " no esta definido para este tipo. Usando valor default: " << defaultValue;
+		Log().Get(TAG,logWARNING) << attributeName << " no esta definido para este tipo. Usando valor default: " << defaultValue;
 	} else if(!nodo[attributeName].IsScalar()){
-		Log().Get(TAG,logDEBUG) << attributeName << " no es del tipo int. Usando valor default: " << defaultValue;
+		Log().Get(TAG,logWARNING) << attributeName << " no es del tipo int. Usando valor default: " << defaultValue;
 	} else {
 		try{
 			return nodo[attributeName].as<int>();
 		} catch(YAML::RepresentationException& error){
-			Log().Get(TAG,logDEBUG) << attributeName << " no se puede castear a int. Error YAML: " << error.msg << ". Usando valor default: " << defaultValue;
+			Log().Get(TAG,logWARNING) << attributeName << " no se puede castear a int. Error YAML: " << error.msg << ". Usando valor default: " << defaultValue;
 		}
 	}
 	return defaultValue;
 }
 string TipoConfig::getStringAttribute(YAML::Node nodo, string attributeName, string defaultValue){
 	if(!nodo[attributeName] || nodo[attributeName].IsNull() || !nodo[attributeName].IsDefined()){
-		Log().Get(TAG,logDEBUG) << attributeName << " no esta definido para este tipo. Usando valor default: " << defaultValue;
+		Log().Get(TAG,logWARNING) << attributeName << " no esta definido para este tipo. Usando valor default: " << defaultValue;
 	} else {
 		try{
 			return nodo[attributeName].as<string>();
 		} catch(YAML::RepresentationException& error){
-			Log().Get(TAG,logDEBUG) << attributeName << " no se puede castear a string. Error YAML: " << error.msg << ". Usando valor default: " << defaultValue;
+			Log().Get(TAG,logWARNING) << attributeName << " no se puede castear a string. Error YAML: " << error.msg << ". Usando valor default: " << defaultValue;
 		}
 	}
 	return defaultValue;
@@ -73,20 +73,20 @@ string TipoConfig::getStringAttribute(YAML::Node nodo, string attributeName, str
 
 float TipoConfig::getFloatAttribute(YAML::Node nodo, string attributeName, float defaultValue) {
 	if(!nodo[attributeName] || nodo[attributeName].IsNull() || !nodo[attributeName].IsDefined()){
-			Log().Get(TAG,logDEBUG) << attributeName << " no esta definido para este tipo. Usando valor default: " << defaultValue;
+			Log().Get(TAG,logWARNING) << attributeName << " no esta definido para este tipo. Usando valor default: " << defaultValue;
 		} else if(!nodo[attributeName].IsScalar()){
-			Log().Get(TAG,logDEBUG) << attributeName << " no es del tipo float. Usando valor default: " << defaultValue;
+			Log().Get(TAG,logWARNING) << attributeName << " no es del tipo float. Usando valor default: " << defaultValue;
 		} else {
 			try{
 				if (nodo[attributeName].as<float>() > 0){
 					return nodo[attributeName].as<float>();
 				}
 				else {
-					Log().Get(TAG,logDEBUG) << "El valor de fps es menor a invalido, usando valor default ";
+					Log().Get(TAG,logWARNING) << "El valor de fps es menor a invalido, usando valor default ";
 					return defaultValue;
 				}
 			} catch(YAML::RepresentationException& error){
-				Log().Get(TAG,logDEBUG) << attributeName << " no se puede castear a float. Error YAML: " << error.msg << ". Usando valor default: " << defaultValue;
+				Log().Get(TAG,logWARNING) << attributeName << " no se puede castear a float. Error YAML: " << error.msg << ". Usando valor default: " << defaultValue;
 			}
 		}
 		return defaultValue;

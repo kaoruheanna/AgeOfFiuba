@@ -27,13 +27,13 @@ EscenarioConfig::~EscenarioConfig() {
 void EscenarioConfig::validarContenido(){
 	if (this->nodoEscenario.IsNull() || !this->nodoEscenario.IsSequence() || this->nodoEscenario.size() != 1){
 			this->cargarEscenarioPorDefecto();
-			Log().Get(TAG,logERROR) << "No existe campo Escenario o es invalido, Se carga una configuracion por Defecto";
+			Log().Get(TAG,logWARNING) << "No existe campo Escenario o es invalido, Se carga una configuracion por Defecto";
 			return;
 		}
 		else{
 			if (!this->verificarNombre()){
 				this->nombre = "NombreDefault";
-				Log().Get(TAG,logERROR) << "El nombre del escenario es incorrecto, se carga un nombre por defecto";
+				Log().Get(TAG,logWARNING) << "El nombre del escenario es incorrecto, se carga un nombre por defecto";
 			}
 			this->validarTamanio();
 			this->parsearProtagonista();
@@ -59,14 +59,14 @@ bool EscenarioConfig::verificarNombre(){
 void EscenarioConfig::validarTamanio(){
 	if (!this->validarINT("size_x")){
 		this->sizeX = TAMANIO_DEFAULT;
-		Log().Get(TAG,logERROR) << "Tamanio X de pantalla invalido, se cargo el tamanio en X por defecto";
+		Log().Get(TAG,logWARNING) << "Tamanio X de pantalla invalido, se cargo el tamanio en X por defecto";
 	}
 	else{
 			this->sizeX = this->nodoEscenario[0]["size_x"].as<int>();
 	}
 	if (!this->validarINT("size_y")){
 		this->sizeY = TAMANIO_DEFAULT;
-		Log().Get(TAG,logERROR) << "Tamanio Y de pantalla invalido, se cargo el tamanio en X por defecto";
+		Log().Get(TAG,logWARNING) << "Tamanio Y de pantalla invalido, se cargo el tamanio en X por defecto";
 	}
 	else{
 			this->sizeY = this->nodoEscenario[0]["size_y"].as<int>();
@@ -134,7 +134,7 @@ void EscenarioConfig::parsearProtagonista(){
 	if (nodoProtagonista.IsSequence() && nodoProtagonista.size() == 1 && !nodoProtagonista[0].IsNull()){
 		this->parsearEntidad(nodoProtagonista[0], personajeParseado);}
 	else {
-		Log().Get(TAG,logERROR) << "El protagonista no existe o se encuentra mal definido, se cargo el protagonista por defecto";
+		Log().Get(TAG,logWARNING) << "El protagonista no existe o se encuentra mal definido, se cargo el protagonista por defecto";
 	}
 	this->protagonista = personajeParseado;
 }

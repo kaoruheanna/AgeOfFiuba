@@ -50,7 +50,6 @@ void Sprite::onTextureChange(){
 
 	int delayFrames = ((this->delay * 1000) / DELAY_MILISEC);
 
-	Log().Get(TAG,logINFO) << "delay frames: "<< delayFrames;
 	for (int i = 0; i < delayFrames; i++){
 		this->frameIndexes.push_back(START_MOVING_INDEX);
 	}
