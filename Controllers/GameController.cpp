@@ -108,10 +108,6 @@ float GameController::scrollingSpeed(int x, int large) {
 	return 0;
 }
 
-
-SDL_Point intialPointWindowWrapper;
-SDL_Point finalPointWindowWrapper;
-
 void GameController::initWindowSizes() {
 	SDL_Point intialWindowWrapperTop;
 	SDL_Point intialWindowWrapperBottom;
@@ -136,11 +132,14 @@ void GameController::initWindowSizes() {
 	pointL = this->escenario->getSize();
 	intialWindowWrapperBottom = this->renderer->mapToWindowPoint(pointL);
 
+	vertixSlope = -1 * (intialWindowWrapperTop.x - intialWindowWrapperLeft.x) / (intialWindowWrapperTop.y - intialWindowWrapperLeft.y);
+	middlePoint = -1 * intialWindowWrapperLeft.y;
+
 	intialPointWindowWrapper.x = -intialWindowWrapperLeft.x + (this->config->getPantallaAncho()/2);
 	intialPointWindowWrapper.y = -intialWindowWrapperTop.y;
 
 	finalPointWindowWrapper.x = -intialWindowWrapperRight.x;
-	finalPointWindowWrapper.y = -intialWindowWrapperBottom.y ;
+	finalPointWindowWrapper.y = -intialWindowWrapperBottom.y;
 }
 
 float GameController::scrollingSpeedX(int x) {
@@ -151,11 +150,31 @@ float GameController::scrollingSpeedY(int y) {
 	return scrollingSpeed(y,this->config->getPantallaAlto())*-1;
 }
 
+SDL_Point GameController::getMaxVertixForPoint(int yPosition) {
+ 	SDL_Point maxVertix = { 0, 0 };
+	if(yPosition < middlePoint){
+		// If is the bottom half of the map then the slope is inverted
+		int invertedYPosition = 2* middlePoint - yPosition;
+		maxVertix.x = vertixSlope * invertedYPosition + this->config->getPantallaAncho();
+		maxVertix.y = -1 * vertixSlope * invertedYPosition;
+	} else {
+		maxVertix.x = vertixSlope * yPosition;
+		maxVertix.y = this->config->getPantallaAncho() - vertixSlope * yPosition;
+	}
+	return maxVertix;
+}
+
 void GameController::moveToPoint(SDL_Point point) {
+	// Checkea que el scroll no se vaya por las perpendiculares
 	point.y = (point.y > intialPointWindowWrapper.y) ? intialPointWindowWrapper.y :point.y;
 	point.y = (point.y < (finalPointWindowWrapper.y + this->config->getPantallaAlto())) ? (finalPointWindowWrapper.y + this->config->getPantallaAlto()) : point.y;
 	point.x = (point.x > intialPointWindowWrapper.x) ? intialPointWindowWrapper.x : point.x;
 	point.x = (point.x < (finalPointWindowWrapper.x + (1.5*this->config->getPantallaAncho()))) ? (finalPointWindowWrapper.x + (1.5*this->config->getPantallaAncho())) :point.x;
+
+	// Checkea que el scroll no se vaya por las diagonales
+	SDL_Point maxVertix = this->getMaxVertixForPoint(point.y);
+	point.x = (point.x < maxVertix.x)? maxVertix.x: point.x;
+	point.x = (point.x > maxVertix.y)? maxVertix.y: point.x;
 
 	this->renderer->mainTilePosition = point;
 }

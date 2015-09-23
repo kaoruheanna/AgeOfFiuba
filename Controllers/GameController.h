@@ -43,6 +43,15 @@ private:
 
 	void moveToPoint(SDL_Point point);
 	void initWindowSizes();
+
+	// Metodos y variables para que no se vaya el scroll del mapa
+	SDL_Point intialPointWindowWrapper;
+	SDL_Point finalPointWindowWrapper;
+
+	int vertixSlope;
+	int middlePoint;
+
+	SDL_Point getMaxVertixForPoint(int yPosition);
 };
 
 #endif /* GAMECONTROLLER_H_ */
