@@ -58,8 +58,8 @@ tipos:
    imagen: img/tree1.png
    ancho_base: 1
    alto_base : 1
-   pixel_ref_x: -40
-   pixel_ref_y: -5
+   pixel_ref_x: 25
+   pixel_ref_y: 25
    fps: 3
    delay: 1
    alto_frame: 64
