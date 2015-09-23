@@ -62,7 +62,7 @@ void GameConfiguration::loadFile(const char* archivoAParsear){
 			Log().Get(TAG,logERROR) << "El archivo no tiene ninguno de los campos necesarios";
 		}
 	}
-	catch ( YAML::ParserException& archivoCorrupto){
+	catch ( YAML::Exception& error){
 		this->nodoRaiz = YAML::LoadFile(this->defaultFile);
 		Log().Get(TAG,logERROR) << "El archivo indicado como parametro no existe o no respeta la sintaxis de YAML, se carga el archivo por defecto";
 	}
