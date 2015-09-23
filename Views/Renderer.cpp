@@ -80,7 +80,7 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 
 	// Mapa
 	Log().Get(TAG,logINFO) << "Cargando tile default";
-	string tileDefault = "img/grass1.png";
+	string tileDefault = "img/grass1n.png";
 	Drawable *tileDefDrawable = new Drawable(64,0);
 	if (tileDefDrawable -> loadTextureFromFile(tileDefault,this->sdlRenderer)){
 		Log().Get(TAG,logINFO) << "Cargado tile default";
