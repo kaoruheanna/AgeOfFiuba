@@ -193,7 +193,7 @@ void EscenarioConfig::parsearEntidades(){
 				EntidadConfig newNodo = aux;
 				this->lista.push_back(newNodo);
 			}
-			Log().Get(TAG,logDEBUG) << "No se cargo la entidad N°: " << i;
+			else{Log().Get(TAG,logERROR) << "Mal formato de la entidad N°: " << i;}
 		}
 	}
 	else{
