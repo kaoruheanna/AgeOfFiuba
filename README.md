@@ -6,6 +6,7 @@ Segundo cuatrimestre de 2015
 Integrantes:
 Kaoru Martin Heanna; 91891
 Diego Juan Martins Forgan; 92290
+Nicolas Mariano Fernandez Lema; 93410
 
 
 
