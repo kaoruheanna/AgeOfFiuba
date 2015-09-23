@@ -9,13 +9,13 @@ and may not be redistributed without written permission.*/
 #include "Controllers/GameController.h"
 #include "Utils/Log.h"
 #include "Configuration/GameConfiguration.h"
-
+#include "GlobalConstants.h"
 
 int main( int argc, char* args[] )
 {
 	bool shouldRestart = false;
 	do {
-		GameConfiguration *configuration = new GameConfiguration("yaml-files/configuracionMapa.yaml");
+		GameConfiguration *configuration = new GameConfiguration(CONFIG_CUSTOM);
 		GameController *gameController = new GameController(configuration);
 		shouldRestart = gameController->play();
 

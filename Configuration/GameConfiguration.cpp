@@ -7,19 +7,18 @@
 
 #include "GameConfiguration.h"
 #include "../Utils/Log.h"
+#include "../GlobalConstants.h"
 
 const std::string TAG = "GameConfiguration";
 
-GameConfiguration::GameConfiguration(const char* archivoAParsear){
+GameConfiguration::GameConfiguration(const string archivoAParsear){
 	this->tipos.clear();
-	this->defaultFile = "yaml-files/configuracion.yaml";//ARCHIVO_DEFAULT;
 	this->parseYAML(archivoAParsear);
 }
 
 GameConfiguration::GameConfiguration(){
 	this->tipos.clear();
-	this->defaultFile = "yaml-files/configuracion.yaml";
-	this->parseYAML(this->defaultFile);
+	this->parseYAML(CONFIG_DEFAULT);
 }
 
 GameConfiguration::~GameConfiguration(){
@@ -54,22 +53,22 @@ int GameConfiguration::getTamanioY(){
 }
 
 //ESTA FUNCION VA A COMPROBAR QUE EL ARCHIVO RESPETE LAS ESPECIFICACIONES DE YAML, NO VERIFICA LA VALIDACION DE VALORES
-void GameConfiguration::loadFile(const char* archivoAParsear){
+void GameConfiguration::loadFile(const string archivoAParsear){
 	try{
 	this->nodoRaiz = YAML::LoadFile(archivoAParsear);
 		if (!nodoRaiz["pantalla"] && !nodoRaiz["configuracion"] && !nodoRaiz["tipos"] && !nodoRaiz["esceario"]){
-			this->nodoRaiz = YAML::LoadFile(this->defaultFile);
+			this->nodoRaiz = YAML::LoadFile(CONFIG_DEFAULT);
 			Log().Get(TAG,logERROR) << "El archivo no tiene ninguno de los campos necesarios";
 		}
 	}
 	catch ( YAML::ParserException& archivoCorrupto){
-		this->nodoRaiz = YAML::LoadFile(this->defaultFile);
+		this->nodoRaiz = YAML::LoadFile(CONFIG_DEFAULT);
 		Log().Get(TAG,logWARNING) << "El archivo indicado como parametro no existe o no respeta la sintaxis de YAML, se carga el archivo por defecto";
 	}
 }
 
 
-void GameConfiguration::parseYAML(const char* archivoAParsear){
+void GameConfiguration::parseYAML(const string archivoAParsear){
 	//VERIFICA SI ARCHIVO ESTA CORRUPTO O TIENE FORMATO VALIDO DE YAML, EN ESE CASO PARSEA DIRECTAMENTE EL ARCHIVO POR DEFECTO
 	this->loadFile(archivoAParsear);
 

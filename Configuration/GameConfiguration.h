@@ -18,13 +18,11 @@
 #include "EscenarioConfig.h"
 
 
-//const char* ARCHIVOPORDEFECTO = "configuracion.yaml";
-
 class GameConfiguration {
 
 public:
 	GameConfiguration();
-	GameConfiguration(const char* archivoAParsear);
+	GameConfiguration(const string archivoAParsear);
 	~GameConfiguration();
 	int getPantallaAlto();
 	int getPantallaAncho();
@@ -38,10 +36,9 @@ public:
 	int getTamanioY();
 
 private:
-	void parseYAML(const char* archivoAParsear);
-	void loadFile(const char* archivoAParsear);
+	void parseYAML(const string archivoAParsear);
+	void loadFile(const string archivoAParsear);
 	void auxiliar();
-	const char* defaultFile;
 	YAML::Node nodoRaiz;
 	PantallaConfig pantalla;
 	ConfiguracionConfig configuracion;
