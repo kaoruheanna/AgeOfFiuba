@@ -8,6 +8,7 @@ Kaoru Martin Heanna; 91891
 Diego Juan Martins Forgan; 92290
 Nicolas Mariano Fernandez Lema; 93410
 Dario Leandro Miñones; 86644
+Federico Longhi; 93336
 
 
 Sistema Operativo: Ubuntu
