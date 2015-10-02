@@ -8,12 +8,12 @@
 #include "Renderer.h"
 #include "Sprite.h"
 #include "../Utils/Log.h"
+#include "../GlobalConstants.h"
 
 const std::string TAG = "Renderer";
 
 const int TILE_WIDTH = 128;//hay que ver de donde sacamos esto
 const int TILE_HEIGHT = 64;//deberia ser info que tiene el renderer
-
 
 
 Renderer::Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos) {
@@ -23,6 +23,7 @@ Renderer::Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos) {
 	this->mainTilePosition = {screenWidth/2,0}; // para que el mapa este en la mitad
 	this->screenWidth = screenWidth;
 	this->screenHeight = screenHeight;
+	this->screenMenu = new ScreenMenu(0,(this->screenHeight - MENU_HEIGHT),this->screenWidth,MENU_HEIGHT);
 
 	bool didInitSDL = this->initSDL();
 	bool didLoadMedia = this->loadMedia(tipos);
@@ -133,7 +134,7 @@ void Renderer::close() {
 
 	this->missingImageDrawable->free();
 	delete this->missingImageDrawable;
-
+	delete this->screenMenu;
 
 	//Destroy window
 	SDL_DestroyRenderer(this->sdlRenderer);
@@ -179,8 +180,14 @@ void Renderer::drawViews() {
 	}
 	this->drawablesToPaint.clear();
 
+	this->drawMenu();
+
 	//Update screen
 	SDL_RenderPresent(this->sdlRenderer);
+}
+
+void Renderer::drawMenu(){
+	this->screenMenu->render(this);
 }
 
 SDL_Point Renderer::mapToWindowPoint(SDL_Point mapPoint){
@@ -219,9 +226,9 @@ SDL_Point Renderer::proyectedPoint(SDL_Point mapPoint, SDL_Point plano){
 	if (y > height) {y = height - padding;}
 
 	return {x,y};
-
 }
 
+// draw Drawable
 void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable, bool iso) {
 	SDL_Point mapRect = { mapPositionX, mapPositionY };
 	SDL_Point windowPoint = this->mapToWindowPoint(mapRect);
@@ -237,12 +244,18 @@ void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable, bool
 	}
 }
 
-
+// draw shape
+void Renderer::draw(SDL_Rect rect, SDL_Color color){
+	SDL_SetRenderDrawColor(this->sdlRenderer, color.r, color.g, color.b, color.a);
+	SDL_RenderFillRect(this->sdlRenderer, &rect);
+}
 
 bool Renderer::isInsideWindow(SDL_Rect* rect){
+	int maxY = this->screenMenu->getY();
+
 	return (rect->x < this->screenWidth &&
 			rect->x + rect->w > 0 &&
-		    rect->y < this->screenHeight &&
+		    rect->y < maxY &&
 			rect->y + rect->h > 0);
 }
 
