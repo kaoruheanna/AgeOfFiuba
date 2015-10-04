@@ -9,6 +9,7 @@
 #define SCREENMENU_H_
 
 class Renderer;
+class StatusMenu;
 
 class ScreenMenu {
 
@@ -23,6 +24,7 @@ private:
 	int y;
 	int width;
 	int height;
+	StatusMenu *statusMenu;
 };
 
 #endif /* SCREENMENU_H_ */

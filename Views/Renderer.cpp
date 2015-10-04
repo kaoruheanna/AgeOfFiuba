@@ -20,6 +20,7 @@ Renderer::Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos) {
 	this->window = NULL;
 	this->sdlRenderer = NULL;
 	this->missingImageDrawable = NULL;
+	this->textFont = NULL;
 	this->mainTilePosition = {screenWidth/2,0}; // para que el mapa este en la mitad
 	this->screenWidth = screenWidth;
 	this->screenHeight = screenHeight;
@@ -60,6 +61,11 @@ bool Renderer::initSDL() {
 	int imgFlags = IMG_INIT_PNG;
 	if (!(IMG_Init( imgFlags ) & imgFlags))	{
 		Log().Get(TAG,logERROR) << "SDL_image no pudo inicializar: "<<SDL_GetError();
+		return false;
+	}
+
+	if( TTF_Init() == -1 ){
+		Log().Get(TAG,logERROR) << "SDL_ttf no se pudo inicializar: "<<TTF_GetError();
 		return false;
 	}
 
@@ -106,6 +112,13 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 	  }
 	  i++;
 	}
+
+	this->textFont = TTF_OpenFont("img/arial.ttf", 16);
+	if (this->textFont == NULL ) {
+		Log().Get(TAG,logERROR) << "No se pudo cargar la fuente: "<< TTF_GetError();
+		success = false;
+	}
+
 	return success;
 }
 
@@ -250,6 +263,10 @@ void Renderer::draw(SDL_Rect rect, SDL_Color color){
 	SDL_RenderFillRect(this->sdlRenderer, &rect);
 }
 
+void Renderer::drawTextureInRect(SDL_Texture *texture,SDL_Rect rect){
+	SDL_RenderCopy(this->sdlRenderer, texture, NULL, &rect);
+}
+
 bool Renderer::isInsideWindow(SDL_Rect* rect){
 	int maxY = this->screenMenu->getY();
 
@@ -274,4 +291,12 @@ void Renderer::addView(View* view) {
 	}
 	view->setDrawable(drawable);
 	this->views.push_back(view);
+}
+
+SDL_Renderer* Renderer::getSdlRenderer(){
+	return this->sdlRenderer;
+}
+
+TTF_Font* Renderer::getFont(){
+	return this->textFont;
 }

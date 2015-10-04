@@ -13,6 +13,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <string>
 #include "View.h"
@@ -33,18 +34,16 @@ public:
 	virtual ~Renderer();
 	void close();
 	void drawViews();
-
-	// draw Drawable
-	void draw(int mapPositionX, int mapPositionY, Drawable* drawable, bool iso);
-
-	// draw shape
-	void draw(SDL_Rect rect, SDL_Color color);
-
+	void draw(int mapPositionX, int mapPositionY, Drawable* drawable, bool iso); // draw Drawable
+	void draw(SDL_Rect rect, SDL_Color color); // draw shape
+	void drawTextureInRect(SDL_Texture *texture,SDL_Rect rect);
 	SDL_Point mapToWindowPoint(SDL_Point mapPoint);
 	SDL_Point windowToMapPoint(SDL_Point windowPoint);
 	SDL_Point proyectedPoint(SDL_Point mapPoint, SDL_Point plano);
 	bool canDraw();
 	void addView(View* view);
+	SDL_Renderer* getSdlRenderer();
+	TTF_Font* getFont();
 
 private:
 	bool successfullInit;
@@ -55,6 +54,7 @@ private:
 	std::map<std::string, Drawable*> drawablesByInstanceName;
 	Drawable* missingImageDrawable;
 	ScreenMenu* screenMenu;
+	TTF_Font *textFont;
 
 	int screenWidth;
 	int screenHeight;
