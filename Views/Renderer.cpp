@@ -147,6 +147,10 @@ void Renderer::close() {
 
 	this->missingImageDrawable->free();
 	delete this->missingImageDrawable;
+
+	// delete menu
+	TTF_CloseFont(this->textFont);
+	this->textFont = NULL;
 	delete this->screenMenu;
 
 	//Destroy window

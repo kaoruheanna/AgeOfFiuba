@@ -17,11 +17,18 @@ StatusMenu::StatusMenu(int x, int y, int width, int height) {
 	this->y = y;
 	this->width = width;
 	this->height = height;
-	this->label = new TextLabel(x+10,y+10);
+	this->firstLabel = new TextLabel(x+10,y+10);
+	this->secondLabel = new TextLabel(x+10,y+40);
+	this->thirdLabel = new TextLabel(x+10,y+70);
+	this->firstLabel->setMessage("Hola");
+	this->secondLabel->setMessage("Soy Kao");
+	this->thirdLabel->setMessage("");
 }
 
 StatusMenu::~StatusMenu() {
-	delete this->label;
+	delete this->firstLabel;
+	delete this->secondLabel;
+	delete this->thirdLabel;
 }
 
 void StatusMenu::render(Renderer* renderer) {
@@ -29,6 +36,8 @@ void StatusMenu::render(Renderer* renderer) {
 	SDL_Color color = {0xFF, 0xFF, 0xFF, 0xFF};
 	renderer->draw(point,color);
 
-	this->label->render(renderer);
+	this->firstLabel->render(renderer);
+	this->secondLabel->render(renderer);
+	this->thirdLabel->render(renderer);
 }
 

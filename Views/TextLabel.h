@@ -20,6 +20,7 @@ public:
 	TextLabel(int x, int y);
 	virtual ~TextLabel();
 	void render(Renderer* renderer);
+	void setMessage(string newMessage);
 
 private:
 	SDL_Point origin;
@@ -29,6 +30,7 @@ private:
 	string message;
 
 	void loadTexture(SDL_Renderer *sdlRenderer,TTF_Font *font);
+	void freeTexture();
 };
 
 #endif /* TEXTLABEL_H_ */

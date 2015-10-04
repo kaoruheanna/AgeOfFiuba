@@ -22,7 +22,9 @@ private:
 	int y;
 	int width;
 	int height;
-	TextLabel *label;
+	TextLabel *firstLabel;
+	TextLabel *secondLabel;
+	TextLabel *thirdLabel;
 };
 
 #endif /* STATUSMENU_H_ */

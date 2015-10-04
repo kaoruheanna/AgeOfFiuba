@@ -16,12 +16,11 @@ TextLabel::TextLabel(int x, int y) {
 	this->width = 0;
 	this->height = 0;
 	this->texture = NULL;
-	this->message = "HOLA SOY KAORU";
+	this->message = "";
 }
 
 TextLabel::~TextLabel() {
-	SDL_DestroyTexture(this-> texture);
-	this->texture = NULL;
+	this->freeTexture();
 }
 
 void TextLabel::render(Renderer *renderer){
@@ -33,10 +32,7 @@ void TextLabel::render(Renderer *renderer){
 }
 
 void TextLabel::loadTexture(SDL_Renderer *sdlRenderer,TTF_Font *font){
-	if (this->texture){
-		SDL_DestroyTexture(this-> texture);
-		this->texture = NULL;
-	}
+	this->freeTexture();
 	SDL_Color textColor = {0,0,0};
 	SDL_Surface* surfaceMessage = TTF_RenderText_Solid(font, this->message.c_str(), textColor);
 	if(surfaceMessage == NULL) {
@@ -52,5 +48,20 @@ void TextLabel::loadTexture(SDL_Renderer *sdlRenderer,TTF_Font *font){
 	if (this->texture == NULL){
 		Log().Get(TAG,logERROR) << "No se pudo crear la texture: "<<SDL_GetError();
 		return;
+	}
+}
+
+void TextLabel::setMessage(string newMessage) {
+	if (this->message == newMessage){
+		return;
+	}
+	this->message = newMessage;
+	this->freeTexture();
+}
+
+void TextLabel::freeTexture() {
+	if (this->texture){
+		SDL_DestroyTexture(this->texture);
+		this->texture = NULL;
 	}
 }
