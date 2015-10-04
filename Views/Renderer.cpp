@@ -12,10 +12,6 @@
 
 const std::string TAG = "Renderer";
 
-const int TILE_WIDTH = 128;//hay que ver de donde sacamos esto
-const int TILE_HEIGHT = 64;//deberia ser info que tiene el renderer
-
-
 Renderer::Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos) {
 	this->window = NULL;
 	this->sdlRenderer = NULL;
