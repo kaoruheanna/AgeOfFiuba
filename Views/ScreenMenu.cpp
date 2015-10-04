@@ -8,8 +8,9 @@
 #include "ScreenMenu.h"
 #include "Renderer.h"
 #include "StatusMenu.h"
+#include "MiniMapMenu.h"
 
-const int STATUS_SPACING = 10;
+const int SPACING = 10;
 
 ScreenMenu::ScreenMenu(int x, int y, int width, int height) {
 	this->x = x;
@@ -17,14 +18,25 @@ ScreenMenu::ScreenMenu(int x, int y, int width, int height) {
 	this->width = width;
 	this->height = height;
 
-	this->statusMenu = new StatusMenu(x+STATUS_SPACING,
-									y + STATUS_SPACING,
-									width/2,
-									height-(2*STATUS_SPACING));
+	this->statusMenu = new StatusMenu(
+		x+SPACING,
+		y+SPACING,
+		width/2,
+		height-(2*SPACING)
+	);
+
+	int minimapWidth = width / 3;
+	this->miniMapMenu = new MiniMapMenu(
+		width - SPACING - minimapWidth,
+		y + SPACING,
+		minimapWidth,
+		height-(2*SPACING)
+	);
 }
 
 ScreenMenu::~ScreenMenu() {
 	delete this->statusMenu;
+	delete this->miniMapMenu;
 }
 
 void ScreenMenu::render(Renderer* renderer) {
@@ -33,6 +45,7 @@ void ScreenMenu::render(Renderer* renderer) {
 	renderer->draw(rect,color);
 
 	this->statusMenu->render(renderer);
+	this->miniMapMenu->render(renderer);
 }
 
 int ScreenMenu::getY(){
