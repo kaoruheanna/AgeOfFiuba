@@ -13,6 +13,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <string>
 #include "View.h"
@@ -20,6 +21,8 @@
 #include <list>
 #include <map>
 #include "../Configuration/TipoConfig.h"
+#include "ScreenMenu.h"
+
 using namespace std;
 
 class View;
@@ -31,12 +34,16 @@ public:
 	virtual ~Renderer();
 	void close();
 	void drawViews();
-	void draw(int mapPositionX, int mapPositionY, Drawable* drawable, bool iso);
+	void draw(int mapPositionX, int mapPositionY, Drawable* drawable); // draw Drawable
+	void draw(SDL_Rect rect, SDL_Color color); // draw shape
+	void drawTextureInRect(SDL_Texture *texture,SDL_Rect rect);
 	SDL_Point mapToWindowPoint(SDL_Point mapPoint);
 	SDL_Point windowToMapPoint(SDL_Point windowPoint);
 	SDL_Point proyectedPoint(SDL_Point mapPoint, SDL_Point plano);
 	bool canDraw();
 	void addView(View* view);
+	SDL_Renderer* getSdlRenderer();
+	TTF_Font* getFont();
 
 private:
 	bool successfullInit;
@@ -46,6 +53,8 @@ private:
 	list< pair<SDL_Point,Drawable*> > drawablesToPaint;
 	std::map<std::string, Drawable*> drawablesByInstanceName;
 	Drawable* missingImageDrawable;
+	ScreenMenu* screenMenu;
+	TTF_Font *textFont;
 
 	int screenWidth;
 	int screenHeight;
@@ -54,6 +63,7 @@ private:
 	bool loadMedia(list<TipoConfig> tipos);
 	bool isInsideWindow(SDL_Rect* rect);
 	Drawable* getDrawableFromTipoConfig(TipoConfig tipo);
+	void drawMenu();
 };
 
 #endif /* RENDERER_H_ */

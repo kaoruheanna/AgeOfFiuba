@@ -1,5 +1,6 @@
 #include "Escenario.h"
 #include "../Utils/Log.h"
+#include "../GlobalConstants.h"
 
 Escenario::Escenario(EscenarioConfig escenario, list<TipoConfig> tipos) {
 	map<string, SDL_Point> sizeByType;
@@ -20,7 +21,7 @@ Escenario::Escenario(EscenarioConfig escenario, list<TipoConfig> tipos) {
 	} else if(escenario.getSizeY() < 1){
 		Log().Get("Escenario", logWARNING) << "El escenario " << this->name << " tiene que ser al menos una unidad de alto. Cargando escenario default.";
 	} else {
-		this->mundo = new Map(escenario.getSizeX(), escenario.getSizeY(),128,64); // TODO Cambiar ancho y alto de tile hardcodeados
+		this->mundo = new Map(escenario.getSizeX(), escenario.getSizeY(),TILE_WIDTH_PIXELS,TILE_HEIGHT_PIXELS);
 		Entity* protagonista = this->crearEntidad(escenario.getProtagonista(), sizeByType, true);
 		if(protagonista == NULL){
 			Log().Get("Escenario", logWARNING) << "El escenario " << this->name << " no pudo crear al protagonista. Cargando escenario default.";
