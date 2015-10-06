@@ -29,6 +29,21 @@ GameController::~GameController() {
 	// TODO Auto-generated destructor stub
 }
 
+void GameController::agregarEntidades(list<Entity*> entidades) {
+	list<Entity*>::iterator entidad;
+	int indice = 0;
+	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
+		Entity* entidadReal = (*entidad);
+		if (entidadReal != this->escenario->getProtagonista()) {
+			EntityView* entityView = new EntityView(entidadReal->getNombre());
+			entityView->setModel(entidadReal);
+			this->views.push_back(entityView);
+			this->renderer->addView(entityView);
+		}
+		indice++;
+	}
+}
+
 bool GameController::play() {
 	this->renderer = new Renderer(this->config->getPantallaAncho(),this->config->getPantallaAlto(), this->config->getTipos());
 	if (!this->renderer->canDraw()){
@@ -59,19 +74,8 @@ bool GameController::play() {
 	this->renderer->addView(mapView);
 
 	// Agrego todas las vistas (siempre que no sean el protagonista)
-	list<Entity*>::iterator entidad;
 	list<Entity*> entidades = escenario->getListaEntidades();
-	int indice = 0;
-	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad){
-		Entity* entidadReal = (*entidad);
-		if(entidadReal != this->escenario->getProtagonista()){
-			EntityView* entityView = new EntityView(entidadReal->getNombre());
-			entityView->setModel(entidadReal);
-			this->views.push_back(entityView);
-			this->renderer->addView(entityView);
-		}
-		indice++;
-	}
+	agregarEntidades(entidades);
 
 	// Agrego vista del personaje
 	MobileView *marioView = new MobileView(this->escenario->getProtagonista()->getNombre());
@@ -81,6 +85,9 @@ bool GameController::play() {
 
 	initWindowSizes();
 
+	//Inicializar resources Manager
+	this->resourcesManager = new ResourcesManager(config->getTamanioX(),config->getTamanioY());
+
 	bool shouldRestart = false;
 	//While application is running
 	while( !this->shouldQuit && !shouldRestart ) {
@@ -89,6 +96,7 @@ bool GameController::play() {
 		this->escenario->getProtagonista()->updatePosition();
 		this->renderer->drawViews();
 		this->sleep();
+		agregarEntidades(this->resourcesManager->InsertResourcesForNewLoopOnMap());
 	}
 
 	this->close();

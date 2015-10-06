@@ -10,10 +10,11 @@
 
 #include <string>
 #include <SDL2/SDL.h>
+#include "Mapeable.h"
 
 using namespace std;
 
-class Entity{
+class Entity : Mapeable{
 private:
 	//int id;
 	string nombre;
@@ -32,7 +33,7 @@ public:
 
 	string toString();
 
-	Entity(string,SDL_Point,int,int);
+	Entity(string nombre, SDL_Point posicion, int ancho_base, int alto_base);
 	Entity(string,int,int);
 	~Entity();
 };

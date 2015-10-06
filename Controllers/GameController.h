@@ -14,6 +14,7 @@
 #include <list>
 #include "../Configuration/GameConfiguration.h"
 #include "../Models/Escenario.h"
+#include "../Utils/ResourcesManager.h"
 
 using namespace std;
 
@@ -29,6 +30,7 @@ private:
 	Renderer *renderer;
 	Escenario* escenario;
 	GameConfiguration *config;
+	ResourcesManager *resourcesManager;
 
 	bool pollEvents();
 	void updateWindow();
@@ -52,6 +54,7 @@ private:
 	int middlePoint;
 
 	SDL_Point getMaxVertixForPoint(int yPosition);
+	void agregarEntidades(list<Entity*> entidades);
 };
 
 #endif /* GAMECONTROLLER_H_ */
