@@ -27,7 +27,7 @@ list<Entity*> ResourcesManager::InsertResourcesForNewLoopOnMap() {
 		int posicionX = rand() % this->ancho;
 		int posicionY = rand() % this->alto;
 
-		entities.push_back(new Entity("arbol",{posicionX,posicionY},1,1));
+		entities.push_back(new Resource("arbol",{posicionX,posicionY}));
 		Log().Get(TAG) << "Agregar en posicion" << posicionX << "," << posicionY;
 		loopsToNext = 0;
 	}

@@ -12,3 +12,4 @@ Resource::Resource(string nombre, SDL_Point posicion, int ancho_base, int alto_b
 Resource::~Resource() {
 	// TODO Auto-generated destructor stub
 }
+
