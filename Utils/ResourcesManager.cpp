@@ -24,7 +24,7 @@ Resource* ResourcesManager::getNewResource() {
 	int posicionY = rand() % this->alto;
 	Log().Get(TAG) << "Agregar en posicion" << posicionX << "," << posicionY;
 
-	return new Resource("arbol", { posicionX, posicionY });
+	return new Resource("piedra", { posicionX, posicionY });
 }
 
 list<Entity*> ResourcesManager::InsertResourcesForNewLoopOnMap() {
