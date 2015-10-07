@@ -8,21 +8,19 @@
 #include "Renderer.h"
 #include "Sprite.h"
 #include "../Utils/Log.h"
+#include "../GlobalConstants.h"
 
 const std::string TAG = "Renderer";
-
-const int TILE_WIDTH = 128;//hay que ver de donde sacamos esto
-const int TILE_HEIGHT = 64;//deberia ser info que tiene el renderer
-
-
 
 Renderer::Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos) {
 	this->window = NULL;
 	this->sdlRenderer = NULL;
 	this->missingImageDrawable = NULL;
+	this->textFont = NULL;
 	this->mainTilePosition = {screenWidth/2,0}; // para que el mapa este en la mitad
 	this->screenWidth = screenWidth;
 	this->screenHeight = screenHeight;
+	this->screenMenu = new ScreenMenu(0,(this->screenHeight - MENU_HEIGHT),this->screenWidth,MENU_HEIGHT);
 
 	bool didInitSDL = this->initSDL();
 	bool didLoadMedia = this->loadMedia(tipos);
@@ -59,6 +57,11 @@ bool Renderer::initSDL() {
 	int imgFlags = IMG_INIT_PNG;
 	if (!(IMG_Init( imgFlags ) & imgFlags))	{
 		Log().Get(TAG,logERROR) << "SDL_image no pudo inicializar: "<<SDL_GetError();
+		return false;
+	}
+
+	if( TTF_Init() == -1 ){
+		Log().Get(TAG,logERROR) << "SDL_ttf no se pudo inicializar: "<<TTF_GetError();
 		return false;
 	}
 
@@ -105,6 +108,13 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 	  }
 	  i++;
 	}
+
+	this->textFont = TTF_OpenFont("img/arial.ttf", 16);
+	if (this->textFont == NULL ) {
+		Log().Get(TAG,logERROR) << "No se pudo cargar la fuente: "<< TTF_GetError();
+		success = false;
+	}
+
 	return success;
 }
 
@@ -134,6 +144,10 @@ void Renderer::close() {
 	this->missingImageDrawable->free();
 	delete this->missingImageDrawable;
 
+	// delete menu
+	TTF_CloseFont(this->textFont);
+	this->textFont = NULL;
+	delete this->screenMenu;
 
 	//Destroy window
 	SDL_DestroyRenderer(this->sdlRenderer);
@@ -179,8 +193,14 @@ void Renderer::drawViews() {
 	}
 	this->drawablesToPaint.clear();
 
+	this->drawMenu();
+
 	//Update screen
 	SDL_RenderPresent(this->sdlRenderer);
+}
+
+void Renderer::drawMenu(){
+	this->screenMenu->render(this);
 }
 
 SDL_Point Renderer::mapToWindowPoint(SDL_Point mapPoint){
@@ -219,9 +239,9 @@ SDL_Point Renderer::proyectedPoint(SDL_Point mapPoint, SDL_Point plano){
 	if (y > height) {y = height - padding;}
 
 	return {x,y};
-
 }
 
+// draw Drawable
 void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable, bool iso) {
 	SDL_Point mapRect = { mapPositionX, mapPositionY };
 	SDL_Point windowPoint = this->mapToWindowPoint(mapRect);
@@ -237,12 +257,22 @@ void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable, bool
 	}
 }
 
+// draw shape
+void Renderer::draw(SDL_Rect rect, SDL_Color color){
+	SDL_SetRenderDrawColor(this->sdlRenderer, color.r, color.g, color.b, color.a);
+	SDL_RenderFillRect(this->sdlRenderer, &rect);
+}
 
+void Renderer::drawTextureInRect(SDL_Texture *texture,SDL_Rect rect){
+	SDL_RenderCopy(this->sdlRenderer, texture, NULL, &rect);
+}
 
 bool Renderer::isInsideWindow(SDL_Rect* rect){
+	int maxY = this->screenMenu->getY();
+
 	return (rect->x < this->screenWidth &&
 			rect->x + rect->w > 0 &&
-		    rect->y < this->screenHeight &&
+		    rect->y < maxY &&
 			rect->y + rect->h > 0);
 }
 
@@ -261,4 +291,12 @@ void Renderer::addView(View* view) {
 	}
 	view->setDrawable(drawable);
 	this->views.push_back(view);
+}
+
+SDL_Renderer* Renderer::getSdlRenderer(){
+	return this->sdlRenderer;
+}
+
+TTF_Font* Renderer::getFont(){
+	return this->textFont;
 }
