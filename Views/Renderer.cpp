@@ -242,7 +242,7 @@ SDL_Point Renderer::proyectedPoint(SDL_Point mapPoint, SDL_Point plano){
 }
 
 // draw Drawable
-void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable, bool iso) {
+void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable) {
 	SDL_Point mapRect = { mapPositionX, mapPositionY };
 	SDL_Point windowPoint = this->mapToWindowPoint(mapRect);
 	SDL_Rect renderQuad = drawable->getRectToDraw(windowPoint.x, windowPoint.y);

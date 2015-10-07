@@ -34,6 +34,6 @@ void EntityView::render(Renderer* renderer) {
 	SDL_Point point = this->getOrigin();
 	this->animationStatus = this->drawable->getAnimation(this->animationStatus.direction,true,this->animationStatus);
 	this->drawable->animate(this->animationStatus);
-	renderer->draw(point.x, point.y, this->drawable,false);
+	renderer->draw(point.x, point.y, this->drawable);
 }
 

@@ -24,13 +24,7 @@ View::~View() {
 void View::render(Renderer* renderer ) {
 	SDL_Point point = this->getOrigin();
 	this->drawable->animate(this->animationStatus);
-	renderer->draw(point.x, point.y, this->drawable,true);
-}
-
-void View::render(Renderer* renderer, bool iso) {
-	SDL_Point point = this->getOrigin();
-	this->drawable->animate(this->animationStatus);
-	renderer->draw(point.x, point.y, this->drawable, iso);
+	renderer->draw(point.x, point.y, this->drawable);
 }
 
 void View::setDrawable(Drawable *drawable){
