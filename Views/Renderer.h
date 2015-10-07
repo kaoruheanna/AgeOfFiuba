@@ -21,7 +21,7 @@
 #include <list>
 #include <map>
 #include "../Configuration/TipoConfig.h"
-#include "ScreenMenu.h"
+#include "Menu/ScreenMenu.h"
 
 using namespace std;
 

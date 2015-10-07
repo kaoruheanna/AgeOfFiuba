@@ -6,7 +6,7 @@
  */
 
 #include "ScreenMenu.h"
-#include "Renderer.h"
+#include "../Renderer.h"
 #include "StatusMenu.h"
 #include "MiniMapMenu.h"
 
@@ -50,5 +50,9 @@ void ScreenMenu::render(Renderer* renderer) {
 
 int ScreenMenu::getY(){
 	return this->y;
+}
+
+void ScreenMenu::addMiniMapSubview(View* view){
+	this->miniMapMenu->addView(view);
 }
 

@@ -6,8 +6,8 @@
  */
 
 #include "StatusMenu.h"
-#include "Renderer.h"
-#include "../Utils/Log.h"
+#include "../Renderer.h"
+#include "../../Utils/Log.h"
 #include "TextLabel.h"
 
 const std::string TAG = "StatusMenu";

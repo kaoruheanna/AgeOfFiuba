@@ -11,6 +11,7 @@
 class Renderer;
 class StatusMenu;
 class MiniMapMenu;
+class View;
 
 class ScreenMenu {
 
@@ -19,6 +20,7 @@ public:
 	virtual ~ScreenMenu();
 	void render(Renderer* renderer);
 	int getY();
+	void addMiniMapSubview(View* view);
 
 private:
 	int x;

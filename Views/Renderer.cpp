@@ -291,6 +291,7 @@ void Renderer::addView(View* view) {
 	}
 	view->setDrawable(drawable);
 	this->views.push_back(view);
+	this->screenMenu->addMiniMapSubview(view);
 }
 
 SDL_Renderer* Renderer::getSdlRenderer(){

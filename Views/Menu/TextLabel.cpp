@@ -6,8 +6,8 @@
  */
 
 #include "TextLabel.h"
-#include "Renderer.h"
-#include "../Utils/Log.h"
+#include "../Renderer.h"
+#include "../../Utils/Log.h"
 
 const std::string TAG = "TextLabel";
 
