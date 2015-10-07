@@ -6,7 +6,6 @@
  */
 
 #include "ResourcesManager.h"
-#include "../Models/Resource.h"
 #include "../Utils/Log.h"
 
 const int LOOPS_DIFF = 200;
@@ -20,15 +19,19 @@ ResourcesManager::ResourcesManager(int ancho,int alto) {
 
 ResourcesManager::~ResourcesManager() {}
 
+Resource* ResourcesManager::getNewResource() {
+	int posicionX = rand() % this->ancho;
+	int posicionY = rand() % this->alto;
+	Log().Get(TAG) << "Agregar en posicion" << posicionX << "," << posicionY;
+
+	return new Resource("arbol", { posicionX, posicionY });
+}
+
 list<Entity*> ResourcesManager::InsertResourcesForNewLoopOnMap() {
 	list<Entity*> entities;
 
 	if(loopsToNext >= LOOPS_DIFF) {
-		int posicionX = rand() % this->ancho;
-		int posicionY = rand() % this->alto;
-
-		entities.push_back(new Resource("arbol",{posicionX,posicionY}));
-		Log().Get(TAG) << "Agregar en posicion" << posicionX << "," << posicionY;
+		entities.push_back(getNewResource());
 		loopsToNext = 0;
 	}
 	loopsToNext++;

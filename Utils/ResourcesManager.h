@@ -9,6 +9,7 @@
 #define UTILS_RESOURCESMANAGER_H_
 
 #include "../Models/Escenario.h"
+#include "../Models/Resource.h"
 #include <SDL2/SDL.h>
 
 class ResourcesManager {
@@ -21,6 +22,8 @@ private:
 	int loopsToNext;
 	int alto;
 	int ancho;
+
+	Resource* getNewResource();
 };
 
 #endif /* UTILS_RESOURCESMANAGER_H_ */
