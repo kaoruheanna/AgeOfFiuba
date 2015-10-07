@@ -18,7 +18,6 @@ public:
 	View(std::string type);
 	virtual ~View();
 	virtual void render(Renderer* renderer);
-	virtual void render(Renderer* renderer, bool iso);
 	void setDrawable(Drawable *drawable);
 	void setOrigin(int x, int y);
 	std::string getType();
