@@ -7,6 +7,7 @@
 
 #include "MiniMapMenu.h"
 #include "../Renderer.h"
+#include "MiniMapView.h"
 
 MiniMapMenu::MiniMapMenu(int x, int y, int width, int height) {
 	this->x = x;
@@ -16,16 +17,18 @@ MiniMapMenu::MiniMapMenu(int x, int y, int width, int height) {
 }
 
 MiniMapMenu::~MiniMapMenu() {
-	this->views.clear();
+	this->minimapViews.clear();
 }
 
 void MiniMapMenu::render(Renderer* renderer) {
-	SDL_Rect point = {this->x,this->y,this->width,this->height};
+	SDL_Rect rect = {this->x,this->y,this->width,this->height};
 	SDL_Color color = {0,0,0};
-	renderer->draw(point,color);
+	renderer->draw(rect,color);
 }
 
 void MiniMapMenu::addView(View* view){
-	this->views.push_back(view);
+	SDL_Rect rect = {this->x,this->y,this->width,this->height};
+	MiniMapView *minimapView = new MiniMapView(view,rect);
+	this->minimapViews.push_back(minimapView);
 }
 

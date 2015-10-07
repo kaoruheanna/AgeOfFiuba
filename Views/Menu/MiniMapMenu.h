@@ -8,8 +8,9 @@
 #ifndef MINIMAPMENU_H_
 #define MINIMAPMENU_H_
 
-#include "../View.h"
+#include "MiniMapView.h"
 #include <list>
+using namespace std;
 
 class Renderer;
 
@@ -23,7 +24,7 @@ public:
 private:
 	int x,y;
 	int width,height;
-	list<View*> views;
+	list<MiniMapView*> minimapViews;
 };
 
 #endif /* MINIMAPMENU_H_ */
