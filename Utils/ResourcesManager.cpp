@@ -11,20 +11,27 @@
 const int LOOPS_DIFF = 200;
 const string TAG = "ResourcesManager";
 
-ResourcesManager::ResourcesManager(int ancho,int alto) {
+ResourcesManager::ResourcesManager(Escenario *escenario) {
 	this->loopsToNext = 0;
-	this->ancho = ancho;
-	this->alto = alto;
+	this->escenario = escenario;
 }
 
 ResourcesManager::~ResourcesManager() {}
 
 Resource* ResourcesManager::getNewResource() {
-	int posicionX = rand() % this->ancho;
-	int posicionY = rand() % this->alto;
+	int posicionX = rand() % this->escenario->mundo->getWidth();
+	int posicionY = rand() % this->escenario->mundo->getHeight();
 	Log().Get(TAG) << "Agregar en posicion" << posicionX << "," << posicionY;
-
-	return new Resource("piedra", { posicionX, posicionY });
+	Resource *resource = (Resource*)this->escenario->crearEntidad("piedra",{ posicionX, posicionY },false);
+	if(resource == NULL){
+		Log().Get("Escenario", logWARNING) << "La entidad  del escenario  no pudo ser creada.";
+	} else {
+		if(!this->escenario->construirEntidad(resource, resource->getPosicion())){
+			delete resource;
+			Log().Get("Escenario", logWARNING) << "La entidad N°  del escenario  no fue agregada al mapa. La misma no puede estar en la misma posicion que otra entidad.";
+		}
+	}
+	return resource;
 }
 
 list<Entity*> ResourcesManager::InsertResourcesForNewLoopOnMap() {

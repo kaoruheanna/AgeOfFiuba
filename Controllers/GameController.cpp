@@ -86,7 +86,7 @@ bool GameController::play() {
 	initWindowSizes();
 
 	//Inicializar resources Manager
-	this->resourcesManager = new ResourcesManager(config->getTamanioX(),config->getTamanioY());
+	this->resourcesManager = new ResourcesManager(this->escenario);
 
 	bool shouldRestart = false;
 	//While application is running

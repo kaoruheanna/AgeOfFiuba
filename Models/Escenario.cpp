@@ -3,7 +3,6 @@
 #include "../GlobalConstants.h"
 
 Escenario::Escenario(EscenarioConfig escenario, list<TipoConfig> tipos) {
-	map<string, SDL_Point> sizeByType;
 	list<TipoConfig>::iterator tipo;
 	for (tipo = tipos.begin(); tipo != tipos.end(); ++tipo){
 		sizeByType.insert(
@@ -22,7 +21,7 @@ Escenario::Escenario(EscenarioConfig escenario, list<TipoConfig> tipos) {
 		Log().Get("Escenario", logWARNING) << "El escenario " << this->name << " tiene que ser al menos una unidad de alto. Cargando escenario default.";
 	} else {
 		this->mundo = new Map(escenario.getSizeX(), escenario.getSizeY(),TILE_WIDTH_PIXELS,TILE_HEIGHT_PIXELS);
-		Entity* protagonista = this->crearEntidad(escenario.getProtagonista(), sizeByType, true);
+		Entity* protagonista = this->crearEntidad(escenario.getProtagonista(), true);
 		if(protagonista == NULL){
 			Log().Get("Escenario", logWARNING) << "El escenario " << this->name << " no pudo crear al protagonista. Cargando escenario default.";
 		} else if(!this->agregarEntidad(protagonista)){
@@ -34,7 +33,7 @@ Escenario::Escenario(EscenarioConfig escenario, list<TipoConfig> tipos) {
 			list<EntidadConfig> configs = escenario.getEntidades();
 			int indice = 0;
 			for (configEntidad = configs.begin(); configEntidad != configs.end(); ++configEntidad){
-				Entity* entidad = this->crearEntidad(*configEntidad, sizeByType, false);
+				Entity* entidad = this->crearEntidad(*configEntidad, false);
 				if(entidad == NULL){
 					Log().Get("Escenario", logWARNING) << "La entidad N° "<< indice <<" del escenario " << this->name << " no pudo ser creada.";
 				} else {
@@ -84,48 +83,61 @@ list<Entity*> Escenario::getListaEntidades(){
 	return this->entidades;
 }
 
-
-Entity* Escenario::crearEntidad(EntidadConfig config, map<string, SDL_Point> sizeByType, bool esProtagonista) {
+Entity* Escenario::crearEntidad(const string& tipo, SDL_Point posicion,
+		bool esProtagonista) {
 	Entity* entidad = NULL;
-	if(config.getTipo() == ""){
-		Log().Get("Escenario", logWARNING) << "La entidad tiene que tener un tipo. Descartando entidad.";
+	if (tipo == "") {
+		Log().Get("Escenario", logWARNING)
+				<< "La entidad tiene que tener un tipo. Descartando entidad.";
 	} else {
-		SDL_Point posicion = {
-			config.getX(), config.getY()
-		};
-		if(posicion.x < 0 || posicion.x >= this->mundo->getWidth()){
+		if (posicion.x < 0 || posicion.x >= this->mundo->getWidth()) {
 			posicion.x = 0;
-			Log().Get("Escenario", logWARNING) << "La entidad " << config.getTipo() << " esta fuera del mapa en ancho. Asumida posicion x = 0.";
+			Log().Get("Escenario", logWARNING) << "La entidad " << tipo
+					<< " esta fuera del mapa en ancho. Asumida posicion x = 0.";
 		}
-		if(posicion.y < 0 || posicion.y >= this->mundo->getHeight()){
+		if (posicion.y < 0 || posicion.y >= this->mundo->getHeight()) {
 			posicion.y = 0;
-			Log().Get("Escenario", logWARNING) << "La entidad " << config.getTipo() << " esta fuera del mapa en alto. Asumida posicion y = 0.";
+			Log().Get("Escenario", logWARNING) << "La entidad " << tipo
+					<< " esta fuera del mapa en alto. Asumida posicion y = 0.";
 		}
 		// Cambia de coordenadas tile a coordenadas mapa "pixel"
 		posicion = this->mundo->getPositionForTile(posicion);
-		map<string, SDL_Point>::iterator found = sizeByType.find(config.getTipo());
+		map<string, SDL_Point>::iterator found = sizeByType.find(tipo);
 		SDL_Point size = { 1, 1 };
-		if(found != sizeByType.end()){
+		if (found != sizeByType.end()) {
 			size = found->second;
 		} else {
-			Log().Get("Escenario",logWARNING) << "No se encontro el tipo "<< config.getTipo() <<". Usando tamaño de la base 1x1.";
+			Log().Get("Escenario", logWARNING) << "No se encontro el tipo "
+					<< tipo << ". Usando tamaño de la base 1x1.";
 		}
-		if(size.x < 1){
+		if (size.x < 1) {
 			size.x = 1;
-			Log().Get("Escenario",logWARNING) << "Ancho de base del tipo "<< config.getTipo() <<" no puede ser menor a una unidad. Usando una unidad de ancho.";
+			Log().Get("Escenario", logWARNING) << "Ancho de base del tipo "
+					<< tipo
+					<< " no puede ser menor a una unidad. Usando una unidad de ancho.";
 		}
-		if(size.y < 1){
+		if (size.y < 1) {
 			size.y = 1;
-			Log().Get("Escenario",logWARNING) << "Alto de base del tipo "<< config.getTipo() <<" no puede ser menor a una unidad. Usando una unidad de alto.";
+			Log().Get("Escenario", logWARNING) << "Alto de base del tipo "
+					<< tipo
+					<< " no puede ser menor a una unidad. Usando una unidad de alto.";
 		}
-		if(esProtagonista){
-			this->protagonista = new MobileModel(config.getTipo(), posicion, size.x, size.y);
+		if (esProtagonista) {
+			this->protagonista = new MobileModel(tipo, posicion, size.x,
+					size.y);
 			entidad = this->protagonista;
 		} else {
-			entidad = new Entity(config.getTipo(), posicion, size.x, size.y);
+			entidad = new Entity(tipo, posicion, size.x, size.y);
 		}
 	}
 	return entidad;
+}
+
+Entity* Escenario::crearEntidad(EntidadConfig config, bool esProtagonista) {
+	SDL_Point posicion = {config.getX(), config.getY()};
+	string tipo = config.getTipo();
+
+	return crearEntidad(tipo, posicion, esProtagonista);
 }
 
 void Escenario::vaciarEntidades(){

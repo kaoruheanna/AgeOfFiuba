@@ -13,6 +13,10 @@ tipos:
 
  - nombre: piedra
    imagen: img/Mossy_Stone_Brick.png
+   ancho_base: 1
+   alto_base : 1
+   pixel_ref_x: 25
+   pixel_ref_y: 25
 
  - nombre: casa
    imagen: img/casa2x2.png

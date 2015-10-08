@@ -14,15 +14,14 @@
 
 class ResourcesManager {
 public:
-	ResourcesManager(int ancho,int alto);
+	ResourcesManager(Escenario *escenario);
 	virtual ~ResourcesManager();
 
 	list<Entity*> InsertResourcesForNewLoopOnMap();
 private:
 	int loopsToNext;
-	int alto;
-	int ancho;
 
+	Escenario *escenario;
 	Resource* getNewResource();
 };
 
