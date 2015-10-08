@@ -12,7 +12,10 @@ const int DELAY_MILISEC = 20; //50 frames por segundo
 const int PROTAGONISTA_SPEED = 5;
 const int SCROLL_SPEED = 20;
 const int MENU_HEIGHT = 130;
+const int MENU_SPACING = 10;
 
+//TILES
+const std::string TILE_DEFAULT = "tileDefault";
 const int TILE_WIDTH_PIXELS = 128;
 const int TILE_HEIGHT_PIXELS = 64;
 

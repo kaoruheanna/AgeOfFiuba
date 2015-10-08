@@ -65,3 +65,101 @@ bool TileSet::sectorEstaBloqueado(SDL_Point origen, SDL_Point fin){
 
 	return false;
 }
+
+//Devuelve todas las posiciones adyacentes a la baldosa, por las que se puede caminar
+std::list<Posicion> TileSet::vecinos(Posicion baldosa){
+	list<Posicion>lista_de_vecinos;
+	int x = baldosa.first;
+	int y = baldosa.second;
+	for (int i=-1; i<2; i++){
+		for (int j=-1; j<2; j++){
+			int x_v = x+i;
+			int y_v = y+j;
+			if (this->esVecino({x_v,y_v},baldosa)){
+					lista_de_vecinos.push_front({x_v,y_v});
+			}
+		}
+	}
+	return lista_de_vecinos;
+}
+
+
+//Devuelve el valor heuristico de ir de "a" a "b"
+int TileSet::distancia(Posicion a, Posicion b){
+	return sqrt( pow((b.first - a.first),2) + pow((b.second - a.second), 2));
+}
+
+//Devuelve el valor de ir de "a" a "b" en la grilla (a y b son vecinos)
+//Devuelve -1 si la arista no existe
+int TileSet::valorArista(Posicion a, Posicion b){
+	if  (!(this->esVecino(a,b))){
+		return -1;
+	}
+	return this->distancia(a,b);
+}
+
+bool TileSet::esVecino(Posicion a, Posicion b){
+	if (a.first >= 0 and a.second >= 0 and a.first < this->ancho and a.second < this->alto){
+		if (b.first >= 0 and b.second >= 0 and b.first < this->ancho and b.second < this->alto){
+			if (this->distancia(a,b) >= 1 and (this->distancia(a,b)) < 2){
+				if (!(this->matriz[a.first][a.second])or(this->matriz[b.first][b.second])){
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
+pointMap TileSet::caminoMinimo(Posicion origen, Posicion destino, Posicion *destino_alternativo){
+	PriorityQueue<Posicion> frontera;
+	frontera.put(origen, 0);
+	pointMap desde_donde_vino;
+	costMap costo_hasta_ahora;
+
+	desde_donde_vino [origen] = origen;
+	costo_hasta_ahora[origen] = 0;
+
+	while (!frontera.empty()) {
+		Posicion actual = frontera.get();
+		Posicion posible_destino;
+		if (actual == destino) {
+			destino_alternativo = &destino;
+			return desde_donde_vino;
+		}
+
+		for (Posicion prox : this->vecinos(actual)) {
+			int nuevo_costo = costo_hasta_ahora[actual] + this->valorArista(actual, prox);
+			if (!costo_hasta_ahora.count(prox) || nuevo_costo < costo_hasta_ahora[prox]) {
+				costo_hasta_ahora[prox] = nuevo_costo;
+				int prioridad = nuevo_costo + this->distancia(prox, destino); // distancia es la heuristica
+				frontera.put(prox, prioridad);
+				desde_donde_vino[prox] = actual;
+				posible_destino = prox;
+			}
+		}
+		if (frontera.empty()){
+			destino_alternativo = &posible_destino;
+		}
+	}
+	return desde_donde_vino; // si sale del while es porque no llego al destino, el camino es hasta el lugar mas cercano al destino.
+}
+
+list<SDL_Point> TileSet::obtenerCamino(SDL_Point origen, SDL_Point destino){
+	Posicion des;
+	pointMap lugares = this->caminoMinimo({origen.x,origen.y},{destino.x,destino.y}, &des);
+	list<SDL_Point> camino;
+	//Posicion des = {destino.x, destino.y};
+	Posicion orig = {origen.x, origen.y};
+
+	if (lugares.empty()){ //si no tengo un camino
+		camino.push_front(origen);
+		return camino; //si no existe el camino minimo devuelvo el origen.
+	}
+	Posicion actual = des;
+	while (actual != orig){
+		camino.push_front({actual.first,actual.second});
+		actual = lugares[actual];
+	}
+	return camino;
+}

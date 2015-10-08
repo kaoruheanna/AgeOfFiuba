@@ -1,5 +1,5 @@
 /*
- * TileSet.h
+* TileSet.h
  *
  *  Created on: 08/09/2015
  *      Author: fedelonghi
@@ -11,6 +11,42 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 #include <string>
+#include <list>
+#include <queue>
+#include <vector>
+#include <math.h>
+#include <unordered_map>
+#include <map>
+#include <utility>
+
+using namespace std;
+
+typedef pair <int,int> Posicion;
+
+// unordered map mejoraria la eficiencia
+typedef map<Posicion, Posicion> pointMap;
+typedef map<Posicion,int> costMap;
+
+template<typename T, typename Number=int>
+
+struct PriorityQueue {
+
+	typedef pair<Number, T> PQElement;
+
+	priority_queue<PQElement, vector<PQElement>, std::greater<PQElement> > elements;
+
+	inline bool empty() {return elements.empty();}
+
+	inline void put(T item, Number priority) {
+		elements.emplace(priority, item);
+	}
+
+	inline T get() {
+		T best_item = elements.top().second;
+		elements.pop();
+		return best_item;
+	}
+};
 
 class TileSet {
 	/* El tileSet esta constituido por una matriz
@@ -27,6 +63,14 @@ public:
 	bool setTileConstruible(SDL_Point);
 	bool setTileInconstruible(SDL_Point);
 	bool sectorEstaBloqueado(SDL_Point, SDL_Point);
+
+	std::list<Posicion> vecinos(Posicion baldosa);
+	int distancia(Posicion a, Posicion b); // heuristica a usar en A* (distancia euclideana)
+	int valorArista(Posicion a, Posicion b);
+	bool esVecino(Posicion a, Posicion b);
+	pointMap caminoMinimo(Posicion origen, Posicion destino, Posicion *destino_alternativo);
+	list<SDL_Point> obtenerCamino(SDL_Point origen, SDL_Point destino);
+
 	virtual ~TileSet();
 };
 

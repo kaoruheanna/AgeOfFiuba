@@ -10,23 +10,19 @@
 
 class Renderer;
 class StatusMenu;
-class MiniMapMenu;
+class View;
 
 class ScreenMenu {
 
 public:
-	ScreenMenu(int x, int y, int width, int height);
+	ScreenMenu(int width, int height);
 	virtual ~ScreenMenu();
 	void render(Renderer* renderer);
-	int getY();
 
 private:
-	int x;
-	int y;
 	int width;
 	int height;
 	StatusMenu *statusMenu;
-	MiniMapMenu *miniMapMenu;
 };
 
 #endif /* SCREENMENU_H_ */
