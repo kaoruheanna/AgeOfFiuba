@@ -8,9 +8,12 @@
 #ifndef UTILS_RESOURCESMANAGER_H_
 #define UTILS_RESOURCESMANAGER_H_
 
-#include "../Models/Escenario.h"
 #include "../Models/Resource.h"
 #include <SDL2/SDL.h>
+#include <list>
+
+class Escenario;
+using namespace std;
 
 class ResourcesManager {
 public:

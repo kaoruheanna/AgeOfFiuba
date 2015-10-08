@@ -13,6 +13,7 @@
 #include "../Configuration/EscenarioConfig.h"
 #include "../Configuration/TipoConfig.h"
 #include "../Factories/EntityFactory.h"
+#include "../Utils/ResourcesManager.h"
 
 using namespace std;
 
@@ -20,7 +21,10 @@ class Escenario {
 	private:
 		string name;
 		list<Entity*> entidades;
+		list<Entity*> entidadesASacar;
+		list<Entity*> entidadesAInsertar;
 		MobileModel* protagonista;
+		ResourcesManager* resourcesManager;
 
 	public:
 		Map* mundo;
@@ -30,6 +34,10 @@ class Escenario {
 		bool agregarEntidad(Entity*);
 		bool construirEntidad(Entity*,SDL_Point);
 		void vaciarEntidades();
+		void loop();
+		list<Entity*> getEntidadesAInsertar();
+		list<Entity*> getEntidadesASacar();
+
 		SDL_Point getSize();
 		Entity* crearEntidad(EntidadConfig config, bool esProtagonista);
 		Entity* crearEntidad(const string& tipo, SDL_Point posicion, bool esProtagonista);

@@ -5,7 +5,7 @@
  *      Author: dario
  */
 
-#include "ResourcesManager.h"
+#include "../Models/Escenario.h"
 #include "../Utils/Log.h"
 
 const int LOOPS_DIFF = 200;

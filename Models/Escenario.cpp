@@ -55,6 +55,8 @@ Escenario::Escenario(EscenarioConfig escenario, list<TipoConfig> tipos) {
 		delete this->mundo;
 		this->mundo = NULL;
 	}
+	//Inicializar resources Manager
+	this->resourcesManager = new ResourcesManager(this);
 }
 
 Escenario::~Escenario(){
@@ -88,7 +90,19 @@ list<Entity*> Escenario::getListaEntidades(){
 	return this->entidades;
 }
 
+//Actualiza todos los modelos en un nuevo loop
+void Escenario::loop() {
+	protagonista->updatePosition();
+	entidadesAInsertar = resourcesManager->InsertResourcesForNewLoopOnMap();
+}
 
+list<Entity*> Escenario::getEntidadesAInsertar() {
+	return entidadesAInsertar;
+}
+
+list<Entity*> Escenario::getEntidadesASacar() {
+	return entidadesASacar;
+}
 
 Entity* Escenario::crearEntidad(EntidadConfig config, bool esProtagonista) {
 	SDL_Point posicion = {config.getX(), config.getY()};

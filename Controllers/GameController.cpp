@@ -44,6 +44,16 @@ void GameController::agregarEntidades(list<Entity*> entidades) {
 	}
 }
 
+void GameController::removerEntidades(list<Entity*> entidades) {
+	Log().Get(TAG) << "removerEntidades";
+}
+
+void GameController::loopEscenario() {
+	this->escenario->loop();
+	agregarEntidades(this->escenario->getEntidadesAInsertar());
+	removerEntidades(this->escenario->getEntidadesASacar());
+}
+
 bool GameController::play() {
 	this->renderer = new Renderer(this->config->getPantallaAncho(),this->config->getPantallaAlto(), this->config->getTipos());
 	if (!this->renderer->canDraw()){
@@ -85,18 +95,15 @@ bool GameController::play() {
 
 	initWindowSizes();
 
-	//Inicializar resources Manager
-	this->resourcesManager = new ResourcesManager(this->escenario);
 
 	bool shouldRestart = false;
 	//While application is running
 	while( !this->shouldQuit && !shouldRestart ) {
 		this->updateWindow();
 		shouldRestart = this->pollEvents();
-		this->escenario->getProtagonista()->updatePosition();
+		this->loopEscenario();
 		this->renderer->drawViews();
 		this->sleep();
-		agregarEntidades(this->resourcesManager->InsertResourcesForNewLoopOnMap());
 	}
 
 	this->close();
