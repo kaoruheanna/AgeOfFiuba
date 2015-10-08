@@ -12,6 +12,7 @@
 #include "MobileModel.h"
 #include "../Configuration/EscenarioConfig.h"
 #include "../Configuration/TipoConfig.h"
+#include "../Factories/EntityFactory.h"
 
 using namespace std;
 
@@ -21,11 +22,9 @@ class Escenario {
 		list<Entity*> entidades;
 		MobileModel* protagonista;
 
-		//entidades
 	public:
 		Map* mundo;
-		map<string, SDL_Point> sizeByType;
-
+		EntityFactory *factory;
 		string toString ();
 
 		bool agregarEntidad(Entity*);

@@ -3,12 +3,14 @@
 #include "../GlobalConstants.h"
 
 Escenario::Escenario(EscenarioConfig escenario, list<TipoConfig> tipos) {
+	map<string, SDL_Point> sizeByType;
 	list<TipoConfig>::iterator tipo;
 	for (tipo = tipos.begin(); tipo != tipos.end(); ++tipo){
 		sizeByType.insert(
 			pair<string, SDL_Point>(tipo->getNombre(), { tipo->getAnchoBase(), tipo->getAltoBase() })
 		);
 	}
+
 	this->name = escenario.getNombre();
 	this->inicializacionCorrecta = false;
 	if(this->name == ""){
@@ -21,7 +23,10 @@ Escenario::Escenario(EscenarioConfig escenario, list<TipoConfig> tipos) {
 		Log().Get("Escenario", logWARNING) << "El escenario " << this->name << " tiene que ser al menos una unidad de alto. Cargando escenario default.";
 	} else {
 		this->mundo = new Map(escenario.getSizeX(), escenario.getSizeY(),TILE_WIDTH_PIXELS,TILE_HEIGHT_PIXELS);
-		Entity* protagonista = this->crearEntidad(escenario.getProtagonista(), true);
+		factory = new EntityFactory(this->mundo, sizeByType);
+
+		this->protagonista =  factory->crearProtagonista(escenario.getProtagonista().getTipo(),
+											{escenario.getProtagonista().getX(), escenario.getProtagonista().getY()});
 		if(protagonista == NULL){
 			Log().Get("Escenario", logWARNING) << "El escenario " << this->name << " no pudo crear al protagonista. Cargando escenario default.";
 		} else if(!this->agregarEntidad(protagonista)){
@@ -83,61 +88,13 @@ list<Entity*> Escenario::getListaEntidades(){
 	return this->entidades;
 }
 
-Entity* Escenario::crearEntidad(const string& tipo, SDL_Point posicion,
-		bool esProtagonista) {
-	Entity* entidad = NULL;
-	if (tipo == "") {
-		Log().Get("Escenario", logWARNING)
-				<< "La entidad tiene que tener un tipo. Descartando entidad.";
-	} else {
-		if (posicion.x < 0 || posicion.x >= this->mundo->getWidth()) {
-			posicion.x = 0;
-			Log().Get("Escenario", logWARNING) << "La entidad " << tipo
-					<< " esta fuera del mapa en ancho. Asumida posicion x = 0.";
-		}
-		if (posicion.y < 0 || posicion.y >= this->mundo->getHeight()) {
-			posicion.y = 0;
-			Log().Get("Escenario", logWARNING) << "La entidad " << tipo
-					<< " esta fuera del mapa en alto. Asumida posicion y = 0.";
-		}
-		// Cambia de coordenadas tile a coordenadas mapa "pixel"
-		posicion = this->mundo->getPositionForTile(posicion);
-		map<string, SDL_Point>::iterator found = sizeByType.find(tipo);
-		SDL_Point size = { 1, 1 };
-		if (found != sizeByType.end()) {
-			size = found->second;
-		} else {
-			Log().Get("Escenario", logWARNING) << "No se encontro el tipo "
-					<< tipo << ". Usando tamaño de la base 1x1.";
-		}
-		if (size.x < 1) {
-			size.x = 1;
-			Log().Get("Escenario", logWARNING) << "Ancho de base del tipo "
-					<< tipo
-					<< " no puede ser menor a una unidad. Usando una unidad de ancho.";
-		}
-		if (size.y < 1) {
-			size.y = 1;
-			Log().Get("Escenario", logWARNING) << "Alto de base del tipo "
-					<< tipo
-					<< " no puede ser menor a una unidad. Usando una unidad de alto.";
-		}
-		if (esProtagonista) {
-			this->protagonista = new MobileModel(tipo, posicion, size.x,
-					size.y);
-			entidad = this->protagonista;
-		} else {
-			entidad = new Entity(tipo, posicion, size.x, size.y);
-		}
-	}
-	return entidad;
-}
+
 
 Entity* Escenario::crearEntidad(EntidadConfig config, bool esProtagonista) {
 	SDL_Point posicion = {config.getX(), config.getY()};
 	string tipo = config.getTipo();
 
-	return crearEntidad(tipo, posicion, esProtagonista);
+	return factory->crearEntidad(tipo, posicion, esProtagonista);
 }
 
 void Escenario::vaciarEntidades(){
