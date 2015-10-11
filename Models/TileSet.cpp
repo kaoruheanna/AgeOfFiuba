@@ -116,6 +116,7 @@ bool TileSet::esVecino(SDL_Point a, SDL_Point b){
 	return false;
 }
 
+/*
 pointMap TileSet::caminoMinimo(SDL_Point origen, SDL_Point destino){
 	PriorityQueue<SDL_Point> frontera;
 	frontera.put(origen, 0);
@@ -124,21 +125,22 @@ pointMap TileSet::caminoMinimo(SDL_Point origen, SDL_Point destino){
 	desde_donde_vino [origen] = origen;
 	costo_hasta_ahora[origen] = 0;
 
-	while (!frontera.empty()) {
-		auto actual = frontera.get();
+	while (true){//(!frontera.empty()) {
+		SDL_Point actual = frontera.get();
 		if (actual.x == destino.x and actual.y == destino.y) {
 			return desde_donde_vino;
 		}
 
-		for (auto prox : this->vecinos(actual)) {
+		for (SDL_Point prox : this->vecinos(actual)) {
 			int nuevo_costo = costo_hasta_ahora[actual] + this->valorArista(actual, prox);
 			if (!costo_hasta_ahora.count(prox) || nuevo_costo < costo_hasta_ahora[prox]) {
 				costo_hasta_ahora[prox] = nuevo_costo;
 				int prioridad = nuevo_costo + this->distancia(prox, destino); // distancia es la heuristica
-				frontera.put(prox, prioridad);
+				//frontera.put(prox, prioridad);
 				desde_donde_vino[prox] = actual;
 			}
 		}
 	}
 	return desde_donde_vino; // si sale del while es porque no llego al destino, el camino es hasta el lugar mas cercano al destino.
 }
+*/

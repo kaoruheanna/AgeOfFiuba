@@ -1,5 +1,5 @@
 /*
- * TileSet.h
+* TileSet.h
  *
  *  Created on: 08/09/2015
  *      Author: fedelonghi
@@ -18,7 +18,8 @@
 #include <map>
 
 using namespace std;
-/* unordered map mejoraria la eficiencia */
+/*
+// unordered map mejoraria la eficiencia
 typedef map<SDL_Point,SDL_Point> pointMap;
 typedef map<SDL_Point,int> costMap;
 
@@ -26,10 +27,12 @@ typedef map<SDL_Point,int> costMap;
 template<typename T, typename Number=int>
 
 struct PriorityQueue {
+
 	typedef pair<Number, T> PQElement;
+
 	priority_queue<PQElement, vector<PQElement>, std::greater<PQElement> > elements;
 
-	inline bool empty() { return elements.empty(); }
+	inline bool empty() {return elements.empty();}
 
 	inline void put(T item, Number priority) {
 		elements.emplace(priority, item);
@@ -40,7 +43,7 @@ struct PriorityQueue {
 		elements.pop();
 		return best_item;
 	}
-};
+};*/
 
 class TileSet {
 	/* El tileSet esta constituido por una matriz
@@ -63,7 +66,7 @@ public:
 	int distancia(SDL_Point a, SDL_Point b); // heuristica a usar en A* (distancia euclideana)
 	int valorArista(SDL_Point a, SDL_Point b);
 	bool esVecino(SDL_Point a, SDL_Point b);
-	pointMap caminoMinimo(SDL_Point origen, SDL_Point destino);
+	//pointMap caminoMinimo(SDL_Point origen, SDL_Point destino);
 
 	virtual ~TileSet();
 };
