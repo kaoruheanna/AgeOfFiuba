@@ -26,7 +26,14 @@ EscenarioView::~EscenarioView() {
 }
 
 void EscenarioView::render(Renderer* renderer){
+	//draw Tiles
 	this->mapView->render(renderer);
+
+	list<View*>::iterator i;
+	for(i=this->entitiesViews.begin(); i != this->entitiesViews.end(); ++i) {
+		View* view = *i;
+		view->render(renderer);
+	}
 }
 
 MapView* EscenarioView::getMapView(){

@@ -8,10 +8,8 @@
 #ifndef GAMECONTROLLER_H_
 #define GAMECONTROLLER_H_
 
-//#include "../Views/View.h"
 #include "../Views/Renderer.h"
 #include "../Models/MobileModel.h"
-//#include <list>
 #include "../Configuration/GameConfiguration.h"
 #include "../Models/Escenario.h"
 #include "../Utils/ResourcesManager.h"
@@ -29,7 +27,6 @@ public:
 private:
 	bool shouldQuit;
 	EscenarioView *escenarioView;
-//	list<View*> views;
 	Renderer *renderer;
 	Escenario* escenario;
 	GameConfiguration *config;

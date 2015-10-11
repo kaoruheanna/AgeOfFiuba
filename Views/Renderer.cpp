@@ -198,13 +198,6 @@ void Renderer::drawEscenario() {
 
 	this->escenarioView->render(this);
 
-	list<View*>* entitiesViews = this->escenarioView->getEntitiesView();
-	list<View*>::iterator i;
-	for(i=entitiesViews->begin(); i != entitiesViews->end(); ++i) {
-		View* view = *i;
-		view->render(this);
-	}
-
 	// Order the views in the "paintor style" drawing
 	this->drawablesToPaint.sort(drawOrder);
 

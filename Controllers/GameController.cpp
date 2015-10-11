@@ -39,8 +39,6 @@ void GameController::agregarEntidades(list<Entity*> entidades) {
 		if (entidadReal != this->escenario->getProtagonista()) {
 			EntityView* entityView = new EntityView(entidadReal->getNombre());
 			entityView->setModel(entidadReal);
-//			this->views.push_back(entityView);
-//			this->renderer->addView(entityView);
 			this->escenarioView->addEntityView(entityView);
 			this->renderer->updatedEscenario();
 		}
@@ -76,8 +74,6 @@ bool GameController::play() {
 	mapView->setModel(this->escenario->mundo);
 	this->escenarioView = new EscenarioView(mapView);
 	this->renderer->setEscenarioView(this->escenarioView);
-//	this->views.push_back(mapView);
-//	this->renderer->addView(mapView);
 
 	// Agrego todas las vistas (siempre que no sean el protagonista)
 	list<Entity*> entidades = escenario->getListaEntidades();
@@ -86,8 +82,6 @@ bool GameController::play() {
 	// Agrego vista del personaje
 	MobileView *marioView = new MobileView(this->escenario->getProtagonista()->getNombre());
 	marioView->setModel(this->escenario->getProtagonista());
-//	this->views.push_back(marioView);
-//	this->renderer->addView(marioView);
 	this->escenarioView->addEntityView(marioView);
 	this->renderer->updatedEscenario();
 
@@ -239,13 +233,6 @@ void GameController::close() {
 		this->renderer->close();
 		delete this->renderer;
 	}
-
-//	list<View*>::iterator i;
-//	for(i=this->views.begin(); i != this->views.end(); ++i) {
-//		View* view = *i;
-//		delete view;
-//	}
-//	this->views.clear();
 
 	delete this->escenarioView;
 	this->escenarioView = NULL;
