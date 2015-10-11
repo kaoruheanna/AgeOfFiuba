@@ -16,18 +16,15 @@
 #include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <string>
-#include "View.h"
 #include "Drawable.h"
 #include <list>
 #include <map>
 #include "../Configuration/TipoConfig.h"
 #include "Menu/ScreenMenu.h"
-
-class EscenarioView;
-
 using namespace std;
 
 class View;
+class EscenarioView;
 
 class Renderer {
 public:
@@ -53,7 +50,6 @@ private:
 	bool successfullInit;
 	SDL_Window* window;
 	SDL_Renderer* sdlRenderer;
-	list<View*> views;
 	list< pair<SDL_Point,Drawable*> > drawablesToPaint;
 	std::map<std::string, Drawable*> drawablesByInstanceName;
 	Drawable* missingImageDrawable;
