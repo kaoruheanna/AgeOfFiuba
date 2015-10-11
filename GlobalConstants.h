@@ -17,7 +17,7 @@ const int TILE_WIDTH_PIXELS = 128;
 const int TILE_HEIGHT_PIXELS = 64;
 
 const std::string CONFIG_DEFAULT = "yaml-files/configuracion.yaml";
-const std::string CONFIG_CUSTOM = "yaml-files/configuracionMapa.yaml";
+const std::string CONFIG_CUSTOM = "yaml-files/_configuracionMapa.yaml";
 
 
 #endif /* GLOBALCONSTANTS_H_ */
