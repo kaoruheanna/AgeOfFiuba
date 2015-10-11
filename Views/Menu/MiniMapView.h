@@ -8,20 +8,21 @@
 #ifndef MINIMAPVIEW_H_
 #define MINIMAPVIEW_H_
 
-#include <SDL2/SDL.h>
+#include "MiniView.h"
 
 class View;
 class Renderer;
+class Map;
 
-class MiniMapView {
+class MiniMapView: public MiniView {
 public:
-	MiniMapView(View* view,SDL_Rect superviewRect);
+	MiniMapView(std::string type);
 	virtual ~MiniMapView();
-	void render(Renderer* renderer);
+	void setModel(Map *model);
+	virtual void render(Renderer* renderer);
 
 private:
-	View *view;
-	SDL_Rect superviewRect;
+	Map *model;
 };
 
 #endif /* MINIMAPVIEW_H_ */

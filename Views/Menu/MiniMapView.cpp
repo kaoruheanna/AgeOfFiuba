@@ -8,16 +8,27 @@
 #include "MiniMapView.h"
 #include "../View.h"
 #include "../Renderer.h"
+#include "../../Models/Map.h"
 
-MiniMapView::MiniMapView(View* view,SDL_Rect superviewRect) {
-	this->view = view;
-	this->superviewRect = superviewRect;
+MiniMapView::MiniMapView(std::string type): MiniView(type) {
+	this->model = NULL;
 }
 
 MiniMapView::~MiniMapView() {
-	this->view = NULL;
+	this->model = NULL;
 }
 
-void MiniMapView::render(Renderer* renderer){
+void MiniMapView::setModel(Map *model) {
+	this->model = model;
+}
 
+void MiniMapView::render(Renderer* renderer ){
+	int width = this->model->getWidth();
+	int height = this->model->getHeight();
+	for (int i=0; i<width ; i++){
+		for (int j=0; j<height; j++){
+			SDL_Point point = this->model->getPositionForTile({ j, i });
+			renderer->drawInMiniMap(point.x, point.y, this->drawable);
+		}
+	}
 }

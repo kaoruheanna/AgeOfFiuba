@@ -10,7 +10,6 @@
 
 class Renderer;
 class StatusMenu;
-class MiniMapMenu;
 class View;
 
 class ScreenMenu {
@@ -25,7 +24,6 @@ private:
 	int width;
 	int height;
 	StatusMenu *statusMenu;
-	MiniMapMenu *miniMapMenu;
 };
 
 #endif /* SCREENMENU_H_ */

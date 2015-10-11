@@ -8,33 +8,33 @@
 #include "ScreenMenu.h"
 #include "../Renderer.h"
 #include "StatusMenu.h"
-#include "MiniMapMenu.h"
-
-const int SPACING = 10;
+//#include "MiniMapMenu.h"
+#include "../../GlobalConstants.h"
 
 ScreenMenu::ScreenMenu(int width, int height) {
 	this->width = width;
 	this->height = height;
 
 	this->statusMenu = new StatusMenu(
-		SPACING,
-		SPACING,
+		MENU_SPACING,
+		MENU_SPACING,
 		width/2,
-		height-(2*SPACING)
+		height-(2*MENU_SPACING)
 	);
 
-	int minimapWidth = width / 3;
-	this->miniMapMenu = new MiniMapMenu(
-		width - SPACING - minimapWidth,
-		SPACING,
-		minimapWidth,
-		height-(2*SPACING)
-	);
+//	int minimapHeight = height-(2*MENU_SPACING);
+//	int minimapWidth = minimapHeight * 2;
+//	this->miniMapMenu = new MiniMapMenu(
+//		width - MENU_SPACING - minimapWidth,
+//		MENU_SPACING,
+//		minimapWidth,
+//		minimapHeight
+//	);
 }
 
 ScreenMenu::~ScreenMenu() {
 	delete this->statusMenu;
-	delete this->miniMapMenu;
+//	delete this->miniMapMenu;
 }
 
 void ScreenMenu::render(Renderer* renderer) {
@@ -43,10 +43,10 @@ void ScreenMenu::render(Renderer* renderer) {
 	renderer->draw(rect,color);
 
 	this->statusMenu->render(renderer);
-	this->miniMapMenu->render(renderer);
+//	this->miniMapMenu->render(renderer);
 }
 
 void ScreenMenu::addMiniMapSubview(View* view){
-	this->miniMapMenu->addView(view);
+//	this->miniMapMenu->addView(view);
 }
 

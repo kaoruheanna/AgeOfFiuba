@@ -25,10 +25,13 @@ using namespace std;
 
 class View;
 class EscenarioView;
+class MiniEscenarioView;
+class MiniView;
 
 class Renderer {
 public:
 	SDL_Point mainTilePosition;
+	SDL_Point miniMapMainTilePosition;
 	Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos);
 	virtual ~Renderer();
 	void close();
@@ -45,6 +48,9 @@ public:
 	TTF_Font* getFont();
 	void setEscenarioView(EscenarioView *escenarioView);
 	void updatedEscenario();
+	void setMiniEscenarioView(MiniEscenarioView *miniEscenarioView);
+	void updatedMiniEscenario();
+	void drawInMiniMap(int mapPositionX, int mapPositionY, Drawable* drawable);
 
 private:
 	bool successfullInit;
@@ -56,6 +62,7 @@ private:
 	ScreenMenu* screenMenu;
 	TTF_Font *textFont;
 	EscenarioView *escenarioView;
+	MiniEscenarioView *miniEscenarioView;
 	int screenWidth;
 	int screenHeight;
 
@@ -65,8 +72,10 @@ private:
 	Drawable* getDrawableFromTipoConfig(TipoConfig tipo);
 	void drawMenu();
 	void drawEscenario();
+	void drawMiniEscenario();
 	int menuOriginY();
 	void setDrawableForView(View* view);
+	void setDrawableForMiniView(MiniView* view);
 };
 
 #endif /* RENDERER_H_ */
