@@ -15,6 +15,7 @@
 #include "../Models/Escenario.h"
 #include "../Utils/Log.h"
 #include "../GlobalConstants.h"
+#include "../Views/EscenarioView.h"
 
 const std::string TAG = "GameController";
 
@@ -23,6 +24,7 @@ GameController::GameController(GameConfiguration *config) {
 	this->renderer = NULL;
 	this->config = config;
 	this->escenario = NULL;
+	this->escenarioView = NULL;
 }
 
 GameController::~GameController() {
@@ -70,8 +72,10 @@ bool GameController::play() {
 	// Crear vistas a partir de la configuracion
 	MapView *mapView = new MapView("tileDefault");
 	mapView->setModel(this->escenario->mundo);
-	this->views.push_back(mapView);
-	this->renderer->addView(mapView);
+//	this->views.push_back(mapView);
+	this->escenarioView = new EscenarioView(mapView);
+	this->renderer->setEscenarioView(this->escenarioView);
+//	this->renderer->addView(mapView);
 
 	// Agrego todas las vistas (siempre que no sean el protagonista)
 	list<Entity*> entidades = escenario->getListaEntidades();
@@ -238,6 +242,9 @@ void GameController::close() {
 		delete view;
 	}
 	this->views.clear();
+
+	delete this->escenarioView;
+	this->escenarioView = NULL;
 }
 
 void GameController::sleep(){

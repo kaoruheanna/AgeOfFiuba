@@ -9,6 +9,8 @@
 #include "Sprite.h"
 #include "../Utils/Log.h"
 #include "../GlobalConstants.h"
+#include "EscenarioView.h"
+#include "MapView.h"
 
 const std::string TAG = "Renderer";
 
@@ -17,6 +19,7 @@ Renderer::Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos) {
 	this->sdlRenderer = NULL;
 	this->missingImageDrawable = NULL;
 	this->textFont = NULL;
+	this->escenarioView = NULL;
 	this->mainTilePosition = {screenWidth/2,0}; // para que el mapa este en la mitad
 	this->screenWidth = screenWidth;
 	this->screenHeight = screenHeight;
@@ -154,6 +157,7 @@ void Renderer::close() {
 	SDL_DestroyWindow(this->window);
 	this->window = NULL;
 	this->sdlRenderer = NULL;
+	this->escenarioView = NULL;
 
 	//Quit SDL subsystems
 	IMG_Quit();
@@ -191,6 +195,8 @@ void Renderer::drawEscenario() {
 	//Clear screen
 	SDL_SetRenderDrawColor(this->sdlRenderer, 0x00, 0x00, 0x00, 0x00 );
 	SDL_RenderClear(this->sdlRenderer);
+
+	this->escenarioView->render(this);
 
 	list<View*>::iterator i;
 	for(i=this->views.begin(); i != this->views.end(); ++i) {
@@ -309,7 +315,7 @@ void Renderer::addView(View* view) {
 	}
 	view->setDrawable(drawable);
 	this->views.push_back(view);
-	this->screenMenu->addMiniMapSubview(view);
+//	this->screenMenu->addMiniMapSubview(view);
 }
 
 SDL_Renderer* Renderer::getSdlRenderer(){
@@ -322,4 +328,18 @@ TTF_Font* Renderer::getFont(){
 
 int Renderer::menuOriginY(){
 	return (this->screenHeight - MENU_HEIGHT);
+}
+
+void Renderer::setEscenarioView(EscenarioView *escenarioView){
+	this->escenarioView = escenarioView;
+	MapView *mapView = this->escenarioView->getMapView();
+	std::map<std::string,Drawable *>::iterator found = this->drawablesByInstanceName.find(mapView->getType());
+	Drawable* drawable = NULL;
+	if(found != this->drawablesByInstanceName.end()){
+		drawable = found->second;
+	} else {
+		Log().Get(TAG,logWARNING) << "No se pudo cargar la imagen: '"<<mapView->getType().c_str()<<"', usa la imagen default";
+		drawable = this->missingImageDrawable;
+	}
+	mapView->setDrawable(drawable);
 }

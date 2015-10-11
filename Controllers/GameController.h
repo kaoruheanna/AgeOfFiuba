@@ -18,6 +18,8 @@
 
 using namespace std;
 
+class EscenarioView;
+
 class GameController {
 public:
 	GameController(GameConfiguration *config);
@@ -26,6 +28,7 @@ public:
 
 private:
 	bool shouldQuit;
+	EscenarioView *escenarioView;
 	list<View*> views;
 	Renderer *renderer;
 	Escenario* escenario;

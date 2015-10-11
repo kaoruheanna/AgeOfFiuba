@@ -11,7 +11,6 @@
 #include "View.h"
 #include "../Models/Map.h"
 
-
 class MapView: public View{
 public:
 	MapView(std::string type);

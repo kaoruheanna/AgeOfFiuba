@@ -23,6 +23,8 @@
 #include "../Configuration/TipoConfig.h"
 #include "Menu/ScreenMenu.h"
 
+class EscenarioView;
+
 using namespace std;
 
 class View;
@@ -44,6 +46,7 @@ public:
 	void addView(View* view);
 	SDL_Renderer* getSdlRenderer();
 	TTF_Font* getFont();
+	void setEscenarioView(EscenarioView *escenarioView);
 
 private:
 	bool successfullInit;
@@ -66,6 +69,7 @@ private:
 	void drawMenu();
 	void drawEscenario();
 	int menuOriginY();
+	EscenarioView *escenarioView;
 };
 
 #endif /* RENDERER_H_ */
