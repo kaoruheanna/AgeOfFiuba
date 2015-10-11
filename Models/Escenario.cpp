@@ -58,6 +58,7 @@ Escenario::Escenario(EscenarioConfig escenario, list<TipoConfig> tipos) {
 }
 
 Escenario::~Escenario(){
+	this->vaciarEntidades();
 }
 
 
