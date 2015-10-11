@@ -15,6 +15,14 @@ EscenarioView::EscenarioView(MapView *mapView) {
 
 EscenarioView::~EscenarioView() {
 	delete this->mapView;
+	this->mapView = NULL;
+
+	list<View*>::iterator i;
+	for(i=this->entitiesViews.begin(); i != this->entitiesViews.end(); ++i) {
+		View* view = *i;
+		delete view;
+	}
+	this->entitiesViews.clear();
 }
 
 void EscenarioView::render(Renderer* renderer){
@@ -23,6 +31,14 @@ void EscenarioView::render(Renderer* renderer){
 
 MapView* EscenarioView::getMapView(){
 	return this->mapView;
+}
+
+void EscenarioView::addEntityView(View* view){
+	this->entitiesViews.push_back(view);
+}
+
+list<View*>* EscenarioView::getEntitiesView() {
+	return &(this->entitiesViews);
 }
 
 

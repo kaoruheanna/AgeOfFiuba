@@ -198,8 +198,9 @@ void Renderer::drawEscenario() {
 
 	this->escenarioView->render(this);
 
+	list<View*>* entitiesViews = this->escenarioView->getEntitiesView();
 	list<View*>::iterator i;
-	for(i=this->views.begin(); i != this->views.end(); ++i) {
+	for(i=entitiesViews->begin(); i != entitiesViews->end(); ++i) {
 		View* view = *i;
 		view->render(this);
 	}
@@ -304,20 +305,6 @@ bool Renderer::canDraw() {
 	return this->successfullInit;
 }
 
-void Renderer::addView(View* view) {
-	std::map<std::string,Drawable *>::iterator found = this->drawablesByInstanceName.find(view->getType());
-	Drawable* drawable = NULL;
-	if(found != this->drawablesByInstanceName.end()){
-		drawable = found->second;
-	} else {
-		Log().Get(TAG,logWARNING) << "No se pudo cargar la imagen: '"<<view->getType().c_str()<<"', usa la imagen default";
-		drawable = this->missingImageDrawable;
-	}
-	view->setDrawable(drawable);
-	this->views.push_back(view);
-//	this->screenMenu->addMiniMapSubview(view);
-}
-
 SDL_Renderer* Renderer::getSdlRenderer(){
 	return this->sdlRenderer;
 }
@@ -332,14 +319,29 @@ int Renderer::menuOriginY(){
 
 void Renderer::setEscenarioView(EscenarioView *escenarioView){
 	this->escenarioView = escenarioView;
+	this->updatedEscenario();
+}
+
+void Renderer::updatedEscenario(){
 	MapView *mapView = this->escenarioView->getMapView();
-	std::map<std::string,Drawable *>::iterator found = this->drawablesByInstanceName.find(mapView->getType());
+	this->setDrawableForView(mapView);
+
+	list<View*>* entitiesViews = this->escenarioView->getEntitiesView();
+	list<View*>::iterator i;
+	for(i=entitiesViews->begin(); i != entitiesViews->end(); ++i) {
+		View* view = *i;
+		this->setDrawableForView(view);
+	}
+}
+
+void Renderer::setDrawableForView(View* view){
+	std::map<std::string,Drawable *>::iterator found = this->drawablesByInstanceName.find(view->getType());
 	Drawable* drawable = NULL;
 	if(found != this->drawablesByInstanceName.end()){
 		drawable = found->second;
 	} else {
-		Log().Get(TAG,logWARNING) << "No se pudo cargar la imagen: '"<<mapView->getType().c_str()<<"', usa la imagen default";
+		Log().Get(TAG,logWARNING) << "No se pudo cargar la imagen: '"<<view->getType().c_str()<<"', usa la imagen default";
 		drawable = this->missingImageDrawable;
 	}
-	mapView->setDrawable(drawable);
+	view->setDrawable(drawable);
 }

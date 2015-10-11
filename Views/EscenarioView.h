@@ -20,12 +20,13 @@ public:
 	EscenarioView(MapView *mapView);
 	virtual ~EscenarioView();
 	void render(Renderer* renderer);
-//	void addView(View* view);
+	void addEntityView(View* view);
 	MapView* getMapView();
+	list<View*>* getEntitiesView();
 
 private:
 	MapView *mapView;
-	list<View*> views;
+	list<View*> entitiesViews;
 };
 
 #endif /* ESCENARIOVIEW_H_ */

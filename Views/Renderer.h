@@ -47,6 +47,7 @@ public:
 	SDL_Renderer* getSdlRenderer();
 	TTF_Font* getFont();
 	void setEscenarioView(EscenarioView *escenarioView);
+	void updatedEscenario();
 
 private:
 	bool successfullInit;
@@ -58,7 +59,7 @@ private:
 	Drawable* missingImageDrawable;
 	ScreenMenu* screenMenu;
 	TTF_Font *textFont;
-
+	EscenarioView *escenarioView;
 	int screenWidth;
 	int screenHeight;
 
@@ -69,7 +70,7 @@ private:
 	void drawMenu();
 	void drawEscenario();
 	int menuOriginY();
-	EscenarioView *escenarioView;
+	void setDrawableForView(View* view);
 };
 
 #endif /* RENDERER_H_ */
