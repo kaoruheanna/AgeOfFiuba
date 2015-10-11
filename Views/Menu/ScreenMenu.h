@@ -18,7 +18,6 @@ public:
 	ScreenMenu(int width, int height);
 	virtual ~ScreenMenu();
 	void render(Renderer* renderer);
-	void addMiniMapSubview(View* view);
 
 private:
 	int width;

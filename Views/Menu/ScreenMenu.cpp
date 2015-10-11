@@ -21,20 +21,10 @@ ScreenMenu::ScreenMenu(int width, int height) {
 		width/2,
 		height-(2*MENU_SPACING)
 	);
-
-//	int minimapHeight = height-(2*MENU_SPACING);
-//	int minimapWidth = minimapHeight * 2;
-//	this->miniMapMenu = new MiniMapMenu(
-//		width - MENU_SPACING - minimapWidth,
-//		MENU_SPACING,
-//		minimapWidth,
-//		minimapHeight
-//	);
 }
 
 ScreenMenu::~ScreenMenu() {
 	delete this->statusMenu;
-//	delete this->miniMapMenu;
 }
 
 void ScreenMenu::render(Renderer* renderer) {
@@ -43,10 +33,6 @@ void ScreenMenu::render(Renderer* renderer) {
 	renderer->draw(rect,color);
 
 	this->statusMenu->render(renderer);
-//	this->miniMapMenu->render(renderer);
 }
 
-void ScreenMenu::addMiniMapSubview(View* view){
-//	this->miniMapMenu->addView(view);
-}
 

@@ -239,6 +239,11 @@ void Renderer::drawMiniEscenario(){
 	viewportRect.w = width;
 	viewportRect.h = height;
 	SDL_RenderSetViewport(this->sdlRenderer, &viewportRect);
+
+	SDL_Rect rect = {0,0,width,height};
+	SDL_Color color = {0, 0, 0};
+	this->draw(rect,color);
+
 	this->miniEscenarioView->render(this);
 }
 
