@@ -64,6 +64,8 @@ private:
 	bool isInsideWindow(SDL_Rect* rect);
 	Drawable* getDrawableFromTipoConfig(TipoConfig tipo);
 	void drawMenu();
+	void drawEscenario();
+	int menuOriginY();
 };
 
 #endif /* RENDERER_H_ */

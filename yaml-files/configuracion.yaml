@@ -43,7 +43,7 @@ tipos:
    alto_frame: 145
 
  - nombre: soldado
-   imagen: img/vlad.png
+   imagen: img/vlad1.png
    ancho_base: 1
    alto_base : 1
    pixel_ref_x: 25

@@ -20,7 +20,7 @@ Renderer::Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos) {
 	this->mainTilePosition = {screenWidth/2,0}; // para que el mapa este en la mitad
 	this->screenWidth = screenWidth;
 	this->screenHeight = screenHeight;
-	this->screenMenu = new ScreenMenu(0,(this->screenHeight - MENU_HEIGHT),this->screenWidth,MENU_HEIGHT);
+	this->screenMenu = new ScreenMenu(0,0,this->screenWidth,MENU_HEIGHT);
 
 	bool didInitSDL = this->initSDL();
 	bool didLoadMedia = this->loadMedia(tipos);
@@ -171,6 +171,23 @@ bool drawOrder (pair<SDL_Point, Drawable*> first,pair<SDL_Point, Drawable*> seco
 }
 
 void Renderer::drawViews() {
+
+	this->drawEscenario();
+	this->drawMenu();
+
+	//Update screen
+	SDL_RenderPresent(this->sdlRenderer);
+}
+
+void Renderer::drawEscenario() {
+	//set viewport
+	SDL_Rect viewportRect;
+	viewportRect.x = 0;
+	viewportRect.y = 0;
+	viewportRect.w = this->screenWidth;
+	viewportRect.h = this->menuOriginY();
+	SDL_RenderSetViewport(this->sdlRenderer, &viewportRect);
+
 	//Clear screen
 	SDL_SetRenderDrawColor(this->sdlRenderer, 0x00, 0x00, 0x00, 0x00 );
 	SDL_RenderClear(this->sdlRenderer);
@@ -192,14 +209,15 @@ void Renderer::drawViews() {
 		SDL_RenderCopy(sdlRenderer, drawable->getTexture(), drawable->getClipRect(), &renderQuad);
 	}
 	this->drawablesToPaint.clear();
-
-	this->drawMenu();
-
-	//Update screen
-	SDL_RenderPresent(this->sdlRenderer);
 }
 
 void Renderer::drawMenu(){
+	SDL_Rect viewportRect;
+	viewportRect.x = 0;
+	viewportRect.y = this->menuOriginY();
+	viewportRect.w = this->screenWidth;
+	viewportRect.h = MENU_HEIGHT;
+	SDL_RenderSetViewport(this->sdlRenderer, &viewportRect);
 	this->screenMenu->render(this);
 }
 
@@ -268,7 +286,7 @@ void Renderer::drawTextureInRect(SDL_Texture *texture,SDL_Rect rect){
 }
 
 bool Renderer::isInsideWindow(SDL_Rect* rect){
-	int maxY = this->screenMenu->getY();
+	int maxY = this->menuOriginY();
 
 	return (rect->x < this->screenWidth &&
 			rect->x + rect->w > 0 &&
@@ -300,4 +318,8 @@ SDL_Renderer* Renderer::getSdlRenderer(){
 
 TTF_Font* Renderer::getFont(){
 	return this->textFont;
+}
+
+int Renderer::menuOriginY(){
+	return (this->screenHeight - MENU_HEIGHT);
 }
