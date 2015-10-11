@@ -12,15 +12,13 @@
 
 const int SPACING = 10;
 
-ScreenMenu::ScreenMenu(int x, int y, int width, int height) {
-	this->x = x;
-	this->y = y;
+ScreenMenu::ScreenMenu(int width, int height) {
 	this->width = width;
 	this->height = height;
 
 	this->statusMenu = new StatusMenu(
-		x+SPACING,
-		y+SPACING,
+		SPACING,
+		SPACING,
 		width/2,
 		height-(2*SPACING)
 	);
@@ -28,7 +26,7 @@ ScreenMenu::ScreenMenu(int x, int y, int width, int height) {
 	int minimapWidth = width / 3;
 	this->miniMapMenu = new MiniMapMenu(
 		width - SPACING - minimapWidth,
-		y + SPACING,
+		SPACING,
 		minimapWidth,
 		height-(2*SPACING)
 	);
@@ -40,16 +38,12 @@ ScreenMenu::~ScreenMenu() {
 }
 
 void ScreenMenu::render(Renderer* renderer) {
-	SDL_Rect rect = {this->x,this->y,this->width,this->height};
+	SDL_Rect rect = {0,0,this->width,this->height};
 	SDL_Color color = {0xA0, 0x52, 0x2D, 0xFF};
 	renderer->draw(rect,color);
 
 	this->statusMenu->render(renderer);
 	this->miniMapMenu->render(renderer);
-}
-
-int ScreenMenu::getY(){
-	return this->y;
 }
 
 void ScreenMenu::addMiniMapSubview(View* view){

@@ -16,15 +16,12 @@ class View;
 class ScreenMenu {
 
 public:
-	ScreenMenu(int x, int y, int width, int height);
+	ScreenMenu(int width, int height);
 	virtual ~ScreenMenu();
 	void render(Renderer* renderer);
-	int getY();
 	void addMiniMapSubview(View* view);
 
 private:
-	int x;
-	int y;
 	int width;
 	int height;
 	StatusMenu *statusMenu;

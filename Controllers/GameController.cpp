@@ -75,7 +75,7 @@ bool GameController::play() {
 
 	// Agrego todas las vistas (siempre que no sean el protagonista)
 	list<Entity*> entidades = escenario->getListaEntidades();
-	agregarEntidades(entidades);
+	this->agregarEntidades(entidades);
 
 	// Agrego vista del personaje
 	MobileView *marioView = new MobileView(this->escenario->getProtagonista()->getNombre());
@@ -96,7 +96,7 @@ bool GameController::play() {
 		this->escenario->getProtagonista()->updatePosition();
 		this->renderer->drawViews();
 		this->sleep();
-		agregarEntidades(this->resourcesManager->InsertResourcesForNewLoopOnMap());
+		this->agregarEntidades(this->resourcesManager->InsertResourcesForNewLoopOnMap());
 	}
 
 	this->close();

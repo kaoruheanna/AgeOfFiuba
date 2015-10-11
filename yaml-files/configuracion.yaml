@@ -71,8 +71,8 @@ tipos:
 
 escenario:
  - nombre: orleans
-   size_x: 15
-   size_y: 15
+   size_x: 10
+   size_y: 10
    
    entidades:
    - [x: 6, y: 4, tipo: archeryRange]

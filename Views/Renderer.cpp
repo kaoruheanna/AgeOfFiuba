@@ -20,7 +20,7 @@ Renderer::Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos) {
 	this->mainTilePosition = {screenWidth/2,0}; // para que el mapa este en la mitad
 	this->screenWidth = screenWidth;
 	this->screenHeight = screenHeight;
-	this->screenMenu = new ScreenMenu(0,0,this->screenWidth,MENU_HEIGHT);
+	this->screenMenu = new ScreenMenu(this->screenWidth,MENU_HEIGHT);
 
 	bool didInitSDL = this->initSDL();
 	bool didLoadMedia = this->loadMedia(tipos);
