@@ -159,11 +159,13 @@ void GameController::initWindowSizes() {
 }
 
 float GameController::scrollingSpeedX(int x) {
-	return scrollingSpeed(x,this->config->getPantallaAncho())*-1;
+	SDL_Point escenarioSize = this->renderer->escenarioSize();
+	return scrollingSpeed(x,escenarioSize.x)*-1;
 }
 
 float GameController::scrollingSpeedY(int y) {
-	return scrollingSpeed(y,this->config->getPantallaAlto())*-1;
+	SDL_Point escenarioSize = this->renderer->escenarioSize();
+	return scrollingSpeed(y,escenarioSize.y)*-1;
 }
 
 SDL_Point GameController::getMaxVertixForPoint(int yPosition) {
@@ -181,11 +183,12 @@ SDL_Point GameController::getMaxVertixForPoint(int yPosition) {
 }
 
 void GameController::moveToPoint(SDL_Point point) {
+	SDL_Point escenarioSize = this->renderer->escenarioSize();
 	// Checkea que el scroll no se vaya por las perpendiculares
 	point.y = (point.y > intialPointWindowWrapper.y) ? intialPointWindowWrapper.y :point.y;
-	point.y = (point.y < (finalPointWindowWrapper.y + this->config->getPantallaAlto())) ? (finalPointWindowWrapper.y + this->config->getPantallaAlto()) : point.y;
+	point.y = (point.y < (finalPointWindowWrapper.y + escenarioSize.y)) ? (finalPointWindowWrapper.y + escenarioSize.y) : point.y;
 	point.x = (point.x > intialPointWindowWrapper.x) ? intialPointWindowWrapper.x : point.x;
-	point.x = (point.x < (finalPointWindowWrapper.x + (1.5*this->config->getPantallaAncho()))) ? (finalPointWindowWrapper.x + (1.5*this->config->getPantallaAncho())) :point.x;
+	point.x = (point.x < (finalPointWindowWrapper.x + (1.5*escenarioSize.x))) ? (finalPointWindowWrapper.x + (1.5*escenarioSize.x)) :point.x;
 
 	// Checkea que el scroll no se vaya por las diagonales
 	SDL_Point maxVertix = this->getMaxVertixForPoint(point.y);
@@ -204,7 +207,7 @@ void GameController::updateWindow() {
 	newY = (scrollingSpeedY(y)*SCROLL_SPEED) + this->renderer->mainTilePosition.y;
 
 	if ((newX != this->renderer->mainTilePosition.x) || (newY != this->renderer->mainTilePosition.y)) {
-		moveToPoint({newX,newY});
+		this->moveToPoint({newX,newY});
 	}
 }
 

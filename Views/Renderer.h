@@ -51,6 +51,7 @@ public:
 	void setMiniEscenarioView(MiniEscenarioView *miniEscenarioView);
 	void updatedMiniEscenario();
 	void drawInMiniMap(int mapPositionX, int mapPositionY, Drawable* drawable);
+	SDL_Point escenarioSize();
 
 private:
 	bool successfullInit;

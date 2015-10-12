@@ -336,6 +336,11 @@ int Renderer::menuOriginY(){
 	return (this->screenHeight - MENU_HEIGHT);
 }
 
+SDL_Point Renderer::escenarioSize(){
+	int height = this->menuOriginY();
+	return {this->screenWidth,height};
+}
+
 void Renderer::setEscenarioView(EscenarioView *escenarioView){
 	this->escenarioView = escenarioView;
 	this->updatedEscenario();
