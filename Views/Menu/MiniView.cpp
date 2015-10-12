@@ -46,3 +46,7 @@ void MiniView::setModel(Entity *model) {
 	this->model = model;
 }
 
+string MiniView::NombreDrawableFromNombreTipo(string nombreTipo){
+	return "mini-"+nombreTipo;
+}
+

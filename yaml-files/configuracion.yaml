@@ -10,9 +10,11 @@ configuracion:
 tipos:
  - nombre: agua
    imagen: img/agua.png
+   miniImagen: img/tile_yellow.png
 
  - nombre: piedra
    imagen: img/Mossy_Stone_Brick.png
+   miniImagen: img/tile_black.png
    ancho_base: 1
    alto_base : 1
    pixel_ref_x: 25
@@ -20,6 +22,7 @@ tipos:
 
  - nombre: casa
    imagen: img/casa2x2.png
+   miniImagen: img/tile_orange.png
    ancho_base: 2
    alto_base : 2
    pixel_ref_x: 153
@@ -27,6 +30,7 @@ tipos:
    
  - nombre: archeryRange
    imagen: img/archeryRange.png
+   miniImagen: img/tile_orange.png
    ancho_base: 3
    alto_base : 3
    pixel_ref_x: 159
@@ -34,6 +38,7 @@ tipos:
 
  - nombre: molino
    imagen: img/whatermill.png
+   miniImagen: img/tile_orange.png
    ancho_base: 1
    alto_base : 1
    pixel_ref_x: 80
@@ -44,6 +49,7 @@ tipos:
 
  - nombre: soldado
    imagen: img/vlad1.png
+   miniImagen: img/tile_red.png
    ancho_base: 1
    alto_base : 1
    pixel_ref_x: 25
@@ -55,9 +61,11 @@ tipos:
 
  - nombre: tierra
    imagen: img/tierra.png
+   miniImagen: img/tile_yellow.png
  
  - nombre: arbol
    imagen: img/tree1.png
+   miniImagen: img/tile_yellow.png
    ancho_base: 1
    alto_base : 1
    pixel_ref_x: 25
@@ -68,11 +76,10 @@ tipos:
    ancho_frame: 72
 
 
-
 escenario:
  - nombre: orleans
-   size_x: 20
-   size_y: 20
+   size_x: 15
+   size_y: 15
    
    entidades:
    - [x: 6, y: 4, tipo: archeryRange]

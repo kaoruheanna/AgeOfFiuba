@@ -10,6 +10,7 @@
 
 #include <SDL2/SDL.h>
 #include <string>
+using namespace std;
 
 class Drawable;
 class Renderer;
@@ -24,6 +25,7 @@ public:
 	void render(Renderer* renderer);
 	std::string getType();
 	void setModel(Entity *model);
+	static string NombreDrawableFromNombreTipo(string nombreTipo);
 
 protected:
 	Drawable *drawable;

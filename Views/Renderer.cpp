@@ -86,12 +86,6 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 		Log().Get(TAG,logERROR) << "No se pudo cargar el drawable default";
 	}
 
-	this->miniMissingImageDrawable = new Drawable(TILE_WIDTH_PIXELS/2,0);
-	success = this->miniMissingImageDrawable->loadTextureFromFile(MINI_MISSING_IMAGE_PATH,this->sdlRenderer);
-	if(!success){
-		Log().Get(TAG,logERROR) << "No se pudo cargar el mini drawable default";
-	}
-
 	// Mapa
 	Drawable *tileDefDrawable = new Drawable(TILE_WIDTH_PIXELS/2,0);
 	if (tileDefDrawable -> loadTextureFromFile(TILE_DEFAULT_PATH,this->sdlRenderer)){
@@ -99,13 +93,6 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 				std::pair<std::string,Drawable*>(TILE_DEFAULT_NAME, tileDefDrawable));
 	} else {
 		Log().Get(TAG,logERROR) << "No se pudo cargar el drawable del tile default";
-	}
-
-	Drawable *miniTileDefDrawable = new Drawable(TILE_WIDTH_PIXELS/2,0);
-	if (miniTileDefDrawable->loadTextureFromFile(MINI_TILE_DEFAULT_PATH,this->sdlRenderer)){
-		this->drawablesByInstanceName.insert(std::pair<std::string,Drawable*>(MINI_TILE_DEFAULT_NAME, miniTileDefDrawable));
-	} else {
-		Log().Get(TAG,logERROR) << "No se pudo cargar el drawable del tile default de minimap";
 	}
 
 	// Cargar los tipos pasados por el YAML
@@ -129,13 +116,49 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 	  i++;
 	}
 
+	bool minimapSuccess = this->loadMediaForMiniMap(&tipos);
+
 	this->textFont = TTF_OpenFont("img/arial.ttf", 16);
 	if (this->textFont == NULL ) {
 		Log().Get(TAG,logERROR) << "No se pudo cargar la fuente: "<< TTF_GetError();
 		success = false;
 	}
 
-	return success;
+	return (success & minimapSuccess);
+}
+
+bool Renderer::loadMediaForMiniMap(list<TipoConfig>* tipos){
+	int pixelRefX = TILE_WIDTH_PIXELS/2;
+	int pixelRefY = 0;
+
+	//imagen default
+	this->miniMissingImageDrawable = new Drawable(pixelRefX,pixelRefY);
+	bool success = this->miniMissingImageDrawable->loadTextureFromFile(MINI_MISSING_IMAGE_PATH,this->sdlRenderer);
+	if(!success){
+		Log().Get(TAG,logERROR) << "No se pudo cargar el mini drawable default";
+		return false;
+	}
+
+	Drawable *miniTileDefDrawable = new Drawable(pixelRefX,pixelRefY);
+	if (miniTileDefDrawable->loadTextureFromFile(MINI_TILE_DEFAULT_PATH,this->sdlRenderer)){
+		this->drawablesByInstanceName.insert(std::pair<std::string,Drawable*>(MINI_TILE_DEFAULT_NAME, miniTileDefDrawable));
+	} else {
+		Log().Get(TAG,logERROR) << "No se pudo cargar el drawable del tile default de minimap";
+		return false;
+	}
+
+	for (list<TipoConfig>::iterator it = tipos->begin(); it != tipos->end(); ++it) {
+		TipoConfig tipo = *it;
+		if((tipo.getNombre() != "") && (tipo.getMiniImagen() != "")){
+			string name = MiniView::NombreDrawableFromNombreTipo(tipo.getNombre());
+			Drawable *nodoDrawable = new Drawable(pixelRefX,pixelRefY);
+			bool textureLoaded = nodoDrawable->loadTextureFromFile(tipo.getMiniImagen(), this->sdlRenderer);
+			if(textureLoaded){
+				this->drawablesByInstanceName.insert(std::pair<std::string,Drawable*>(name, nodoDrawable));
+			}
+		}
+	}
+	return true;
 }
 
 Drawable* Renderer::getDrawableFromTipoConfig(TipoConfig tipo){
