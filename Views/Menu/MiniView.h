@@ -13,6 +13,7 @@
 
 class Drawable;
 class Renderer;
+class Entity;
 
 class MiniView {
 public:
@@ -22,6 +23,7 @@ public:
 	void setOrigin(int x, int y);
 	void render(Renderer* renderer);
 	std::string getType();
+	void setModel(Entity *model);
 
 protected:
 	Drawable *drawable;
@@ -29,6 +31,7 @@ protected:
 private:
 	SDL_Point origin;
 	std::string type;
+	Entity* model;
 };
 
 #endif /* MINIVIEW_H_ */

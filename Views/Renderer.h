@@ -60,6 +60,7 @@ private:
 	list< pair<SDL_Point,Drawable*> > drawablesToPaint;
 	std::map<std::string, Drawable*> drawablesByInstanceName;
 	Drawable* missingImageDrawable;
+	Drawable* miniMissingImageDrawable;
 	ScreenMenu* screenMenu;
 	TTF_Font *textFont;
 	EscenarioView *escenarioView;

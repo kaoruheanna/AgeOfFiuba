@@ -105,7 +105,10 @@ bool GameController::play() {
 	this->renderer->updatedEscenario();
 
 	// agrego mini vista del personaje
-
+	MiniView *miniPersonajeView = new MiniView("lalal");
+	miniPersonajeView->setModel(this->escenario->getProtagonista());
+	this->miniEscenarioView->addEntityMiniView(miniPersonajeView);
+	this->renderer->updatedMiniEscenario();
 
 	initWindowSizes();
 

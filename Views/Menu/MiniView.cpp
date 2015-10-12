@@ -8,12 +8,14 @@
 #include "MiniView.h"
 #include "../Drawable.h"
 #include "../Renderer.h"
+#include "../../Models/Entity.h"
 
 MiniView::MiniView(std::string name) {
 	this->drawable = NULL;
 	SDL_Point origin = {0,0};
 	this->origin = origin;
 	this->type = name;
+	this->model = NULL;
 }
 
 MiniView::~MiniView() {
@@ -30,10 +32,17 @@ void MiniView::setOrigin(int x, int y) {
 }
 
 void MiniView::render(Renderer* renderer ) {
-	renderer->draw(this->origin.x, this->origin.y, this->drawable);
+	if (this->model){
+		this->setOrigin(this->model->getPosicion().x,this->model->getPosicion().y);
+	}
+	renderer->drawInMiniMap(this->origin.x, this->origin.y, this->drawable);
 }
 
 std::string MiniView::getType() {
 	return this->type;
+}
+
+void MiniView::setModel(Entity *model) {
+	this->model = model;
 }
 

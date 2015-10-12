@@ -21,6 +21,7 @@ Renderer::Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos) {
 	this->window = NULL;
 	this->sdlRenderer = NULL;
 	this->missingImageDrawable = NULL;
+	this->miniMissingImageDrawable = NULL;
 	this->textFont = NULL;
 	this->escenarioView = NULL;
 	this->miniEscenarioView = NULL;
@@ -80,9 +81,15 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 
 	// Imagen Default
 	this->missingImageDrawable = new Drawable(TILE_WIDTH_PIXELS/2,0);
-	success = this->missingImageDrawable->loadTextureFromFile("img/missingImage.png",this->sdlRenderer);
+	success = this->missingImageDrawable->loadTextureFromFile(MISSING_IMAGE_PATH,this->sdlRenderer);
 	if(!success){
 		Log().Get(TAG,logERROR) << "No se pudo cargar el drawable default";
+	}
+
+	this->miniMissingImageDrawable = new Drawable(TILE_WIDTH_PIXELS/2,0);
+	success = this->miniMissingImageDrawable->loadTextureFromFile(MINI_MISSING_IMAGE_PATH,this->sdlRenderer);
+	if(!success){
+		Log().Get(TAG,logERROR) << "No se pudo cargar el mini drawable default";
 	}
 
 	// Mapa
@@ -156,6 +163,9 @@ void Renderer::close() {
 
 	this->missingImageDrawable->free();
 	delete this->missingImageDrawable;
+
+	this->miniMissingImageDrawable->free();
+	delete this->miniMissingImageDrawable;
 
 	// delete menu
 	TTF_CloseFont(this->textFont);
@@ -385,6 +395,13 @@ void Renderer::setMiniEscenarioView(MiniEscenarioView *miniEscenarioView){
 void Renderer::updatedMiniEscenario(){
 	MiniMapView *miniMapView = this->miniEscenarioView->getMiniMapView();
 	this->setDrawableForMiniView(miniMapView);
+
+	list<MiniView*>* entitiesMiniViews = this->miniEscenarioView->getEntitiesMiniView();
+	list<MiniView*>::iterator i;
+	for(i=entitiesMiniViews->begin(); i != entitiesMiniViews->end(); ++i) {
+		MiniView* view = *i;
+		this->setDrawableForMiniView(view);
+	}
 }
 
 void Renderer::setDrawableForMiniView(MiniView* view){
@@ -394,7 +411,7 @@ void Renderer::setDrawableForMiniView(MiniView* view){
 		drawable = found->second;
 	} else {
 		Log().Get(TAG,logWARNING) << "No se pudo cargar la imagen: '"<<view->getType().c_str()<<"', usa la imagen default";
-		drawable = this->missingImageDrawable;
+		drawable = this->miniMissingImageDrawable;
 	}
 	view->setDrawable(drawable);
 }

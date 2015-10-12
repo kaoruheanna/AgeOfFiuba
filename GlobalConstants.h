@@ -19,6 +19,8 @@ const std::string TILE_DEFAULT_NAME = "tileDefault";
 const std::string TILE_DEFAULT_PATH = "img/grass1n.png";
 const std::string MINI_TILE_DEFAULT_NAME = "miniTileDefault";
 const std::string MINI_TILE_DEFAULT_PATH = "img/tile_green.png";
+const std::string MISSING_IMAGE_PATH = "img/missingImage.png";
+const std::string MINI_MISSING_IMAGE_PATH = "img/tile_purple.png";
 
 
 const int TILE_WIDTH_PIXELS = 128;
