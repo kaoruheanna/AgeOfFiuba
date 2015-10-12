@@ -394,14 +394,16 @@ void Renderer::drawInMiniMap(int mapPositionX, int mapPositionY, Drawable* drawa
 	windowPoint.x = (mapPositionX  - mapPositionY);
 	windowPoint.y = (mapPositionX  + mapPositionY) / 2;
 
-	int factor = 9;
+	float mapHeight = (float)(this->escenarioView->getMapView()->getHeightInPixels());
+	float miniMapHeight = (float)(MENU_HEIGHT-(2*MENU_SPACING));
+	float factor = (miniMapHeight/mapHeight);
+
 	SDL_Rect originalQuad = drawable->getRectToDraw(windowPoint.x, windowPoint.y);
 	SDL_Rect renderQuad;
-	renderQuad.x = (originalQuad.x / factor) + this->miniMapMainTilePosition.x;
-	renderQuad.y = (originalQuad.y / factor) + this->miniMapMainTilePosition.y;
-	renderQuad.w = (originalQuad.w / factor);
-	renderQuad.h = (originalQuad.h / factor);
-
+	renderQuad.x = (originalQuad.x * factor) + this->miniMapMainTilePosition.x;
+	renderQuad.y = (originalQuad.y * factor) + this->miniMapMainTilePosition.y;
+	renderQuad.w = (originalQuad.w * factor);
+	renderQuad.h = (originalQuad.h * factor);
 
 	SDL_RenderCopy(sdlRenderer, drawable->getTexture(), NULL, &renderQuad);
 }

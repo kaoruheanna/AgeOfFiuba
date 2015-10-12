@@ -17,6 +17,7 @@ public:
 	virtual ~MapView();
 	void setModel(Map *model);
 	virtual void render(Renderer* renderer );
+	int getHeightInPixels();
 
 protected:
 	SDL_Point getOrigin();

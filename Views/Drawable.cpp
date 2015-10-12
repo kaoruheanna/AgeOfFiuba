@@ -87,3 +87,7 @@ AnimationStatus Drawable::getAnimation(MotionDirection currentDirection, bool cu
 	nextStatus.isMoving = false;
 	return nextStatus;
 }
+
+int Drawable::getHeight() {
+	return this->height;
+}

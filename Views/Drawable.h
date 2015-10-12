@@ -40,6 +40,7 @@ public:
 	virtual void animate(AnimationStatus status);
 	virtual AnimationStatus getAnimation(MotionDirection currentDirection, bool currentlyMoving, AnimationStatus lastStatus);
 	void free();
+	int getHeight();
 
 protected:
 	bool loadTextureFromSurface(SDL_Renderer* renderer, SDL_Surface* surface);
