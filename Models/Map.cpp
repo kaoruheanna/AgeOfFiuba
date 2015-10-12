@@ -1,4 +1,5 @@
 #include "Map.h"
+#include "../GlobalConstants.h"
 
 Map::Map(int alto, int ancho, int tile_ancho, int tile_alto){
 	//el ancho y alto del tile se puede determinar con las dimensiones del tile default.
@@ -75,11 +76,9 @@ bool Map::construirEntidad(Entity* entidad, SDL_Point posicion){
 	return false;
 }
 
-const int TILE_SIZE = 64;
-
 SDL_Point Map::getTileForPosition(SDL_Point point) {
-	return { point.x / TILE_SIZE, point.y / TILE_SIZE };
+	return { point.x / TILE_HEIGHT_PIXELS, point.y / TILE_HEIGHT_PIXELS };
 }
 SDL_Point Map::getPositionForTile(SDL_Point point) {
-	return { point.x * TILE_SIZE, point.y * TILE_SIZE };
+	return { point.x * TILE_HEIGHT_PIXELS, point.y * TILE_HEIGHT_PIXELS };
 }

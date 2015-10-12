@@ -60,6 +60,7 @@ private:
 	list< pair<SDL_Point,Drawable*> > drawablesToPaint;
 	std::map<std::string, Drawable*> drawablesByInstanceName;
 	Drawable* missingImageDrawable;
+	Drawable* miniMissingImageDrawable;
 	ScreenMenu* screenMenu;
 	TTF_Font *textFont;
 	EscenarioView *escenarioView;
@@ -69,6 +70,7 @@ private:
 
 	bool initSDL();
 	bool loadMedia(list<TipoConfig> tipos);
+	bool loadMediaForMiniMap(list<TipoConfig>* tipos);
 	bool isInsideWindow(SDL_Rect* rect);
 	Drawable* getDrawableFromTipoConfig(TipoConfig tipo);
 	void drawMenu();

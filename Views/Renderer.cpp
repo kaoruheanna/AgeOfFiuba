@@ -21,6 +21,7 @@ Renderer::Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos) {
 	this->window = NULL;
 	this->sdlRenderer = NULL;
 	this->missingImageDrawable = NULL;
+	this->miniMissingImageDrawable = NULL;
 	this->textFont = NULL;
 	this->escenarioView = NULL;
 	this->miniEscenarioView = NULL;
@@ -79,20 +80,19 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 	bool success = true;
 
 	// Imagen Default
-	this->missingImageDrawable = new Drawable(64,0);
-	success = this->missingImageDrawable->loadTextureFromFile("img/missingImage.png",this->sdlRenderer);
+	this->missingImageDrawable = new Drawable(TILE_WIDTH_PIXELS/2,0);
+	success = this->missingImageDrawable->loadTextureFromFile(MISSING_IMAGE_PATH,this->sdlRenderer);
 	if(!success){
 		Log().Get(TAG,logERROR) << "No se pudo cargar el drawable default";
 	}
 
 	// Mapa
-	string tileDefault = "img/grass1n.png";
-	Drawable *tileDefDrawable = new Drawable(64,0);
-	if (tileDefDrawable -> loadTextureFromFile(tileDefault,this->sdlRenderer)){
+	Drawable *tileDefDrawable = new Drawable(TILE_WIDTH_PIXELS/2,0);
+	if (tileDefDrawable -> loadTextureFromFile(TILE_DEFAULT_PATH,this->sdlRenderer)){
 		this->drawablesByInstanceName.insert(
-				std::pair<std::string,Drawable*>("tileDefault", tileDefDrawable));
+				std::pair<std::string,Drawable*>(TILE_DEFAULT_NAME, tileDefDrawable));
 	} else {
-		Log().Get(TAG,logERROR) << "No se pudo cargar el drawable default";
+		Log().Get(TAG,logERROR) << "No se pudo cargar el drawable del tile default";
 	}
 
 	// Cargar los tipos pasados por el YAML
@@ -116,13 +116,49 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 	  i++;
 	}
 
+	bool minimapSuccess = this->loadMediaForMiniMap(&tipos);
+
 	this->textFont = TTF_OpenFont("img/arial.ttf", 16);
 	if (this->textFont == NULL ) {
 		Log().Get(TAG,logERROR) << "No se pudo cargar la fuente: "<< TTF_GetError();
 		success = false;
 	}
 
-	return success;
+	return (success & minimapSuccess);
+}
+
+bool Renderer::loadMediaForMiniMap(list<TipoConfig>* tipos){
+	int pixelRefX = TILE_WIDTH_PIXELS/2;
+	int pixelRefY = 0;
+
+	//imagen default
+	this->miniMissingImageDrawable = new Drawable(pixelRefX,pixelRefY);
+	bool success = this->miniMissingImageDrawable->loadTextureFromFile(MINI_MISSING_IMAGE_PATH,this->sdlRenderer);
+	if(!success){
+		Log().Get(TAG,logERROR) << "No se pudo cargar el mini drawable default";
+		return false;
+	}
+
+	Drawable *miniTileDefDrawable = new Drawable(pixelRefX,pixelRefY);
+	if (miniTileDefDrawable->loadTextureFromFile(MINI_TILE_DEFAULT_PATH,this->sdlRenderer)){
+		this->drawablesByInstanceName.insert(std::pair<std::string,Drawable*>(MINI_TILE_DEFAULT_NAME, miniTileDefDrawable));
+	} else {
+		Log().Get(TAG,logERROR) << "No se pudo cargar el drawable del tile default de minimap";
+		return false;
+	}
+
+	for (list<TipoConfig>::iterator it = tipos->begin(); it != tipos->end(); ++it) {
+		TipoConfig tipo = *it;
+		if((tipo.getNombre() != "") && (tipo.getMiniImagen() != "")){
+			string name = MiniView::NombreDrawableFromNombreTipo(tipo.getNombre());
+			Drawable *nodoDrawable = new Drawable(pixelRefX,pixelRefY);
+			bool textureLoaded = nodoDrawable->loadTextureFromFile(tipo.getMiniImagen(), this->sdlRenderer);
+			if(textureLoaded){
+				this->drawablesByInstanceName.insert(std::pair<std::string,Drawable*>(name, nodoDrawable));
+			}
+		}
+	}
+	return true;
 }
 
 Drawable* Renderer::getDrawableFromTipoConfig(TipoConfig tipo){
@@ -150,6 +186,9 @@ void Renderer::close() {
 
 	this->missingImageDrawable->free();
 	delete this->missingImageDrawable;
+
+	this->miniMissingImageDrawable->free();
+	delete this->miniMissingImageDrawable;
 
 	// delete menu
 	TTF_CloseFont(this->textFont);
@@ -293,7 +332,7 @@ void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable) {
 
 	if(this->isInsideWindow(&renderQuad)){
 		// Only postpone drawing if its not the tiles
-		if(this->drawablesByInstanceName.find("tileDefault")->second != drawable){
+		if(this->drawablesByInstanceName.find(TILE_DEFAULT_NAME)->second != drawable){
 			this->drawablesToPaint.push_back(pair<SDL_Point, Drawable*>(mapRect, drawable));
 		} else {
 			SDL_RenderCopy(sdlRenderer, drawable->getTexture(), drawable->getClipRect(), &renderQuad);
@@ -379,6 +418,13 @@ void Renderer::setMiniEscenarioView(MiniEscenarioView *miniEscenarioView){
 void Renderer::updatedMiniEscenario(){
 	MiniMapView *miniMapView = this->miniEscenarioView->getMiniMapView();
 	this->setDrawableForMiniView(miniMapView);
+
+	list<MiniView*>* entitiesMiniViews = this->miniEscenarioView->getEntitiesMiniView();
+	list<MiniView*>::iterator i;
+	for(i=entitiesMiniViews->begin(); i != entitiesMiniViews->end(); ++i) {
+		MiniView* view = *i;
+		this->setDrawableForMiniView(view);
+	}
 }
 
 void Renderer::setDrawableForMiniView(MiniView* view){
@@ -388,7 +434,7 @@ void Renderer::setDrawableForMiniView(MiniView* view){
 		drawable = found->second;
 	} else {
 		Log().Get(TAG,logWARNING) << "No se pudo cargar la imagen: '"<<view->getType().c_str()<<"', usa la imagen default";
-		drawable = this->missingImageDrawable;
+		drawable = this->miniMissingImageDrawable;
 	}
 	view->setDrawable(drawable);
 }

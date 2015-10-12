@@ -11,10 +11,9 @@
 const std::string TAG = "EntidadConfig";
 
 EntidadConfig::EntidadConfig(){
-
-
+	this->x = 0;
+	this->y = 0;
 }
-
 
 EntidadConfig::EntidadConfig(int x, int y, std::string tipo) {
 	this->x = x;
