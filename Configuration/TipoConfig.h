@@ -19,6 +19,7 @@ public:
 	virtual ~TipoConfig();
 	string getNombre();
 	string getImagen();
+	string getMiniImagen();
 	int getAnchoBase();
 	int getAltoBase();
 	int getPixelRefX();
@@ -31,6 +32,7 @@ public:
 private:
 	string nombre;
 	string imagen;
+	string miniImagen;
 	int anchoBase;
 	int altoBase;
 	int pixelRefX;

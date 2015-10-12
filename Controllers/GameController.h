@@ -34,17 +34,17 @@ private:
 
 	bool pollEvents();
 	void updateWindow();
-
 	void close();
 	void sleep();
-
 	// Entre -1 y 1
 	float scrollingSpeedX(int x);
 	float scrollingSpeedY(int y);
 	float scrollingSpeed(int x, int large);
-
 	void moveToPoint(SDL_Point point);
 	void initWindowSizes();
+	void initMap();
+	void initPersonaje();
+	void initEntities();
 
 	// Metodos y variables para que no se vaya el scroll del mapa
 	SDL_Point intialPointWindowWrapper;
