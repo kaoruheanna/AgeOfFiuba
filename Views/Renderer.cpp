@@ -110,7 +110,6 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 	}
 
 	this->textFont = TTF_OpenFont("img/arial.ttf", 16);
-
 	if (this->textFont == NULL ) {
 		Log().Get(TAG,logERROR) << "No se pudo cargar la fuente: "<< TTF_GetError();
 		success = false;
