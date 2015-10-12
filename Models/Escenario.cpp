@@ -57,6 +57,8 @@ Escenario::Escenario(EscenarioConfig escenario, list<TipoConfig> tipos) {
 	}
 	//Inicializar resources Manager
 	this->resourcesManager = new ResourcesManager(this);
+	this->niebla = new FogOfWar(this->entidades, this->protagonista, this->mundo);
+	this->niebla->initialice();
 }
 
 Escenario::~Escenario(){
@@ -91,7 +93,8 @@ list<Entity*> Escenario::getListaEntidades(){
 
 //Actualiza todos los modelos en un nuevo loop
 void Escenario::loop() {
-	protagonista->updatePosition();
+	this->protagonista->updatePosition();
+	this->niebla->update();
 	entidadesAInsertar = resourcesManager->InsertResourcesForNewLoopOnMap();
 }
 

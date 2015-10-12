@@ -14,6 +14,7 @@
 #include "../Configuration/TipoConfig.h"
 #include "../Factories/EntityFactory.h"
 #include "../Utils/ResourcesManager.h"
+#include "FogOfWar.h"
 
 using namespace std;
 
@@ -25,6 +26,7 @@ class Escenario {
 		list<Entity*> entidadesAInsertar;
 		MobileModel* protagonista;
 		ResourcesManager* resourcesManager;
+		FogOfWar* niebla;
 
 	public:
 		Map* mundo;

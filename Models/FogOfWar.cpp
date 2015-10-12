@@ -43,8 +43,10 @@ void FogOfWar::update(){
 }
 
 bool FogOfWar::checkInSight(SDL_Point character, SDL_Point entity){
-
-	return true;
+	if (((entity.x >= (character.x - 1)) && (entity.x <= (character.x + 1))) && ((entity.y >= (character.y - 1)) && (entity.y <= (character.y + 1)))){
+		return true;
+	}
+	return false;
 }
 
 FogOfWar::~FogOfWar() {
