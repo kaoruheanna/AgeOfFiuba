@@ -89,7 +89,7 @@ bool GameController::play() {
 	this->renderer->setEscenarioView(this->escenarioView);
 
 	//creo mini escenario
-	MiniMapView *miniMapView = new MiniMapView(TILE_DEFAULT_NAME);
+	MiniMapView *miniMapView = new MiniMapView(MINI_TILE_DEFAULT_NAME);
 	miniMapView->setModel(this->escenario->mundo);
 	this->miniEscenarioView = new MiniEscenarioView(miniMapView);
 	this->renderer->setMiniEscenarioView(this->miniEscenarioView);

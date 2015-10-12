@@ -91,7 +91,14 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 		this->drawablesByInstanceName.insert(
 				std::pair<std::string,Drawable*>(TILE_DEFAULT_NAME, tileDefDrawable));
 	} else {
-		Log().Get(TAG,logERROR) << "No se pudo cargar el drawable default";
+		Log().Get(TAG,logERROR) << "No se pudo cargar el drawable del tile default";
+	}
+
+	Drawable *miniTileDefDrawable = new Drawable(TILE_WIDTH_PIXELS/2,0);
+	if (miniTileDefDrawable->loadTextureFromFile(MINI_TILE_DEFAULT_PATH,this->sdlRenderer)){
+		this->drawablesByInstanceName.insert(std::pair<std::string,Drawable*>(MINI_TILE_DEFAULT_NAME, miniTileDefDrawable));
+	} else {
+		Log().Get(TAG,logERROR) << "No se pudo cargar el drawable del tile default de minimap";
 	}
 
 	// Cargar los tipos pasados por el YAML
