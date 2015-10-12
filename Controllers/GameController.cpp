@@ -83,13 +83,13 @@ bool GameController::play() {
 	}
 
 	// Crear vistas a partir de la configuracion
-	MapView *mapView = new MapView(TILE_DEFAULT);
+	MapView *mapView = new MapView(TILE_DEFAULT_NAME);
 	mapView->setModel(this->escenario->mundo);
 	this->escenarioView = new EscenarioView(mapView);
 	this->renderer->setEscenarioView(this->escenarioView);
 
 	//creo mini escenario
-	MiniMapView *miniMapView = new MiniMapView(TILE_DEFAULT);
+	MiniMapView *miniMapView = new MiniMapView(TILE_DEFAULT_NAME);
 	miniMapView->setModel(this->escenario->mundo);
 	this->miniEscenarioView = new MiniEscenarioView(miniMapView);
 	this->renderer->setMiniEscenarioView(this->miniEscenarioView);
@@ -103,6 +103,9 @@ bool GameController::play() {
 	marioView->setModel(this->escenario->getProtagonista());
 	this->escenarioView->addEntityView(marioView);
 	this->renderer->updatedEscenario();
+
+	// agrego mini vista del personaje
+
 
 	initWindowSizes();
 

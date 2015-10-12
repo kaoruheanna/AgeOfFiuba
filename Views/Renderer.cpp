@@ -79,18 +79,17 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 	bool success = true;
 
 	// Imagen Default
-	this->missingImageDrawable = new Drawable(64,0);
+	this->missingImageDrawable = new Drawable(TILE_WIDTH_PIXELS/2,0);
 	success = this->missingImageDrawable->loadTextureFromFile("img/missingImage.png",this->sdlRenderer);
 	if(!success){
 		Log().Get(TAG,logERROR) << "No se pudo cargar el drawable default";
 	}
 
 	// Mapa
-	string tileDefault = "img/grass1n.png";
-	Drawable *tileDefDrawable = new Drawable(64,0);
-	if (tileDefDrawable -> loadTextureFromFile(tileDefault,this->sdlRenderer)){
+	Drawable *tileDefDrawable = new Drawable(TILE_WIDTH_PIXELS/2,0);
+	if (tileDefDrawable -> loadTextureFromFile(TILE_DEFAULT_PATH,this->sdlRenderer)){
 		this->drawablesByInstanceName.insert(
-				std::pair<std::string,Drawable*>("tileDefault", tileDefDrawable));
+				std::pair<std::string,Drawable*>(TILE_DEFAULT_NAME, tileDefDrawable));
 	} else {
 		Log().Get(TAG,logERROR) << "No se pudo cargar el drawable default";
 	}
@@ -293,7 +292,7 @@ void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable) {
 
 	if(this->isInsideWindow(&renderQuad)){
 		// Only postpone drawing if its not the tiles
-		if(this->drawablesByInstanceName.find("tileDefault")->second != drawable){
+		if(this->drawablesByInstanceName.find(TILE_DEFAULT_NAME)->second != drawable){
 			this->drawablesToPaint.push_back(pair<SDL_Point, Drawable*>(mapRect, drawable));
 		} else {
 			SDL_RenderCopy(sdlRenderer, drawable->getTexture(), drawable->getClipRect(), &renderQuad);

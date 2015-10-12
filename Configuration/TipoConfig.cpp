@@ -7,6 +7,7 @@
 
 #include "TipoConfig.h"
 #include "../Utils/Log.h"
+#include "../GlobalConstants.h"
 
 const std::string TAG = "TipoConfig";
 
@@ -17,7 +18,7 @@ TipoConfig::TipoConfig() {
 	this->fps = 0;
 	this->imagen = "";
 	this->nombre = "";
-	this->pixelRefX = 64;
+	this->pixelRefX = (TILE_WIDTH_PIXELS/2);
 	this->pixelRefY = 0;
 	this->anchoFrame = 1;
 	this->altoFrame = 1;

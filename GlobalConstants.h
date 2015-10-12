@@ -15,7 +15,12 @@ const int MENU_HEIGHT = 130;
 const int MENU_SPACING = 10;
 
 //TILES
-const std::string TILE_DEFAULT = "tileDefault";
+const std::string TILE_DEFAULT_NAME = "tileDefault";
+const std::string TILE_DEFAULT_PATH = "img/grass1n.png";
+const std::string MINI_TILE_DEFAULT_NAME = "miniTileDefault";
+const std::string MINI_TILE_DEFAULT_PATH = "img/tile_green.png";
+
+
 const int TILE_WIDTH_PIXELS = 128;
 const int TILE_HEIGHT_PIXELS = 64;
 
