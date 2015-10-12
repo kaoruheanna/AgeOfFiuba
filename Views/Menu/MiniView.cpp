@@ -9,6 +9,7 @@
 #include "../Drawable.h"
 #include "../Renderer.h"
 #include "../../Models/Entity.h"
+#include "../../GlobalConstants.h"
 
 MiniView::MiniView(std::string name) {
 	this->drawable = NULL;
@@ -35,7 +36,17 @@ void MiniView::render(Renderer* renderer ) {
 	if (this->model){
 		this->setOrigin(this->model->getPosicion().x,this->model->getPosicion().y);
 	}
-	renderer->drawInMiniMap(this->origin.x, this->origin.y, this->drawable);
+
+	int tilesInX = (this->model) ? this->model->getAnchoBase() : 1;
+	int tilesInY = (this->model) ? this->model->getAltoBase() : 1;
+
+	for (int i = 0; i < tilesInX; i++){
+		for (int j = 0; j < tilesInY; j++){
+			int mapPositionX = (this->origin.x + i*TILE_HEIGHT_PIXELS);
+			int mapPositionY = (this->origin.y + j*TILE_HEIGHT_PIXELS);
+			renderer->drawInMiniMap(mapPositionX,mapPositionY, this->drawable);
+		}
+	}
 }
 
 std::string MiniView::getType() {

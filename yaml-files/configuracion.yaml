@@ -10,7 +10,7 @@ configuracion:
 tipos:
  - nombre: agua
    imagen: img/agua.png
-   miniImagen: img/tile_yellow.png
+   miniImagen: img/tile_blue.png
 
  - nombre: piedra
    imagen: img/Mossy_Stone_Brick.png
