@@ -151,7 +151,12 @@ bool Renderer::loadMediaForMiniMap(list<TipoConfig>* tipos){
 		TipoConfig tipo = *it;
 		if((tipo.getNombre() != "") && (tipo.getMiniImagen() != "")){
 			string name = MiniView::NombreDrawableFromNombreTipo(tipo.getNombre());
-			Drawable *nodoDrawable = new Drawable(pixelRefX,pixelRefY);
+
+			int pixelRefType = tipo.getMinimapPixelRefType();
+			int x = (pixelRefType == MinimapPixelRefTypeCentered) ? (TILE_WIDTH_PIXELS/2) : pixelRefX;
+			int y = (pixelRefType == MinimapPixelRefTypeCentered) ? (TILE_HEIGHT_PIXELS/2) : pixelRefY;
+
+			Drawable *nodoDrawable = new Drawable(x,y);
 			bool textureLoaded = nodoDrawable->loadTextureFromFile(tipo.getMiniImagen(), this->sdlRenderer);
 			if(textureLoaded){
 				this->drawablesByInstanceName.insert(std::pair<std::string,Drawable*>(name, nodoDrawable));

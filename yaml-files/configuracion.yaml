@@ -58,6 +58,7 @@ tipos:
    delay: 0
    alto_frame: 50
    ancho_frame: 50
+   mini_map_pixel_ref_type: 1
 
  - nombre: tierra
    imagen: img/tierra.png

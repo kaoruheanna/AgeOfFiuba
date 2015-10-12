@@ -23,6 +23,7 @@ TipoConfig::TipoConfig() {
 	this->pixelRefY = 0;
 	this->anchoFrame = 1;
 	this->altoFrame = 1;
+	this->minimapPixelRefType = MinimapPixelRefTypeDefault;
 }
 
 TipoConfig::TipoConfig(YAML::Node nodo): TipoConfig(){
@@ -35,6 +36,7 @@ TipoConfig::TipoConfig(YAML::Node nodo): TipoConfig(){
 	this->pixelRefY = TipoConfig::getIntAttribute(nodo, "pixel_ref_y", this->pixelRefY);
 	this->anchoFrame = TipoConfig::getIntAttribute(nodo, "ancho_frame", this->anchoFrame);
 	this->altoFrame = TipoConfig::getIntAttribute(nodo, "alto_frame", this->altoFrame);
+	this->minimapPixelRefType = TipoConfig::getIntAttribute(nodo, "mini_map_pixel_ref_type", this->minimapPixelRefType);
 
 	this->imagen = TipoConfig::getStringAttribute(nodo, "imagen", this->imagen);
 	this->miniImagen = TipoConfig::getStringAttribute(nodo, "miniImagen", this->miniImagen);
@@ -142,4 +144,6 @@ int TipoConfig::getAltoFrame() {
 int TipoConfig::getAnchoFrame() {
 	return this->anchoFrame;
 }
-
+int TipoConfig::getMinimapPixelRefType() {
+	return this->minimapPixelRefType;
+}
