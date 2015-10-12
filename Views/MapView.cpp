@@ -24,14 +24,20 @@ SDL_Point MapView::getOrigin(){
 }
 
 void MapView::render(Renderer* renderer ){
-	int width = this -> model -> getWidth();
-	int height = this -> model-> getHeight();
+	int width = this->model->getWidth();
+	int height = this->model->getHeight();
 	for (int i=0; i<width ; i++){
 		for (int j=0; j<height; j++){
 			SDL_Point point = this->model->getPositionForTile({ j, i });
 			renderer->draw(point.x, point.y, this->drawable);
 		}
 	}
+}
+
+int MapView::getHeightInPixels(){
+	int tiles = this->model->getWidth();
+	int heightPerTile = this->drawable->getHeight();
+	return (tiles * heightPerTile);
 }
 
 

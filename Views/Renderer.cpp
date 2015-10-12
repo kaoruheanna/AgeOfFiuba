@@ -9,6 +9,11 @@
 #include "Sprite.h"
 #include "../Utils/Log.h"
 #include "../GlobalConstants.h"
+#include "EscenarioView.h"
+#include "MapView.h"
+#include "Menu/MiniEscenarioView.h"
+#include "Menu/MiniMapView.h"
+#include "Menu/MiniView.h"
 
 const std::string TAG = "Renderer";
 
@@ -17,10 +22,12 @@ Renderer::Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos) {
 	this->sdlRenderer = NULL;
 	this->missingImageDrawable = NULL;
 	this->textFont = NULL;
+	this->escenarioView = NULL;
+	this->miniEscenarioView = NULL;
 	this->mainTilePosition = {screenWidth/2,0}; // para que el mapa este en la mitad
 	this->screenWidth = screenWidth;
 	this->screenHeight = screenHeight;
-	this->screenMenu = new ScreenMenu(0,(this->screenHeight - MENU_HEIGHT),this->screenWidth,MENU_HEIGHT);
+	this->screenMenu = new ScreenMenu(this->screenWidth,MENU_HEIGHT);
 
 	bool didInitSDL = this->initSDL();
 	bool didLoadMedia = this->loadMedia(tipos);
@@ -154,6 +161,7 @@ void Renderer::close() {
 	SDL_DestroyWindow(this->window);
 	this->window = NULL;
 	this->sdlRenderer = NULL;
+	this->escenarioView = NULL;
 
 	//Quit SDL subsystems
 	IMG_Quit();
@@ -171,15 +179,29 @@ bool drawOrder (pair<SDL_Point, Drawable*> first,pair<SDL_Point, Drawable*> seco
 }
 
 void Renderer::drawViews() {
+
+	this->drawEscenario();
+	this->drawMenu();
+	this->drawMiniEscenario();
+
+	//Update screen
+	SDL_RenderPresent(this->sdlRenderer);
+}
+
+void Renderer::drawEscenario() {
+	//set viewport
+	SDL_Rect viewportRect;
+	viewportRect.x = 0;
+	viewportRect.y = 0;
+	viewportRect.w = this->screenWidth;
+	viewportRect.h = this->menuOriginY();
+	SDL_RenderSetViewport(this->sdlRenderer, &viewportRect);
+
 	//Clear screen
 	SDL_SetRenderDrawColor(this->sdlRenderer, 0x00, 0x00, 0x00, 0x00 );
 	SDL_RenderClear(this->sdlRenderer);
 
-	list<View*>::iterator i;
-	for(i=this->views.begin(); i != this->views.end(); ++i) {
-		View* view = *i;
-		view->render(this);
-	}
+	this->escenarioView->render(this);
 
 	// Order the views in the "paintor style" drawing
 	this->drawablesToPaint.sort(drawOrder);
@@ -192,15 +214,37 @@ void Renderer::drawViews() {
 		SDL_RenderCopy(sdlRenderer, drawable->getTexture(), drawable->getClipRect(), &renderQuad);
 	}
 	this->drawablesToPaint.clear();
-
-	this->drawMenu();
-
-	//Update screen
-	SDL_RenderPresent(this->sdlRenderer);
 }
 
 void Renderer::drawMenu(){
+	SDL_Rect viewportRect;
+	viewportRect.x = 0;
+	viewportRect.y = this->menuOriginY();
+	viewportRect.w = this->screenWidth;
+	viewportRect.h = MENU_HEIGHT;
+	SDL_RenderSetViewport(this->sdlRenderer, &viewportRect);
 	this->screenMenu->render(this);
+}
+
+void Renderer::drawMiniEscenario(){
+	int height = MENU_HEIGHT-(2*MENU_SPACING);
+	int width = height * 2;
+	int x = (this->screenWidth - MENU_SPACING - width);
+	int y = (this->menuOriginY() +  MENU_SPACING);
+	this->miniMapMainTilePosition = {width/2,0};
+
+	SDL_Rect viewportRect;
+	viewportRect.x = x;
+	viewportRect.y = y;
+	viewportRect.w = width;
+	viewportRect.h = height;
+	SDL_RenderSetViewport(this->sdlRenderer, &viewportRect);
+
+	SDL_Rect rect = {0,0,width,height};
+	SDL_Color color = {0, 0, 0};
+	this->draw(rect,color);
+
+	this->miniEscenarioView->render(this);
 }
 
 SDL_Point Renderer::mapToWindowPoint(SDL_Point mapPoint){
@@ -268,7 +312,7 @@ void Renderer::drawTextureInRect(SDL_Texture *texture,SDL_Rect rect){
 }
 
 bool Renderer::isInsideWindow(SDL_Rect* rect){
-	int maxY = this->screenMenu->getY();
+	int maxY = this->menuOriginY();
 
 	return (rect->x < this->screenWidth &&
 			rect->x + rect->w > 0 &&
@@ -280,7 +324,41 @@ bool Renderer::canDraw() {
 	return this->successfullInit;
 }
 
-void Renderer::addView(View* view) {
+SDL_Renderer* Renderer::getSdlRenderer(){
+	return this->sdlRenderer;
+}
+
+TTF_Font* Renderer::getFont(){
+	return this->textFont;
+}
+
+int Renderer::menuOriginY(){
+	return (this->screenHeight - MENU_HEIGHT);
+}
+
+SDL_Point Renderer::escenarioSize(){
+	int height = this->menuOriginY();
+	return {this->screenWidth,height};
+}
+
+void Renderer::setEscenarioView(EscenarioView *escenarioView){
+	this->escenarioView = escenarioView;
+	this->updatedEscenario();
+}
+
+void Renderer::updatedEscenario(){
+	MapView *mapView = this->escenarioView->getMapView();
+	this->setDrawableForView(mapView);
+
+	list<View*>* entitiesViews = this->escenarioView->getEntitiesView();
+	list<View*>::iterator i;
+	for(i=entitiesViews->begin(); i != entitiesViews->end(); ++i) {
+		View* view = *i;
+		this->setDrawableForView(view);
+	}
+}
+
+void Renderer::setDrawableForView(View* view){
 	std::map<std::string,Drawable *>::iterator found = this->drawablesByInstanceName.find(view->getType());
 	Drawable* drawable = NULL;
 	if(found != this->drawablesByInstanceName.end()){
@@ -290,13 +368,50 @@ void Renderer::addView(View* view) {
 		drawable = this->missingImageDrawable;
 	}
 	view->setDrawable(drawable);
-	this->views.push_back(view);
 }
 
-SDL_Renderer* Renderer::getSdlRenderer(){
-	return this->sdlRenderer;
+// MINIMAP
+void Renderer::setMiniEscenarioView(MiniEscenarioView *miniEscenarioView){
+	this->miniEscenarioView = miniEscenarioView;
+	this->updatedMiniEscenario();
 }
 
-TTF_Font* Renderer::getFont(){
-	return this->textFont;
+void Renderer::updatedMiniEscenario(){
+	MiniMapView *miniMapView = this->miniEscenarioView->getMiniMapView();
+	this->setDrawableForMiniView(miniMapView);
 }
+
+void Renderer::setDrawableForMiniView(MiniView* view){
+	std::map<std::string,Drawable *>::iterator found = this->drawablesByInstanceName.find(view->getType());
+	Drawable* drawable = NULL;
+	if(found != this->drawablesByInstanceName.end()){
+		drawable = found->second;
+	} else {
+		Log().Get(TAG,logWARNING) << "No se pudo cargar la imagen: '"<<view->getType().c_str()<<"', usa la imagen default";
+		drawable = this->missingImageDrawable;
+	}
+	view->setDrawable(drawable);
+}
+
+void Renderer::drawInMiniMap(int mapPositionX, int mapPositionY, Drawable* drawable) {
+	SDL_Point windowPoint = {0,0};
+	// Cambio a coordenadas isometricas
+	windowPoint.x = (mapPositionX  - mapPositionY);
+	windowPoint.y = (mapPositionX  + mapPositionY) / 2;
+
+	float mapHeight = (float)(this->escenarioView->getMapView()->getHeightInPixels());
+	float miniMapHeight = (float)(MENU_HEIGHT-(2*MENU_SPACING));
+	float factor = (miniMapHeight/mapHeight);
+
+	SDL_Rect originalQuad = drawable->getRectToDraw(windowPoint.x, windowPoint.y);
+	SDL_Rect renderQuad;
+	renderQuad.x = (originalQuad.x * factor) + this->miniMapMainTilePosition.x;
+	renderQuad.y = (originalQuad.y * factor) + this->miniMapMainTilePosition.y;
+	renderQuad.w = (originalQuad.w * factor);
+	renderQuad.h = (originalQuad.h * factor);
+
+	SDL_RenderCopy(sdlRenderer, drawable->getTexture(), NULL, &renderQuad);
+}
+
+
+

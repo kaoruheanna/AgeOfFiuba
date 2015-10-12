@@ -5,7 +5,7 @@ pantalla:
 
 configuracion:
  - vel_personaje: 3
- - margen_scroll: 30
+ - margen_scroll: 20
 
 tipos:
  - nombre: agua
@@ -43,7 +43,7 @@ tipos:
    alto_frame: 145
 
  - nombre: soldado
-   imagen: img/vlad.png
+   imagen: img/vlad1.png
    ancho_base: 1
    alto_base : 1
    pixel_ref_x: 25
@@ -71,8 +71,8 @@ tipos:
 
 escenario:
  - nombre: orleans
-   size_x: 15
-   size_y: 15
+   size_x: 20
+   size_y: 20
    
    entidades:
    - [x: 6, y: 4, tipo: archeryRange]

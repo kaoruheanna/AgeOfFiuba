@@ -11,13 +11,13 @@
 #include "View.h"
 #include "../Models/Map.h"
 
-
 class MapView: public View{
 public:
 	MapView(std::string type);
 	virtual ~MapView();
 	void setModel(Map *model);
-	void render(Renderer* renderer );
+	virtual void render(Renderer* renderer );
+	int getHeightInPixels();
 
 protected:
 	SDL_Point getOrigin();

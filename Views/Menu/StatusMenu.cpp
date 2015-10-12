@@ -6,8 +6,8 @@
  */
 
 #include "StatusMenu.h"
-#include "Renderer.h"
-#include "../Utils/Log.h"
+#include "../Renderer.h"
+#include "../../Utils/Log.h"
 #include "TextLabel.h"
 
 const std::string TAG = "StatusMenu";
@@ -22,7 +22,7 @@ StatusMenu::StatusMenu(int x, int y, int width, int height) {
 	this->thirdLabel = new TextLabel(x+10,y+70);
 	this->firstLabel->setMessage("Hola");
 	this->secondLabel->setMessage("Soy Kao");
-	this->thirdLabel->setMessage("");
+	this->thirdLabel->setMessage("23");
 }
 
 StatusMenu::~StatusMenu() {

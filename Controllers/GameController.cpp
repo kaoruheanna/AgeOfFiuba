@@ -15,6 +15,9 @@
 #include "../Models/Escenario.h"
 #include "../Utils/Log.h"
 #include "../GlobalConstants.h"
+#include "../Views/EscenarioView.h"
+#include "../Views/Menu/MiniEscenarioView.h"
+#include "../Views/Menu/MiniMapView.h"
 
 const std::string TAG = "GameController";
 
@@ -23,6 +26,8 @@ GameController::GameController(GameConfiguration *config) {
 	this->renderer = NULL;
 	this->config = config;
 	this->escenario = NULL;
+	this->escenarioView = NULL;
+	this->miniEscenarioView = NULL;
 }
 
 GameController::~GameController() {
@@ -37,8 +42,8 @@ void GameController::agregarEntidades(list<Entity*> entidades) {
 		if (entidadReal != this->escenario->getProtagonista()) {
 			EntityView* entityView = new EntityView(entidadReal->getNombre());
 			entityView->setModel(entidadReal);
-			this->views.push_back(entityView);
-			this->renderer->addView(entityView);
+			this->escenarioView->addEntityView(entityView);
+			this->renderer->updatedEscenario();
 		}
 		indice++;
 	}
@@ -68,20 +73,26 @@ bool GameController::play() {
 	}
 
 	// Crear vistas a partir de la configuracion
-	MapView *mapView = new MapView("tileDefault");
+	MapView *mapView = new MapView(TILE_DEFAULT);
 	mapView->setModel(this->escenario->mundo);
-	this->views.push_back(mapView);
-	this->renderer->addView(mapView);
+	this->escenarioView = new EscenarioView(mapView);
+	this->renderer->setEscenarioView(this->escenarioView);
+
+	//creo mini escenario
+	MiniMapView *miniMapView = new MiniMapView(TILE_DEFAULT);
+	miniMapView->setModel(this->escenario->mundo);
+	this->miniEscenarioView = new MiniEscenarioView(miniMapView);
+	this->renderer->setMiniEscenarioView(this->miniEscenarioView);
 
 	// Agrego todas las vistas (siempre que no sean el protagonista)
 	list<Entity*> entidades = escenario->getListaEntidades();
-	agregarEntidades(entidades);
+	this->agregarEntidades(entidades);
 
 	// Agrego vista del personaje
 	MobileView *marioView = new MobileView(this->escenario->getProtagonista()->getNombre());
 	marioView->setModel(this->escenario->getProtagonista());
-	this->views.push_back(marioView);
-	this->renderer->addView(marioView);
+	this->escenarioView->addEntityView(marioView);
+	this->renderer->updatedEscenario();
 
 	initWindowSizes();
 
@@ -96,7 +107,7 @@ bool GameController::play() {
 		this->escenario->getProtagonista()->updatePosition();
 		this->renderer->drawViews();
 		this->sleep();
-		agregarEntidades(this->resourcesManager->InsertResourcesForNewLoopOnMap());
+		this->agregarEntidades(this->resourcesManager->InsertResourcesForNewLoopOnMap());
 	}
 
 	this->close();
@@ -148,11 +159,13 @@ void GameController::initWindowSizes() {
 }
 
 float GameController::scrollingSpeedX(int x) {
-	return scrollingSpeed(x,this->config->getPantallaAncho())*-1;
+	SDL_Point escenarioSize = this->renderer->escenarioSize();
+	return scrollingSpeed(x,escenarioSize.x)*-1;
 }
 
 float GameController::scrollingSpeedY(int y) {
-	return scrollingSpeed(y,this->config->getPantallaAlto())*-1;
+	SDL_Point escenarioSize = this->renderer->escenarioSize();
+	return scrollingSpeed(y,escenarioSize.y)*-1;
 }
 
 SDL_Point GameController::getMaxVertixForPoint(int yPosition) {
@@ -170,11 +183,12 @@ SDL_Point GameController::getMaxVertixForPoint(int yPosition) {
 }
 
 void GameController::moveToPoint(SDL_Point point) {
+	SDL_Point escenarioSize = this->renderer->escenarioSize();
 	// Checkea que el scroll no se vaya por las perpendiculares
 	point.y = (point.y > intialPointWindowWrapper.y) ? intialPointWindowWrapper.y :point.y;
-	point.y = (point.y < (finalPointWindowWrapper.y + this->config->getPantallaAlto())) ? (finalPointWindowWrapper.y + this->config->getPantallaAlto()) : point.y;
+	point.y = (point.y < (finalPointWindowWrapper.y + escenarioSize.y)) ? (finalPointWindowWrapper.y + escenarioSize.y) : point.y;
 	point.x = (point.x > intialPointWindowWrapper.x) ? intialPointWindowWrapper.x : point.x;
-	point.x = (point.x < (finalPointWindowWrapper.x + (1.5*this->config->getPantallaAncho()))) ? (finalPointWindowWrapper.x + (1.5*this->config->getPantallaAncho())) :point.x;
+	point.x = (point.x < (finalPointWindowWrapper.x + (1.5*escenarioSize.x))) ? (finalPointWindowWrapper.x + (1.5*escenarioSize.x)) :point.x;
 
 	// Checkea que el scroll no se vaya por las diagonales
 	SDL_Point maxVertix = this->getMaxVertixForPoint(point.y);
@@ -193,7 +207,7 @@ void GameController::updateWindow() {
 	newY = (scrollingSpeedY(y)*SCROLL_SPEED) + this->renderer->mainTilePosition.y;
 
 	if ((newX != this->renderer->mainTilePosition.x) || (newY != this->renderer->mainTilePosition.y)) {
-		moveToPoint({newX,newY});
+		this->moveToPoint({newX,newY});
 	}
 }
 
@@ -232,12 +246,11 @@ void GameController::close() {
 		delete this->renderer;
 	}
 
-	list<View*>::iterator i;
-	for(i=this->views.begin(); i != this->views.end(); ++i) {
-		View* view = *i;
-		delete view;
-	}
-	this->views.clear();
+	delete this->escenarioView;
+	this->escenarioView = NULL;
+
+	delete this->miniEscenarioView;
+	this->miniEscenarioView = NULL;
 }
 
 void GameController::sleep(){

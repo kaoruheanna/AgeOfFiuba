@@ -16,20 +16,22 @@
 #include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <string>
-#include "View.h"
 #include "Drawable.h"
 #include <list>
 #include <map>
 #include "../Configuration/TipoConfig.h"
-#include "ScreenMenu.h"
-
+#include "Menu/ScreenMenu.h"
 using namespace std;
 
 class View;
+class EscenarioView;
+class MiniEscenarioView;
+class MiniView;
 
 class Renderer {
 public:
 	SDL_Point mainTilePosition;
+	SDL_Point miniMapMainTilePosition;
 	Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos);
 	virtual ~Renderer();
 	void close();
@@ -44,18 +46,24 @@ public:
 	void addView(View* view);
 	SDL_Renderer* getSdlRenderer();
 	TTF_Font* getFont();
+	void setEscenarioView(EscenarioView *escenarioView);
+	void updatedEscenario();
+	void setMiniEscenarioView(MiniEscenarioView *miniEscenarioView);
+	void updatedMiniEscenario();
+	void drawInMiniMap(int mapPositionX, int mapPositionY, Drawable* drawable);
+	SDL_Point escenarioSize();
 
 private:
 	bool successfullInit;
 	SDL_Window* window;
 	SDL_Renderer* sdlRenderer;
-	list<View*> views;
 	list< pair<SDL_Point,Drawable*> > drawablesToPaint;
 	std::map<std::string, Drawable*> drawablesByInstanceName;
 	Drawable* missingImageDrawable;
 	ScreenMenu* screenMenu;
 	TTF_Font *textFont;
-
+	EscenarioView *escenarioView;
+	MiniEscenarioView *miniEscenarioView;
 	int screenWidth;
 	int screenHeight;
 
@@ -64,6 +72,11 @@ private:
 	bool isInsideWindow(SDL_Rect* rect);
 	Drawable* getDrawableFromTipoConfig(TipoConfig tipo);
 	void drawMenu();
+	void drawEscenario();
+	void drawMiniEscenario();
+	int menuOriginY();
+	void setDrawableForView(View* view);
+	void setDrawableForMiniView(MiniView* view);
 };
 
 #endif /* RENDERER_H_ */

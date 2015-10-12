@@ -8,15 +8,16 @@
 #ifndef GAMECONTROLLER_H_
 #define GAMECONTROLLER_H_
 
-#include "../Views/View.h"
 #include "../Views/Renderer.h"
 #include "../Models/MobileModel.h"
-#include <list>
 #include "../Configuration/GameConfiguration.h"
 #include "../Models/Escenario.h"
 #include "../Utils/ResourcesManager.h"
 
 using namespace std;
+
+class EscenarioView;
+class MiniEscenarioView;
 
 class GameController {
 public:
@@ -26,7 +27,8 @@ public:
 
 private:
 	bool shouldQuit;
-	list<View*> views;
+	EscenarioView *escenarioView;
+	MiniEscenarioView *miniEscenarioView;
 	Renderer *renderer;
 	Escenario* escenario;
 	GameConfiguration *config;
