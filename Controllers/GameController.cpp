@@ -28,6 +28,8 @@ GameController::GameController(GameConfiguration *config) {
 	this->escenario = NULL;
 	this->escenarioView = NULL;
 	this->miniEscenarioView = NULL;
+	this->middlePoint = 0;
+	this->vertixSlope = 0;
 }
 
 GameController::~GameController() {
@@ -52,8 +54,10 @@ void GameController::agregarEntidades(list<Entity*> entidades) {
 			this->miniEscenarioView->addEntityMiniView(miniView);
 		}
 	}
-	this->renderer->updatedEscenario();
-	this->renderer->updatedMiniEscenario();
+	if (updated){
+		this->renderer->updatedEscenario();
+		this->renderer->updatedMiniEscenario();
+	}
 }
 
 void GameController::removerEntidades(list<Entity*> entidades) {

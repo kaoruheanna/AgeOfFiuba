@@ -11,10 +11,13 @@
 const std::string TAG = "EscenarioConfig";
 
 EscenarioConfig::EscenarioConfig() {
-
+	this->sizeX = 0;
+	this->sizeY = 0;
 }
 
 EscenarioConfig::EscenarioConfig(YAML::Node nodo){
+	this->sizeX = 0;
+	this->sizeY = 0;
 	this->nodoEscenario = nodo;
 	this->validarContenido();
 
@@ -204,7 +207,6 @@ void EscenarioConfig::parsearEntidades(){
 void EscenarioConfig::cargarEscenarioPorDefecto(){
 	this->sizeX = TAMANIO_DEFAULT;
 	this->sizeY = TAMANIO_DEFAULT;
-
 }
 
 std::list<EntidadConfig> EscenarioConfig::getEntidades() {
