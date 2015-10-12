@@ -69,7 +69,6 @@ string Escenario::toString(){
 }
 
 bool Escenario::agregarEntidad(Entity* entidad){
-	Log().Get("Escenario") << "Agregar" << entidad->getPosicion().x << "," << entidad->getPosicion().y;
 	this->entidades.push_back(entidad);
 	return true;
 }

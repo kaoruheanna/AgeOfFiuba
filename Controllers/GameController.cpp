@@ -50,7 +50,7 @@ void GameController::agregarEntidades(list<Entity*> entidades) {
 }
 
 void GameController::removerEntidades(list<Entity*> entidades) {
-	Log().Get(TAG) << "removerEntidades";
+	//Log().Get(TAG) << "removerEntidades";
 }
 
 void GameController::loopEscenario() {
