@@ -103,7 +103,8 @@ bool Escenario::mapeableForPosition(SDL_Point point) {
 		SDL_Point position = this->mundo->getTileForPosition(entidadReal->getPosicion());
 		if ((position.x == point.x) &&
 			(position.y == point.y) &&
-			(entidadReal != protagonista)) {
+			(entidadReal != protagonista) &&
+			entidadReal->Cosechable) {
 				entidades.erase(entidad);
 				return true;
 		}
