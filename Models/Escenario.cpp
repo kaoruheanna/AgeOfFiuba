@@ -2,6 +2,9 @@
 #include "../Utils/Log.h"
 #include "../GlobalConstants.h"
 
+using namespace std;
+const string TAG = "Escenario";
+
 Escenario::Escenario(EscenarioConfig escenario, list<TipoConfig> tipos) {
 	map<string, SDL_Point> sizeByType;
 	list<TipoConfig>::iterator tipo;
@@ -13,6 +16,7 @@ Escenario::Escenario(EscenarioConfig escenario, list<TipoConfig> tipos) {
 
 	this->name = escenario.getNombre();
 	this->inicializacionCorrecta = false;
+	this->updated = true;
 	if(this->name == ""){
 		this->name = "sinNombre";
 		Log().Get("Escenario", logWARNING) << "El escenario tiene que tener un nombre. Usando nombre "<< this->name;
@@ -89,10 +93,33 @@ list<Entity*> Escenario::getListaEntidades(){
 	return this->entidades;
 }
 
+bool Escenario::mapeableForPosition(SDL_Point point) {
+	//return this->mundo->mapeableInPosition(point);
+	list<Entity*>::iterator entidad;
+	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
+		Entity* entidadReal = (*entidad);
+		SDL_Point position = this->mundo->getTileForPosition(entidadReal->getPosicion());
+		if ((position.x == point.x) &&
+			(position.y == point.y) &&
+			(entidadReal != protagonista)) {
+				entidades.erase(entidad);
+				return true;
+		}
+	}
+	return false;
+}
+
 //Actualiza todos los modelos en un nuevo loop
 void Escenario::loop() {
+	updated = false;
 	protagonista->updatePosition();
+	SDL_Point point = this->mundo->getTileForPosition(protagonista->getPosicion());
+	updated = mapeableForPosition(point);
+
 	entidadesAInsertar = resourcesManager->InsertResourcesForNewLoopOnMap();
+	if (entidadesAInsertar.size() > 0) {
+		updated = true;
+	}
 }
 
 list<Entity*> Escenario::getEntidadesAInsertar() {
@@ -117,7 +144,6 @@ void Escenario::vaciarEntidades(){
 		delete e;
 	}
 }
-
 
 SDL_Point Escenario::getSize(){
 	return this->mundo->getPositionForTile({this->mundo->getHeight(), this->mundo->getWidth()});

@@ -21,7 +21,7 @@ ResourcesManager::~ResourcesManager() {}
 Resource* ResourcesManager::getNewResource() {
 	int posicionX = rand() % this->escenario->mundo->getWidth();
 	int posicionY = rand() % this->escenario->mundo->getHeight();
-	Resource *resource = (Resource*)this->escenario->factory->crearEntidad("piedra",{ posicionX, posicionY });
+	Resource *resource = this->escenario->factory->crearRecurso("piedra",{ posicionX, posicionY });
 	if(resource == NULL){
 		Log().Get("Escenario", logWARNING) << "La entidad  del escenario  no pudo ser creada.";
 	} else {

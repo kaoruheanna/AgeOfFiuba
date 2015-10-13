@@ -43,20 +43,30 @@ void GameController::agregarEntidades(list<Entity*> entidades) {
 			EntityView* entityView = new EntityView(entidadReal->getNombre());
 			entityView->setModel(entidadReal);
 			this->escenarioView->addEntityView(entityView);
-			this->renderer->updatedEscenario();
 		}
 		indice++;
 	}
+	this->renderer->updatedEscenario();
 }
 
 void GameController::removerEntidades(list<Entity*> entidades) {
-	//Log().Get(TAG) << "removerEntidades";
+	this->escenarioView->getEntitiesView()->clear();
+	// Agrego vista del personaje
+	MobileView *marioView = new MobileView(this->escenario->getProtagonista()->getNombre());
+	marioView->setModel(this->escenario->getProtagonista());
+	this->escenarioView->addEntityView(marioView);
+	this->renderer->updatedEscenario();
+
+	this->agregarEntidades(this->escenario->getListaEntidades());
 }
 
 void GameController::loopEscenario() {
 	this->escenario->loop();
-	agregarEntidades(this->escenario->getEntidadesAInsertar());
-	removerEntidades(this->escenario->getEntidadesASacar());
+	//agregarEntidades(this->escenario->getEntidadesAInsertar());
+	if (this->escenario->updated) {
+		removerEntidades(this->escenario->getEntidadesASacar());
+		this->escenario->updated = false;
+	}
 }
 
 bool GameController::play() {

@@ -10,10 +10,10 @@
 
 class Mapeable {
 public:
-	Mapeable(){};
+	Mapeable(){Cosechable = false;};
 	virtual ~Mapeable(){};
-	virtual bool OcupaEspacio() {return true;};
-	virtual bool PuedeAtravesarse() {return false;};
+
+	bool Cosechable;
 };
 
 #endif /* MODELS_MAPEABLE_H_ */

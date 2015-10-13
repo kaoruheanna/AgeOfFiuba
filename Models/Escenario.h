@@ -26,10 +26,13 @@ class Escenario {
 		MobileModel* protagonista;
 		ResourcesManager* resourcesManager;
 
+		bool mapeableForPosition(SDL_Point point);
+
 	public:
 		Map* mundo;
 		EntityFactory *factory;
 		string toString ();
+		bool updated;
 
 		bool agregarEntidad(Entity*);
 		bool construirEntidad(Entity*,SDL_Point);
