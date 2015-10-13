@@ -8,6 +8,11 @@ Map::Map(int alto, int ancho, int tile_ancho, int tile_alto){
 	this -> tile_alto = tile_alto;
 	this -> tile_ancho = tile_ancho;
 	this -> baldosas = new TileSet(ancho,alto);
+	EstadoDeVisibilidad** matriz = new EstadoDeVisibilidad*[ancho];
+	for (int x = 0; x < ancho; ++x){
+		matriz[x] = new EstadoDeVisibilidad[alto];
+	}
+	this->estado = matriz;
 }
 
 Map::~Map(){
@@ -81,4 +86,15 @@ SDL_Point Map::getTileForPosition(SDL_Point point) {
 }
 SDL_Point Map::getPositionForTile(SDL_Point point) {
 	return { point.x * TILE_HEIGHT_PIXELS, point.y * TILE_HEIGHT_PIXELS };
+}
+
+void Map::setEstado (int i, int j, EstadoDeVisibilidad estado){
+	if (((i >= 0) && (j>= 0)) && (i < this->getHeight()) && (j < this->getWidth())){
+		this->estado[i][j] = estado;
+	}
+}
+
+
+EstadoDeVisibilidad Map::getEstado (int i, int j){
+	return this->estado[i][j];
 }
