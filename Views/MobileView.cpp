@@ -37,8 +37,14 @@ SDL_Point MobileView::getOrigin(){
 
 void MobileView::render(Renderer* renderer) {
 	MotionDirection currentDirection = this->getMotionDirection();
+	Uint8 alpha;
+	if (this->model->getEstado() != OCULTO){
+		if (this->model->getEstado() == VISIBLE) alpha = FOG_VISIBLE;
+		if (this->model->getEstado() == NUBLADO) alpha = FOG_VISITED;
 	this->animationStatus = this->drawable->getAnimation(currentDirection,this->model->isMoving(),this->animationStatus);
+	SDL_SetTextureAlphaMod( this->drawable->getTexture(), alpha );
 	View::render(renderer);
+	}
 }
 
 // REVISAR EL TEMA CON LA ROTACION

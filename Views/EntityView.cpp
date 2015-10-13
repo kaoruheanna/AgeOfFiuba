@@ -31,9 +31,13 @@ SDL_Point EntityView::getOrigin(){
 
 void EntityView::render(Renderer* renderer) {
 	SDL_Point point = this->getOrigin();
-	if (this->model->getEstado() == VISIBLE){
+	Uint8 alpha;
+	if (this->model->getEstado() != OCULTO){
+		if (this->model->getEstado() == VISIBLE) alpha = FOG_VISIBLE;
+		if (this->model->getEstado() == NUBLADO) alpha = FOG_VISITED;
 		this->animationStatus = this->drawable->getAnimation(this->animationStatus.direction,true,this->animationStatus);
 		this->drawable->animate(this->animationStatus);
+		SDL_SetTextureAlphaMod( this->drawable->getTexture(), alpha );
 		renderer->draw(point.x, point.y, this->drawable);
 	}
 }
