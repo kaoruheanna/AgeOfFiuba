@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <SDL2/SDL.h>
+#include "../GlobalConstants.h"
 
 using namespace std;
 
@@ -58,5 +59,5 @@ void Entity::setEstado(EstadoDeVisibilidad estado){
 }
 
 EstadoDeVisibilidad Entity::getEstado(){
-	return this->estado;
+	return (FOG_ENABLED) ? this->estado : VISIBLE;
 }
