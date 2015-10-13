@@ -95,7 +95,8 @@ list<Entity*> Escenario::getListaEntidades(){
 	return this->entidades;
 }
 
-bool Escenario::mapeableForPosition(SDL_Point point) {
+//Devuelve true si cosecho algo
+bool Escenario::cosecharEnPosicion(SDL_Point point) {
 	//return this->mundo->mapeableInPosition(point);
 	list<Entity*>::iterator entidad;
 	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
@@ -118,21 +119,16 @@ void Escenario::loop() {
 	this->protagonista->updatePosition();
 	this->niebla->update();
 	SDL_Point point = this->mundo->getTileForPosition(protagonista->getPosicion());
-	updated = mapeableForPosition(point);
+	updated = this->cosecharEnPosicion(point);
 
-	entidadesAInsertar = resourcesManager->InsertResourcesForNewLoopOnMap();
+
+	list<Entity*> entidadesAInsertar = resourcesManager->InsertResourcesForNewLoopOnMap();
 	if (entidadesAInsertar.size() > 0) {
+		this->entidades.splice(this->entidades.end(), entidadesAInsertar);
 		updated = true;
 	}
 }
 
-list<Entity*> Escenario::getEntidadesAInsertar() {
-	return entidadesAInsertar;
-}
-
-list<Entity*> Escenario::getEntidadesASacar() {
-	return entidadesASacar;
-}
 
 Entity* Escenario::crearEntidad(EntidadConfig config, bool esProtagonista) {
 	SDL_Point posicion = {config.getX(), config.getY()};

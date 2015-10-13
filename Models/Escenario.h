@@ -22,13 +22,11 @@ class Escenario {
 	private:
 		string name;
 		list<Entity*> entidades;
-		list<Entity*> entidadesASacar;
-		list<Entity*> entidadesAInsertar;
 		MobileModel* protagonista;
 		ResourcesManager* resourcesManager;
 		FogOfWar* niebla;
 
-		bool mapeableForPosition(SDL_Point point);
+		bool cosecharEnPosicion(SDL_Point point);
 
 	public:
 		Map* mundo;
@@ -40,8 +38,6 @@ class Escenario {
 		bool construirEntidad(Entity*,SDL_Point);
 		void vaciarEntidades();
 		void loop();
-		list<Entity*> getEntidadesAInsertar();
-		list<Entity*> getEntidadesASacar();
 
 		SDL_Point getSize();
 		Entity* crearEntidad(EntidadConfig config, bool esProtagonista);
