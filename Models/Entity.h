@@ -14,7 +14,7 @@
 
 using namespace std;
 
-class Entity : Mapeable{
+class Entity : public Mapeable{
 private:
 	//int id;
 	string nombre;
