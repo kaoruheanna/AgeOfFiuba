@@ -48,6 +48,13 @@ void FogOfWar::update(){
 		}
 		int posicionx;
 		int posiciony;
+		for (posicionx = 0; posicionx < this->world->getWidth(); ++posicionx){
+			for (posiciony = 0; posiciony < this->world->getHeight(); ++posiciony){
+				if (this->world->getEstado(posiciony,posicionx) == VISIBLE){
+					this->world->setEstado(posiciony,posicionx,NUBLADO);
+				}
+			}
+		}
 		for (posicionx = (currentCharacterPositionInTile.x - 1); posicionx <= (currentCharacterPositionInTile.x + 1); ++posicionx){
 			for (posiciony = (currentCharacterPositionInTile.y - 1); posiciony <= (currentCharacterPositionInTile.y + 1); ++posiciony){
 				this->world->setEstado(posiciony,posicionx,VISIBLE);
