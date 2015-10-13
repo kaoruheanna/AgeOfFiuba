@@ -18,10 +18,18 @@ ResourcesManager::ResourcesManager(Escenario *escenario) {
 
 ResourcesManager::~ResourcesManager() {}
 
+const char * ResourcesManager::GetTextForEnum( int val ) {
+	return this->ResourceTypes()[val];
+}
+
+const char * ResourcesManager::getNewResourceType() {
+	return this->GetTextForEnum(rand() % RESOURCES_QTY);
+}
+
 Resource* ResourcesManager::getNewResource() {
 	int posicionX = rand() % this->escenario->mundo->getWidth();
 	int posicionY = rand() % this->escenario->mundo->getHeight();
-	Resource *resource = this->escenario->factory->crearRecurso("piedra",{ posicionX, posicionY });
+	Resource *resource = this->escenario->factory->crearRecurso(this->getNewResourceType(),{ posicionX, posicionY });
 	if(resource == NULL){
 		Log().Get("Escenario", logWARNING) << "La entidad  del escenario  no pudo ser creada.";
 	} else {
