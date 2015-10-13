@@ -30,6 +30,8 @@ Resource* ResourcesManager::getNewResource() {
 			Log().Get("Escenario", logWARNING) << "La entidad N°  del escenario  no fue agregada al mapa. La misma no puede estar en la misma posicion que otra entidad.";
 		}
 	}
+	Log().Get("Escenario") << "Se creo en " << posicionX << " , " << posicionY;
+
 	return resource;
 }
 

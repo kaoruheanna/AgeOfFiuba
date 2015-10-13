@@ -12,6 +12,11 @@
 #include <yaml-cpp/yaml.h>
 using namespace std;
 
+enum MinimapPixelRefType {
+	MinimapPixelRefTypeDefault = 0,
+	MinimapPixelRefTypeCentered
+};
+
 class TipoConfig {
 public:
 	TipoConfig();
@@ -19,6 +24,7 @@ public:
 	virtual ~TipoConfig();
 	string getNombre();
 	string getImagen();
+	string getMiniImagen();
 	int getAnchoBase();
 	int getAltoBase();
 	int getPixelRefX();
@@ -27,10 +33,12 @@ public:
 	int getDelay();
 	int getAltoFrame();
 	int getAnchoFrame();
+	int getMinimapPixelRefType();
 
 private:
 	string nombre;
 	string imagen;
+	string miniImagen;
 	int anchoBase;
 	int altoBase;
 	int pixelRefX;
@@ -39,6 +47,7 @@ private:
 	int delay;
 	int altoFrame;
 	int anchoFrame;
+	int minimapPixelRefType;
 
 	static int getIntAttribute(YAML::Node nodo, string attributeName, int defaultValue);
 	static string getStringAttribute(YAML::Node nodo, string attributeName, string defaultValue);

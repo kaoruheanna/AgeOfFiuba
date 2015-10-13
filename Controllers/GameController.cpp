@@ -28,6 +28,8 @@ GameController::GameController(GameConfiguration *config) {
 	this->escenario = NULL;
 	this->escenarioView = NULL;
 	this->miniEscenarioView = NULL;
+	this->middlePoint = 0;
+	this->vertixSlope = 0;
 }
 
 GameController::~GameController() {
@@ -35,18 +37,28 @@ GameController::~GameController() {
 }
 
 void GameController::agregarEntidades(list<Entity*> entidades) {
+	bool updated = false;
 	list<Entity*>::iterator entidad;
-	int indice = 0;
 	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
 		Entity* entidadReal = (*entidad);
 		if (entidadReal != this->escenario->getProtagonista()) {
+			updated = true;
 			EntityView* entityView = new EntityView(entidadReal->getNombre());
 			entityView->setModel(entidadReal);
 			this->escenarioView->addEntityView(entityView);
+
+
+			// agrego mini vista
+			string miniName = MiniView::NombreDrawableFromNombreTipo(entidadReal->getNombre());
+			MiniView *miniView = new MiniView(miniName);
+			miniView->setModel(entidadReal);
+			this->miniEscenarioView->addEntityMiniView(miniView);
 		}
-		indice++;
 	}
-	this->renderer->updatedEscenario();
+	if (updated){
+		this->renderer->updatedEscenario();
+		this->renderer->updatedMiniEscenario();
+	}
 }
 
 void GameController::removerEntidades(list<Entity*> entidades) {
@@ -62,7 +74,7 @@ void GameController::removerEntidades(list<Entity*> entidades) {
 
 void GameController::loopEscenario() {
 	this->escenario->loop();
-	//agregarEntidades(this->escenario->getEntidadesAInsertar());
+	agregarEntidades(this->escenario->getEntidadesAInsertar());
 	if (this->escenario->updated) {
 		removerEntidades(this->escenario->getEntidadesASacar());
 		this->escenario->updated = false;
@@ -92,30 +104,10 @@ bool GameController::play() {
 		}
 	}
 
-	// Crear vistas a partir de la configuracion
-	MapView *mapView = new MapView(TILE_DEFAULT);
-	mapView->setModel(this->escenario->mundo);
-	this->escenarioView = new EscenarioView(mapView);
-	this->renderer->setEscenarioView(this->escenarioView);
-
-	//creo mini escenario
-	MiniMapView *miniMapView = new MiniMapView(TILE_DEFAULT);
-	miniMapView->setModel(this->escenario->mundo);
-	this->miniEscenarioView = new MiniEscenarioView(miniMapView);
-	this->renderer->setMiniEscenarioView(this->miniEscenarioView);
-
-	// Agrego todas las vistas (siempre que no sean el protagonista)
-	list<Entity*> entidades = escenario->getListaEntidades();
-	this->agregarEntidades(entidades);
-
-	// Agrego vista del personaje
-	MobileView *marioView = new MobileView(this->escenario->getProtagonista()->getNombre());
-	marioView->setModel(this->escenario->getProtagonista());
-	this->escenarioView->addEntityView(marioView);
-	this->renderer->updatedEscenario();
-
-	initWindowSizes();
-
+	this->initMap();
+	this->initEntities();
+	this->initPersonaje();
+	this->initWindowSizes();
 
 	bool shouldRestart = false;
 	//While application is running
@@ -129,6 +121,41 @@ bool GameController::play() {
 
 	this->close();
 	return shouldRestart;
+}
+
+void GameController::initMap(){
+	// Crear vistas a partir de la configuracion
+	MapView *mapView = new MapView(TILE_DEFAULT_NAME);
+	mapView->setModel(this->escenario->mundo);
+	this->escenarioView = new EscenarioView(mapView);
+	this->renderer->setEscenarioView(this->escenarioView);
+
+	//creo mini escenario
+	MiniMapView *miniMapView = new MiniMapView(MINI_TILE_DEFAULT_NAME);
+	miniMapView->setModel(this->escenario->mundo);
+	this->miniEscenarioView = new MiniEscenarioView(miniMapView);
+	this->renderer->setMiniEscenarioView(this->miniEscenarioView);
+}
+
+void GameController::initEntities(){
+	// Agrego todas las vistas (siempre que no sean el protagonista)
+	list<Entity*> entidades = escenario->getListaEntidades();
+	this->agregarEntidades(entidades);
+}
+
+void GameController::initPersonaje() {
+	// Agrego vista del personaje
+	MobileView *personajeView = new MobileView(this->escenario->getProtagonista()->getNombre());
+	personajeView->setModel(this->escenario->getProtagonista());
+	this->escenarioView->addEntityView(personajeView);
+	this->renderer->updatedEscenario();
+
+	// agrego mini vista del personaje
+	string miniPersonajeName = MiniView::NombreDrawableFromNombreTipo(this->escenario->getProtagonista()->getNombre());
+	MiniView *miniPersonajeView = new MiniView(miniPersonajeName);
+	miniPersonajeView->setModel(this->escenario->getProtagonista());
+	this->miniEscenarioView->addEntityMiniView(miniPersonajeView);
+	this->renderer->updatedMiniEscenario();
 }
 
 float GameController::scrollingSpeed(int x, int large) {

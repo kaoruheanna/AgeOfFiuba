@@ -21,7 +21,6 @@ void EntityView::setModel(Entity *model) {
 	this->model = model;
 	int pX = this->model->getPosicion().x; //ojo esto esta en coordenadas logicas
 	int pY = this->model->getPosicion().y;
-	//SDL_Point origin =	{(pX-pY)*tw,(pX+pY)*th};
 	SDL_Point origin =	{pX,pY};
 	this->origin = origin;
 }
@@ -32,8 +31,14 @@ SDL_Point EntityView::getOrigin(){
 
 void EntityView::render(Renderer* renderer) {
 	SDL_Point point = this->getOrigin();
-	this->animationStatus = this->drawable->getAnimation(this->animationStatus.direction,true,this->animationStatus);
-	this->drawable->animate(this->animationStatus);
-	renderer->draw(point.x, point.y, this->drawable);
+	Uint8 alpha;
+	if (this->model->getEstado() != OCULTO){
+		if (this->model->getEstado() == VISIBLE) alpha = FOG_VISIBLE;
+		if (this->model->getEstado() == NUBLADO) alpha = FOG_VISITED;
+		this->animationStatus = this->drawable->getAnimation(this->animationStatus.direction,true,this->animationStatus);
+		this->drawable->animate(this->animationStatus);
+		SDL_SetTextureAlphaMod( this->drawable->getTexture(), alpha );
+		renderer->draw(point.x, point.y, this->drawable);
+	}
 }
 

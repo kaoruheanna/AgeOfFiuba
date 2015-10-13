@@ -61,6 +61,8 @@ Escenario::Escenario(EscenarioConfig escenario, list<TipoConfig> tipos) {
 	}
 	//Inicializar resources Manager
 	this->resourcesManager = new ResourcesManager(this);
+	this->niebla = new FogOfWar(this->entidades, this->protagonista, this->mundo);
+	this->niebla->initialice();
 }
 
 Escenario::~Escenario(){
@@ -112,7 +114,8 @@ bool Escenario::mapeableForPosition(SDL_Point point) {
 //Actualiza todos los modelos en un nuevo loop
 void Escenario::loop() {
 	updated = false;
-	protagonista->updatePosition();
+	this->protagonista->updatePosition();
+	this->niebla->update();
 	SDL_Point point = this->mundo->getTileForPosition(protagonista->getPosicion());
 	updated = mapeableForPosition(point);
 

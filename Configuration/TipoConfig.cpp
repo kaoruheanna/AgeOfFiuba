@@ -7,6 +7,7 @@
 
 #include "TipoConfig.h"
 #include "../Utils/Log.h"
+#include "../GlobalConstants.h"
 
 const std::string TAG = "TipoConfig";
 
@@ -16,11 +17,13 @@ TipoConfig::TipoConfig() {
 	this->delay = 0;
 	this->fps = 0;
 	this->imagen = "";
+	this->miniImagen = "";
 	this->nombre = "";
-	this->pixelRefX = 64;
+	this->pixelRefX = (TILE_WIDTH_PIXELS/2);
 	this->pixelRefY = 0;
 	this->anchoFrame = 1;
 	this->altoFrame = 1;
+	this->minimapPixelRefType = MinimapPixelRefTypeDefault;
 }
 
 TipoConfig::TipoConfig(YAML::Node nodo): TipoConfig(){
@@ -33,14 +36,19 @@ TipoConfig::TipoConfig(YAML::Node nodo): TipoConfig(){
 	this->pixelRefY = TipoConfig::getIntAttribute(nodo, "pixel_ref_y", this->pixelRefY);
 	this->anchoFrame = TipoConfig::getIntAttribute(nodo, "ancho_frame", this->anchoFrame);
 	this->altoFrame = TipoConfig::getIntAttribute(nodo, "alto_frame", this->altoFrame);
+	this->minimapPixelRefType = TipoConfig::getIntAttribute(nodo, "mini_map_pixel_ref_type", this->minimapPixelRefType);
 
 	this->imagen = TipoConfig::getStringAttribute(nodo, "imagen", this->imagen);
+	this->miniImagen = TipoConfig::getStringAttribute(nodo, "miniImagen", this->miniImagen);
 	this->nombre = TipoConfig::getStringAttribute(nodo, "nombre", this->nombre);
 	if(this->nombre == ""){
 		Log().Get(TAG,logERROR) << "Nombre no puede ser null para tipo TipoConfig";
 	}
 	if(this->imagen == ""){
 		Log().Get(TAG,logERROR) << "Imagen no puede ser null para tipo TipoConfig";
+	}
+	if(this->miniImagen == ""){
+		Log().Get(TAG,logERROR) << "Mini Imagen no puede ser null para tipo TipoConfig";
 	}
 }
 
@@ -108,6 +116,9 @@ string TipoConfig::getNombre() {
 string TipoConfig::getImagen() {
 	return this->imagen;
 }
+string TipoConfig::getMiniImagen() {
+	return this->miniImagen;
+}
 int TipoConfig::getAnchoBase() {
 	return this->anchoBase;
 }
@@ -133,4 +144,6 @@ int TipoConfig::getAltoFrame() {
 int TipoConfig::getAnchoFrame() {
 	return this->anchoFrame;
 }
-
+int TipoConfig::getMinimapPixelRefType() {
+	return this->minimapPixelRefType;
+}

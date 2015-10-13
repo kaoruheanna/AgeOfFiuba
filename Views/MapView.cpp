@@ -29,7 +29,13 @@ void MapView::render(Renderer* renderer ){
 	for (int i=0; i<width ; i++){
 		for (int j=0; j<height; j++){
 			SDL_Point point = this->model->getPositionForTile({ j, i });
-			renderer->draw(point.x, point.y, this->drawable);
+			Uint8 alpha;
+			if (this->model->getEstado(i,j) != OCULTO){
+				if (this->model->getEstado(i,j) == VISIBLE) alpha = FOG_VISIBLE;
+				if (this->model->getEstado(i,j) == NUBLADO) alpha = FOG_VISITED;
+				SDL_SetTextureAlphaMod( this->drawable->getTexture(), alpha );
+				renderer->draw(point.x, point.y, this->drawable);
+			}
 		}
 	}
 }

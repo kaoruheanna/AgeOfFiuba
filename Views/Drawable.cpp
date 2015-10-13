@@ -47,6 +47,8 @@ bool Drawable::loadTextureFromSurface(SDL_Renderer* renderer, SDL_Surface* surfa
 	if( newTexture == NULL ){
 		return false;
 	}
+	//Quizas hay que chequear esto//
+	SDL_SetTextureBlendMode( newTexture, SDL_BLENDMODE_BLEND );
 	this->texture = newTexture;
 	this->onTextureChange();
 	return true;

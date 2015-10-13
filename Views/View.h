@@ -10,6 +10,7 @@
 
 #include "Renderer.h"
 #include "Drawable.h"
+#include "../GlobalConstants.h"
 
 class Renderer;
 
