@@ -37,12 +37,22 @@ SDL_Point MobileView::getOrigin(){
 
 void MobileView::render(Renderer* renderer) {
 	MotionDirection currentDirection = this->getMotionDirection();
-	Uint8 alpha;
+	Uint8 red;
+	Uint8 green;
+	Uint8 blue;
 	if (this->model->getEstado() != OCULTO){
-		if (this->model->getEstado() == VISIBLE) alpha = FOG_VISIBLE;
-		if (this->model->getEstado() == NUBLADO) alpha = FOG_VISITED;
+			if (this->model->getEstado() == VISIBLE) {
+				red = FOG_VISIBLE;
+				blue = FOG_VISIBLE;
+				green = FOG_VISIBLE;
+			}
+			if (this->model->getEstado() == NUBLADO) {
+				red = FOG_VISITED;
+				blue = FOG_VISITED;
+				green = FOG_VISITED;
+			}
 	this->animationStatus = this->drawable->getAnimation(currentDirection,this->model->isMoving(),this->animationStatus);
-	SDL_SetTextureAlphaMod( this->drawable->getTexture(), alpha );
+	SDL_SetTextureColorMod( this->drawable->getTexture(), red,green,blue );
 	View::render(renderer);
 	}
 }

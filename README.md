@@ -17,6 +17,18 @@ Para poder usarlo el proyecto compilado tiene que estar en una carpeta junto con
 Se puede cambiar la configuracion del juego modificando el archivo configuracionMapa.yaml
 NO MODIFICAR configuracion.yaml NI BORRAR LA CARPETA img YA QUE SON LOS DATOS DEFAULT DE LA APP
 
+Como funciona el cliente / servidor:
+
+- Tiene que haber un servidor prendido. Puede haber varios clientes por servidor.
+- Para prender un servidor ejecutar: AgeOfFiuba -s -port {Numero del puerto}
+- Para prender un cliente y conectarlo a un servidor ejecutar: AgeOfFiuba -c -port {Puerto del servidor} -ip {IP del servidor}
+
+Prueba local de cliente / servidor:
+
+- Abrir dos terminales
+- En una ejecutar: AgeOfFiuba -s -port 8080
+- En la otra ejecturar: AgeOfFiuba -c -port 8080 -ip 127.0.0.1
+
 Para poder compilar el proyecto se necesitan las siguientes librerias:
 
 - yaml-cpp
