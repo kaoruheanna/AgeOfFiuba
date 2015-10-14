@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <iostream>
+#include "SerializableTest/DoubleStringSerializable.h"
 
 using namespace std;
 
@@ -64,15 +65,24 @@ void Cliente::empezar(char* ip, int port) {
 	printf("Escribir algo: ");
 	string testInput;
 	getline(cin, testInput);
+	/*
+	 * Ejemplo de serializar un string
 	printf("Cliente - Enviando %s ...", testInput.c_str());
 
-	int stringLength = testInput.length() + sizeof(char); // Add end of line
-	printf("Cliente - Mando string length: %i\n", stringLength);
-	write(sd, &stringLength, sizeof(int));
-	printf("Cliente - Mando string: %s\n", testInput.c_str());
-	write(sd, testInput.c_str(),(int) testInput.length());
-	printf("Cliente - Mando el barra 0\n");
-	write(sd, &"\0", sizeof(char));
+	StringSerializable* serializable = new StringSerializable(testInput.c_str());
+	int resultado = enviarSerializable(sd, serializable);
+	printf("Cliente - Enviado con estado: %i\n", resultado);
+	delete serializable;
+	*/
+	printf("Escribir algo mas: ");
+	string secondTestInput;
+	getline(cin, secondTestInput);
+
+	// Ejemplo de serializar una estructura con 2 strings
+	DoubleStringSerializable* serializable = new DoubleStringSerializable(testInput.c_str(), secondTestInput.c_str());
+	int resultado = enviarSerializable(sd, serializable);
+	printf("Cliente - Enviado con estado: %i\n", resultado);
+	delete serializable;
 	// TODO read / write
 
 	printf("Cliente - Todo ok\n");

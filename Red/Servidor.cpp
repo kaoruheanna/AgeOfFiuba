@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <iostream>
+#include "SerializableTest/DoubleStringSerializable.h"
 
 Servidor::Servidor() {
 	// TODO Auto-generated constructor stub
@@ -52,27 +53,25 @@ void Servidor::empezar(int port) {
 		socklen_t client_length = sizeof(client_addr);
 		int client_sd = accept(sd, (sockaddr *) &client_addr, &client_length);
 
-		int stringLength = 0;
-		printf("Servidor - Esperando numero\n");
-		read(client_sd, &stringLength, sizeof(int));
-		printf("Servidor - Obtenido numero: %i\n", stringLength);
+		// Ejemplo de recibir un string
+		/*StringSerializable* serializable = new StringSerializable();
 		printf("Servidor - Esperando string\n");
-		char* puntero = (char*) malloc(stringLength);
-		char* posicionActual = puntero;
-		int leido = read(client_sd, posicionActual, stringLength);
-		// Mientras no sea un error (leido < 0) y no haya terminado la lectura seguir esperando
-		while((leido > 0) && ((stringLength - leido) > 0)){
-			printf("Servidor - Leido: %i\n", leido);
-			stringLength -= leido;
-			posicionActual = posicionActual + leido;
-			printf("Servidor - Esperando resto de string: %i\n", stringLength);
-			leido = read(client_sd, posicionActual, stringLength);
+		int resultado = recibirSerializable(client_sd, serializable);
+		printf("Servidor - Recibi string con resultado: %i\n", resultado);
+		if(resultado > 0){
+			printf("Servidor - String recibido: %s\n", serializable->string);
 		}
-		if(leido > 0){
-			printf("Servidor - Leido string: %s\n", puntero);
-		} else {
-			printf("Servidor - No se pudo leer nada: %i\n", leido);
+		delete serializable;*/
+
+		// Ejemplo de recibir dos strings
+		DoubleStringSerializable* serializable = new DoubleStringSerializable();
+		printf("Servidor - Esperando string\n");
+		int resultado = recibirSerializable(client_sd, serializable);
+		printf("Servidor - Recibi string con resultado: %i\n", resultado);
+		if(resultado > 0){
+			printf("Servidor - String recibido - 1: %s 2: %s\n", serializable->firstString, serializable->secondString);
 		}
+		delete serializable;
 		// TODO read / write
 
 	//}
