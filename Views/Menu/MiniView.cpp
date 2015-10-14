@@ -44,6 +44,8 @@ void MiniView::render(Renderer* renderer ) {
 		for (int j = 0; j < tilesInY; j++){
 			int mapPositionX = (this->origin.x + i*TILE_HEIGHT_PIXELS);
 			int mapPositionY = (this->origin.y + j*TILE_HEIGHT_PIXELS);
+			//AGREGADO PARA QUE SEA SIEMPRE VISIBLE DESDE EL INICIO
+			SDL_SetTextureColorMod(this->drawable->getTexture(),255,255,255);
 			renderer->drawInMiniMap(mapPositionX,mapPositionY, this->drawable);
 		}
 	}

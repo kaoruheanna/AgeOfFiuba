@@ -28,6 +28,8 @@ void MiniMapView::render(Renderer* renderer ){
 	for (int i=0; i<width ; i++){
 		for (int j=0; j<height; j++){
 			SDL_Point point = this->model->getPositionForTile({ j, i });
+			//AGREGADO PARA QUE SEA SIEMPRE VISIBLE DESDE EL INICIO
+			SDL_SetTextureColorMod(this->drawable->getTexture(),255,255,255);
 			renderer->drawInMiniMap(point.x, point.y, this->drawable);
 		}
 	}
