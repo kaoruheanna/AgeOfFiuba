@@ -62,27 +62,35 @@ void Cliente::empezar(char* ip, int port) {
 		return ; // ERR: -1
 	}
 
+	// Loop de conexion
+	bool endLoop = false;
+
 	printf("Escribir algo: ");
 	string testInput;
 	getline(cin, testInput);
-	/*
-	 * Ejemplo de serializar un string
-	printf("Cliente - Enviando %s ...", testInput.c_str());
 
-	StringSerializable* serializable = new StringSerializable(testInput.c_str());
-	int resultado = enviarSerializable(sd, serializable);
-	printf("Cliente - Enviado con estado: %i\n", resultado);
-	delete serializable;
-	*/
 	printf("Escribir algo mas: ");
 	string secondTestInput;
 	getline(cin, secondTestInput);
 
-	// Ejemplo de serializar una estructura con 2 strings
-	DoubleStringSerializable* serializable = new DoubleStringSerializable(testInput.c_str(), secondTestInput.c_str());
-	int resultado = enviarSerializable(sd, serializable);
-	printf("Cliente - Enviado con estado: %i\n", resultado);
-	delete serializable;
+	endLoop = (testInput.length() == 0) || (secondTestInput.length() == 0);
+
+	while(!endLoop){
+		// Ejemplo de serializar una estructura con 2 strings
+		DoubleStringSerializable* serializable = new DoubleStringSerializable(testInput.c_str(), secondTestInput.c_str());
+		int resultado = enviarSerializable(sd, serializable);
+		printf("Cliente - Enviado con estado: %i\n", resultado);
+		delete serializable;
+
+		printf("Escribir algo: ");
+		getline(cin, testInput);
+
+		printf("Escribir algo mas: ");
+		getline(cin, secondTestInput);
+
+		endLoop = (testInput.length() == 0) || (secondTestInput.length() == 0);
+	}
+
 	// TODO read / write
 
 	printf("Cliente - Todo ok\n");

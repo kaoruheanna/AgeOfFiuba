@@ -74,7 +74,7 @@ void* recibirInfo(int sd, int tamanio) {
 		faltaLeer -= leido;
 		bufferActual = bufferActual + leido;
 	} while((leido > 0) && (faltaLeer > 0));
-	if(leido < 0){
+	if(leido <= 0){
 		Log().Get(tag, logINFO) << "Error leyendo info " << leido;
 		free(infoBuffer);
 		infoBuffer = NULL;
