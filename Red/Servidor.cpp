@@ -14,6 +14,7 @@
 #include <netdb.h>
 #include <stdio.h>
 #include <string.h>
+#include <iostream>
 
 Servidor::Servidor() {
 	// TODO Auto-generated constructor stub
@@ -51,10 +52,27 @@ void Servidor::empezar(int port) {
 		socklen_t client_length = sizeof(client_addr);
 		int client_sd = accept(sd, (sockaddr *) &client_addr, &client_length);
 
-		int numer = 0;
-		printf("Servidor - Esperando numero: %i\n", numer);
-		read(client_sd, &numer, sizeof(int));
-		printf("Servidor - Obtenido numero: %i\n", numer);
+		int stringLength = 0;
+		printf("Servidor - Esperando numero\n");
+		read(client_sd, &stringLength, sizeof(int));
+		printf("Servidor - Obtenido numero: %i\n", stringLength);
+		printf("Servidor - Esperando string\n");
+		char* puntero = (char*) malloc(stringLength);
+		char* posicionActual = puntero;
+		int leido = read(client_sd, posicionActual, stringLength);
+		// Mientras no sea un error (leido < 0) y no haya terminado la lectura seguir esperando
+		while((leido > 0) && ((stringLength - leido) > 0)){
+			printf("Servidor - Leido: %i\n", leido);
+			stringLength -= leido;
+			posicionActual = posicionActual + leido;
+			printf("Servidor - Esperando resto de string: %i\n", stringLength);
+			leido = read(client_sd, posicionActual, stringLength);
+		}
+		if(leido > 0){
+			printf("Servidor - Leido string: %s\n", puntero);
+		} else {
+			printf("Servidor - No se pudo leer nada: %i\n", leido);
+		}
 		// TODO read / write
 
 	//}

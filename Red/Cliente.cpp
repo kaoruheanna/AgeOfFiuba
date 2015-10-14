@@ -14,6 +14,10 @@
 #include <netdb.h>
 #include <stdio.h>
 #include <string.h>
+#include <iostream>
+
+using namespace std;
+
 
 Cliente::Cliente() {
 	// TODO Auto-generated constructor stub
@@ -57,10 +61,18 @@ void Cliente::empezar(char* ip, int port) {
 		return ; // ERR: -1
 	}
 
-	int numer = 101;
-	printf("Cliente - Mando numero: %i\n", numer);
-	write(sd, &numer, sizeof(int));
+	printf("Escribir algo: ");
+	string testInput;
+	getline(cin, testInput);
+	printf("Cliente - Enviando %s ...", testInput.c_str());
 
+	int stringLength = testInput.length() + sizeof(char); // Add end of line
+	printf("Cliente - Mando string length: %i\n", stringLength);
+	write(sd, &stringLength, sizeof(int));
+	printf("Cliente - Mando string: %s\n", testInput.c_str());
+	write(sd, testInput.c_str(),(int) testInput.length());
+	printf("Cliente - Mando el barra 0\n");
+	write(sd, &"\0", sizeof(char));
 	// TODO read / write
 
 	printf("Cliente - Todo ok\n");
