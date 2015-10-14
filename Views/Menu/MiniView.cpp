@@ -44,9 +44,29 @@ void MiniView::render(Renderer* renderer ) {
 		for (int j = 0; j < tilesInY; j++){
 			int mapPositionX = (this->origin.x + i*TILE_HEIGHT_PIXELS);
 			int mapPositionY = (this->origin.y + j*TILE_HEIGHT_PIXELS);
-			//AGREGADO PARA QUE SEA SIEMPRE VISIBLE DESDE EL INICIO
+
+			/*/*PERMITE QUE VAYA DESCUBRIENDO EL MINIMAPA A LA PAR DEL MAPA DEL ESCENARIO
+			 *
+			Uint8 red;
+			Uint8 green;
+			Uint8 blue;
+			if (this->model->getEstado() != OCULTO){
+				if (this->model->getEstado() == VISIBLE) {
+					red = FOG_VISIBLE;
+					blue = FOG_VISIBLE;
+					green = FOG_VISIBLE;
+				}
+				if (this->model->getEstado() == NUBLADO) {
+					red = FOG_VISITED;
+					blue = FOG_VISITED;
+					green = FOG_VISITED;
+				}
+			SDL_SetTextureColorMod( this->drawable->getTexture(), red,green,blue );*/
+
+			//AGREGADO PARA QUE SE VEA TODO VISIBLE DESDE EL INICIO
 			SDL_SetTextureColorMod(this->drawable->getTexture(),255,255,255);
 			renderer->drawInMiniMap(mapPositionX,mapPositionY, this->drawable);
+			//}
 		}
 	}
 }

@@ -28,9 +28,31 @@ void MiniMapView::render(Renderer* renderer ){
 	for (int i=0; i<width ; i++){
 		for (int j=0; j<height; j++){
 			SDL_Point point = this->model->getPositionForTile({ j, i });
-			//AGREGADO PARA QUE SEA SIEMPRE VISIBLE DESDE EL INICIO
+
+			/*PERMITE QUE VAYA DESCUBRIENDO EL MINIMAPA A LA PAR DEL MAPA DEL ESCENARIO
+			 *
+			 * Uint8 red;
+			Uint8 green;
+			Uint8 blue;
+			if (this->model->getEstado(i,j) != OCULTO){
+				if (this->model->getEstado(i,j) == VISIBLE) {
+					red = FOG_VISIBLE;
+					blue = FOG_VISIBLE;
+					green = FOG_VISIBLE;
+				}
+				if (this->model->getEstado(i,j) == NUBLADO) {
+					red = FOG_VISITED;
+					blue = FOG_VISITED;
+					green = FOG_VISITED;
+				}
+
+			SDL_SetTextureColorMod( this->drawable->getTexture(), red,green,blue );*/
+
+
+			//ESTA PARA QUE SE VEA TODO DEL INICIO//
 			SDL_SetTextureColorMod(this->drawable->getTexture(),255,255,255);
 			renderer->drawInMiniMap(point.x, point.y, this->drawable);
 		}
 	}
 }
+//}
