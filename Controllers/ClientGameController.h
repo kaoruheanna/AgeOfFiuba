@@ -19,7 +19,7 @@ using namespace std;
 class EscenarioView;
 class MiniEscenarioView;
 
-class ClientGameController {
+class ClientGameController : public MensajeroCliente{
 public:
 	ClientGameController(Mensajero *mensajero);
 	virtual ~ClientGameController();

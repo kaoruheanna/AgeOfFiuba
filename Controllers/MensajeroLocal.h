@@ -12,9 +12,6 @@
 #include "../Configuration/GameConfiguration.h"
 #include "Mensajero.h"
 
-class ClientGameController;
-
-
 class MensajeroLocal : public Mensajero{
 public:
 	MensajeroLocal(ServerGameController* server);
@@ -25,10 +22,9 @@ public:
 	virtual Escenario* obtenerEscenario();
 	virtual bool inicializado();
 
-	//virtual void addClient(ClientGameController* client);
+	virtual void addClient(MensajeroCliente* client);
 private:
 	ServerGameController* server;
-	ClientGameController* client;
 };
 
 #endif /* CONTROLLERS_MENSAJEROLOCAL_H_ */

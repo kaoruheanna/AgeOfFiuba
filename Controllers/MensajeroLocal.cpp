@@ -25,3 +25,7 @@ bool MensajeroLocal::inicializado() {
 Escenario* MensajeroLocal::obtenerEscenario() {
 	return this->server->escenario;
 }
+
+void MensajeroLocal::addClient(MensajeroCliente* client) {
+	this->client = client;
+}

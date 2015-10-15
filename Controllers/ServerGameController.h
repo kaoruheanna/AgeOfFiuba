@@ -11,6 +11,7 @@
 #include "../Models/MobileModel.h"
 #include "../Models/Escenario.h"
 #include "../Configuration/GameConfiguration.h"
+#include "Mensajero.h"
 
 using namespace std;
 
