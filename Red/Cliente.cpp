@@ -15,7 +15,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <iostream>
-#include "SerializableTest/DoubleStringSerializable.h"
+
+#include "Mensaje.h"
+#include "Archivo.h"
 
 using namespace std;
 
@@ -41,7 +43,7 @@ void Cliente::empezar(char* ip, int port) {
 	addr.sin_port = htons(port);
 	struct hostent *ptr_srv;
 	ptr_srv = gethostbyname(ip);
-	if(ptr_srv == NULL){ // TODO castear a char* ?
+	if(ptr_srv == NULL){
 		printf("Cliente - Fallo el host name\n");
 		return; // ERR: -2
 	}
@@ -50,49 +52,49 @@ void Cliente::empezar(char* ip, int port) {
 			ptr_srv->h_addr_list[0],
 			ptr_srv->h_length);
 
-	/*int sockfd = socket(AF_INET, SOCK_STREAM, 0);
-	if(sockfd == -1){
-		return; // ERR: -1
-	}*/
-	// sd == sockfd
-
 	if(connect(sd, (struct sockaddr *)&addr, sizeof(addr)) == -1){
-		printf("Cliente - Fallo la coneccion\n");
+		printf("Cliente - Fallo la conexion\n");
 		close(sd);
 		return ; // ERR: -1
 	}
-
+	printf("Cliente - Empezo la conexion\n");
 	// Loop de conexion
 	bool endLoop = false;
-
-	printf("Escribir algo: ");
-	string testInput;
-	getline(cin, testInput);
-
-	printf("Escribir algo mas: ");
-	string secondTestInput;
-	getline(cin, secondTestInput);
-
-	endLoop = (testInput.length() == 0) || (secondTestInput.length() == 0);
-
+	string userName;
+	do{
+		if(endLoop){
+			printf("Nombre invalido. Escriba otro: ");
+		} else {
+			printf("Escribir nombre: ");
+		}
+		getline(cin, userName);
+		endLoop = (userName.length() == 0);
+	} while(endLoop);
+	// Se intenta logear al server
+	Mensaje* mensaje = new Mensaje(LOGIN, userName.c_str());
+	int resultado = enviarSerializable(sd, mensaje);
+	printf("Cliente - Enviado con estado: %i\nCliente - Esperando respuesta del servidor\n", resultado);
+	resultado = recibirSerializable(sd, mensaje);
+	printf("Cliente - Recibido estado: %i. Mensaje: %s\n", resultado, mensaje->toString());
 	while(!endLoop){
-		// Ejemplo de serializar una estructura con 2 strings
-		DoubleStringSerializable* serializable = new DoubleStringSerializable(testInput.c_str(), secondTestInput.c_str());
-		int resultado = enviarSerializable(sd, serializable);
-		printf("Cliente - Enviado con estado: %i\n", resultado);
-		delete serializable;
-
-		printf("Escribir algo: ");
-		getline(cin, testInput);
-
-		printf("Escribir algo mas: ");
-		getline(cin, secondTestInput);
-
-		endLoop = (testInput.length() == 0) || (secondTestInput.length() == 0);
+		endLoop = true;
+		if(resultado < 0){
+			printf("Cliente - Se corto la conexion\n");
+		} else if(mensaje->getType() == ERROR_NOMBRE_TOMADO){
+			printf("Cliente - El usuario ya existe y esta logeado actualmente\n");
+		} else if(mensaje->getType() != ESCENARIO){
+			printf("Cliente - Se mando un mensaje inesperado\n");
+		} else {
+			printf("Cliente - Recibiendo escenario...\n");
+			Archivo* configuracion = new Archivo("yaml-files/configuracion_cliente.yaml");
+			resultado = recibirSerializable(sd, configuracion);
+			delete configuracion;
+			printf("Cliente - Recibido con resultado: %i\n", resultado);
+			// A partir de aca esta el flow comun de datos...
+			// TODO el cliente indica todos los movimientos del jugador
+		}
 	}
-
-	// TODO read / write
-
-	printf("Cliente - Todo ok\n");
+	delete mensaje;
 	close(sd);
+	printf("Cliente - Termino la conexion\n");
 }

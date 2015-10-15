@@ -24,7 +24,6 @@ class Escenario {
 		list<Entity*> entidades;
 		MobileModel* protagonista;
 		ResourcesManager* resourcesManager;
-		FogOfWar* niebla;
 
 		bool cosecharEnPosicion(SDL_Point point);
 

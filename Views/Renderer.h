@@ -21,6 +21,7 @@
 #include <map>
 #include "../Configuration/TipoConfig.h"
 #include "Menu/ScreenMenu.h"
+#include "../Models/FogOfWar.h"
 using namespace std;
 
 class View;
@@ -53,6 +54,9 @@ public:
 	void updatedMiniEscenario();
 	void drawInMiniMap(int mapPositionX, int mapPositionY, Drawable* drawable);
 	SDL_Point escenarioSize();
+	void setFog(int ancho, int alto);
+	void fogUpdate(int posicionX, int posicionY);
+	FogOfWar* getFog();
 
 private:
 	bool successfullInit;
@@ -67,6 +71,8 @@ private:
 	TTF_Font *textFont;
 	EscenarioView *escenarioView;
 	MiniEscenarioView *miniEscenarioView;
+	FogOfWar* fog;
+
 	int screenWidth;
 	int screenHeight;
 

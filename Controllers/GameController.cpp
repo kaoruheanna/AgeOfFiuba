@@ -24,19 +24,17 @@ const std::string TAG = "GameController";
 GameController::GameController(GameConfiguration *config) {
 	this->shouldQuit = false;
 	this->renderer = NULL;
+	this->config = config;
 	this->escenario = NULL;
 	this->escenarioView = NULL;
 	this->miniEscenarioView = NULL;
 	this->middlePoint = 0;
 	this->vertixSlope = 0;
-
-	this->config = config;
-
 }
 
-GameController::~GameController() {}
-
-//Vistas
+GameController::~GameController() {
+	// TODO Auto-generated destructor stub
+}
 
 void GameController::agregarEntidades(list<Entity*> entidades) {
 	bool updated = false;
@@ -65,11 +63,71 @@ void GameController::agregarEntidades(list<Entity*> entidades) {
 
 void GameController::actualizarEntidades(list<Entity*> entidades) {
 	this->escenarioView->getEntitiesView()->clear();
-	this->miniEscenarioView->getEntitiesMiniView()->clear();
-	// Agrego vista del personaA>je
-	this->initPersonaje();
+	// Agrego vista del personaje
+	MobileView *marioView = new MobileView(this->escenario->getProtagonista()->getNombre());
+	marioView->setModel(this->escenario->getProtagonista());
+	this->escenarioView->addEntityView(marioView);
+	this->renderer->updatedEscenario();
 
 	this->agregarEntidades(entidades);
+}
+
+void GameController::loopEscenario() {
+	this->escenario->loop();
+	if (this->escenario->updated) {
+		actualizarEntidades(this->escenario->getListaEntidades());
+		this->escenario->updated = false;
+	}
+}
+
+bool GameController::play() {
+	this->renderer = new Renderer(this->config->getPantallaAncho(),this->config->getPantallaAlto(), this->config->getTipos());
+	if (!this->renderer->canDraw()){
+		Log().Get(TAG,logERROR) << "Failed to initialize Renderer!";
+		this->close();
+		return false;
+	}
+
+	// Crear modelos a partir de la configuracion
+	this->escenario = new Escenario(this->config->getEscenario(), this->config->getTipos());
+	if(!this->escenario->inicializacionCorrecta){
+		delete this->escenario;
+		delete this->config;
+		// Cargar configuracion default
+		this->config = new GameConfiguration();
+		this->escenario = new Escenario(this->config->getEscenario(), this->config->getTipos());
+		if(!this->escenario->inicializacionCorrecta){
+			Log().Get("GameController", logERROR) << "La configuracion default es incorrecta.";
+			this->close();
+			return false;
+		}
+	}
+
+	this->initMap();
+	this->initEntities();
+	this->initPersonaje();
+	this->initWindowSizes();
+
+	this->renderer->setFog(this->escenario->mundo->getWidth(),this->escenario->mundo->getHeight());
+	SDL_Point positionCharacter = {0,0};
+
+	bool shouldRestart = false;
+	//While application is running
+	while( !this->shouldQuit && !shouldRestart ) {
+		this->updateWindow();
+		shouldRestart = this->pollEvents();
+		this->loopEscenario();
+
+		positionCharacter =(this->escenario->getProtagonista())->getPosicion();
+		positionCharacter = this->escenario->mundo->getTileForPosition(positionCharacter);
+		this->renderer->fogUpdate(positionCharacter.x,positionCharacter.y);
+
+		this->renderer->drawViews();
+		this->sleep();
+	}
+
+	this->close();
+	return shouldRestart;
 }
 
 void GameController::initMap(){
@@ -263,65 +321,6 @@ void GameController::close() {
 	this->miniEscenarioView = NULL;
 }
 
-
-// Modelo
-
-void GameController::loopEscenario() {
-	this->escenario->loop();
-	if (this->escenario->updated) {
-		actualizarEntidades(this->escenario->getListaEntidades());
-		this->escenario->updated = false;
-	}
-}
-
-
-// Mixtos
 void GameController::sleep(){
 	SDL_Delay(DELAY_MILISEC);
 }
-
-bool GameController::play() {
-
-	// Crear modelos a partir de la configuracion
-	this->escenario = new Escenario(this->config->getEscenario(), this->config->getTipos());
-	if(!this->escenario->inicializacionCorrecta){
-		delete this->escenario;
-		delete this->config;
-		// Cargar configuracion default
-		this->config = new GameConfiguration();
-		this->escenario = new Escenario(this->config->getEscenario(), this->config->getTipos());
-		if(!this->escenario->inicializacionCorrecta){
-			Log().Get("GameController", logERROR) << "La configuracion default es incorrecta.";
-			this->close();
-			return false;
-		}
-	}
-
-	this->renderer = new Renderer(this->config->getPantallaAncho(),this->config->getPantallaAlto(), this->config->getTipos());
-		if (!this->renderer->canDraw()){
-			Log().Get(TAG,logERROR) << "Failed to initialize Renderer!";
-			this->close();
-			return false;
-		}
-
-	this->initMap();
-	this->initEntities();
-	this->initPersonaje();
-	this->initWindowSizes();
-
-	bool shouldRestart = false;
-	//While application is running
-	while( !this->shouldQuit && !shouldRestart ) {
-		this->updateWindow();
-		shouldRestart = this->pollEvents();
-		this->loopEscenario();
-		this->renderer->drawViews();
-		this->sleep();
-	}
-
-	this->close();
-	return shouldRestart;
-}
-
-
-
