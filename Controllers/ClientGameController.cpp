@@ -1,11 +1,11 @@
 /*
- * GameController.cpp
+ * ClientGameController.cpp
  *
- *  Created on: Aug 30, 2015
- *      Author: kaoru
+ *  Created on: Oct 15, 2015
+ *      Author: dario
  */
 
-#include "GameController.h"
+#include "ClientGameController.h"
 #include <stdio.h>
 #include <string>
 #include <iostream>
@@ -18,27 +18,26 @@
 #include "../Views/EscenarioView.h"
 #include "../Views/Menu/MiniEscenarioView.h"
 #include "../Views/Menu/MiniMapView.h"
+#include "Mensajero.h"
 
-const std::string TAG = "GameController";
+static const string TAG = "ClientGameController";
 
-GameController::GameController(GameConfiguration *config) {
+ClientGameController::ClientGameController(Mensajero *mensajero) {
+	this->mensajero = mensajero;
+
 	this->shouldQuit = false;
 	this->renderer = NULL;
 	this->escenario = NULL;
 	this->escenarioView = NULL;
 	this->miniEscenarioView = NULL;
+	this->config = NULL;
 	this->middlePoint = 0;
 	this->vertixSlope = 0;
-
-	this->config = config;
-
 }
 
-GameController::~GameController() {}
+ClientGameController::~ClientGameController() {}
 
-//Vistas
-
-void GameController::agregarEntidades(list<Entity*> entidades) {
+void ClientGameController::agregarEntidades(list<Entity*> entidades) {
 	bool updated = false;
 	list<Entity*>::iterator entidad;
 	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
@@ -63,7 +62,7 @@ void GameController::agregarEntidades(list<Entity*> entidades) {
 	}
 }
 
-void GameController::actualizarEntidades(list<Entity*> entidades) {
+void ClientGameController::actualizarEntidades(list<Entity*> entidades) {
 	this->escenarioView->getEntitiesView()->clear();
 	this->miniEscenarioView->getEntitiesMiniView()->clear();
 	// Agrego vista del personaA>je
@@ -72,7 +71,7 @@ void GameController::actualizarEntidades(list<Entity*> entidades) {
 	this->agregarEntidades(entidades);
 }
 
-void GameController::initMap(){
+void ClientGameController::initMap(){
 	// Crear vistas a partir de la configuracion
 	MapView *mapView = new MapView(TILE_DEFAULT_NAME);
 	mapView->setModel(this->escenario->mundo);
@@ -86,13 +85,13 @@ void GameController::initMap(){
 	this->renderer->setMiniEscenarioView(this->miniEscenarioView);
 }
 
-void GameController::initEntities(){
+void ClientGameController::initEntities(){
 	// Agrego todas las vistas (siempre que no sean el protagonista)
 	list<Entity*> entidades = escenario->getListaEntidades();
 	this->agregarEntidades(entidades);
 }
 
-void GameController::initPersonaje() {
+void ClientGameController::initPersonaje() {
 	// Agrego vista del personaje
 	MobileView *personajeView = new MobileView(this->escenario->getProtagonista()->getNombre());
 	personajeView->setModel(this->escenario->getProtagonista());
@@ -107,7 +106,7 @@ void GameController::initPersonaje() {
 	this->renderer->updatedMiniEscenario();
 }
 
-float GameController::scrollingSpeed(int z, int min, int max) {
+float ClientGameController::scrollingSpeed(int z, int min, int max) {
 	//estoy fuera del escenario
 	if ((z <= min) || (z >= max)){
 		return 0;
@@ -132,7 +131,7 @@ float GameController::scrollingSpeed(int z, int min, int max) {
 	return 0;
 }
 
-void GameController::initWindowSizes() {
+void ClientGameController::initWindowSizes() {
 	SDL_Point intialWindowWrapperTop;
 	SDL_Point intialWindowWrapperBottom;
 	SDL_Point intialWindowWrapperLeft;
@@ -166,19 +165,19 @@ void GameController::initWindowSizes() {
 	finalPointWindowWrapper.y = -intialWindowWrapperBottom.y;
 }
 
-float GameController::scrollingSpeedX(int x) {
+float ClientGameController::scrollingSpeedX(int x) {
 	SDL_Point escenarioSize = this->renderer->escenarioSize();
 	return scrollingSpeed(x,0,escenarioSize.x)*-1;
 }
 
-float GameController::scrollingSpeedY(int y) {
+float ClientGameController::scrollingSpeedY(int y) {
 	SDL_Point escenarioSize = this->renderer->escenarioSize();
 	int minY = TOP_BAR_HEIGHT;
 	int maxY = TOP_BAR_HEIGHT+escenarioSize.y;
 	return scrollingSpeed(y,minY,maxY)*-1;
 }
 
-SDL_Point GameController::getMaxVertixForPoint(int yPosition) {
+SDL_Point ClientGameController::getMaxVertixForPoint(int yPosition) {
  	SDL_Point maxVertix = { 0, 0 };
 	if(yPosition < middlePoint){
 		// If is the bottom half of the map then the slope is inverted
@@ -192,7 +191,7 @@ SDL_Point GameController::getMaxVertixForPoint(int yPosition) {
 	return maxVertix;
 }
 
-void GameController::moveToPoint(SDL_Point point) {
+void ClientGameController::moveToPoint(SDL_Point point) {
 	SDL_Point escenarioSize = this->renderer->escenarioSize();
 	// Checkea que el scroll no se vaya por las perpendiculares
 	point.y = (point.y > intialPointWindowWrapper.y) ? intialPointWindowWrapper.y :point.y;
@@ -208,7 +207,7 @@ void GameController::moveToPoint(SDL_Point point) {
 	this->renderer->mainTilePosition = point;
 }
 
-void GameController::updateWindow() {
+void ClientGameController::updateWindow() {
 	//Get mouse position
 	int x, y, newY, newX;
 	SDL_GetMouseState(&x, &y);
@@ -221,7 +220,7 @@ void GameController::updateWindow() {
 	}
 }
 
-bool GameController::pollEvents(){
+bool ClientGameController::pollEvents(){
 	bool pressedR = false;
 	SDL_Event e;
 	while( SDL_PollEvent( &e ) != 0 ) {
@@ -250,7 +249,7 @@ bool GameController::pollEvents(){
 }
 
 
-void GameController::close() {
+void ClientGameController::close() {
 	if (this->renderer){
 		this->renderer->close();
 		delete this->renderer;
@@ -263,39 +262,13 @@ void GameController::close() {
 	this->miniEscenarioView = NULL;
 }
 
-
-// Modelo
-
-void GameController::loopEscenario() {
-	this->escenario->loop();
-	if (this->escenario->updated) {
-		actualizarEntidades(this->escenario->getListaEntidades());
-		this->escenario->updated = false;
-	}
-}
-
-
 // Mixtos
-void GameController::sleep(){
-	SDL_Delay(DELAY_MILISEC);
-}
-
-bool GameController::play() {
-
-	// Crear modelos a partir de la configuracion
-	this->escenario = new Escenario(this->config->getEscenario(), this->config->getTipos());
-	if(!this->escenario->inicializacionCorrecta){
-		delete this->escenario;
-		delete this->config;
-		// Cargar configuracion default
-		this->config = new GameConfiguration();
-		this->escenario = new Escenario(this->config->getEscenario(), this->config->getTipos());
-		if(!this->escenario->inicializacionCorrecta){
-			Log().Get("GameController", logERROR) << "La configuracion default es incorrecta.";
-			this->close();
-			return false;
-		}
+bool ClientGameController::play() {
+	while( !this->mensajero->inicializado()) {
+		return false;
 	}
+	this->config = this->mensajero->obtenerConfiguracion();
+	this->escenario = this->mensajero->obtenerEscenario();
 
 	this->renderer = new Renderer(this->config->getPantallaAncho(),this->config->getPantallaAlto(), this->config->getTipos());
 		if (!this->renderer->canDraw()){
@@ -314,7 +287,6 @@ bool GameController::play() {
 	while( !this->shouldQuit && !shouldRestart ) {
 		this->updateWindow();
 		shouldRestart = this->pollEvents();
-		this->loopEscenario();
 		this->renderer->drawViews();
 		this->sleep();
 	}
@@ -323,5 +295,6 @@ bool GameController::play() {
 	return shouldRestart;
 }
 
-
-
+void ClientGameController::sleep(){
+	SDL_Delay(DELAY_MILISEC);
+}

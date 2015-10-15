@@ -15,6 +15,11 @@ and may not be redistributed without written permission.*/
 #include "Red/Servidor.h"
 #include "inttypes.h"
 
+#include "Controllers/ClientGameController.h"
+#include "Controllers/MensajeroLocal.h"
+#include "Controllers/ServerGameController.h"
+
+/*
 int main( int argc, char* args[] )
 {
 	// Detect arguments to startup server or client
@@ -71,5 +76,28 @@ int main( int argc, char* args[] )
 		delete gameController;
 		delete configuration;
 	} while(shouldRestart);
+	return 0;
+}
+*/
+
+int main( int argc, char* args[] ) {
+	GameConfiguration *configuration = new GameConfiguration(CONFIG_CUSTOM);
+	ServerGameController *serverGameController = new ServerGameController(configuration);
+
+	// If no arguments then start the YAML game
+	bool shouldRestart = false;
+	do {
+		serverGameController->play();
+		Mensajero* mensajero = new MensajeroLocal(serverGameController);
+		ClientGameController *clientGameController = new ClientGameController(mensajero);
+		shouldRestart = clientGameController->play();
+
+		delete clientGameController;
+		delete mensajero;
+
+	} while(shouldRestart);
+	delete serverGameController;
+	delete configuration;
+
 	return 0;
 }
