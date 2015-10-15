@@ -20,7 +20,7 @@ enum EstadoDeVisibilidad{
 	VISIBLE,
 };
 
-class Entity : Mapeable{
+class Entity : public Mapeable{
 private:
 	//int id;
 	string nombre;

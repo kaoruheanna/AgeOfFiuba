@@ -31,9 +31,23 @@ SDL_Point EntityView::getOrigin(){
 
 void EntityView::render(Renderer* renderer) {
 	SDL_Point point = this->getOrigin();
-	if (this->model->getEstado() == VISIBLE){
+	Uint8 red;
+	Uint8 green;
+	Uint8 blue;
+	if (this->model->getEstado() != OCULTO){
+		if (this->model->getEstado() == VISIBLE) {
+			red = FOG_VISIBLE;
+			blue = FOG_VISIBLE;
+			green = FOG_VISIBLE;
+		}
+		if (this->model->getEstado() == NUBLADO) {
+			red = FOG_VISITED;
+			blue = FOG_VISITED;
+			green = FOG_VISITED;
+		}
 		this->animationStatus = this->drawable->getAnimation(this->animationStatus.direction,true,this->animationStatus);
 		this->drawable->animate(this->animationStatus);
+		SDL_SetTextureColorMod( this->drawable->getTexture(), red,green,blue );
 		renderer->draw(point.x, point.y, this->drawable);
 	}
 }

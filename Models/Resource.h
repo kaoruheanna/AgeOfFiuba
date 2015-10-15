@@ -13,6 +13,7 @@ using namespace std;
 
 class Resource : public Entity {
 public:
+	Resource( const Resource& other );
 	Resource(string nombre, SDL_Point posicion, int ancho_base = 1, int alto_base = 1);
 	virtual ~Resource();
 };

@@ -12,6 +12,7 @@ FogOfWar::FogOfWar(list<Entity*> entities, Entity* mainCharacter, Map* map){
 	this->world = map;
 }
 
+
 void FogOfWar::initialice(){
 	list<Entity*>::iterator currentEntityIterator;
 	Entity* currentEntity;
@@ -19,11 +20,18 @@ void FogOfWar::initialice(){
 			currentEntity = (*currentEntityIterator);
 			currentEntity->setEstado(OCULTO);
 	}
+	int posicionx;
+	int posiciony;
+	for (posicionx = 0; posicionx < this->world->getWidth(); ++posicionx){
+		for (posiciony = 0; posiciony < this->world->getHeight(); ++posiciony){
+			this->world->setEstado(posiciony,posicionx,OCULTO);
+		}
+	}
 	character->setEstado(VISIBLE);
 }
 
 void FogOfWar::update(){
-	list<Entity*>::iterator currentEntityIterator;
+		list<Entity*>::iterator currentEntityIterator;
 		Entity* currentEntity;
 		SDL_Point currentCharacterPositionInTile = this->world->getTileForPosition(this->character->getPosicion());
 		SDL_Point currentEntityPositionInTile = {0,0};
@@ -37,6 +45,20 @@ void FogOfWar::update(){
 				if (currentEntity->getEstado() == VISIBLE ){
 					currentEntity->setEstado(NUBLADO);
 				}
+			}
+		}
+		int posicionx;
+		int posiciony;
+		for (posicionx = 0; posicionx < this->world->getWidth(); ++posicionx){
+			for (posiciony = 0; posiciony < this->world->getHeight(); ++posiciony){
+				if (this->world->getEstado(posiciony,posicionx) == VISIBLE){
+					this->world->setEstado(posiciony,posicionx,NUBLADO);
+				}
+			}
+		}
+		for (posicionx = (currentCharacterPositionInTile.x - 1); posicionx <= (currentCharacterPositionInTile.x + 1); ++posicionx){
+			for (posiciony = (currentCharacterPositionInTile.y - 1); posiciony <= (currentCharacterPositionInTile.y + 1); ++posiciony){
+				this->world->setEstado(posiciony,posicionx,VISIBLE);
 			}
 		}
 

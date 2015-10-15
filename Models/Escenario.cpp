@@ -2,6 +2,9 @@
 #include "../Utils/Log.h"
 #include "../GlobalConstants.h"
 
+using namespace std;
+const string TAG = "Escenario";
+
 Escenario::Escenario(EscenarioConfig escenario, list<TipoConfig> tipos) {
 	map<string, SDL_Point> sizeByType;
 	list<TipoConfig>::iterator tipo;
@@ -13,6 +16,7 @@ Escenario::Escenario(EscenarioConfig escenario, list<TipoConfig> tipos) {
 
 	this->name = escenario.getNombre();
 	this->inicializacionCorrecta = false;
+	this->updated = true;
 	if(this->name == ""){
 		this->name = "sinNombre";
 		Log().Get("Escenario", logWARNING) << "El escenario tiene que tener un nombre. Usando nombre "<< this->name;
@@ -91,20 +95,40 @@ list<Entity*> Escenario::getListaEntidades(){
 	return this->entidades;
 }
 
+//Devuelve true si cosecho algo
+bool Escenario::cosecharEnPosicion(SDL_Point point) {
+	//return this->mundo->mapeableInPosition(point);
+	list<Entity*>::iterator entidad;
+	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
+		Entity* entidadReal = (*entidad);
+		SDL_Point position = this->mundo->getTileForPosition(entidadReal->getPosicion());
+		if ((position.x == point.x) &&
+			(position.y == point.y) &&
+			(entidadReal != protagonista) &&
+			entidadReal->Cosechable) {
+				entidades.erase(entidad);
+				return true;
+		}
+	}
+	return false;
+}
+
 //Actualiza todos los modelos en un nuevo loop
 void Escenario::loop() {
+	updated = false;
 	this->protagonista->updatePosition();
 	this->niebla->update();
-	entidadesAInsertar = resourcesManager->InsertResourcesForNewLoopOnMap();
+	SDL_Point point = this->mundo->getTileForPosition(protagonista->getPosicion());
+	updated = this->cosecharEnPosicion(point);
+
+
+	list<Entity*> entidadesAInsertar = resourcesManager->InsertResourcesForNewLoopOnMap();
+	if (entidadesAInsertar.size() > 0) {
+		this->entidades.splice(this->entidades.end(), entidadesAInsertar);
+		updated = true;
+	}
 }
 
-list<Entity*> Escenario::getEntidadesAInsertar() {
-	return entidadesAInsertar;
-}
-
-list<Entity*> Escenario::getEntidadesASacar() {
-	return entidadesASacar;
-}
 
 Entity* Escenario::crearEntidad(EntidadConfig config, bool esProtagonista) {
 	SDL_Point posicion = {config.getX(), config.getY()};
@@ -120,7 +144,6 @@ void Escenario::vaciarEntidades(){
 		delete e;
 	}
 }
-
 
 SDL_Point Escenario::getSize(){
 	return this->mundo->getPositionForTile({this->mundo->getHeight(), this->mundo->getWidth()});

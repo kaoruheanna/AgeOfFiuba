@@ -14,6 +14,8 @@
 #include <netdb.h>
 #include <stdio.h>
 #include <string.h>
+#include <iostream>
+#include "SerializableTest/DoubleStringSerializable.h"
 
 Servidor::Servidor() {
 	// TODO Auto-generated constructor stub
@@ -45,19 +47,29 @@ void Servidor::empezar(int port) {
 		return; // ERR: -1
 	}
 
-	//while(true){
+	while(true){
 
 		sockaddr_in client_addr;
 		socklen_t client_length = sizeof(client_addr);
 		int client_sd = accept(sd, (sockaddr *) &client_addr, &client_length);
 
-		int numer = 0;
-		printf("Servidor - Esperando numero: %i\n", numer);
-		read(client_sd, &numer, sizeof(int));
-		printf("Servidor - Obtenido numero: %i\n", numer);
+		bool stopClientTalk = false;
+		while(!stopClientTalk){
+			// Ejemplo de recibir dos strings
+			DoubleStringSerializable* serializable = new DoubleStringSerializable();
+			printf("Servidor - Esperando string\n");
+			int resultado = recibirSerializable(client_sd, serializable);
+			printf("Servidor - Recibi string con resultado: %i\n", resultado);
+			if(resultado > 0){
+				printf("Servidor - String recibido - 1: %s 2: %s\n", serializable->firstString, serializable->secondString);
+			} else {
+				stopClientTalk = true;
+			}
+			delete serializable;
+		}
 		// TODO read / write
 
-	//}
+	}
 
 	printf("Servidor - Todo ok\n");
 	close(sd);

@@ -47,6 +47,7 @@ void GameController::agregarEntidades(list<Entity*> entidades) {
 			entityView->setModel(entidadReal);
 			this->escenarioView->addEntityView(entityView);
 
+
 			// agrego mini vista
 			string miniName = MiniView::NombreDrawableFromNombreTipo(entidadReal->getNombre());
 			MiniView *miniView = new MiniView(miniName);
@@ -60,14 +61,23 @@ void GameController::agregarEntidades(list<Entity*> entidades) {
 	}
 }
 
-void GameController::removerEntidades(list<Entity*> entidades) {
-	//Log().Get(TAG) << "removerEntidades";
+void GameController::actualizarEntidades(list<Entity*> entidades) {
+	this->escenarioView->getEntitiesView()->clear();
+	// Agrego vista del personaje
+	MobileView *marioView = new MobileView(this->escenario->getProtagonista()->getNombre());
+	marioView->setModel(this->escenario->getProtagonista());
+	this->escenarioView->addEntityView(marioView);
+	this->renderer->updatedEscenario();
+
+	this->agregarEntidades(entidades);
 }
 
 void GameController::loopEscenario() {
 	this->escenario->loop();
-	agregarEntidades(this->escenario->getEntidadesAInsertar());
-	removerEntidades(this->escenario->getEntidadesASacar());
+	if (this->escenario->updated) {
+		actualizarEntidades(this->escenario->getListaEntidades());
+		this->escenario->updated = false;
+	}
 }
 
 bool GameController::play() {

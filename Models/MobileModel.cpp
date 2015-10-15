@@ -22,6 +22,7 @@ MobileModel::MobileModel() : Entity("", {0, 0}, 1, 1){
 	this->destinationX = 0;
 	this->destinationY = 0;
 	this->moving = false;
+	this->Cosechable = false;
 }
 
 MobileModel::MobileModel(string nombre, SDL_Point posicion, int ancho_base, int alto_base)
@@ -29,6 +30,7 @@ MobileModel::MobileModel(string nombre, SDL_Point posicion, int ancho_base, int 
 	this->destinationX = this->posicion.x;
 	this->destinationY = this->posicion.y;
 	this->moving = false;
+	this->Cosechable = false;
 }
 
 MobileModel::~MobileModel() {
