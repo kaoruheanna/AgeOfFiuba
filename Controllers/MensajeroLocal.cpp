@@ -7,9 +7,14 @@
 
 #include "MensajeroLocal.h"
 
+MensajeroLocal::MensajeroLocal() : Mensajero() {
+	this->server = NULL;
+	this->cliente = NULL;
+}
+
 MensajeroLocal::MensajeroLocal(ServerGameController* server) : Mensajero() {
 	this->server = server;
-	this->client = NULL;
+	this->cliente = NULL;
 }
 
 MensajeroLocal::~MensajeroLocal() {}
@@ -27,5 +32,22 @@ Escenario* MensajeroLocal::obtenerEscenario() {
 }
 
 void MensajeroLocal::addClient(MensajeroCliente* client) {
-	this->client = client;
+	this->cliente = client;
+	this->server->addMensajero(this);
+}
+
+void MensajeroLocal::moverProtagonista(SDL_Point point) {
+	this->server->moverProtagonista(point);
+}
+
+void MensajeroLocal::apareceRecurso(Resource* recurso){
+	this->cliente->apareceRecurso(recurso);
+}
+
+void MensajeroLocal::desapareceRecurso(Resource recurso){
+	this->cliente->desapareceRecurso(recurso);
+}
+
+void MensajeroLocal::actualizaPersonaje(MobileModel* entity){
+	this->cliente->actualizaPersonaje(entity);
 }

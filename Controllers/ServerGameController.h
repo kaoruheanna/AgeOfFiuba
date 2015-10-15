@@ -11,7 +11,10 @@
 #include "../Models/MobileModel.h"
 #include "../Models/Escenario.h"
 #include "../Configuration/GameConfiguration.h"
+#include "MensajeroServidor.h"
 #include "Mensajero.h"
+
+class Mensajero;
 
 using namespace std;
 
@@ -23,10 +26,17 @@ public:
 	bool inicializado();
 
 	void play();
+	void moverProtagonista(SDL_Point point);
 	Escenario* escenario;
-
+	virtual void addMensajero(Mensajero *mensajero);
+	void init();
 private:
 	GameConfiguration *config;
+	list<Mensajero*> mensajeros;
+	void loopEscenario();
+	void actualizarProtagonista();
+	void sleep();
+
 };
 
 #endif /* CONTROLLERS_SERVERGAMECONTROLLER_H_ */

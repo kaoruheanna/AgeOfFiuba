@@ -242,7 +242,7 @@ bool ClientGameController::pollEvents(){
 
 			point = this->renderer->proyectedPoint(point, this->escenario->getSize());
 
-			this->escenario->getProtagonista()->setDestination(point.x,point.y);
+			this->mensajero->moverProtagonista(point);
 		}
 	}
 	return pressedR;
@@ -269,6 +269,7 @@ bool ClientGameController::play() {
 	}
 	this->config = this->mensajero->obtenerConfiguracion();
 	this->escenario = this->mensajero->obtenerEscenario();
+	this->mensajero->addClient(this);
 
 	this->renderer = new Renderer(this->config->getPantallaAncho(),this->config->getPantallaAlto(), this->config->getTipos());
 		if (!this->renderer->canDraw()){
@@ -282,11 +283,19 @@ bool ClientGameController::play() {
 	this->initPersonaje();
 	this->initWindowSizes();
 
+	this->renderer->setFog(this->escenario->mundo->getWidth(),this->escenario->mundo->getHeight());
+	SDL_Point positionCharacter = {0,0};
+
 	bool shouldRestart = false;
 	//While application is running
 	while( !this->shouldQuit && !shouldRestart ) {
 		this->updateWindow();
 		shouldRestart = this->pollEvents();
+
+		positionCharacter =(this->escenario->getProtagonista())->getPosicion();
+		positionCharacter = this->escenario->mundo->getTileForPosition(positionCharacter);
+		this->renderer->fogUpdate(positionCharacter.x,positionCharacter.y);
+
 		this->renderer->drawViews();
 		this->sleep();
 	}
@@ -297,4 +306,8 @@ bool ClientGameController::play() {
 
 void ClientGameController::sleep(){
 	SDL_Delay(DELAY_MILISEC);
+}
+
+void ClientGameController::actualizaPersonaje(MobileModel* entity) {
+	this->escenario->getProtagonista()->setPosicion(entity->getPosicion());
 }

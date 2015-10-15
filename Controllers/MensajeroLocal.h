@@ -14,17 +14,24 @@
 
 class MensajeroLocal : public Mensajero{
 public:
+	MensajeroLocal();
 	MensajeroLocal(ServerGameController* server);
 	virtual ~MensajeroLocal();
+	virtual void addClient(MensajeroCliente* client);
 
 	//Metodos Cliente->Servidor
 	virtual GameConfiguration* obtenerConfiguracion();
 	virtual Escenario* obtenerEscenario();
 	virtual bool inicializado();
+	virtual void moverProtagonista(SDL_Point point);
 
-	virtual void addClient(MensajeroCliente* client);
+	//Metodos Servidor->Cliente
+	virtual void apareceRecurso(Resource* recurso);
+	virtual void desapareceRecurso(Resource recurso);
+	virtual void actualizaPersonaje(MobileModel* entity);
 private:
 	ServerGameController* server;
+	MensajeroCliente* cliente;
 };
 
 #endif /* CONTROLLERS_MENSAJEROLOCAL_H_ */

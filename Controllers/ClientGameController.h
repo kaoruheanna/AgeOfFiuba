@@ -60,6 +60,9 @@ private:
 	void agregarEntidades(list<Entity*> entidades);
 	void actualizarEntidades(list<Entity*> entidades);
 	void loopEscenario();
+
+	//Mensajero Cliente
+	virtual void actualizaPersonaje(MobileModel* entity);
 };
 
 #endif /* CONTROLLERS_CLIENTGAMECONTROLLER_H_ */

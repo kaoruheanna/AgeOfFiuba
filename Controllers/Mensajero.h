@@ -8,30 +8,31 @@
 #ifndef CONTROLLERS_MENSAJERO_H_
 #define CONTROLLERS_MENSAJERO_H_
 
-#include "ServerGameController.h"
+#include "../Models/Resource.h"
+#include "../Models/MobileModel.h"
+#include "../Models/Escenario.h"
 #include "../Configuration/GameConfiguration.h"
 
 class MensajeroCliente {
-
-};
-
-
-class MensajeroServidor {
-
-};
-
-class Mensajero {
 public:
-	Mensajero() : client(NULL){};
-	virtual ~Mensajero(){};
+	MensajeroCliente(){};
+	virtual ~MensajeroCliente(){};
+	virtual void apareceRecurso(Resource* recurso){};
+	virtual void desapareceRecurso(Resource recurso){};
+	virtual void actualizaPersonaje(MobileModel* entity){};
+};
+
+class Mensajero : public MensajeroCliente{
+public:
+	Mensajero();
+	virtual ~Mensajero();
+	virtual void addClient(MensajeroCliente* client){};
 
 	//Metodos Cliente->Servidor
 	virtual GameConfiguration* obtenerConfiguracion(){return 0;};
 	virtual Escenario* obtenerEscenario(){return 0;};
 	virtual bool inicializado(){return 0;};
+	virtual void moverProtagonista(SDL_Point point){};
 
-	virtual void addClient(MensajeroCliente* client){};
-protected:
-	MensajeroCliente* client;
 };
 #endif /* CONTROLLERS_MENSAJERO_H_ */

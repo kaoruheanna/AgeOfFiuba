@@ -1,6 +1,9 @@
 /*This source code copyrighted by Lazy Foo' Productions (2004-2015)
 and may not be redistributed without written permission.*/
 
+
+#include <iostream>
+#include <thread>
 //Using SDL, SDL_image, standard IO, and strings
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -80,14 +83,22 @@ int main( int argc, char* args[] )
 }
 */
 
+
+GameConfiguration *configuration;
+ServerGameController *serverGameController;
+void startServer() {
+	serverGameController->play();
+}
+
 int main( int argc, char* args[] ) {
-	GameConfiguration *configuration = new GameConfiguration(CONFIG_CUSTOM);
-	ServerGameController *serverGameController = new ServerGameController(configuration);
+	configuration = new GameConfiguration(CONFIG_CUSTOM);
+	serverGameController = new ServerGameController(configuration);
+	serverGameController->init();
+	std::thread startServerThread(startServer);
 
 	// If no arguments then start the YAML game
 	bool shouldRestart = false;
 	do {
-		serverGameController->play();
 		Mensajero* mensajero = new MensajeroLocal(serverGameController);
 		ClientGameController *clientGameController = new ClientGameController(mensajero);
 		shouldRestart = clientGameController->play();
@@ -101,3 +112,4 @@ int main( int argc, char* args[] ) {
 
 	return 0;
 }
+
