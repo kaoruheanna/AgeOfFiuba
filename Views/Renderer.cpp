@@ -14,6 +14,7 @@
 #include "Menu/MiniEscenarioView.h"
 #include "Menu/MiniMapView.h"
 #include "Menu/MiniView.h"
+#include "TopBar/TopBar.h"
 
 const std::string TAG = "Renderer";
 
@@ -29,6 +30,7 @@ Renderer::Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos) {
 	this->screenWidth = screenWidth;
 	this->screenHeight = screenHeight;
 	this->screenMenu = new ScreenMenu(this->screenWidth,MENU_HEIGHT);
+	this->topBar = new TopBar(this->screenWidth,TOP_BAR_HEIGHT);
 
 	bool didInitSDL = this->initSDL();
 	bool didLoadMedia = this->loadMedia(tipos);
@@ -199,6 +201,7 @@ void Renderer::close() {
 	TTF_CloseFont(this->textFont);
 	this->textFont = NULL;
 	delete this->screenMenu;
+	delete this->topBar;
 
 	//Destroy window
 	SDL_DestroyRenderer(this->sdlRenderer);
@@ -223,7 +226,11 @@ bool drawOrder (pair<SDL_Point, Drawable*> first,pair<SDL_Point, Drawable*> seco
 }
 
 void Renderer::drawViews() {
+	//Clear screen
+	SDL_SetRenderDrawColor(this->sdlRenderer, 0x00, 0x00, 0x00, 0x00 );
+	SDL_RenderClear(this->sdlRenderer);
 
+	this->drawTopBar();
 	this->drawEscenario();
 	this->drawMenu();
 	this->drawMiniEscenario();
@@ -232,18 +239,25 @@ void Renderer::drawViews() {
 	SDL_RenderPresent(this->sdlRenderer);
 }
 
-void Renderer::drawEscenario() {
-	//set viewport
+void Renderer::drawTopBar() {
 	SDL_Rect viewportRect;
 	viewportRect.x = 0;
 	viewportRect.y = 0;
 	viewportRect.w = this->screenWidth;
-	viewportRect.h = this->menuOriginY();
+	viewportRect.h = TOP_BAR_HEIGHT;
 	SDL_RenderSetViewport(this->sdlRenderer, &viewportRect);
 
-	//Clear screen
-	SDL_SetRenderDrawColor(this->sdlRenderer, 0x00, 0x00, 0x00, 0x00 );
-	SDL_RenderClear(this->sdlRenderer);
+	this->topBar->render(this);
+}
+
+void Renderer::drawEscenario() {
+	//set viewport
+	SDL_Rect viewportRect;
+	viewportRect.x = 0;
+	viewportRect.y = TOP_BAR_HEIGHT;
+	viewportRect.w = this->screenWidth;
+	viewportRect.h = this->menuOriginY();
+	SDL_RenderSetViewport(this->sdlRenderer, &viewportRect);
 
 	this->escenarioView->render(this);
 
@@ -381,7 +395,7 @@ int Renderer::menuOriginY(){
 }
 
 SDL_Point Renderer::escenarioSize(){
-	int height = this->menuOriginY();
+	int height = this->menuOriginY() - TOP_BAR_HEIGHT;
 	return {this->screenWidth,height};
 }
 

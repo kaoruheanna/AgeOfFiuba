@@ -27,6 +27,7 @@ class View;
 class EscenarioView;
 class MiniEscenarioView;
 class MiniView;
+class TopBar;
 
 class Renderer {
 public:
@@ -62,6 +63,7 @@ private:
 	Drawable* missingImageDrawable;
 	Drawable* miniMissingImageDrawable;
 	ScreenMenu* screenMenu;
+	TopBar* topBar;
 	TTF_Font *textFont;
 	EscenarioView *escenarioView;
 	MiniEscenarioView *miniEscenarioView;
@@ -73,6 +75,7 @@ private:
 	bool loadMediaForMiniMap(list<TipoConfig>* tipos);
 	bool isInsideWindow(SDL_Rect* rect);
 	Drawable* getDrawableFromTipoConfig(TipoConfig tipo);
+	void drawTopBar();
 	void drawMenu();
 	void drawEscenario();
 	void drawMiniEscenario();

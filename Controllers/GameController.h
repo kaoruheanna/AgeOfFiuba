@@ -39,7 +39,7 @@ private:
 	// Entre -1 y 1
 	float scrollingSpeedX(int x);
 	float scrollingSpeedY(int y);
-	float scrollingSpeed(int x, int large);
+	float scrollingSpeed(int z, int min, int max);
 	void moveToPoint(SDL_Point point);
 	void initWindowSizes();
 	void initMap();

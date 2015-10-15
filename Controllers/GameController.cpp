@@ -147,13 +147,28 @@ void GameController::initPersonaje() {
 	this->renderer->updatedMiniEscenario();
 }
 
-float GameController::scrollingSpeed(int x, int large) {
-	if ((x < this->config->getMargenScroll()) && (x>0)) {
-		return ((float)(x-this->config->getMargenScroll())/this->config->getMargenScroll());
+float GameController::scrollingSpeed(int z, int min, int max) {
+	//estoy fuera del escenario
+	if ((z <= min) || (z >= max)){
+		return 0;
 	}
-	if ((x > (large - this->config->getMargenScroll())) && (x < large)) {
-		return ((float)(x - large + this->config->getMargenScroll())/this->config->getMargenScroll());
+
+	int margenScroll = this->config->getMargenScroll();
+	int scrollInferior = (min + margenScroll);
+	int scrollSuperior = (max - margenScroll);
+
+	// esta en la zona de scroll inferior, devuelvo la velocidad proporcional
+	if (z < scrollInferior){
+		float distancia = (float) (z - scrollInferior);
+		return (float)(distancia / margenScroll);
 	}
+
+	// esta en la zona de scroll superior, devuelvo la velocidad proporcional
+	if (z > scrollSuperior){
+		float distancia = (float) (z - scrollSuperior);
+		return (float)(distancia / margenScroll);
+	}
+
 	return 0;
 }
 
@@ -193,12 +208,14 @@ void GameController::initWindowSizes() {
 
 float GameController::scrollingSpeedX(int x) {
 	SDL_Point escenarioSize = this->renderer->escenarioSize();
-	return scrollingSpeed(x,escenarioSize.x)*-1;
+	return scrollingSpeed(x,0,escenarioSize.x)*-1;
 }
 
 float GameController::scrollingSpeedY(int y) {
 	SDL_Point escenarioSize = this->renderer->escenarioSize();
-	return scrollingSpeed(y,escenarioSize.y)*-1;
+	int minY = TOP_BAR_HEIGHT;
+	int maxY = TOP_BAR_HEIGHT+escenarioSize.y;
+	return scrollingSpeed(y,minY,maxY)*-1;
 }
 
 SDL_Point GameController::getMaxVertixForPoint(int yPosition) {

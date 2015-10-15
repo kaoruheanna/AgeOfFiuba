@@ -8,7 +8,6 @@
 #include "ScreenMenu.h"
 #include "../Renderer.h"
 #include "StatusMenu.h"
-//#include "MiniMapMenu.h"
 #include "../../GlobalConstants.h"
 
 ScreenMenu::ScreenMenu(int width, int height) {
