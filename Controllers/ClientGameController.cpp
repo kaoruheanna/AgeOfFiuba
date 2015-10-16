@@ -309,5 +309,16 @@ void ClientGameController::sleep(){
 }
 
 void ClientGameController::actualizaPersonaje(MobileModel* entity) {
-	this->escenario->getProtagonista()->setPosicion(entity->getPosicion());
+	this->escenario->getProtagonista()->update(entity);
+}
+
+void ClientGameController::apareceRecurso(Resource* recurso) {
+	this->escenario->agregarEntidad(recurso);
+	actualizarEntidades(this->escenario->getListaEntidades());
+}
+
+void ClientGameController::desapareceRecurso(Resource* recurso){
+	if(this->escenario->eliminarRecursoConID(recurso->id)) {
+		actualizarEntidades(this->escenario->getListaEntidades());
+	}
 }

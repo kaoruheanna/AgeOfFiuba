@@ -33,6 +33,7 @@ void ServerGameController::init() {
 					<< "La configuracion default es incorrecta.";
 		}
 	}
+	this->escenario->delegate = this;
 }
 
 void ServerGameController::play() {
@@ -48,9 +49,6 @@ void ServerGameController::play() {
 
 void ServerGameController::loopEscenario() {
 	this->escenario->loop();
-	//if (this->escenario->updated) {
-		this->actualizarProtagonista();
-	//}
 }
 bool ServerGameController::inicializado() {
 	return this->escenario && this->escenario->inicializacionCorrecta;
@@ -64,7 +62,6 @@ void ServerGameController::actualizarProtagonista(){
 	list<Mensajero*>::iterator mensajero;
 	for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
 		Mensajero* mensajeroReal = (*mensajero);
-
 		mensajeroReal->actualizaPersonaje(this->escenario->getProtagonista());
 	}
 }
@@ -79,4 +76,24 @@ void ServerGameController::addMensajero(Mensajero* mensajero) {
 
 void ServerGameController::sleep(){
 	SDL_Delay(DELAY_MILISEC);
+}
+
+void ServerGameController::actualizaPersonaje(MobileModel* entity){
+	this->actualizarProtagonista();
+}
+
+void ServerGameController::apareceEntidad(Entity* recurso) {
+	list<Mensajero*>::iterator mensajero;
+	for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
+		Mensajero* mensajeroReal = (*mensajero);
+		mensajeroReal->apareceRecurso((Resource*)recurso);
+	}
+}
+
+void ServerGameController::desapareceEntidad(Entity* recurso) {
+	list<Mensajero*>::iterator mensajero;
+	for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
+		Mensajero* mensajeroReal = (*mensajero);
+		mensajeroReal->desapareceRecurso((Resource*)recurso);
+	}
 }

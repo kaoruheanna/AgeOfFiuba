@@ -5,63 +5,81 @@
 using namespace std;
 const string TAG = "Escenario";
 
-Escenario::Escenario(EscenarioConfig escenario, list<TipoConfig> tipos) {
+
+void Escenario::init() {
 	map<string, SDL_Point> sizeByType;
 	list<TipoConfig>::iterator tipo;
-	for (tipo = tipos.begin(); tipo != tipos.end(); ++tipo){
+	for (tipo = tiposConfigList.begin(); tipo != tiposConfigList.end(); ++tipo) {
 		sizeByType.insert(
-			pair<string, SDL_Point>(tipo->getNombre(), { tipo->getAnchoBase(), tipo->getAltoBase() })
-		);
+				pair<string, SDL_Point>(tipo->getNombre(), {
+						tipo->getAnchoBase(), tipo->getAltoBase() }));
 	}
-
-	this->name = escenario.getNombre();
+	this->name = escenarioConfig.getNombre();
 	this->inicializacionCorrecta = false;
 	this->updated = true;
-	if(this->name == ""){
+	if (this->name == "") {
 		this->name = "sinNombre";
-		Log().Get("Escenario", logWARNING) << "El escenario tiene que tener un nombre. Usando nombre "<< this->name;
+		Log().Get("Escenario", logWARNING)
+				<< "El escenario tiene que tener un nombre. Usando nombre "
+				<< this->name;
 	}
-	if(escenario.getSizeX() < 1){
-		Log().Get("Escenario", logWARNING) << "El escenario " << this->name << " tiene que ser al menos una unidad de ancho. Cargando escenario default.";
-	} else if(escenario.getSizeY() < 1){
-		Log().Get("Escenario", logWARNING) << "El escenario " << this->name << " tiene que ser al menos una unidad de alto. Cargando escenario default.";
+	if (escenarioConfig.getSizeX() < 1) {
+		Log().Get("Escenario", logWARNING) << "El escenario " << this->name
+				<< " tiene que ser al menos una unidad de ancho. Cargando escenario default.";
+	} else if (escenarioConfig.getSizeY() < 1) {
+		Log().Get("Escenario", logWARNING) << "El escenario " << this->name
+				<< " tiene que ser al menos una unidad de alto. Cargando escenario default.";
 	} else {
-		this->mundo = new Map(escenario.getSizeX(), escenario.getSizeY(),TILE_WIDTH_PIXELS,TILE_HEIGHT_PIXELS);
+		this->mundo = new Map(escenarioConfig.getSizeX(), escenarioConfig.getSizeY(),
+				TILE_WIDTH_PIXELS, TILE_HEIGHT_PIXELS);
 		factory = new EntityFactory(this->mundo, sizeByType);
-
-		this->protagonista =  factory->crearProtagonista(escenario.getProtagonista().getTipo(),
-											{escenario.getProtagonista().getX(), escenario.getProtagonista().getY()});
-		if(protagonista == NULL){
-			Log().Get("Escenario", logWARNING) << "El escenario " << this->name << " no pudo crear al protagonista. Cargando escenario default.";
-		} else if(!this->agregarEntidad(protagonista)){
-			Log().Get("Escenario", logWARNING) << "El escenario " << this->name << " no pudo agregar el protagonista al mapa. Cargando escenario default.";
+		this->protagonista = factory->crearProtagonista(
+				escenarioConfig.getProtagonista().getTipo(),
+				{ escenarioConfig.getProtagonista().getX(),
+						escenarioConfig.getProtagonista().getY() });
+		if (protagonista == NULL) {
+			Log().Get("Escenario", logWARNING) << "El escenario " << this->name
+					<< " no pudo crear al protagonista. Cargando escenario default.";
+		} else if (!this->agregarEntidad(protagonista)) {
+			Log().Get("Escenario", logWARNING) << "El escenario " << this->name
+					<< " no pudo agregar el protagonista al mapa. Cargando escenario default.";
 			delete this->protagonista;
 		} else {
 			this->inicializacionCorrecta = true;
 			list<EntidadConfig>::iterator configEntidad;
-			list<EntidadConfig> configs = escenario.getEntidades();
+			list<EntidadConfig> configs = escenarioConfig.getEntidades();
 			int indice = 0;
-			for (configEntidad = configs.begin(); configEntidad != configs.end(); ++configEntidad){
+			for (configEntidad = configs.begin();
+					configEntidad != configs.end(); ++configEntidad) {
 				Entity* entidad = this->crearEntidad(*configEntidad, false);
-				if(entidad == NULL){
-					Log().Get("Escenario", logWARNING) << "La entidad N° "<< indice <<" del escenario " << this->name << " no pudo ser creada.";
+				if (entidad == NULL) {
+					Log().Get("Escenario", logWARNING) << "La entidad N° "
+							<< indice << " del escenario " << this->name
+							<< " no pudo ser creada.";
 				} else {
-					if(!this->construirEntidad(entidad, entidad->getPosicion())){
+					if (!this->construirEntidad(entidad,
+							entidad->getPosicion())) {
 						delete entidad;
-						Log().Get("Escenario", logWARNING) << "La entidad N° "<< indice <<" del escenario " << this->name << " no fue agregada al mapa. La misma no puede estar en la misma posicion que otra entidad.";
+						Log().Get("Escenario", logWARNING) << "La entidad N° "
+								<< indice << " del escenario " << this->name
+								<< " no fue agregada al mapa. La misma no puede estar en la misma posicion que otra entidad.";
 					}
 				}
 				indice++;
 			}
 		}
 	}
-	if(!this->inicializacionCorrecta && this->mundo != NULL){
+
+	if (!this->inicializacionCorrecta && this->mundo != NULL) {
 		delete this->mundo;
 		this->mundo = NULL;
 	}
 	//Inicializar resources Manager
 	this->resourcesManager = new ResourcesManager(this);
+}
 
+Escenario::Escenario(EscenarioConfig config, list<TipoConfig> tipos) :  escenarioConfig(config), tiposConfigList(tipos){
+	init();
 }
 
 Escenario::~Escenario(){
@@ -94,6 +112,20 @@ list<Entity*> Escenario::getListaEntidades(){
 	return this->entidades;
 }
 
+//Devuelve true si lo pudo borrar
+bool Escenario::eliminarRecursoConID(int id) {
+	//return this->mundo->mapeableInPosition(point);
+	list<Entity*>::iterator entidad;
+	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
+		Resource* entidadReal = (Resource*)(*entidad);
+		if (entidadReal->id == id) {
+				entidades.erase(entidad);
+				return true;
+		}
+	}
+	return false;
+}
+
 //Devuelve true si cosecho algo
 bool Escenario::cosecharEnPosicion(SDL_Point point) {
 	//return this->mundo->mapeableInPosition(point);
@@ -105,6 +137,7 @@ bool Escenario::cosecharEnPosicion(SDL_Point point) {
 			(position.y == point.y) &&
 			(entidadReal != protagonista) &&
 			entidadReal->Cosechable) {
+				this->delegate->desapareceEntidad(entidadReal);
 				entidades.erase(entidad);
 				return true;
 		}
@@ -114,8 +147,9 @@ bool Escenario::cosecharEnPosicion(SDL_Point point) {
 
 //Actualiza todos los modelos en un nuevo loop
 void Escenario::loop() {
-	updated = false;
-	this->protagonista->updatePosition();
+	if(this->protagonista->updatePosition()) {
+		this->delegate->actualizaPersonaje(this->protagonista);
+	}
 
 	SDL_Point point = this->mundo->getTileForPosition(protagonista->getPosicion());
 	updated = this->cosecharEnPosicion(point);
@@ -123,8 +157,8 @@ void Escenario::loop() {
 
 	list<Entity*> entidadesAInsertar = resourcesManager->InsertResourcesForNewLoopOnMap();
 	if (entidadesAInsertar.size() > 0) {
+		this->delegate->apareceEntidad(entidadesAInsertar.back());
 		this->entidades.splice(this->entidades.end(), entidadesAInsertar);
-		updated = true;
 	}
 }
 

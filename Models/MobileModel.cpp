@@ -64,7 +64,8 @@ int MobileModel::getSpeed() {
 	return PROTAGONISTA_SPEED;
 }
 
-void MobileModel::updatePosition() {
+bool MobileModel::updatePosition() {
+	bool wasMoving = this->moving;
 	double speed = (double)this->getSpeed();
 
 	double deltaX = (double)(this->destinationX - this->posicion.x);
@@ -73,17 +74,16 @@ void MobileModel::updatePosition() {
 	// si ya estoy en el destino, no hago nada
 	if ((deltaX == 0) && (deltaY == 0)){
 		this->moving = false;
-		return;
+		return wasMoving!=this->moving;
 	}
 
 	this->moving = true;
-
 	double hypotenuse = sqrt (pow(deltaX,2) + pow(deltaY,2.0));
 	// si estoy mas cerca que la velocidad, llegue al destino
 	if (hypotenuse < speed){
 		this->posicion.x = this->destinationX;
 		this->posicion.y = this->destinationY;
-		return;
+		return true;
 	}
 
 	double displacementX = round(speed * (deltaX / hypotenuse));
@@ -91,10 +91,15 @@ void MobileModel::updatePosition() {
 
 	this->posicion.x += (int)displacementX;
 	this->posicion.y += (int)displacementY;
+	return true;
 }
 
 bool MobileModel::isMoving() {
 	return this->moving;
 }
 
+void MobileModel::update(MobileModel* other) {
+	this->moving = other->isMoving();
+	this->posicion = other->getPosicion();
+}
 

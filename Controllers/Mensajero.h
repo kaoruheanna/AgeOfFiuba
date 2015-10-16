@@ -18,7 +18,7 @@ public:
 	MensajeroCliente(){};
 	virtual ~MensajeroCliente(){};
 	virtual void apareceRecurso(Resource* recurso){};
-	virtual void desapareceRecurso(Resource recurso){};
+	virtual void desapareceRecurso(Resource* recurso){};
 	virtual void actualizaPersonaje(MobileModel* entity){};
 };
 

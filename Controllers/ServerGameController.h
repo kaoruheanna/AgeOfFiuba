@@ -18,7 +18,7 @@ class Mensajero;
 
 using namespace std;
 
-class ServerGameController {
+class ServerGameController : public EscenarioDelagate{
 public:
 	ServerGameController(GameConfiguration *config);
 	virtual ~ServerGameController();
@@ -30,6 +30,11 @@ public:
 	Escenario* escenario;
 	virtual void addMensajero(Mensajero *mensajero);
 	void init();
+
+	//EscenarioDelegate
+	virtual void actualizaPersonaje(MobileModel* entity);
+	virtual void apareceEntidad(Entity* entidad);
+	virtual void desapareceEntidad(Entity* entidad);
 private:
 	GameConfiguration *config;
 	list<Mensajero*> mensajeros;

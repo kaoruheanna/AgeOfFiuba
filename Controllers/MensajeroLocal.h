@@ -27,7 +27,7 @@ public:
 
 	//Metodos Servidor->Cliente
 	virtual void apareceRecurso(Resource* recurso);
-	virtual void desapareceRecurso(Resource recurso);
+	virtual void desapareceRecurso(Resource* recurso);
 	virtual void actualizaPersonaje(MobileModel* entity);
 private:
 	ServerGameController* server;

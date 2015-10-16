@@ -28,7 +28,7 @@ bool MensajeroLocal::inicializado() {
 }
 
 Escenario* MensajeroLocal::obtenerEscenario() {
-	return this->server->escenario;
+	return new Escenario(this->server->escenario->escenarioConfig,this->server->escenario->tiposConfigList);
 }
 
 void MensajeroLocal::addClient(MensajeroCliente* client) {
@@ -41,11 +41,11 @@ void MensajeroLocal::moverProtagonista(SDL_Point point) {
 }
 
 void MensajeroLocal::apareceRecurso(Resource* recurso){
-	this->cliente->apareceRecurso(recurso);
+	this->cliente->apareceRecurso(new Resource(*recurso));
 }
 
-void MensajeroLocal::desapareceRecurso(Resource recurso){
-	this->cliente->desapareceRecurso(recurso);
+void MensajeroLocal::desapareceRecurso(Resource* recurso){
+	this->cliente->desapareceRecurso(new Resource(*recurso));
 }
 
 void MensajeroLocal::actualizaPersonaje(MobileModel* entity){

@@ -16,6 +16,15 @@
 #include "../Utils/ResourcesManager.h"
 #include "FogOfWar.h"
 
+class EscenarioDelagate {
+public:
+	EscenarioDelagate(){};
+	virtual ~EscenarioDelagate(){};
+	virtual void apareceEntidad(Entity* recurso){};
+	virtual void desapareceEntidad(Entity* recurso){};
+	virtual void actualizaPersonaje(MobileModel* entity){};
+};
+
 using namespace std;
 
 class Escenario {
@@ -26,12 +35,15 @@ class Escenario {
 		ResourcesManager* resourcesManager;
 
 		bool cosecharEnPosicion(SDL_Point point);
+		void init();
 
 	public:
 		Map* mundo;
 		EntityFactory *factory;
 		string toString ();
 		bool updated;
+
+		EscenarioDelagate* delegate;
 
 		bool agregarEntidad(Entity*);
 		bool construirEntidad(Entity*,SDL_Point);
@@ -43,9 +55,12 @@ class Escenario {
 		Entity* crearEntidad(const string& tipo, SDL_Point posicion, bool esProtagonista);
 		list<Entity*> getListaEntidades(); // Se usa para agregar las vistas de las entidades
 		MobileModel* getProtagonista();
+		bool eliminarRecursoConID(int id);
 
 		bool inicializacionCorrecta;
 
+		EscenarioConfig escenarioConfig;
+		list<TipoConfig> tiposConfigList;
 		Escenario(string,int,int,int,int);//construye un mapa vacio
 		Escenario(EscenarioConfig escenario, list<TipoConfig> tipos);//Este constructor deberia recibir un game config
 		~Escenario();
