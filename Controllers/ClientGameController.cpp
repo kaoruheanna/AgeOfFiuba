@@ -37,6 +37,19 @@ ClientGameController::ClientGameController(Mensajero *mensajero) {
 
 ClientGameController::~ClientGameController() {}
 
+void ClientGameController::agregarEntidad(Entity* entidad) {
+	EntityView* entityView = new EntityView(entidad->getNombre());
+	entityView->setModel(entidad);
+	this->escenarioView->addEntityView(entityView);
+
+
+	// agrego mini vista
+	string miniName = MiniView::NombreDrawableFromNombreTipo(entidad->getNombre());
+	MiniView *miniView = new MiniView(miniName);
+	miniView->setModel(entidad);
+	this->miniEscenarioView->addEntityMiniView(miniView);
+}
+
 void ClientGameController::agregarEntidades(list<Entity*> entidades) {
 	bool updated = false;
 	list<Entity*>::iterator entidad;
@@ -44,16 +57,7 @@ void ClientGameController::agregarEntidades(list<Entity*> entidades) {
 		Entity* entidadReal = (*entidad);
 		if (entidadReal != this->escenario->getProtagonista()) {
 			updated = true;
-			EntityView* entityView = new EntityView(entidadReal->getNombre());
-			entityView->setModel(entidadReal);
-			this->escenarioView->addEntityView(entityView);
-
-
-			// agrego mini vista
-			string miniName = MiniView::NombreDrawableFromNombreTipo(entidadReal->getNombre());
-			MiniView *miniView = new MiniView(miniName);
-			miniView->setModel(entidadReal);
-			this->miniEscenarioView->addEntityMiniView(miniView);
+			this->agregarEntidad(entidadReal);
 		}
 	}
 	if (updated){

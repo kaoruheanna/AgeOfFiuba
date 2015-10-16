@@ -58,6 +58,7 @@ private:
 
 	SDL_Point getMaxVertixForPoint(int yPosition);
 	void agregarEntidades(list<Entity*> entidades);
+	void agregarEntidad(Entity* entidad);
 	void actualizarEntidades(list<Entity*> entidades);
 	void loopEscenario();
 
