@@ -9,7 +9,6 @@ and may not be redistributed without written permission.*/
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <string>
-#include "Controllers/GameController.h"
 #include "Utils/Log.h"
 #include "Configuration/GameConfiguration.h"
 #include "GlobalConstants.h"
