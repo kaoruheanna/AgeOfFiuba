@@ -22,7 +22,12 @@ and may not be redistributed without written permission.*/
 #include "Controllers/MensajeroLocal.h"
 #include "Controllers/ServerGameController.h"
 
-/*
+GameConfiguration *configuration;
+ServerGameController *serverGameController;
+void startServer() {
+	serverGameController->play();
+}
+
 int main( int argc, char* args[] )
 {
 	// Detect arguments to startup server or client
@@ -69,28 +74,11 @@ int main( int argc, char* args[] )
 		}
 		return 0;
 	}
+
+	// Simula el cliente servidor poniendo a correr el servidor en otro thread.
+	// Se comunican mediante Mensajero
+
 	// If no arguments then start the YAML game
-	bool shouldRestart = false;
-	do {
-		GameConfiguration *configuration = new GameConfiguration(CONFIG_CUSTOM);
-		GameController *gameController = new GameController(configuration);
-		shouldRestart = gameController->play();
-
-		delete gameController;
-		delete configuration;
-	} while(shouldRestart);
-	return 0;
-}
-*/
-
-
-GameConfiguration *configuration;
-ServerGameController *serverGameController;
-void startServer() {
-	serverGameController->play();
-}
-
-int main( int argc, char* args[] ) {
 	configuration = new GameConfiguration(CONFIG_CUSTOM);
 	serverGameController = new ServerGameController(configuration);
 	serverGameController->init();
@@ -112,4 +100,5 @@ int main( int argc, char* args[] ) {
 
 	return 0;
 }
+
 
