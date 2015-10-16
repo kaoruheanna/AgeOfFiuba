@@ -17,6 +17,15 @@ ServerGameController::ServerGameController(GameConfiguration *config) :  config(
 
 ServerGameController::~ServerGameController() {}
 
+
+void escenarioInicializado(list<Mensajero*> mensajeros,Escenario* escenario) {
+	list<Mensajero*>::iterator mensajero;
+	for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
+		Mensajero* mensajeroReal = (*mensajero);
+		mensajeroReal->escenarioInicializado(escenario);
+	}
+}
+
 void ServerGameController::init() {
 	// Crear modelos a partir de la configuracion
 	this->escenario = new Escenario(this->config->getEscenario(),
@@ -34,6 +43,7 @@ void ServerGameController::init() {
 		}
 	}
 	this->escenario->delegate = this;
+	escenarioInicializado(this->mensajeros,this->escenario);
 }
 
 void ServerGameController::play() {
@@ -72,6 +82,9 @@ void ServerGameController::moverProtagonista(SDL_Point point) {
 
 void ServerGameController::addMensajero(Mensajero* mensajero) {
 	this->mensajeros.push_back(mensajero);
+	if(escenario->inicializacionCorrecta) {
+		mensajero->escenarioInicializado(escenario);
+	}
 }
 
 void ServerGameController::sleep(){
@@ -97,3 +110,4 @@ void ServerGameController::desapareceEntidad(Entity* recurso) {
 		mensajeroReal->desapareceRecurso((Resource*)recurso);
 	}
 }
+

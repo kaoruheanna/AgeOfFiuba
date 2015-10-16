@@ -87,7 +87,7 @@ int main( int argc, char* args[] )
 	bool shouldRestart = false;
 	do {
 		Mensajero* mensajero = new MensajeroLocal(serverGameController);
-		ClientGameController *clientGameController = new ClientGameController(mensajero);
+		ClientGameController *clientGameController = new ClientGameController(mensajero,configuration->pantalla,configuration->configuracion);
 		shouldRestart = clientGameController->play();
 
 		delete clientGameController;
