@@ -9,6 +9,7 @@
 #define TOPBAR_H_
 
 class Renderer;
+class ResourceCounter;
 
 class TopBar {
 public:
@@ -19,6 +20,9 @@ public:
 private:
 	int width;
 	int height;
+	ResourceCounter *firstResourceCounter;
+	ResourceCounter *secondResourceCounter;
+	ResourceCounter *thirdResourceCounter;
 };
 
 #endif /* TOPBAR_H_ */
