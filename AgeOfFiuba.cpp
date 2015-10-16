@@ -3,7 +3,7 @@ and may not be redistributed without written permission.*/
 
 
 #include <iostream>
-#include <thread>
+#include <pthread.h>
 //Using SDL, SDL_image, standard IO, and strings
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -23,8 +23,9 @@ and may not be redistributed without written permission.*/
 
 GameConfiguration *configuration;
 ServerGameController *serverGameController;
-void startServer() {
+void * startServer(void* nothing) {
 	serverGameController->play();
+	return NULL;
 }
 
 int main( int argc, char* args[] )
@@ -81,7 +82,9 @@ int main( int argc, char* args[] )
 	configuration = new GameConfiguration(CONFIG_CUSTOM);
 	serverGameController = new ServerGameController(configuration);
 	serverGameController->init();
-	std::thread startServerThread(startServer);
+	pthread_t thread;
+	pthread_create(&thread, NULL, startServer, (void*)NULL);
+
 
 	// If no arguments then start the YAML game
 	bool shouldRestart = false;
