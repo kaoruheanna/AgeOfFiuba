@@ -119,7 +119,6 @@ list<Entity*> Escenario::getListaEntidades(){
 
 //Devuelve true si lo pudo borrar
 bool Escenario::eliminarRecursoConID(int id) {
-	//return this->mundo->mapeableInPosition(point);
 	list<Entity*>::iterator entidad;
 	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
 		Resource* entidadReal = (Resource*)(*entidad);
@@ -136,12 +135,12 @@ bool Escenario::cosecharEnPosicion(SDL_Point point) {
 	//return this->mundo->mapeableInPosition(point);
 	list<Entity*>::iterator entidad;
 	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
-		Entity* entidadReal = (*entidad);
+		Resource* entidadReal = (Resource*)(*entidad);
 		SDL_Point position = this->mundo->getTileForPosition(entidadReal->getPosicion());
 		if ((position.x == point.x) &&
 			(position.y == point.y) &&
-			(entidadReal != this->protagonista) &&
 			entidadReal->Cosechable) {
+				entidadReal->cosechar();
 				this->protagonista->didCollectResource(entidadReal->getNombre());
 				this->delegate->desapareceEntidad(entidadReal);
 				entidades.erase(entidad);
