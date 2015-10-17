@@ -314,6 +314,11 @@ bool ClientGameController::play() {
 	bool shouldRestart = false;
 	//While application is running
 	while( !this->shouldQuit && !shouldRestart ) {
+		if(this->updated) {
+			actualizarEntidades(this->escenario->getListaEntidades());
+			this->updated = false;
+		}
+
 		this->updateWindow();
 		shouldRestart = this->pollEvents();
 
@@ -347,7 +352,7 @@ void ClientGameController::apareceRecurso(Resource* recurso) {
 	if(!this->escenario->existeRecursoConID(recurso->id)) {
 		this->escenario->agregarEntidad(new Resource(*recurso));
 	}
-	actualizarEntidades(this->escenario->getListaEntidades());
+	this->updated = true;
 }
 
 void ClientGameController::desapareceRecurso(Resource* recurso){
@@ -355,7 +360,7 @@ void ClientGameController::desapareceRecurso(Resource* recurso){
 		return;
 
 	if(this->escenario->eliminarRecursoConID(recurso->id)) {
-		actualizarEntidades(this->escenario->getListaEntidades());
+		this->updated = true;
 	}
 }
 
