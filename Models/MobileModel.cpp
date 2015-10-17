@@ -149,7 +149,7 @@ void MobileModel::update(MobileModel* other) {
 
 // Metodos de serializacion
 int MobileModel::getTotalBlockCount() {
-	return 4;
+	return 5;
 }
 
 int MobileModel::getBlockSizeFromIndex(int currentIndex) {
@@ -157,7 +157,10 @@ int MobileModel::getBlockSizeFromIndex(int currentIndex) {
 		return this->serializeStringSize((char*)this->nombre.c_str());
 	} else if(currentIndex == 1){
 		return sizeof(SDL_Point);
+	} else if (currentIndex == 4) {
+		return sizeof(bool);
 	}
+
 	return sizeof(int);
 }
 
@@ -168,8 +171,10 @@ void MobileModel::getBlockFromIndex(int currentIndex, void* buffer) {
 		memcpy(buffer, &this->posicion, sizeof(SDL_Point));
 	} else if(currentIndex == 2){
 		memcpy(buffer, &this->destinationX, sizeof(int));
-	} else {
+	} else if (currentIndex == 3){
 		memcpy(buffer, &this->destinationY, sizeof(int));
+	} else {
+		memcpy(buffer, &this->moving, sizeof(int));
 	}
 }
 
@@ -182,8 +187,10 @@ void MobileModel::deserialize(int totalBlockCount, int currentBlock, void* block
 		memcpy(&this->posicion, blockData, sizeof(SDL_Point));
 	} else if(currentBlock == 2){
 		memcpy(&this->destinationX, blockData, sizeof(int));
-	} else {
+	} else if(currentBlock == 3) {
 		memcpy(&this->destinationY, blockData, sizeof(int));
+	} else {
+		memcpy(&this->moving, blockData, sizeof(int));
 	}
 }
 
