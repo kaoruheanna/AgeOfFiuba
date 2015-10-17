@@ -15,7 +15,7 @@ ServerGameController::ServerGameController(GameConfiguration *config) :  config(
 	escenario = NULL;
 	debeActualizarPersonaje = false;
 	entidadAparecida = NULL;
-	moverPersonajeAlPunto.first = -1;
+	moverPersonajeAlPunto= NULL;
 }
 
 ServerGameController::~ServerGameController() {}
@@ -61,13 +61,14 @@ void ServerGameController::play() {
 }
 
 void ServerGameController::loopEscenario() {
-	if (this->moverPersonajeAlPunto.first != -1) {
+	if (this->moverPersonajeAlPunto) {
 		this->escenario->getProtagonista()
 				->setDestination(
-					moverPersonajeAlPunto.first,
-					moverPersonajeAlPunto.second
+					moverPersonajeAlPunto->first,
+					moverPersonajeAlPunto->second
 				);
-		this->moverPersonajeAlPunto.first = -1;
+		delete this->moverPersonajeAlPunto;
+		this->moverPersonajeAlPunto = NULL;
 	}
 
 	this->escenario->loop();
@@ -105,8 +106,9 @@ void ServerGameController::actualizarProtagonista(){
 }
 
 void ServerGameController::moverProtagonista(MobileModel* model) {
-	this->moverPersonajeAlPunto.first = model->getDestinationX();
-	this->moverPersonajeAlPunto.second = model->getDestinationY();
+	this->moverPersonajeAlPunto = new Posicion();
+	this->moverPersonajeAlPunto->first = model->getDestinationX();
+	this->moverPersonajeAlPunto->second = model->getDestinationY();
 }
 
 void ServerGameController::addMensajero(Mensajero* mensajero) {

@@ -50,7 +50,7 @@ private:
 
 	Entity* entidadAparecida;
 	bool debeActualizarPersonaje;
-	Posicion moverPersonajeAlPunto;
+	Posicion* moverPersonajeAlPunto;
 };
 
 #endif /* CONTROLLERS_SERVERGAMECONTROLLER_H_ */
