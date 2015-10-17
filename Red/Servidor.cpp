@@ -15,7 +15,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <iostream>
+
 #include "Mensaje.h"
+#include "Archivo.h"
 
 Servidor::Servidor() {
 	// TODO Auto-generated constructor stub
@@ -44,36 +46,62 @@ void Servidor::empezar(int port) {
 	}
 
 	if(listen(sd, 5) == -1){ // 5 == cant max de conecciones
+		printf("Servidor - Fallo el listen\n");
 		return; // ERR: -1
 	}
 
 	while(true){
-
+		printf("Servidor - Esperando un cliente\n");
 		sockaddr_in client_addr;
 		socklen_t client_length = sizeof(client_addr);
 		int client_sd = accept(sd, (sockaddr *) &client_addr, &client_length);
-
+		printf("Servidor - Empezo la conexion\n");
 		bool stopClientTalk = false;
+
+		// Espera la info del login para el usuario
+		Mensaje* mensaje = new Mensaje(VACIO, "server");
+		printf("Servidor - Esperando mensaje\n");
+		int resultado = recibirSerializable(client_sd, mensaje);
+		printf("Servidor - Recibi resultado: %i con mensaje: %s\n", resultado, mensaje->toString());
 		while(!stopClientTalk){
-			// Espera un mensaje y manda una respuesta
-			Mensaje* mensaje = new Mensaje(VACIO, "server");
-			printf("Servidor - Esperando mensaje\n");
-			int resultado = recibirSerializable(client_sd, mensaje);
-			printf("Servidor - Recibi resultado: %i con mensaje: %s\n", resultado, mensaje->toString());
-			delete mensaje;
 			if(resultado <= 0){
+				printf("Servidor - Se corto la conexion\n");
 				stopClientTalk = true;
 			} else {
-				mensaje = new Mensaje(ERROR_NOMRE_TOMADO, "server");
-				resultado = enviarSerializable(client_sd, mensaje);
-				printf("Servidor - Responde al mensaje con resultado: %i\n", resultado);
-				delete mensaje;
+				if(!this->existeUsuario(mensaje->getSender()) ||
+						!this->usuarioLogueado(mensaje->getSender())){
+					delete mensaje;
+					mensaje = new Mensaje(ESCENARIO, "server");
+					resultado = enviarSerializable(client_sd, mensaje);
+					printf("Servidor - Responde al mensaje con resultado: %i\n", resultado);
+					Archivo* configuracion = new Archivo("yaml-files/configuracion.yaml");
+					resultado = enviarSerializable(client_sd, configuracion);
+					delete configuracion;
+					printf("Servidor - Responde al mensaje con resultado: %i\n", resultado);
+					printf("Servidor - Esperando mensaje\n");
+					resultado = recibirSerializable(client_sd, mensaje);
+					printf("Servidor - Recibi resultado: %i con mensaje: %s\n", resultado, mensaje->toString());
+					// A partir de aca esta el flow comun de datos...
+					// TODO el server indica todos los modelos que se cambiaron
+				} else {
+					delete mensaje;
+					mensaje = new Mensaje(ERROR_NOMBRE_TOMADO, "server");
+					resultado = enviarSerializable(client_sd, mensaje);
+					printf("Servidor - Responde al mensaje con resultado: %i\n", resultado);
+					stopClientTalk = true;
+				}
 			}
 		}
-		// TODO read / write
-
+		delete mensaje;
+		printf("Servidor - Termino la conexion\n");
 	}
 
-	printf("Servidor - Todo ok\n");
 	close(sd);
+}
+
+bool Servidor::existeUsuario(char* nombre) {
+	return true;
+}
+bool Servidor::usuarioLogueado(char* nombre) {
+	return true;
 }

@@ -97,8 +97,8 @@ char* Mensaje::toString() {
 		case LOGIN:
 			type = "LOGIN";
 			break;
-		case ERROR_NOMRE_TOMADO:
-			type = "ERROR_NOMRE_TOMADO";
+		case ERROR_NOMBRE_TOMADO:
+			type = "ERROR_NOMBRE_TOMADO";
 			break;
 		case ESCENARIO:
 			type = "ESCENARIO";

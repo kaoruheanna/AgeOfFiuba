@@ -13,7 +13,7 @@
 enum MensajeType {
 	VACIO, /* Para inicializar los mensajes / Pingear (???) */
 	LOGIN, /* Cliente => Servidor: Pide login con nombre */
-	ERROR_NOMRE_TOMADO, /* Servidor => Cliente: El usuario existe y esta conectado */
+	ERROR_NOMBRE_TOMADO, /* Servidor => Cliente: El usuario existe y esta conectado */
 	ESCENARIO, /* Servidor => Cliente: Se logueo con el usuario y le esta mandando la info inicial */
 	MOVER_PERSONAJE, /* Cliente => Servidor: Mover su personaje a la posicion */
 	APARECE_PERSONAJE, /* Servidor => Cliente: Indica la posicion y estado de un personaje */
