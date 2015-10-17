@@ -506,4 +506,8 @@ void Renderer::fogUpdate(int posicionX,int posicionY){
 	this->fog->update(posicionX,posicionY);
 }
 
+FogOfWar* Renderer::getFog(){
+	return this->fog;
+}
+
 

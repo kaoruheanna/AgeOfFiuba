@@ -56,6 +56,7 @@ public:
 	SDL_Point escenarioSize();
 	void setFog(int ancho, int alto);
 	void fogUpdate(int posicionX, int posicionY);
+	FogOfWar* getFog();
 
 private:
 	bool successfullInit;
