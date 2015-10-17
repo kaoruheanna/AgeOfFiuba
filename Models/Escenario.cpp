@@ -119,6 +119,18 @@ list<Entity*> Escenario::getListaEntidades(){
 }
 
 //Devuelve true si lo pudo borrar
+bool Escenario::existeRecursoConID(int id) {
+	list<Entity*>::iterator entidad;
+	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
+		Resource* entidadReal = (Resource*)(*entidad);
+		if (entidadReal->id == id) {
+				return true;
+		}
+	}
+	return false;
+}
+
+//Devuelve true si lo pudo borrar
 bool Escenario::eliminarRecursoConID(int id) {
 	list<Entity*>::iterator entidad;
 	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
