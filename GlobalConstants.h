@@ -13,6 +13,7 @@ const int PROTAGONISTA_SPEED = 5;
 const int SCROLL_SPEED = 20;
 const int MENU_HEIGHT = 130;
 const int MENU_SPACING = 10;
+const int TOP_BAR_HEIGHT = 30;
 
 //TILES
 const std::string TILE_DEFAULT_NAME = "tileDefault";
@@ -30,6 +31,6 @@ const std::string CONFIG_CUSTOM = "yaml-files/_configuracionMapa.yaml";
 
 const int  FOG_VISIBLE = 255;
 const int  FOG_VISITED = 128;
-const bool FOG_ENABLED = true;
+const bool FOG_ENABLED = false;
 
 #endif /* GLOBALCONSTANTS_H_ */

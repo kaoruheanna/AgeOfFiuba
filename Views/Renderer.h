@@ -21,12 +21,14 @@
 #include <map>
 #include "../Configuration/TipoConfig.h"
 #include "Menu/ScreenMenu.h"
+#include "../Models/FogOfWar.h"
 using namespace std;
 
 class View;
 class EscenarioView;
 class MiniEscenarioView;
 class MiniView;
+class TopBar;
 
 class Renderer {
 public:
@@ -52,6 +54,9 @@ public:
 	void updatedMiniEscenario();
 	void drawInMiniMap(int mapPositionX, int mapPositionY, Drawable* drawable);
 	SDL_Point escenarioSize();
+	void setFog(int ancho, int alto);
+	void fogUpdate(int posicionX, int posicionY);
+	FogOfWar* getFog();
 
 private:
 	bool successfullInit;
@@ -62,9 +67,12 @@ private:
 	Drawable* missingImageDrawable;
 	Drawable* miniMissingImageDrawable;
 	ScreenMenu* screenMenu;
+	TopBar* topBar;
 	TTF_Font *textFont;
 	EscenarioView *escenarioView;
 	MiniEscenarioView *miniEscenarioView;
+	FogOfWar* fog;
+
 	int screenWidth;
 	int screenHeight;
 
@@ -73,6 +81,7 @@ private:
 	bool loadMediaForMiniMap(list<TipoConfig>* tipos);
 	bool isInsideWindow(SDL_Rect* rect);
 	Drawable* getDrawableFromTipoConfig(TipoConfig tipo);
+	void drawTopBar();
 	void drawMenu();
 	void drawEscenario();
 	void drawMiniEscenario();

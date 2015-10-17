@@ -47,6 +47,7 @@ void GameController::agregarEntidades(list<Entity*> entidades) {
 			entityView->setModel(entidadReal);
 			this->escenarioView->addEntityView(entityView);
 
+
 			// agrego mini vista
 			string miniName = MiniView::NombreDrawableFromNombreTipo(entidadReal->getNombre());
 			MiniView *miniView = new MiniView(miniName);
@@ -60,14 +61,23 @@ void GameController::agregarEntidades(list<Entity*> entidades) {
 	}
 }
 
-void GameController::removerEntidades(list<Entity*> entidades) {
-	//Log().Get(TAG) << "removerEntidades";
+void GameController::actualizarEntidades(list<Entity*> entidades) {
+	this->escenarioView->getEntitiesView()->clear();
+	// Agrego vista del personaje
+	MobileView *marioView = new MobileView(this->escenario->getProtagonista()->getNombre());
+	marioView->setModel(this->escenario->getProtagonista());
+	this->escenarioView->addEntityView(marioView);
+	this->renderer->updatedEscenario();
+
+	this->agregarEntidades(entidades);
 }
 
 void GameController::loopEscenario() {
 	this->escenario->loop();
-	agregarEntidades(this->escenario->getEntidadesAInsertar());
-	removerEntidades(this->escenario->getEntidadesASacar());
+	if (this->escenario->updated) {
+		actualizarEntidades(this->escenario->getListaEntidades());
+		this->escenario->updated = false;
+	}
 }
 
 bool GameController::play() {
@@ -98,12 +108,20 @@ bool GameController::play() {
 	this->initPersonaje();
 	this->initWindowSizes();
 
+	this->renderer->setFog(this->escenario->mundo->getWidth(),this->escenario->mundo->getHeight());
+	SDL_Point positionCharacter = {0,0};
+
 	bool shouldRestart = false;
 	//While application is running
 	while( !this->shouldQuit && !shouldRestart ) {
 		this->updateWindow();
 		shouldRestart = this->pollEvents();
 		this->loopEscenario();
+
+		positionCharacter =(this->escenario->getProtagonista())->getPosicion();
+		positionCharacter = this->escenario->mundo->getTileForPosition(positionCharacter);
+		this->renderer->fogUpdate(positionCharacter.x,positionCharacter.y);
+
 		this->renderer->drawViews();
 		this->sleep();
 	}
@@ -147,13 +165,28 @@ void GameController::initPersonaje() {
 	this->renderer->updatedMiniEscenario();
 }
 
-float GameController::scrollingSpeed(int x, int large) {
-	if ((x < this->config->getMargenScroll()) && (x>0)) {
-		return ((float)(x-this->config->getMargenScroll())/this->config->getMargenScroll());
+float GameController::scrollingSpeed(int z, int min, int max) {
+	//estoy fuera del escenario
+	if ((z <= min) || (z >= max)){
+		return 0;
 	}
-	if ((x > (large - this->config->getMargenScroll())) && (x < large)) {
-		return ((float)(x - large + this->config->getMargenScroll())/this->config->getMargenScroll());
+
+	int margenScroll = this->config->getMargenScroll();
+	int scrollInferior = (min + margenScroll);
+	int scrollSuperior = (max - margenScroll);
+
+	// esta en la zona de scroll inferior, devuelvo la velocidad proporcional
+	if (z < scrollInferior){
+		float distancia = (float) (z - scrollInferior);
+		return (float)(distancia / margenScroll);
 	}
+
+	// esta en la zona de scroll superior, devuelvo la velocidad proporcional
+	if (z > scrollSuperior){
+		float distancia = (float) (z - scrollSuperior);
+		return (float)(distancia / margenScroll);
+	}
+
 	return 0;
 }
 
@@ -193,12 +226,14 @@ void GameController::initWindowSizes() {
 
 float GameController::scrollingSpeedX(int x) {
 	SDL_Point escenarioSize = this->renderer->escenarioSize();
-	return scrollingSpeed(x,escenarioSize.x)*-1;
+	return scrollingSpeed(x,0,escenarioSize.x)*-1;
 }
 
 float GameController::scrollingSpeedY(int y) {
 	SDL_Point escenarioSize = this->renderer->escenarioSize();
-	return scrollingSpeed(y,escenarioSize.y)*-1;
+	int minY = TOP_BAR_HEIGHT;
+	int maxY = TOP_BAR_HEIGHT+escenarioSize.y;
+	return scrollingSpeed(y,minY,maxY)*-1;
 }
 
 SDL_Point GameController::getMaxVertixForPoint(int yPosition) {

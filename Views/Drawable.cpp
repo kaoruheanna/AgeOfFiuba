@@ -47,11 +47,6 @@ bool Drawable::loadTextureFromSurface(SDL_Renderer* renderer, SDL_Surface* surfa
 	if( newTexture == NULL ){
 		return false;
 	}
-	//Quizas hay que chequear esto//
-	Uint8 red = 0;
-	Uint8 green = 0;
-	Uint8 blue = 0;
-	SDL_SetTextureColorMod( newTexture, red,green,blue );
 	this->texture = newTexture;
 	this->onTextureChange();
 	return true;

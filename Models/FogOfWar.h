@@ -9,23 +9,34 @@
 #define FOGOFWAR_H_
 
 #include <list>
-#include "Entity.h"
-#include "Map.h"
+#include "Escenario.h"
+
+enum EstadoDeVisibilidad{
+	OCULTO,
+	NUBLADO,
+	VISIBLE,
+};
+
+
 
 class FogOfWar {
 public:
-	FogOfWar(list<Entity*> entities, Entity* mainCharacter, Map* map);
+	FogOfWar(int ancho, int alto);
 	void initialice();
-	void update();
+	void update(int posicionX, int posicionY);
+	EstadoDeVisibilidad getEstado (int posicionX, int posicionY);
+	void close();
 	~FogOfWar();
 
 
-private:
-	list<Entity*> entities;
-	Entity* character;
-	Map* world;
 
-	bool checkInSight(SDL_Point character, SDL_Point entity);
+private:
+	EstadoDeVisibilidad** matrizDeVisibilidad;
+	int ancho;
+	int alto;
+	list<SDL_Point> TilesVisitados;
+	void setInSight(int posicionX, int posicionY);
+	void setNublados();
 };
 
 #endif /* FOGOFWAR_H_ */

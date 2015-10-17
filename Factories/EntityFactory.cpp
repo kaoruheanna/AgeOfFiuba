@@ -72,3 +72,14 @@ Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion, bool
 
 	return new Entity(tipo, pos, size.x, size.y);
 }
+
+Resource* EntityFactory::crearRecurso(const string& tipo, SDL_Point posicion) {
+	if (tipo == "") {
+		Log().Get("Escenario", logWARNING) << "La entidad tiene que tener un tipo. Descartando entidad.";
+		return NULL;
+	}
+	SDL_Point pos = this->getPosition(tipo,posicion);
+	SDL_Point size = this->getSize(tipo,posicion);
+
+	return new Resource(tipo, pos, size.x, size.y);
+}

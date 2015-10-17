@@ -15,6 +15,7 @@
 #include <map>
 #include <SDL2/SDL.h>
 #include "../Models/Entity.h"
+#include "../Models/Resource.h"
 #include "../Models/MobileModel.h"
 
 using namespace std;
@@ -25,7 +26,7 @@ public:
 	virtual ~EntityFactory();
 	MobileModel* crearProtagonista(const string& tipo, SDL_Point posicion);
 	Entity* crearEntidad(const string& tipo, SDL_Point posicion, bool esProtagonista = false);
-
+	Resource* crearRecurso(const string& tipo, SDL_Point posicion);
 private:
 	map<string, SDL_Point> sizeByType;
 	Map *mundo;

@@ -22,23 +22,21 @@ class Escenario {
 	private:
 		string name;
 		list<Entity*> entidades;
-		list<Entity*> entidadesASacar;
-		list<Entity*> entidadesAInsertar;
 		MobileModel* protagonista;
 		ResourcesManager* resourcesManager;
-		FogOfWar* niebla;
+
+		bool cosecharEnPosicion(SDL_Point point);
 
 	public:
 		Map* mundo;
 		EntityFactory *factory;
 		string toString ();
+		bool updated;
 
 		bool agregarEntidad(Entity*);
 		bool construirEntidad(Entity*,SDL_Point);
 		void vaciarEntidades();
 		void loop();
-		list<Entity*> getEntidadesAInsertar();
-		list<Entity*> getEntidadesASacar();
 
 		SDL_Point getSize();
 		Entity* crearEntidad(EntidadConfig config, bool esProtagonista);

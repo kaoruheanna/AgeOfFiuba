@@ -39,7 +39,7 @@ private:
 	// Entre -1 y 1
 	float scrollingSpeedX(int x);
 	float scrollingSpeedY(int y);
-	float scrollingSpeed(int x, int large);
+	float scrollingSpeed(int z, int min, int max);
 	void moveToPoint(SDL_Point point);
 	void initWindowSizes();
 	void initMap();
@@ -55,7 +55,7 @@ private:
 
 	SDL_Point getMaxVertixForPoint(int yPosition);
 	void agregarEntidades(list<Entity*> entidades);
-	void removerEntidades(list<Entity*> entidades);
+	void actualizarEntidades(list<Entity*> entidades);
 	void loopEscenario();
 };
 

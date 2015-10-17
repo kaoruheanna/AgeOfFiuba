@@ -12,7 +12,7 @@ Entity::Entity(string nombre, SDL_Point posicion, int ancho_base, int alto_base)
 	this->posicion = posicion;
 	this->ancho_base = ancho_base;
 	this->alto_base = alto_base;
-	this->estado = OCULTO;
+
 }
 
 Entity::Entity(string nombre, int ancho_base, int alto_base){
@@ -21,7 +21,7 @@ Entity::Entity(string nombre, int ancho_base, int alto_base){
 	this->posicion = {-1,-1}; // posicion invalida hace referencia a que no tiene posicion en el mapa.
 	this->ancho_base = ancho_base;
 	this->alto_base = alto_base;
-	this->estado = OCULTO;
+
 }
 
 Entity::~Entity(){
@@ -52,12 +52,4 @@ int Entity::getAltoBase(){
 
 void Entity::setPosicion(SDL_Point nueva_posicion){
 	this -> posicion = nueva_posicion;
-}
-
-void Entity::setEstado(EstadoDeVisibilidad estado){
-	this->estado = estado;
-}
-
-EstadoDeVisibilidad Entity::getEstado(){
-	return (FOG_ENABLED) ? this->estado : VISIBLE;
 }

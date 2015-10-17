@@ -18,10 +18,18 @@ ResourcesManager::ResourcesManager(Escenario *escenario) {
 
 ResourcesManager::~ResourcesManager() {}
 
+const char * ResourcesManager::GetTextForEnum( int val ) {
+	return this->ResourceTypes()[val];
+}
+
+const char * ResourcesManager::getNewResourceType() {
+	return this->GetTextForEnum(rand() % RESOURCES_QTY);
+}
+
 Resource* ResourcesManager::getNewResource() {
 	int posicionX = rand() % this->escenario->mundo->getWidth();
 	int posicionY = rand() % this->escenario->mundo->getHeight();
-	Resource *resource = (Resource*)this->escenario->factory->crearEntidad("piedra",{ posicionX, posicionY });
+	Resource *resource = this->escenario->factory->crearRecurso(this->getNewResourceType(),{ posicionX, posicionY });
 	if(resource == NULL){
 		Log().Get("Escenario", logWARNING) << "La entidad  del escenario  no pudo ser creada.";
 	} else {
@@ -30,6 +38,8 @@ Resource* ResourcesManager::getNewResource() {
 			Log().Get("Escenario", logWARNING) << "La entidad N°  del escenario  no fue agregada al mapa. La misma no puede estar en la misma posicion que otra entidad.";
 		}
 	}
+	Log().Get("Escenario") << "Se creo en " << posicionX << " , " << posicionY;
+
 	return resource;
 }
 
