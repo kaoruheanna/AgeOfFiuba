@@ -19,7 +19,7 @@ public:
 	// Metodos Servidor -> Cliente
 	virtual void errorDeLogueo();
 	virtual void configEscenario(const string path);
-	//virtual void apareceRecurso(Resource* recurso);
+	virtual void apareceRecurso(Resource* recurso);
 	//virtual void desapareceRecurso(Resource* recurso);
 	virtual void actualizaPersonaje(MobileModel* entity);
 	// Metodos Cliente -> Servidor
@@ -28,6 +28,7 @@ public:
 private:
 	int socket;
 	Mensajero* escucha;
+	bool busy;
 };
 
 #endif /* RED_MENSAJERORED_H_ */

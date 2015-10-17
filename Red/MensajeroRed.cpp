@@ -7,6 +7,7 @@
 
 #include "../GlobalConstants.h"
 #include "../Models/MobileModel.h"
+#include "../Models/Resource.h"
 #include "MensajeroRed.h"
 #include "Mensaje.h"
 #include "Archivo.h"
@@ -16,6 +17,7 @@ MensajeroRed::MensajeroRed(int socket) {
 	// TODO Auto-generated constructor stub
 	this->socket = socket;
 	this->escucha = NULL;
+	this->busy = false;
 }
 
 MensajeroRed::~MensajeroRed() {
@@ -31,6 +33,7 @@ void MensajeroRed::esperaMensaje() {
 	Mensaje* recibido = new Mensaje(VACIO, "nada");
 	Archivo* configuracion = NULL;
 	MobileModel* modelo = NULL;
+	Resource* resource = NULL;
 	int resultado = recibirSerializable(this->socket, recibido);
 	printf("MensajeroRed - Recibi resultado: %i con mensaje: %s\n", resultado, recibido->toString());
 	while(resultado > 0){
@@ -50,18 +53,41 @@ void MensajeroRed::esperaMensaje() {
 				this->escucha->configEscenario(CONFIG_CLIENT);
 				break;
 			case APARECE_PERSONAJE:
+				while(this->busy){
+					SDL_Delay(DELAY_MILISEC);
+				}
+				this->busy = true;
 				modelo = new MobileModel();
 				resultado = recibirSerializable(this->socket, modelo);
 				printf("MensajeroRed - Recibi personaje con resultado: %i\n", resultado);
 				this->escucha->actualizaPersonaje(modelo);
 				delete modelo;
+				this->busy = false;
 				break;
 			case MOVER_PERSONAJE:
+				while(this->busy){
+					SDL_Delay(DELAY_MILISEC);
+				}
+				this->busy = true;
 				modelo = new MobileModel();
 				resultado = recibirSerializable(this->socket, modelo);
 				printf("MensajeroRed - Recibi personaje con resultado: %i\n", resultado);
 				this->escucha->moverProtagonista(modelo);
 				delete modelo;
+				this->busy = false;
+				break;
+
+			case APARECE_RECURSO:
+				while(this->busy){
+					SDL_Delay(DELAY_MILISEC);
+				}
+				this->busy = true;
+				resource = new Resource();
+				resultado = recibirSerializable(this->socket, resource);
+				printf("MensajeroRed - Recibi resource con resultado: %i\n", resultado);
+				this->escucha->apareceRecurso(resource);
+				delete resource;
+				this->busy = false;
 				break;
 			default:
 				resultado = -1; // No se pudo entender el mensaje => Cerrar la conexion
@@ -90,15 +116,34 @@ void MensajeroRed::configEscenario(const string path) {
 	printf("Cliente - yaml con resultado: %i\n", resultado);
 	delete archivo;
 }
-//virtual void apareceRecurso(Resource* recurso);
+void MensajeroRed::apareceRecurso(Resource* recurso) {
+	while(this->busy){
+		SDL_Delay(DELAY_MILISEC);
+	}
+	this->busy = true;
+	Mensaje* mensaje = new Mensaje(APARECE_RECURSO, "server");
+	printf("Cliente - apareceRecurso para enviar");
+	int resultado = enviarSerializable(this->socket, mensaje);
+	printf("Cliente - apareceRecurso con resultado: %i\n", resultado);
+	delete mensaje;
+	resultado = enviarSerializable(this->socket, recurso);
+	printf("Cliente - apareceRecurso con resultado: %i\n", resultado);
+	this->busy = false;
+}
+
 //virtual void desapareceRecurso(Resource* recurso);
 void MensajeroRed::actualizaPersonaje(MobileModel* entity) {
+	while(this->busy){
+		SDL_Delay(DELAY_MILISEC);
+	}
+	this->busy = true;
 	Mensaje* mensaje = new Mensaje(APARECE_PERSONAJE, "server");
 	int resultado = enviarSerializable(this->socket, mensaje);
 	printf("Cliente - actualizaPersonaje con resultado: %i\n", resultado);
 	delete mensaje;
 	resultado = enviarSerializable(this->socket, entity);
 	printf("Cliente - personaje con resultado: %i\n", resultado);
+	this->busy = false;
 }
 // Metodos Cliente -> Servidor
 void MensajeroRed::loguearse(char* nombre) {
@@ -109,10 +154,15 @@ void MensajeroRed::loguearse(char* nombre) {
 }
 
 void MensajeroRed::moverProtagonista(MobileModel* entity) {
+	while(this->busy){
+		SDL_Delay(DELAY_MILISEC);
+	}
+	this->busy = true;
 	Mensaje* mensaje = new Mensaje(MOVER_PERSONAJE, "todo"); // TODO agregar el nombre
 	int resultado = enviarSerializable(this->socket, mensaje);
 	printf("Cliente - moverProtagonista con resultado: %i\n", resultado);
 	delete mensaje;
 	resultado = enviarSerializable(this->socket, entity);
 	printf("Cliente - personaje con resultado: %i\n", resultado);
+	this->busy = false;
 }

@@ -70,7 +70,7 @@ void ClientGameController::agregarEntidades(list<Entity*> entidades) {
 void ClientGameController::actualizarEntidades(list<Entity*> entidades) {
 	this->escenarioView->getEntitiesView()->clear();
 	this->miniEscenarioView->getEntitiesMiniView()->clear();
-	// Agrego vista del personaA>je
+	// Agrego vista del personaje
 	this->initPersonaje();
 
 	this->agregarEntidades(entidades);
@@ -248,6 +248,8 @@ bool ClientGameController::pollEvents(){
 			SDL_Point point = this->renderer->windowToMapPoint({x,y});
 			Entity *entidad = this->escenario->getEntidadEnPosicion(point,true);
 			std::pair<SDL_Point,SDL_Point> tiles;
+
+			/*
 			if (entidad && (entidad != this->escenario->getProtagonista())){
 				this->setMessageForSelectedEntity(entidad);
 				tiles = this->escenario->getTilesCoordinatesForEntity(entidad);
@@ -255,7 +257,7 @@ bool ClientGameController::pollEvents(){
 			} else {
 				this->setMessageForSelectedEntity(this->escenario->getProtagonista());
 				this->renderer->setSelectedTilesCoordinates(false,tiles);
-			}
+			}*/
 
 			point = this->renderer->proyectedPoint(point, this->escenario->getSize());
 			MobileModel* auxModel = new MobileModel();
