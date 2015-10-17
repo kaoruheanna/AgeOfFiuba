@@ -68,8 +68,15 @@ void MensajeroRed::esperaMensaje() {
 			case APARECE_RECURSO:
 				resource = new Resource();
 				resultado = recibirSerializable(this->socket, resource);
-				printf("MensajeroRed - Recibi resource con resultado: %i\n", resultado);
+				printf("MensajeroRed - Recibi aparece resource con resultado: %i\n", resultado);
 				this->escucha->apareceRecurso(resource);
+				delete resource;
+				break;
+			case DESAPARECE_RECURSO:
+				resource = new Resource();
+				resultado = recibirSerializable(this->socket, resource);
+				printf("MensajeroRed - Recibi  desaparece resource con resultado: %i\n", resultado);
+				this->escucha->desapareceRecurso(resource);
 				delete resource;
 				break;
 			default:
@@ -110,7 +117,16 @@ void MensajeroRed::apareceRecurso(Resource* recurso) {
 	printf("Cliente - apareceRecurso con resultado: %i\n", resultado);
 }
 
-//virtual void desapareceRecurso(Resource* recurso);
+void MensajeroRed::desapareceRecurso(Resource* recurso) {
+	Mensaje* mensaje = new Mensaje(DESAPARECE_RECURSO, "server");
+	printf("Cliente - desapareceRecurso para enviar\n");
+	int resultado = enviarSerializable(this->socket, mensaje);
+	printf("Cliente - desapareceRecurso con resultado: %i\n", resultado);
+	delete mensaje;
+	resultado = enviarSerializable(this->socket, recurso);
+	printf("Cliente - desapareceRecurso con resultado: %i\n", resultado);
+}
+
 void MensajeroRed::actualizaPersonaje(MobileModel* entity) {
 	Mensaje* mensaje = new Mensaje(APARECE_PERSONAJE, "server");
 	int resultado = enviarSerializable(this->socket, mensaje);

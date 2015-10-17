@@ -20,7 +20,7 @@ public:
 	virtual void errorDeLogueo();
 	virtual void configEscenario(const string path);
 	virtual void apareceRecurso(Resource* recurso);
-	//virtual void desapareceRecurso(Resource* recurso);
+	virtual void desapareceRecurso(Resource* recurso);
 	virtual void actualizaPersonaje(MobileModel* entity);
 	// Metodos Cliente -> Servidor
 	virtual void loguearse(char* nombre);

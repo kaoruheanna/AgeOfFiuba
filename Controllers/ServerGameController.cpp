@@ -14,7 +14,6 @@ static const string TAG = "ServerGameController";
 ServerGameController::ServerGameController(GameConfiguration *config) :  config(config) {
 	escenario = NULL;
 	debeActualizarPersonaje = false;
-	entidadAparecida = NULL;
 	moverPersonajeAlPunto= NULL;
 }
 
@@ -60,33 +59,50 @@ void ServerGameController::play() {
 	}
 }
 
-void ServerGameController::loopEscenario() {
+void ServerGameController::obtenerEventos() {
 	if (this->moverPersonajeAlPunto) {
-		this->escenario->getProtagonista()
-				->setDestination(
+		this->escenario->getProtagonista()->setDestination(
 					moverPersonajeAlPunto->first,
 					moverPersonajeAlPunto->second
 				);
 		delete this->moverPersonajeAlPunto;
 		this->moverPersonajeAlPunto = NULL;
 	}
+}
 
-	this->escenario->loop();
-
+void ServerGameController::enviarEventos() {
 	if(debeActualizarPersonaje) {
 		debeActualizarPersonaje = false;
 		this->actualizarProtagonista();
 	}
 
-	if (this->entidadAparecida) {
+	list<Entity*>::iterator entidad;
+	for (entidad = recursos.begin(); entidad != recursos.end(); ++entidad){
+		Entity* entidadReal = (*entidad);
 		list<Mensajero*>::iterator mensajero;
 		for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
 			Mensajero* mensajeroReal = (*mensajero);
-			mensajeroReal->apareceRecurso((Resource*)this->entidadAparecida);
+			mensajeroReal->apareceRecurso((Resource*)entidadReal);
 		}
-		delete this->entidadAparecida;
-		this->entidadAparecida = NULL;
 	}
+	recursos.clear();
+
+	list<Entity*>::iterator entidadEliminada;
+	for (entidadEliminada = recursosEliminados.begin(); entidadEliminada != recursosEliminados.end(); ++entidadEliminada){
+		Entity* entidadReal = (*entidadEliminada);
+		list<Mensajero*>::iterator mensajero;
+		for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
+			Mensajero* mensajeroReal = (*mensajero);
+			mensajeroReal->desapareceRecurso((Resource*)entidadReal);
+		}
+	}
+	recursosEliminados.clear();
+}
+
+void ServerGameController::loopEscenario() {
+	this->obtenerEventos();
+	this->escenario->loop();
+	this->enviarEventos();
 }
 
 bool ServerGameController::inicializado() {
@@ -127,17 +143,11 @@ void ServerGameController::actualizaPersonaje(MobileModel* entity){
 }
 
 void ServerGameController::apareceEntidad(Entity* recurso) {
-	this->entidadAparecida = new Entity(*recurso);
-
+	this->recursos.push_back(recurso);
 }
 
 void ServerGameController::desapareceEntidad(Entity* recurso) {
-	/*
-	list<Mensajero*>::iterator mensajero;
-	for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
-		Mensajero* mensajeroReal = (*mensajero);
-		mensajeroReal->desapareceRecurso((Resource*)recurso);
-	}*/
+	this->recursosEliminados.push_back(recurso);
 }
 
 // TODO Implementar el manejo de usuarios

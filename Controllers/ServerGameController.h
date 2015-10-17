@@ -45,10 +45,13 @@ private:
 	GameConfiguration *config;
 	list<Mensajero*> mensajeros;
 	void loopEscenario();
+	void obtenerEventos();
+	void enviarEventos();
 	void actualizarProtagonista();
 	void sleep();
 
-	Entity* entidadAparecida;
+	list<Entity*> recursos;
+	list<Entity*> recursosEliminados;
 	bool debeActualizarPersonaje;
 	Posicion* moverPersonajeAlPunto;
 };
