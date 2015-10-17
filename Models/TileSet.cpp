@@ -112,6 +112,8 @@ bool TileSet::esVecino(Posicion a, Posicion b){
 }
 
 pointMap TileSet::caminoMinimo(Posicion origen, Posicion destino, Posicion *destino_alternativo){
+	cout<<"origen: "<<origen.first<<","<<origen.second<<endl;
+	cout<<"destino: "<<destino.first<<","<<destino.second<<endl;
 	PriorityQueue<Posicion> frontera;
 	frontera.put(origen, 0);
 	pointMap desde_donde_vino;
@@ -145,20 +147,23 @@ pointMap TileSet::caminoMinimo(Posicion origen, Posicion destino, Posicion *dest
 	return desde_donde_vino; // si sale del while es porque no llego al destino, el camino es hasta el lugar mas cercano al destino.
 }
 
-list<SDL_Point> TileSet::obtenerCamino(SDL_Point origen, SDL_Point destino){
+deque<SDL_Point> TileSet::obtenerCamino(SDL_Point origen, SDL_Point destino){
+	cout<<"obtener camino"<<endl;
 	Posicion des;
 	pointMap lugares = this->caminoMinimo({origen.x,origen.y},{destino.x,destino.y}, &des);
-	list<SDL_Point> camino;
-	//Posicion des = {destino.x, destino.y};
+	cout<<"camino encontrado"<<endl;
+	deque<SDL_Point> camino;
+	des = {destino.x, destino.y};
 	Posicion orig = {origen.x, origen.y};
 
 	if (lugares.empty()){ //si no tengo un camino
-		camino.push_front(origen);
+		camino.push_back(origen);
 		return camino; //si no existe el camino minimo devuelvo el origen.
 	}
 	Posicion actual = des;
+	cout<<"lugares size: "<<lugares.size()<<endl;
 	while (actual != orig){
-		camino.push_front({actual.first,actual.second});
+		camino.push_back({actual.first,actual.second});
 		actual = lugares[actual];
 	}
 	return camino;

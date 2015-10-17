@@ -60,11 +60,18 @@ void ServerGameController::play() {
 }
 
 void ServerGameController::obtenerEventos() {
-	if (this->moverPersonajeAlPunto) {
+	if (this->moverPersonajeAlPunto != NULL) {
+		Log().Get(TAG) << "Personaje se mueve al " << this->moverPersonajeAlPunto->first << " , " << this->moverPersonajeAlPunto->second;
+		//Directo
 		this->escenario->getProtagonista()->setDestination(
-					moverPersonajeAlPunto->first,
-					moverPersonajeAlPunto->second
-				);
+				moverPersonajeAlPunto->first,moverPersonajeAlPunto->second);
+
+		//Con caminno minimo
+		/*
+		SDL_Point origen = this->escenario->getProtagonista()->getPosicion();
+		queue <SDL_Point> camino = this->escenario->getPath(origen,{moverPersonajeAlPunto->first,moverPersonajeAlPunto->second});
+		this->escenario->getProtagonista()->setPath(camino);
+		 */
 		delete this->moverPersonajeAlPunto;
 		this->moverPersonajeAlPunto = NULL;
 	}
@@ -121,9 +128,13 @@ void ServerGameController::actualizarProtagonista(){
 }
 
 void ServerGameController::moverProtagonista(MobileModel* model) {
+	if(this->moverPersonajeAlPunto) {
+		delete this->moverPersonajeAlPunto;
+	}
 	this->moverPersonajeAlPunto = new Posicion();
 	this->moverPersonajeAlPunto->first = model->getDestinationX();
 	this->moverPersonajeAlPunto->second = model->getDestinationY();
+	Log().Get(TAG) << "Callbac se mueve al " << this->moverPersonajeAlPunto->first << " , " << this->moverPersonajeAlPunto->second;
 }
 
 void ServerGameController::addMensajero(Mensajero* mensajero) {

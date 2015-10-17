@@ -80,15 +80,19 @@ bool MobileModel::updatePosition() {
 
 	// si ya estoy en el destino, me fijo si tengo que seguir caminando.
 	if ((deltaX == 0) && (deltaY == 0)){
-		if (this->camino.empty()){
+		if (this->path.empty()){
 			this->moving = false;
+			/*queue <SDL_Point,deque<SDL_Point>> n_q;
+			n_q.push({100,100});
+			n_q.push({500,200});
+			n_q.push({100,300});
+			this->setPath(n_q);*/
 			return wasMoving!=this->moving;
 		}else{//si la cola de camino no esta vacia tengo que seguir caminando
-			SDL_Point destination = (SDL_Point)this->camino.front(); //ver casteo
-			this->camino.pop();
+			SDL_Point destination = this->getNextDestination();
 			this->destinationX = destination.x;
 			this->destinationY = destination.y;
-			return wasMoving!=this->moving; //aca que deberia devolver?
+			return true;
 		}
 	}
 
@@ -145,6 +149,27 @@ void MobileModel::update(MobileModel* other) {
 	}
 }
 
+
+void MobileModel::addDestination(int destinationX, int destionationY){
+	this->path.push({destinationX,destinationY});
+}
+
+SDL_Point MobileModel::getNextDestination(){
+	SDL_Point destination = this->path.front();
+	this->path.pop();
+	return destination;
+}
+
+void MobileModel::setPath(queue<SDL_Point> new_path){
+	this->path.swap(new_path);
+}
+
+void MobileModel::clearPath(){
+	queue<SDL_Point,deque<SDL_Point>> empty;
+	this->path.swap(empty);
+}
+
+
 // TODO mandar y recibir los recursos
 
 // Metodos de serializacion
@@ -189,6 +214,4 @@ void MobileModel::deserialize(int totalBlockCount, int currentBlock, void* block
 		memcpy(&this->moving, blockData, sizeof(int));
 	}
 }
-
-
 

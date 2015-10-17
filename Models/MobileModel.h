@@ -37,13 +37,19 @@ public:
 	list<string> getResourcesNames();
 	int getValueForResource(string resourceName);
 	void update(MobileModel* other);
+	void addDestination(int destinationX, int destionationY);
+	SDL_Point getNextDestination();
+	void setPath(queue<SDL_Point> new_path);
+	void clearPath();
+
 	// Serializable methods
 	virtual int getTotalBlockCount();
 	virtual int getBlockSizeFromIndex(int currentIndex);
 	virtual void getBlockFromIndex(int currentIndex, void* buffer);
 	virtual void deserialize(int totalBlockCount, int currentBlock, void* blockData);
+
 private:
-	queue <SDL_Point,deque<SDL_Point>> camino;
+	queue <SDL_Point,deque<SDL_Point>> path;
 	int destinationX;
 	int destinationY;
 	bool moving;
