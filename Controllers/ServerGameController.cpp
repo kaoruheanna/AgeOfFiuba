@@ -144,6 +144,10 @@ void ServerGameController::addMensajero(Mensajero* mensajero) {
 	}
 }
 
+void ServerGameController::removeMensajero(Mensajero *mensajero) {
+	this->mensajeros.remove(mensajero);
+}
+
 void ServerGameController::sleep(){
 	SDL_Delay(DELAY_MILISEC);
 }
