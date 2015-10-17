@@ -61,13 +61,10 @@ void Entity::setPosicion(SDL_Point nueva_posicion){
 //Serializar
 // Metodos de serializacion
 int Entity::getTotalBlockCount() {
-	Log().Get(TAG) << "getTotalBlockCount";
 	return 2;
 }
 
 int Entity::getBlockSizeFromIndex(int currentIndex) {
-	Log().Get(TAG) << "getBlockSizeFromIndex " << currentIndex;
-
 	if(currentIndex == 0){
 		return this->serializeStringSize((char*)this->nombre.c_str());
 	} else {
