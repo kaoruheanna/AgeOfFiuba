@@ -346,7 +346,7 @@ void ClientGameController::apareceRecurso(Resource* recurso) {
 	if (!this->inicializado())
 			return;
 
-	this->escenario->agregarEntidad(recurso);
+	this->escenario->agregarEntidad(new Resource(*recurso));
 	actualizarEntidades(this->escenario->getListaEntidades());
 }
 

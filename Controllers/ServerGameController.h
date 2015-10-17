@@ -8,6 +8,7 @@
 #ifndef CONTROLLERS_SERVERGAMECONTROLLER_H_
 #define CONTROLLERS_SERVERGAMECONTROLLER_H_
 
+
 #include "../Models/MobileModel.h"
 #include "../Models/Escenario.h"
 #include "../Configuration/GameConfiguration.h"
@@ -47,6 +48,9 @@ private:
 	void actualizarProtagonista();
 	void sleep();
 
+	Entity* entidadAparecida;
+	bool debeActualizarPersonaje;
+	Posicion moverPersonajeAlPunto;
 };
 
 #endif /* CONTROLLERS_SERVERGAMECONTROLLER_H_ */

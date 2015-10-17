@@ -28,7 +28,6 @@ public:
 private:
 	int socket;
 	Mensajero* escucha;
-	bool busy;
 };
 
 #endif /* RED_MENSAJERORED_H_ */
