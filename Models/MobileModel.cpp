@@ -148,64 +148,47 @@ void MobileModel::update(MobileModel* other) {
 // TODO mandar y recibir los recursos
 
 // Metodos de serializacion
+
+const int blockCount = 3;
 int MobileModel::getTotalBlockCount() {
-	return 5;
+	return blockCount + Entity::getTotalBlockCount();
 }
 
 int MobileModel::getBlockSizeFromIndex(int currentIndex) {
-	if(currentIndex == 0){
-		return this->serializeStringSize((char*)this->nombre.c_str());
-	} else if(currentIndex == 1){
-		return sizeof(SDL_Point);
-	} else if (currentIndex == 4) {
+	int realIndex =  currentIndex - Entity::getTotalBlockCount();
+	if ((realIndex == 0) || (realIndex == 1)) {
+		return sizeof(int);
+	} else if (realIndex == 2) {
 		return sizeof(bool);
 	}
-
-	return sizeof(int);
+	return Entity::getBlockSizeFromIndex(currentIndex);
 }
 
 void MobileModel::getBlockFromIndex(int currentIndex, void* buffer) {
-	if(currentIndex == 0){
-		this->serializeString((char*)this->nombre.c_str(), buffer);
-	} else if(currentIndex == 1){
-		memcpy(buffer, &this->posicion, sizeof(SDL_Point));
-	} else if(currentIndex == 2){
+	int realIndex =  currentIndex - Entity::getTotalBlockCount();
+	if (realIndex < 0) {
+		Entity::getBlockFromIndex(currentIndex, buffer);
+	} else if(realIndex == 0){
 		memcpy(buffer, &this->destinationX, sizeof(int));
-	} else if (currentIndex == 3){
+	} else if (realIndex == 1){
 		memcpy(buffer, &this->destinationY, sizeof(int));
-	} else {
-		memcpy(buffer, &this->moving, sizeof(int));
+	} else if (realIndex == 2) {
+		memcpy(buffer, &this->moving, sizeof(bool));
 	}
 }
 
 void MobileModel::deserialize(int totalBlockCount, int currentBlock, void* blockData) {
-	if(currentBlock == 0){
-		char* nombre = this->deserializeString(blockData);
-		this->nombre = string(nombre);
-		free(nombre);
-	} else if(currentBlock == 1){
-		memcpy(&this->posicion, blockData, sizeof(SDL_Point));
-	} else if(currentBlock == 2){
+	int realBlock =  currentBlock - Entity::getTotalBlockCount();
+	if (realBlock < 0) {
+		Entity::deserialize(totalBlockCount,currentBlock,blockData);
+	} else if(realBlock == 0){
 		memcpy(&this->destinationX, blockData, sizeof(int));
-	} else if(currentBlock == 3) {
+	} else if(realBlock == 1) {
 		memcpy(&this->destinationY, blockData, sizeof(int));
 	} else {
 		memcpy(&this->moving, blockData, sizeof(int));
 	}
 }
 
-char* MobileModel::deserializeString(void* blockData) {
-	char* toDeserialize = (char*) blockData;
-	char* string = (char*) malloc(this->serializeStringSize(toDeserialize));
-	this->serializeString(toDeserialize, (void*) string);
-	return string;
-}
 
-void MobileModel::serializeString(char* string, void* buffer) {
-	strcpy((char*) buffer, string);
-}
-
-int MobileModel::serializeStringSize(char* string) {
-	return strlen(string) + 1;
-}
 

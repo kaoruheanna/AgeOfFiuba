@@ -17,7 +17,7 @@
 
 using namespace std;
 
-class MobileModel: public Entity, public Serializable {
+class MobileModel: public Entity{
 public:
 	MobileModel();
 	MobileModel(string nombre, SDL_Point posicion, int ancho_base, int alto_base);
@@ -51,10 +51,6 @@ private:
 
 	int getSpeed();
 
-	// Serializable methods
-	char* deserializeString(void* blockData);
-	void serializeString(char* string, void* buffer);
-	int serializeStringSize(char* string);
 };
 
 #endif /* MOBILEMODEL_H_ */
