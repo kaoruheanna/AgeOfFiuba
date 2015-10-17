@@ -6,72 +6,70 @@
 
 #include "FogOfWar.h"
 
-FogOfWar::FogOfWar(list<Entity*> entities, Entity* mainCharacter, Map* map){
-	this->entities = entities;
-	this->character = mainCharacter;
-	this->world = map;
-}
+FogOfWar::FogOfWar(int ancho, int alto){
+	this->ancho = ancho;
+	this->alto = alto;
 
+	EstadoDeVisibilidad** matriz = new EstadoDeVisibilidad*[ancho];
+	for (int x = 0; x < ancho; ++x){
+		matriz[x] = new EstadoDeVisibilidad[alto];
+	}
+	this->matrizDeVisibilidad = matriz;
+	this->initialice();
+	this->TilesVisitados.clear();
+}
 
 void FogOfWar::initialice(){
-	list<Entity*>::iterator currentEntityIterator;
-	Entity* currentEntity;
-	for (currentEntityIterator = entities.begin(); currentEntityIterator != entities.end(); ++currentEntityIterator){
-			currentEntity = (*currentEntityIterator);
-			currentEntity->setEstado(OCULTO);
-	}
-	int posicionx;
-	int posiciony;
-	for (posicionx = 0; posicionx < this->world->getWidth(); ++posicionx){
-		for (posiciony = 0; posiciony < this->world->getHeight(); ++posiciony){
-			this->world->setEstado(posiciony,posicionx,OCULTO);
+	int i;
+	int j;
+	for ( i = 0; i < this->ancho; ++i){
+		for (j = 0; j < this->alto; ++j){
+			this->matrizDeVisibilidad[i][j] = OCULTO;
 		}
 	}
-	character->setEstado(VISIBLE);
 }
 
-void FogOfWar::update(){
-		list<Entity*>::iterator currentEntityIterator;
-		Entity* currentEntity;
-		SDL_Point currentCharacterPositionInTile = this->world->getTileForPosition(this->character->getPosicion());
-		SDL_Point currentEntityPositionInTile = {0,0};
-		for (currentEntityIterator = entities.begin(); currentEntityIterator != entities.end(); ++currentEntityIterator){
-			currentEntity = (*currentEntityIterator);
-			currentEntityPositionInTile = this->world->getTileForPosition(currentEntity->getPosicion());
-			if (this->checkInSight( currentCharacterPositionInTile , currentEntityPositionInTile )){
-				currentEntity->setEstado(VISIBLE);
-			}
-			else {
-				if (currentEntity->getEstado() == VISIBLE ){
-					currentEntity->setEstado(NUBLADO);
-				}
-			}
-		}
-		int posicionx;
-		int posiciony;
-		for (posicionx = 0; posicionx < this->world->getWidth(); ++posicionx){
-			for (posiciony = 0; posiciony < this->world->getHeight(); ++posiciony){
-				if (this->world->getEstado(posiciony,posicionx) == VISIBLE){
-					this->world->setEstado(posiciony,posicionx,NUBLADO);
-				}
-			}
-		}
-		for (posicionx = (currentCharacterPositionInTile.x - 1); posicionx <= (currentCharacterPositionInTile.x + 1); ++posicionx){
-			for (posiciony = (currentCharacterPositionInTile.y - 1); posiciony <= (currentCharacterPositionInTile.y + 1); ++posiciony){
-				this->world->setEstado(posiciony,posicionx,VISIBLE);
-			}
-		}
-
+//pasar posicion en TILE!!!!
+void FogOfWar::update(int posicionX, int posicionY){
+	this->setNublados();
+	this->setInSight(posicionX,posicionY);
 }
 
-bool FogOfWar::checkInSight(SDL_Point character, SDL_Point entity){
-	if (((entity.x >= (character.x - 1)) && (entity.x <= (character.x + 1))) && ((entity.y >= (character.y - 1)) && (entity.y <= (character.y + 1)))){
-		return true;
+void FogOfWar::setInSight(int posicionX, int posicionY){
+	int coordenadaX;
+	int coordenadaY;
+	for (coordenadaX = (posicionX-1); coordenadaX <= (posicionX+1); ++coordenadaX){
+		for (coordenadaY = (posicionY-1); coordenadaY <= (posicionY+1); ++coordenadaY){
+			if (((coordenadaX >= 0) && (coordenadaY >= 0)) && ((coordenadaX < ancho) && (coordenadaY < alto))){
+			SDL_Point Tile = {coordenadaX,coordenadaY};
+			this->TilesVisitados.push_back(Tile);
+			this->matrizDeVisibilidad[coordenadaX][coordenadaY] = VISIBLE;
+			}
+		}
 	}
-	return false;
+}
+
+void FogOfWar::setNublados(){
+	list<SDL_Point>::iterator posicion;
+	for (posicion = this->TilesVisitados.begin(); posicion != this->TilesVisitados.end(); ++posicion){
+		SDL_Point posicionANublar = (*posicion);
+		this->matrizDeVisibilidad[posicionANublar.x][posicionANublar.y] = NUBLADO;
+	}
+}
+
+EstadoDeVisibilidad FogOfWar::getEstado(int posicionX, int posicionY){
+	if (((posicionX >= 0) && (posicionY >= 0)) && ((posicionX < ancho) && (posicionY < alto)))
+		return this->matrizDeVisibilidad[posicionX][posicionY];
+	return OCULTO;
+}
+
+void FogOfWar::close(){
+	for (int x = 0; x < ancho; ++x){
+			delete (this->matrizDeVisibilidad[x]);
+	}
+	delete (this->matrizDeVisibilidad);
 }
 
 FogOfWar::~FogOfWar() {
 	// TODO Auto-generated destructor stub
 }
-

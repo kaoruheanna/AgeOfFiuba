@@ -16,7 +16,7 @@ class Map {
 		int tile_ancho;//estos tienen que estar definidos por el tile default
 		int tile_alto;
 		TileSet* baldosas;
-		EstadoDeVisibilidad** estado;
+
 
 
 	public:
@@ -29,8 +29,7 @@ class Map {
 		void setAncho(int);
 		void setAll(int,int,int,int);
 		void setTileDimensions(int,int);
-		EstadoDeVisibilidad getEstado(int i, int j);
-		void setEstado(int i, int j, EstadoDeVisibilidad estado);
+
 
 		SDL_Point posicionRelativaRect(SDL_Rect,SDL_Point);
 

@@ -108,12 +108,20 @@ bool GameController::play() {
 	this->initPersonaje();
 	this->initWindowSizes();
 
+	this->renderer->setFog(this->escenario->mundo->getWidth(),this->escenario->mundo->getHeight());
+	SDL_Point positionCharacter = {0,0};
+
 	bool shouldRestart = false;
 	//While application is running
 	while( !this->shouldQuit && !shouldRestart ) {
 		this->updateWindow();
 		shouldRestart = this->pollEvents();
 		this->loopEscenario();
+
+		positionCharacter =(this->escenario->getProtagonista())->getPosicion();
+		positionCharacter = this->escenario->mundo->getTileForPosition(positionCharacter);
+		this->renderer->fogUpdate(positionCharacter.x,positionCharacter.y);
+
 		this->renderer->drawViews();
 		this->sleep();
 	}

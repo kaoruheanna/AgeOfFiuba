@@ -14,19 +14,13 @@
 
 using namespace std;
 
-enum EstadoDeVisibilidad{
-	OCULTO,
-	NUBLADO,
-	VISIBLE,
-};
-
 class Entity : public Mapeable{
 private:
 	//int id;
 	string nombre;
 	int ancho_base; //x
 	int alto_base; //y
-	EstadoDeVisibilidad estado;
+
 
 protected:
 	SDL_Point posicion;  // posicion en el mapa (coordenadas logicas)
@@ -37,8 +31,8 @@ public:
 	int getAltoBase();
 	string getNombre();
 	void setPosicion(SDL_Point);
-	void setEstado(EstadoDeVisibilidad estado);
-	EstadoDeVisibilidad getEstado();
+
+
 
 	string toString();
 

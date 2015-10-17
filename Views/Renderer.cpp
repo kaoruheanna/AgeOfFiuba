@@ -31,6 +31,7 @@ Renderer::Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos) {
 	this->screenHeight = screenHeight;
 	this->screenMenu = new ScreenMenu(this->screenWidth,MENU_HEIGHT);
 	this->topBar = new TopBar(this->screenWidth,TOP_BAR_HEIGHT);
+	this->fog = NULL;
 
 	bool didInitSDL = this->initSDL();
 	bool didLoadMedia = this->loadMedia(tipos);
@@ -191,6 +192,10 @@ void Renderer::close() {
 	  delete it->second;
 	}
 
+	this->fog->close();
+	delete this->fog;
+	this->fog = NULL;
+
 	this->missingImageDrawable->free();
 	delete this->missingImageDrawable;
 
@@ -349,12 +354,19 @@ void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable) {
 	SDL_Point windowPoint = this->mapToWindowPoint(mapRect);
 	SDL_Rect renderQuad = drawable->getRectToDraw(windowPoint.x, windowPoint.y);
 
-	if(this->isInsideWindow(&renderQuad)){
-		// Only postpone drawing if its not the tiles
-		if(this->drawablesByInstanceName.find(TILE_DEFAULT_NAME)->second != drawable){
-			this->drawablesToPaint.push_back(pair<SDL_Point, Drawable*>(mapRect, drawable));
-		} else {
-			SDL_RenderCopy(sdlRenderer, drawable->getTexture(), drawable->getClipRect(), &renderQuad);
+	SDL_Point currentTile = { mapPositionX / TILE_HEIGHT_PIXELS, mapPositionY / TILE_HEIGHT_PIXELS };
+	EstadoDeVisibilidad currentTileState = this->fog->getEstado(currentTile.x,currentTile.y);
+	if (currentTileState != OCULTO){
+		if(currentTileState == VISIBLE) SDL_SetTextureColorMod( drawable->getTexture(), FOG_VISIBLE,FOG_VISIBLE,FOG_VISIBLE );
+		else if(currentTileState == NUBLADO) SDL_SetTextureColorMod( drawable->getTexture(), FOG_VISITED,FOG_VISITED,FOG_VISITED );
+
+		if(this->isInsideWindow(&renderQuad)){
+			// Only postpone drawing if its not the tiles
+			if(this->drawablesByInstanceName.find(TILE_DEFAULT_NAME)->second != drawable){
+				this->drawablesToPaint.push_back(pair<SDL_Point, Drawable*>(mapRect, drawable));
+			} else {
+				SDL_RenderCopy(sdlRenderer, drawable->getTexture(), drawable->getClipRect(), &renderQuad);
+			}
 		}
 	}
 }
@@ -475,8 +487,23 @@ void Renderer::drawInMiniMap(int mapPositionX, int mapPositionY, Drawable* drawa
 	renderQuad.w = (originalQuad.w * factor);
 	renderQuad.h = (originalQuad.h * factor);
 
+	SDL_Point currentTile = { mapPositionX / TILE_HEIGHT_PIXELS, mapPositionY / TILE_HEIGHT_PIXELS };
+	EstadoDeVisibilidad currentTileState = this->fog->getEstado(currentTile.x,currentTile.y);
+	if (currentTileState != OCULTO){
+			if(currentTileState == VISIBLE) SDL_SetTextureColorMod( drawable->getTexture(), FOG_VISIBLE,FOG_VISIBLE,FOG_VISIBLE );
+			else if(currentTileState == NUBLADO) SDL_SetTextureColorMod( drawable->getTexture(), FOG_VISITED,FOG_VISITED,FOG_VISITED );
+
+
 	SDL_RenderCopy(sdlRenderer, drawable->getTexture(), NULL, &renderQuad);
+	}
 }
 
+void Renderer::setFog(int ancho,int alto){
+	this->fog = new FogOfWar(ancho,alto);
+}
+
+void Renderer::fogUpdate(int posicionX,int posicionY){
+	this->fog->update(posicionX,posicionY);
+}
 
 

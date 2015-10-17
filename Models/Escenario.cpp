@@ -61,8 +61,7 @@ Escenario::Escenario(EscenarioConfig escenario, list<TipoConfig> tipos) {
 	}
 	//Inicializar resources Manager
 	this->resourcesManager = new ResourcesManager(this);
-	this->niebla = new FogOfWar(this->entidades, this->protagonista, this->mundo);
-	this->niebla->initialice();
+
 }
 
 Escenario::~Escenario(){
@@ -117,7 +116,7 @@ bool Escenario::cosecharEnPosicion(SDL_Point point) {
 void Escenario::loop() {
 	updated = false;
 	this->protagonista->updatePosition();
-	this->niebla->update();
+
 	SDL_Point point = this->mundo->getTileForPosition(protagonista->getPosicion());
 	updated = this->cosecharEnPosicion(point);
 
