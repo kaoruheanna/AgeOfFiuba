@@ -96,7 +96,6 @@ void ServerGameController::enviarEventos() {
 			mensajeroReal->desapareceRecurso((Resource*)entidadReal);
 		}
 	}
-	recursosEliminados.clear();
 }
 
 void ServerGameController::loopEscenario() {
