@@ -68,7 +68,8 @@ bool Map::construirEntidad(Entity* entidad, SDL_Point posicion){
 		for (int i = 0; i < entidad->getAnchoBase(); i++){
 			for (int j = 0; j < entidad->getAnchoBase(); j++){
 				SDL_Point tile = {i+tilePos.x,j+tilePos.y};
-				this -> baldosas -> setTileInconstruible(tile);
+				if(!entidad->Cosechable)
+					this -> baldosas -> setTileInconstruible(tile);
 			}
 		}
 		return true;
