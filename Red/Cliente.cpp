@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <iostream>
-#include "SerializableTest/DoubleStringSerializable.h"
+#include "Mensaje.h"
 
 using namespace std;
 
@@ -65,30 +65,25 @@ void Cliente::empezar(char* ip, int port) {
 	// Loop de conexion
 	bool endLoop = false;
 
-	printf("Escribir algo: ");
+	printf("Escribir nombre: ");
 	string testInput;
 	getline(cin, testInput);
 
-	printf("Escribir algo mas: ");
-	string secondTestInput;
-	getline(cin, secondTestInput);
-
-	endLoop = (testInput.length() == 0) || (secondTestInput.length() == 0);
+	endLoop = (testInput.length() == 0);
 
 	while(!endLoop){
-		// Ejemplo de serializar una estructura con 2 strings
-		DoubleStringSerializable* serializable = new DoubleStringSerializable(testInput.c_str(), secondTestInput.c_str());
-		int resultado = enviarSerializable(sd, serializable);
+		// Manda un mensaje y espera una respuesta
+		Mensaje* login = new Mensaje(LOGIN, testInput.c_str());
+		int resultado = enviarSerializable(sd, login);
 		printf("Cliente - Enviado con estado: %i\n", resultado);
-		delete serializable;
+		resultado = recibirSerializable(sd, login);
+		printf("Cliente - Recibido estado: %i. Mensaje: %s\n", resultado, login->toString());
+		delete login;
 
-		printf("Escribir algo: ");
+		printf("Escribir nombre: ");
 		getline(cin, testInput);
 
-		printf("Escribir algo mas: ");
-		getline(cin, secondTestInput);
-
-		endLoop = (testInput.length() == 0) || (secondTestInput.length() == 0);
+		endLoop = (testInput.length() == 0);
 	}
 
 	// TODO read / write

@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <iostream>
-#include "SerializableTest/DoubleStringSerializable.h"
+#include "Mensaje.h"
 
 Servidor::Servidor() {
 	// TODO Auto-generated constructor stub
@@ -55,17 +55,20 @@ void Servidor::empezar(int port) {
 
 		bool stopClientTalk = false;
 		while(!stopClientTalk){
-			// Ejemplo de recibir dos strings
-			DoubleStringSerializable* serializable = new DoubleStringSerializable();
-			printf("Servidor - Esperando string\n");
-			int resultado = recibirSerializable(client_sd, serializable);
-			printf("Servidor - Recibi string con resultado: %i\n", resultado);
-			if(resultado > 0){
-				printf("Servidor - String recibido - 1: %s 2: %s\n", serializable->firstString, serializable->secondString);
-			} else {
+			// Espera un mensaje y manda una respuesta
+			Mensaje* mensaje = new Mensaje(VACIO, "server");
+			printf("Servidor - Esperando mensaje\n");
+			int resultado = recibirSerializable(client_sd, mensaje);
+			printf("Servidor - Recibi resultado: %i con mensaje: %s\n", resultado, mensaje->toString());
+			delete mensaje;
+			if(resultado <= 0){
 				stopClientTalk = true;
+			} else {
+				mensaje = new Mensaje(ERROR_NOMRE_TOMADO, "server");
+				resultado = enviarSerializable(client_sd, mensaje);
+				printf("Servidor - Responde al mensaje con resultado: %i\n", resultado);
+				delete mensaje;
 			}
-			delete serializable;
 		}
 		// TODO read / write
 
