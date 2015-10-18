@@ -33,7 +33,7 @@ void TopBar::render(Renderer* renderer) {
 
 	for (list<ResourceCounter*>::iterator it = this->resourcesCounters.begin(); it != this->resourcesCounters.end(); it++){
 		ResourceCounter *counter = *it;
-		const char* resourceName = counter->getResourceName();
+		string resourceName = counter->getResourceName();
 		int value = this->protagonista->getValueForResource(resourceName);
 
 		Log().Get(TAG, logDEBUG) << "RESOURCE: "<<resourceName<<" VALUEEEEEEE "<< value;
@@ -45,7 +45,7 @@ void TopBar::render(Renderer* renderer) {
 void TopBar::setProtagonista(MobileModel *protagonista) {
 	this->protagonista = protagonista;
 
-	list<const char *> names = this->protagonista->getResourcesNames();
+	list<string> names = this->protagonista->getResourcesNames();
 
 	int verticalSpacing = 5;
 	int counterHeight = height - (2*verticalSpacing);
@@ -54,8 +54,8 @@ void TopBar::setProtagonista(MobileModel *protagonista) {
 	int horizontalSpacing = 20;
 	int resourceX = horizontalSpacing;
 
-	for (list<const char *>::iterator it = names.begin(); it != names.end(); it++){
-		const char* name = *it;
+	for (list<string>::iterator it = names.begin(); it != names.end(); it++){
+		string name = *it;
 		ResourceCounter *counter = new ResourceCounter(resourceX,verticalSpacing,counterWidth,counterHeight,name);
 		this->resourcesCounters.push_back(counter);
 		resourceX += (counterWidth + horizontalSpacing);

@@ -8,15 +8,18 @@
 #ifndef RESOURCECOUNTER_H_
 #define RESOURCECOUNTER_H_
 
+#include <string>
+using namespace std;
+
 class TextLabel;
 class Renderer;
 
 class ResourceCounter {
 public:
-	ResourceCounter(int x,int y,int width,int height,const char *resourceName);
+	ResourceCounter(int x,int y,int width,int height,string resourceName);
 	virtual ~ResourceCounter();
 	void render(Renderer* renderer);
-	const char* getResourceName();
+	string getResourceName();
 	void setResourceValue(int value);
 
 private:
@@ -24,7 +27,7 @@ private:
 	int y;
 	int width;
 	int height;
-	const char* resourceName;
+	string resourceName;
 	TextLabel *label;
 };
 

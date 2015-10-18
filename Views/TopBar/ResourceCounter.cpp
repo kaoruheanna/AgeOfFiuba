@@ -11,7 +11,7 @@
 #include <string>
 using namespace std;
 
-ResourceCounter::ResourceCounter(int x,int y,int width,int height,const char *resourceName) {
+ResourceCounter::ResourceCounter(int x,int y,int width,int height,string resourceName) {
 	this->x = x;
 	this->y = y;
 	this->width = width;
@@ -44,7 +44,7 @@ void ResourceCounter::setResourceValue(int value) {
 	this->label->setMessage(name+": "+valueString);
 }
 
-const char* ResourceCounter::getResourceName() {
+string ResourceCounter::getResourceName() {
 	return this->resourceName;
 }
 

@@ -65,7 +65,8 @@ Escenario::Escenario(EscenarioConfig escenario, list<TipoConfig> tipos) {
 	for (int i = 0; i < RESOURCES_QTY; i++){
 //		Log().Get(TAG, logDEBUG) << "tengo el resource: "<< this->resourcesManager->ResourceTypes()[i];
 		const char* resourceName = this->resourcesManager->ResourceTypes()[i];
-		this->protagonista->addResourceToCollect(resourceName);
+		string str(resourceName);
+		this->protagonista->addResourceToCollect(str);
 	}
 
 

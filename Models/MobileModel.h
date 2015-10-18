@@ -29,16 +29,16 @@ public:
 	void setDestination(int destinationX, int destionationY);
 	void updatePosition();
 	bool isMoving();
-	void addResourceToCollect(const char* resourceName);
-	void didCollectResource(const char* resourceName);
-	list<const char *> getResourcesNames();
-	int getValueForResource(const char* resourceName);
+	void addResourceToCollect(string resourceName);
+	void didCollectResource(string resourceName);
+	list<string> getResourcesNames();
+	int getValueForResource(string resourceName);
 
 private:
 	int destinationX;
 	int destinationY;
 	bool moving;
-	std::map<const char*,int> resourcesCounter;
+	std::map<string,int> resourcesCounter;
 
 	int getSpeed();
 };
