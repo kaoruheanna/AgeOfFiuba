@@ -106,7 +106,7 @@ void MobileModel::didCollectResource(string resourceName) {
 	int value = this->resourcesCounter[resourceName];
 	value++;
 	this->resourcesCounter[resourceName] = value;
-//	Log().Get(TAG, logDEBUG) << "resource "<< resourceName <<": "<<this->resourcesCounter[resourceName];
+	Log().Get(TAG, logDEBUG) << "resource "<< resourceName <<": "<<this->resourcesCounter[resourceName];
 }
 
 list<string> MobileModel::getResourcesNames() {

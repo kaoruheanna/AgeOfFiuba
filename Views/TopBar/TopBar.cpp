@@ -35,8 +35,6 @@ void TopBar::render(Renderer* renderer) {
 		ResourceCounter *counter = *it;
 		string resourceName = counter->getResourceName();
 		int value = this->protagonista->getValueForResource(resourceName);
-
-		Log().Get(TAG, logDEBUG) << "RESOURCE: "<<resourceName<<" VALUEEEEEEE "<< value;
 		counter->setResourceValue(value);
 		counter->render(renderer);
 	}
@@ -44,6 +42,11 @@ void TopBar::render(Renderer* renderer) {
 
 void TopBar::setProtagonista(MobileModel *protagonista) {
 	this->protagonista = protagonista;
+
+	if (!this->resourcesCounters.empty()){
+		//ya cree los counters
+		return;
+	}
 
 	list<string> names = this->protagonista->getResourcesNames();
 

@@ -76,6 +76,11 @@ void Escenario::init() {
 	}
 	//Inicializar resources Manager
 	this->resourcesManager = new ResourcesManager(this);
+	for (int i = 0; i < RESOURCES_QTY; i++){
+		const char* resourceName = this->resourcesManager->ResourceTypes()[i];
+		string str(resourceName);
+		this->protagonista->addResourceToCollect(str);
+	}
 }
 
 Escenario::Escenario(EscenarioConfig config, list<TipoConfig> tipos) :  escenarioConfig(config), tiposConfigList(tipos){
@@ -137,6 +142,7 @@ bool Escenario::cosecharEnPosicion(SDL_Point point) {
 			(position.y == point.y) &&
 			(entidadReal != this->protagonista) &&
 			entidadReal->Cosechable) {
+				this->protagonista->didCollectResource(entidadReal->getNombre());
 				this->delegate->desapareceEntidad(entidadReal);
 				entidades.erase(entidad);
 				return true;

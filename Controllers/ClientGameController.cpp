@@ -96,6 +96,8 @@ void ClientGameController::initEntities(){
 }
 
 void ClientGameController::initPersonaje() {
+	this->renderer->setProtagonista(this->escenario->getProtagonista());
+
 	// Agrego vista del personaje
 	MobileView *personajeView = new MobileView(this->escenario->getProtagonista()->getNombre());
 	personajeView->setModel(this->escenario->getProtagonista());

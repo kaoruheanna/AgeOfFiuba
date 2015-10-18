@@ -15,6 +15,7 @@
 #include "../Factories/EntityFactory.h"
 #include "../Utils/ResourcesManager.h"
 #include "FogOfWar.h"
+using namespace std;
 
 class EscenarioDelagate {
 public:
@@ -24,8 +25,6 @@ public:
 	virtual void desapareceEntidad(Entity* recurso){};
 	virtual void actualizaPersonaje(MobileModel* entity){};
 };
-
-using namespace std;
 
 class Escenario {
 	private:
