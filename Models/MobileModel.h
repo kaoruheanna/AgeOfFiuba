@@ -9,12 +9,12 @@
 #define MOBILEMODEL_H_
 
 #include <string>
+#include <queue>
 #include "Entity.h"
 #include <map>
 #include <list>
 
 using namespace std;
-
 
 class MobileModel: public Entity {
 public:
@@ -36,6 +36,7 @@ public:
 	void update(MobileModel* other);
 
 private:
+	queue <SDL_Point,deque<SDL_Point>> camino;
 	int destinationX;
 	int destinationY;
 	bool moving;

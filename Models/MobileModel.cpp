@@ -19,16 +19,14 @@ const std::string TAG = "MobileModel";
 MobileModel::MobileModel() : Entity("", {0, 0}, 1, 1){
 	this->posicion.x = 0;
 	this->posicion.y = 0;
-	this->destinationX = 0;
-	this->destinationY = 0;
 	this->moving = false;
 	this->Cosechable = false;
 }
 
 MobileModel::MobileModel(string nombre, SDL_Point posicion, int ancho_base, int alto_base)
 : Entity(nombre, posicion, ancho_base, alto_base){
-	this->destinationX = this->posicion.x;
-	this->destinationY = this->posicion.y;
+	this->destinationX = posicion.x;
+	this->destinationY = posicion.y;
 	this->moving = false;
 	this->Cosechable = false;
 }
@@ -71,10 +69,18 @@ bool MobileModel::updatePosition() {
 	double deltaX = (double)(this->destinationX - this->posicion.x);
 	double deltaY = (double)(this->destinationY - this->posicion.y);
 
-	// si ya estoy en el destino, no hago nada
+	// si ya estoy en el destino, me fijo si tengo que seguir caminando.
 	if ((deltaX == 0) && (deltaY == 0)){
-		this->moving = false;
-		return wasMoving!=this->moving;
+		if (this->camino.empty()){
+			this->moving = false;
+			return wasMoving!=this->moving;
+		}else{//si la cola de camino no esta vacia tengo que seguir caminando
+			SDL_Point destination = (SDL_Point)this->camino.front(); //ver casteo
+			this->camino.pop();
+			this->destinationX = destination.x;
+			this->destinationY = destination.y;
+			return wasMoving!=this->moving; //aca que deberia devolver?
+		}
 	}
 
 	this->moving = true;
