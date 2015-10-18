@@ -34,14 +34,15 @@ public:
 	std::string getNombreEscenario();
 	int getTamanioX();
 	int getTamanioY();
+	PantallaConfig pantalla;
+	ConfiguracionConfig configuracion;
 
 private:
 	void parseYAML(const string archivoAParsear);
 	void loadFile(const string archivoAParsear);
 	void auxiliar();
 	YAML::Node nodoRaiz;
-	PantallaConfig pantalla;
-	ConfiguracionConfig configuracion;
+
 	list<TipoConfig> tipos;
 	EscenarioConfig escenario;
 };

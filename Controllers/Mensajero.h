@@ -17,6 +17,7 @@ class MensajeroCliente {
 public:
 	MensajeroCliente(){};
 	virtual ~MensajeroCliente(){};
+	virtual void escenarioInicializado(Escenario* escenario){}
 	virtual void apareceRecurso(Resource* recurso){};
 	virtual void desapareceRecurso(Resource* recurso){};
 	virtual void actualizaPersonaje(MobileModel* entity){};
@@ -29,9 +30,6 @@ public:
 	virtual void addClient(MensajeroCliente* client){};
 
 	//Metodos Cliente->Servidor
-	virtual GameConfiguration* obtenerConfiguracion(){return 0;};
-	virtual Escenario* obtenerEscenario(){return 0;};
-	virtual bool inicializado(){return 0;};
 	virtual void moverProtagonista(SDL_Point point){};
 
 };
