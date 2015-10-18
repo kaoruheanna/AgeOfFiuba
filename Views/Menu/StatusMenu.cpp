@@ -19,16 +19,14 @@ StatusMenu::StatusMenu(int x, int y, int width, int height) {
 	this->height = height;
 	this->firstLabel = new TextLabel(x+10,y+10);
 	this->secondLabel = new TextLabel(x+10,y+40);
-	this->thirdLabel = new TextLabel(x+10,y+70);
-	this->firstLabel->setMessage("Hola");
-	this->secondLabel->setMessage("Soy Kao");
-	this->thirdLabel->setMessage("23");
+	this->setMessageForFirstLabel("");
+	this->setMessageForSecondLabel("");
+
 }
 
 StatusMenu::~StatusMenu() {
 	delete this->firstLabel;
 	delete this->secondLabel;
-	delete this->thirdLabel;
 }
 
 void StatusMenu::render(Renderer* renderer) {
@@ -38,6 +36,13 @@ void StatusMenu::render(Renderer* renderer) {
 
 	this->firstLabel->render(renderer);
 	this->secondLabel->render(renderer);
-	this->thirdLabel->render(renderer);
+}
+
+void StatusMenu::setMessageForFirstLabel(std::string message) {
+	this->firstLabel->setMessage(message);
+}
+
+void StatusMenu::setMessageForSecondLabel(std::string message) {
+	this->secondLabel->setMessage(message);
 }
 

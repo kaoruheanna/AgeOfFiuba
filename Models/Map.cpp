@@ -60,7 +60,6 @@ bool Map::puedoConstruir(Entity* entidad, SDL_Point tile){
 	//verificar que en todos los tiles que va a ocupar la entidad se pueda construir
 	SDL_Point fin = {size_x+tile.x-1, size_y+tile.y-1};
 	return !(this -> baldosas->sectorEstaBloqueado(tile,fin));
-	//return true;
 }
 
 bool Map::construirEntidad(Entity* entidad, SDL_Point posicion){

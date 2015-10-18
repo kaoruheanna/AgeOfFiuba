@@ -24,6 +24,10 @@ TextLabel::~TextLabel() {
 }
 
 void TextLabel::render(Renderer *renderer){
+	if (this->message == ""){
+		return;
+	}
+
 	if (this->texture == NULL){
 		this->loadTexture(renderer->getSdlRenderer(),renderer->getFont());
 	}
