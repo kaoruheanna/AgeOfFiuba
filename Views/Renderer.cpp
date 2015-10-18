@@ -32,6 +32,7 @@ Renderer::Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos) {
 	this->screenMenu = new ScreenMenu(this->screenWidth,MENU_HEIGHT);
 	this->topBar = new TopBar(this->screenWidth,TOP_BAR_HEIGHT);
 	this->fog = NULL;
+	this->hasSelectedTiles = false;
 
 	bool didInitSDL = this->initSDL();
 	bool didLoadMedia = this->loadMedia(tipos);
@@ -354,21 +355,44 @@ void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable) {
 	SDL_Point windowPoint = this->mapToWindowPoint(mapRect);
 	SDL_Rect renderQuad = drawable->getRectToDraw(windowPoint.x, windowPoint.y);
 
+	if(!(this->isInsideWindow(&renderQuad))){
+		//como no esta dentro de la ventana, no lo dibuja
+		return;
+	}
+
 	SDL_Point currentTile = { mapPositionX / TILE_HEIGHT_PIXELS, mapPositionY / TILE_HEIGHT_PIXELS };
 	EstadoDeVisibilidad currentTileState = this->fog->getEstado(currentTile.x,currentTile.y);
-	if (currentTileState != OCULTO){
-		if(currentTileState == VISIBLE) SDL_SetTextureColorMod( drawable->getTexture(), FOG_VISIBLE,FOG_VISIBLE,FOG_VISIBLE );
-		else if(currentTileState == NUBLADO) SDL_SetTextureColorMod( drawable->getTexture(), FOG_VISITED,FOG_VISITED,FOG_VISITED );
 
-		if(this->isInsideWindow(&renderQuad)){
-			// Only postpone drawing if its not the tiles
-			if(this->drawablesByInstanceName.find(TILE_DEFAULT_NAME)->second != drawable){
-				this->drawablesToPaint.push_back(pair<SDL_Point, Drawable*>(mapRect, drawable));
-			} else {
-				SDL_RenderCopy(sdlRenderer, drawable->getTexture(), drawable->getClipRect(), &renderQuad);
-			}
+	if (currentTileState == OCULTO){
+		// como todavia esta oculto no lo dibujo
+		return;
+	}
+
+	if (currentTileState == VISIBLE){
+		SDL_SetTextureColorMod( drawable->getTexture(), FOG_VISIBLE,FOG_VISIBLE,FOG_VISIBLE );
+	} else if (currentTileState == NUBLADO) {
+		SDL_SetTextureColorMod( drawable->getTexture(), FOG_VISITED,FOG_VISITED,FOG_VISITED );
+	}
+
+	if(this->drawablesByInstanceName.find(TILE_DEFAULT_NAME)->second != drawable){
+		// si no es un tile, lo guarda para dibujar despues
+		this->drawablesToPaint.push_back(pair<SDL_Point, Drawable*>(mapRect, drawable));
+		return;
+	}
+
+	//si es un tile lo dibuja ahora
+	if (this->hasSelectedTiles){
+		int minX = this->selectedTilesCoordinates.first.x;
+		int maxX = this->selectedTilesCoordinates.second.x;
+		int minY = this->selectedTilesCoordinates.first.y;
+		int maxY = this->selectedTilesCoordinates.second.y;
+		bool inRangeX = ((currentTile.x >= minX) && (currentTile.x < maxX));
+		bool inRangeY = ((currentTile.y >= minY) && (currentTile.y < maxY));
+		if (inRangeX && inRangeY){
+			SDL_SetTextureColorMod( drawable->getTexture(), 80,255,255 );
 		}
 	}
+	SDL_RenderCopy(sdlRenderer, drawable->getTexture(), drawable->getClipRect(), &renderQuad);
 }
 
 // draw shape
@@ -518,3 +542,7 @@ void Renderer::setMessagesInMenu(std::string firstMessage, std::string secondMes
 	this->screenMenu->setMessages(firstMessage,secondMessage);
 }
 
+void Renderer::setSelectedTilesCoordinates(bool selected,std::pair<SDL_Point,SDL_Point> tiles){
+	this->hasSelectedTiles = selected;
+	this->selectedTilesCoordinates = tiles;
+}

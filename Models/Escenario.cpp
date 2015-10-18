@@ -159,11 +159,11 @@ Entity* Escenario::getEntidadEnPosicion(SDL_Point point, bool ignoreCosechables)
 		Entity* entidadReal = (*entidad);
 
 		if (!ignoreCosechables || !(entidadReal->Cosechable)){
-			SDL_Point tileEntidad = this->mundo->getTileForPosition(entidadReal->getPosicion());
-			int minTileX = tileEntidad.x;
-			int maxTileX = (minTileX + entidadReal->getAnchoBase());
-			int minTileY = tileEntidad.y;
-			int maxTileY = (minTileY + entidadReal->getAltoBase());
+			std::pair<SDL_Point,SDL_Point> pair = this->getTilesCoordinatesForEntity(entidadReal);
+			int minTileX = pair.first.x;
+			int maxTileX = pair.second.x;
+			int minTileY = pair.first.y;
+			int maxTileY = pair.second.y;
 			bool sameX = ((tile.x >= minTileX) && (tile.x <= maxTileX));
 			bool sameY = ((tile.y >= minTileY) && (tile.y <= maxTileY));
 
@@ -173,6 +173,14 @@ Entity* Escenario::getEntidadEnPosicion(SDL_Point point, bool ignoreCosechables)
 		}
 	}
 	return NULL;
+}
+
+std::pair<SDL_Point,SDL_Point> Escenario::getTilesCoordinatesForEntity(Entity *entity){
+	SDL_Point minTile = this->mundo->getTileForPosition(entity->getPosicion());
+	int maxTileX = (minTile.x + entity->getAnchoBase());
+	int maxTileY = (minTile.y + entity->getAltoBase());
+	SDL_Point maxTile = {maxTileX,maxTileY};
+	return std::make_pair(minTile,maxTile);
 }
 
 //Actualiza todos los modelos en un nuevo loop

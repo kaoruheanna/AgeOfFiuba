@@ -59,6 +59,7 @@ public:
 	FogOfWar* getFog();
 	void setProtagonista(MobileModel *protagonista);
 	void setMessagesInMenu(std::string firstMessage, std::string secondMessage);
+	void setSelectedTilesCoordinates(bool selected,std::pair<SDL_Point,SDL_Point> tiles);
 
 private:
 	bool successfullInit;
@@ -74,6 +75,8 @@ private:
 	EscenarioView *escenarioView;
 	MiniEscenarioView *miniEscenarioView;
 	FogOfWar* fog;
+	std::pair<SDL_Point,SDL_Point> selectedTilesCoordinates;
+	bool hasSelectedTiles;
 
 	int screenWidth;
 	int screenHeight;

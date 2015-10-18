@@ -56,6 +56,7 @@ class Escenario {
 		MobileModel* getProtagonista();
 		bool eliminarRecursoConID(int id);
 		Entity* getEntidadEnPosicion(SDL_Point point, bool ignoreCosechables); //recibe una posicion logica
+		std::pair<SDL_Point,SDL_Point> getTilesCoordinatesForEntity(Entity *entity); //devuelve un par con el min y maxTile
 
 		bool inicializacionCorrecta;
 

@@ -246,10 +246,14 @@ bool ClientGameController::pollEvents(){
 			SDL_GetMouseState(&x, &y);
 			SDL_Point point = this->renderer->windowToMapPoint({x,y});
 			Entity *entidad = this->escenario->getEntidadEnPosicion(point,true);
-			if (entidad){
+			std::pair<SDL_Point,SDL_Point> tiles;
+			if (entidad && (entidad != this->escenario->getProtagonista())){
 				this->setMessageForSelectedEntity(entidad);
+				tiles = this->escenario->getTilesCoordinatesForEntity(entidad);
+				this->renderer->setSelectedTilesCoordinates(true,tiles);
 			} else {
 				this->setMessageForSelectedEntity(this->escenario->getProtagonista());
+				this->renderer->setSelectedTilesCoordinates(false,tiles);
 			}
 
 			point = this->renderer->proyectedPoint(point, this->escenario->getSize());
