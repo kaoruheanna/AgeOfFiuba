@@ -17,6 +17,7 @@
 #include <iostream>
 #include <pthread.h>
 
+#include "../GlobalConstants.h"
 #include "Mensaje.h"
 #include "Archivo.h"
 
@@ -26,15 +27,14 @@ struct InfoCliente {
 };
 
 Servidor::Servidor() {
-	// TODO Auto-generated constructor stub
-
+	this->modelos = NULL;
 }
 
 Servidor::~Servidor() {
-	// TODO Auto-generated destructor stub
 }
 
-void* atenderCliente(void* cliente_sd);
+void* atenderCliente(void* infoCliente);
+void* simularModelos(void* modelos);
 
 void Servidor::empezar(int port) {
 	int sd = socket(AF_INET, SOCK_STREAM, 0);
@@ -57,6 +57,8 @@ void Servidor::empezar(int port) {
 		printf("Servidor - Fallo el listen\n");
 		return; // ERR: -1
 	}
+	pthread_create((pthread_t*) malloc(sizeof(pthread_t)), NULL,
+			simularModelos, (void*)&this->modelos);
 	while(true){
 		printf("Servidor - Esperando un cliente\n");
 		sockaddr_in client_addr;
@@ -117,10 +119,18 @@ void* atenderCliente(void* arg) {
 	return NULL;
 }
 
+void* simularModelos(void* arg) {
+	ServerGameController* modelos = new ServerGameController(new GameConfiguration(CONFIG_CUSTOM));
+	(*(ServerGameController**)arg) = modelos;
+	modelos->init();
+	modelos->play();
+	return NULL;
+}
+
 bool Servidor::existeUsuario(char* nombre) {
-	return true;
+	return false;
 }
 
 bool Servidor::usuarioLogueado(char* nombre) {
-	return true;
+	return false;
 }

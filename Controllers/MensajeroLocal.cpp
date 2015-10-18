@@ -19,9 +19,8 @@ MensajeroLocal::MensajeroLocal(ServerGameController* server) : Mensajero() {
 
 MensajeroLocal::~MensajeroLocal() {}
 
-void MensajeroLocal::escenarioInicializado(Escenario* escenario) {
-	Escenario* escenarioNuevo =  new Escenario(escenario->escenarioConfig,escenario->tiposConfigList);
-	this->cliente->escenarioInicializado(escenarioNuevo);
+void MensajeroLocal::configEscenario(const string path) {
+	this->cliente->configEscenario(path);
 }
 
 

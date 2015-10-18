@@ -22,10 +22,9 @@
 
 static const string TAG = "ClientGameController";
 
-ClientGameController::ClientGameController(Mensajero *mensajero, PantallaConfig configPantalla, ConfiguracionConfig config) {
+ClientGameController::ClientGameController(Mensajero *mensajero) {
 	this->mensajero = mensajero;
-	this->config = config;
-	this->configPantalla = configPantalla;
+	this->config = NULL;
 
 	this->shouldQuit = false;
 	this->renderer = NULL;
@@ -120,7 +119,7 @@ float ClientGameController::scrollingSpeed(int z, int min, int max) {
 		return 0;
 	}
 
-	int margenScroll = this->config.getScroll();
+	int margenScroll = this->config->configuracion.getScroll();
 	int scrollInferior = (min + margenScroll);
 	int scrollSuperior = (max - margenScroll);
 
@@ -166,7 +165,7 @@ void ClientGameController::initWindowSizes() {
 	vertixSlope = -1 * (intialWindowWrapperTop.x - intialWindowWrapperLeft.x) / (intialWindowWrapperTop.y - intialWindowWrapperLeft.y);
 	middlePoint = -1 * intialWindowWrapperLeft.y;
 
-	intialPointWindowWrapper.x = -intialWindowWrapperLeft.x + (this->configPantalla.getAncho()/2);
+	intialPointWindowWrapper.x = -intialWindowWrapperLeft.x + (this->config->pantalla.getAncho()/2);
 	intialPointWindowWrapper.y = -intialWindowWrapperTop.y;
 
 	finalPointWindowWrapper.x = -intialWindowWrapperRight.x;
@@ -190,11 +189,11 @@ SDL_Point ClientGameController::getMaxVertixForPoint(int yPosition) {
 	if(yPosition < middlePoint){
 		// If is the bottom half of the map then the slope is inverted
 		int invertedYPosition = 2* middlePoint - yPosition;
-		maxVertix.x = vertixSlope * invertedYPosition + this->configPantalla.getAlto();
+		maxVertix.x = vertixSlope * invertedYPosition + this->config->pantalla.getAlto();
 		maxVertix.y = -1 * vertixSlope * invertedYPosition;
 	} else {
 		maxVertix.x = vertixSlope * yPosition;
-		maxVertix.y = this->configPantalla.getAncho() - vertixSlope * yPosition;
+		maxVertix.y = this->config->pantalla.getAncho() - vertixSlope * yPosition;
 	}
 	return maxVertix;
 }
@@ -277,7 +276,7 @@ bool ClientGameController::play() {
 		this->sleep();
 	}
 
-	this->renderer = new Renderer(this->configPantalla.getAncho(),this->configPantalla.getAlto(), this->escenario->tiposConfigList);
+	this->renderer = new Renderer(this->config->pantalla.getAncho(),this->config->pantalla.getAlto(), this->escenario->tiposConfigList);
 		if (!this->renderer->canDraw()){
 			Log().Get(TAG,logERROR) << "Failed to initialize Renderer!";
 			this->close();
@@ -338,8 +337,14 @@ void ClientGameController::desapareceRecurso(Resource* recurso){
 	}
 }
 
-void ClientGameController::escenarioInicializado(Escenario* escenario) {
-	this->escenario = escenario;
+void ClientGameController::configEscenario(const string path) {
+	this->config = new GameConfiguration(path);
+	this->escenario = new Escenario(this->config->getEscenario(), this->config->getTipos());
+}
+
+void ClientGameController::errorDeLogueo() {
+	printf("Cliente - error de logueo\n");
+	this->shouldQuit = true;
 }
 
 bool ClientGameController::inicializado() {

@@ -22,7 +22,7 @@ void escenarioInicializado(list<Mensajero*> mensajeros,Escenario* escenario) {
 	list<Mensajero*>::iterator mensajero;
 	for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
 		Mensajero* mensajeroReal = (*mensajero);
-		mensajeroReal->escenarioInicializado(escenario);
+		mensajeroReal->configEscenario(CONFIG_CUSTOM);
 	}
 }
 
@@ -83,7 +83,7 @@ void ServerGameController::moverProtagonista(SDL_Point point) {
 void ServerGameController::addMensajero(Mensajero* mensajero) {
 	this->mensajeros.push_back(mensajero);
 	if(escenario->inicializacionCorrecta) {
-		mensajero->escenarioInicializado(escenario);
+		mensajero->configEscenario(CONFIG_CUSTOM);
 	}
 }
 

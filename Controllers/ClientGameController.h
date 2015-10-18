@@ -19,9 +19,9 @@ using namespace std;
 class EscenarioView;
 class MiniEscenarioView;
 
-class ClientGameController : public MensajeroCliente{
+class ClientGameController : public Mensajero{ // Era Mensajero Clientes
 public:
-	ClientGameController(Mensajero *mensajero, PantallaConfig configPantalla, ConfiguracionConfig config);
+	ClientGameController(Mensajero *mensajero);
 	virtual ~ClientGameController();
 	bool play();
 
@@ -33,8 +33,7 @@ private:
 	MiniEscenarioView *miniEscenarioView;
 	Renderer *renderer;
 	Escenario* escenario;
-	PantallaConfig configPantalla;
-	ConfiguracionConfig config;
+	GameConfiguration* config;
 
 	bool pollEvents();
 	void updateWindow();
@@ -65,7 +64,8 @@ private:
 	void loopEscenario();
 
 	//Mensajero Cliente
-	virtual void escenarioInicializado(Escenario* escenario);
+	virtual void errorDeLogueo();
+	virtual void configEscenario(const string path);
 	virtual void apareceRecurso(Resource* recurso);
 	virtual void desapareceRecurso(Resource* recurso);
 	virtual void actualizaPersonaje(MobileModel* entity);

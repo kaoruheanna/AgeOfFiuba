@@ -17,19 +17,23 @@ class MensajeroCliente {
 public:
 	MensajeroCliente(){};
 	virtual ~MensajeroCliente(){};
-	virtual void escenarioInicializado(Escenario* escenario){}
+
+	// Metodos Servidor -> Cliente
+	virtual void errorDeLogueo(){};
+	virtual void configEscenario(const string path){};
 	virtual void apareceRecurso(Resource* recurso){};
 	virtual void desapareceRecurso(Resource* recurso){};
 	virtual void actualizaPersonaje(MobileModel* entity){};
 };
 
-class Mensajero : public MensajeroCliente{
+class Mensajero : public MensajeroCliente {
 public:
 	Mensajero();
 	virtual ~Mensajero();
 	virtual void addClient(MensajeroCliente* client){};
 
-	//Metodos Cliente->Servidor
+	// Metodos Cliente -> Servidor
+	virtual void loguearse(char* nombre){};
 	virtual void moverProtagonista(SDL_Point point){};
 
 };

@@ -23,7 +23,7 @@ public:
 	virtual void moverProtagonista(SDL_Point point);
 
 	//Metodos Servidor->Cliente
-	virtual void escenarioInicializado(Escenario* escenario);
+	virtual void configEscenario(const string path);
 	virtual void apareceRecurso(Resource* recurso);
 	virtual void desapareceRecurso(Resource* recurso);
 	virtual void actualizaPersonaje(MobileModel* entity);

@@ -15,9 +15,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <iostream>
+#include "../Controllers/Mensajero.h"
 
 #include "Mensaje.h"
 #include "Archivo.h"
+#include "MensajeroRed.h"
+#include "../Controllers/ClientGameController.h"
 
 using namespace std;
 
@@ -30,6 +33,14 @@ Cliente::Cliente() {
 Cliente::~Cliente() {
 	// TODO Auto-generated destructor stub
 }
+
+struct InfoLoguearse {
+	MensajeroRed* mensajero;
+	ClientGameController* controller;
+	const char* nombre;
+};
+
+void* loguearse(void* args);
 
 void Cliente::empezar(char* ip, int port) {
 	int sd = socket(AF_INET, SOCK_STREAM, 0);
@@ -70,31 +81,30 @@ void Cliente::empezar(char* ip, int port) {
 		getline(cin, userName);
 		endLoop = (userName.length() == 0);
 	} while(endLoop);
-	// Se intenta logear al server
-	Mensaje* mensaje = new Mensaje(LOGIN, userName.c_str());
-	int resultado = enviarSerializable(sd, mensaje);
-	printf("Cliente - Enviado con estado: %i\nCliente - Esperando respuesta del servidor\n", resultado);
-	resultado = recibirSerializable(sd, mensaje);
-	printf("Cliente - Recibido estado: %i. Mensaje: %s\n", resultado, mensaje->toString());
-	while(!endLoop){
-		endLoop = true;
-		if(resultado < 0){
-			printf("Cliente - Se corto la conexion\n");
-		} else if(mensaje->getType() == ERROR_NOMBRE_TOMADO){
-			printf("Cliente - El usuario ya existe y esta logeado actualmente\n");
-		} else if(mensaje->getType() != ESCENARIO){
-			printf("Cliente - Se mando un mensaje inesperado\n");
-		} else {
-			printf("Cliente - Recibiendo escenario...\n");
-			Archivo* configuracion = new Archivo("yaml-files/configuracion_cliente.yaml");
-			resultado = recibirSerializable(sd, configuracion);
-			delete configuracion;
-			printf("Cliente - Recibido con resultado: %i\n", resultado);
-			// A partir de aca esta el flow comun de datos...
-			// TODO el cliente indica todos los movimientos del jugador
-		}
-	}
-	delete mensaje;
+	// Crea controller y client e intenta conectarse al server por nombre
+	MensajeroRed* mensajero = new MensajeroRed(sd);
+	ClientGameController *clientGameController = new ClientGameController(mensajero);
+	mensajero->setMensajero(clientGameController);
+	InfoLoguearse* info = (InfoLoguearse*) malloc(sizeof(InfoLoguearse));
+	info->mensajero = mensajero;
+	info->controller = clientGameController;
+	info->nombre = userName.c_str();
+	pthread_t thread;
+	pthread_create(&thread, NULL, loguearse, (void*)info);
+	mensajero->esperaMensaje();
+	pthread_cancel(thread);
+
+	delete clientGameController;
+	delete mensajero;
+
 	close(sd);
 	printf("Cliente - Termino la conexion\n");
+}
+
+void* loguearse(void* args) {
+	InfoLoguearse* info = (InfoLoguearse*) args;
+	info->mensajero->loguearse((char*)info->nombre);
+	info->controller->play();
+	free(args);
+	return NULL;
 }
