@@ -62,7 +62,8 @@ int MobileModel::getSpeed() {
 	return PROTAGONISTA_SPEED;
 }
 
-void MobileModel::updatePosition() {
+bool MobileModel::updatePosition() {
+	bool wasMoving = this->moving;
 	double speed = (double)this->getSpeed();
 
 	double deltaX = (double)(this->destinationX - this->posicion.x);
@@ -72,27 +73,23 @@ void MobileModel::updatePosition() {
 	if ((deltaX == 0) && (deltaY == 0)){
 		if (this->camino.empty()){
 			this->moving = false;
-			this->camino.push({100,100});
-			this->camino.push({200,100});
-			this->camino.push({200,800});
-			return;
-		}else{
+			return wasMoving!=this->moving;
+		}else{//si la cola de camino no esta vacia tengo que seguir caminando
 			SDL_Point destination = (SDL_Point)this->camino.front(); //ver casteo
 			this->camino.pop();
 			this->destinationX = destination.x;
 			this->destinationY = destination.y;
-			return;
+			return wasMoving!=this->moving; //aca que deberia devolver?
 		}
 	}
 
 	this->moving = true;
-
 	double hypotenuse = sqrt (pow(deltaX,2) + pow(deltaY,2.0));
 	// si estoy mas cerca que la velocidad, llegue al destino
 	if (hypotenuse < speed){
 		this->posicion.x = this->destinationX;
 		this->posicion.y = this->destinationY;
-		return;
+		return true;
 	}
 
 	double displacementX = round(speed * (deltaX / hypotenuse));
@@ -100,10 +97,15 @@ void MobileModel::updatePosition() {
 
 	this->posicion.x += (int)displacementX;
 	this->posicion.y += (int)displacementY;
+	return true;
 }
 
 bool MobileModel::isMoving() {
 	return this->moving;
 }
 
+void MobileModel::update(MobileModel* other) {
+	this->moving = other->isMoving();
+	this->posicion = other->getPosicion();
+}
 
