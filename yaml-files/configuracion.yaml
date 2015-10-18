@@ -47,8 +47,8 @@ tipos:
  - nombre: archeryRange
    imagen: img/archeryRange.png
    miniImagen: img/tile_orange.png
-   ancho_base: 3
-   alto_base : 3
+   ancho_base: 2
+   alto_base : 2
    pixel_ref_x: 159
    pixel_ref_y: 77
 

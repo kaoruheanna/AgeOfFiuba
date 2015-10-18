@@ -106,7 +106,8 @@ bool Escenario::construirEntidad(Entity* entidad,SDL_Point posicion){
 		entidad->setPosicion(posicion);
 		this->agregarEntidad(entidad);
 		return true;
-	}else return false;
+	}
+	return false;
 }
 
 MobileModel* Escenario::getProtagonista() {
@@ -133,7 +134,6 @@ bool Escenario::eliminarRecursoConID(int id) {
 
 //Devuelve true si cosecho algo
 bool Escenario::cosecharEnPosicion(SDL_Point point) {
-	//return this->mundo->mapeableInPosition(point);
 	list<Entity*>::iterator entidad;
 	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
 		Entity* entidadReal = (*entidad);
@@ -149,6 +149,30 @@ bool Escenario::cosecharEnPosicion(SDL_Point point) {
 		}
 	}
 	return false;
+}
+
+Entity* Escenario::getEntidadEnPosicion(SDL_Point point, bool ignoreCosechables) {
+	SDL_Point tile = this->mundo->getTileForPosition(point);
+	list<Entity*>::iterator entidad;
+
+	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
+		Entity* entidadReal = (*entidad);
+
+		if (!ignoreCosechables || !(entidadReal->Cosechable)){
+			SDL_Point tileEntidad = this->mundo->getTileForPosition(entidadReal->getPosicion());
+			int minTileX = tileEntidad.x;
+			int maxTileX = (minTileX + entidadReal->getAnchoBase());
+			int minTileY = tileEntidad.y;
+			int maxTileY = (minTileY + entidadReal->getAltoBase());
+			bool sameX = ((tile.x >= minTileX) && (tile.x <= maxTileX));
+			bool sameY = ((tile.y >= minTileY) && (tile.y <= maxTileY));
+
+			if (sameX && sameY){
+				return entidadReal;
+			}
+		}
+	}
+	return NULL;
 }
 
 //Actualiza todos los modelos en un nuevo loop

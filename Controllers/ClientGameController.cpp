@@ -245,10 +245,18 @@ bool ClientGameController::pollEvents(){
 			int x, y;
 			SDL_GetMouseState(&x, &y);
 			SDL_Point point = this->renderer->windowToMapPoint({x,y});
+			Entity *entidad = this->escenario->getEntidadEnPosicion(point,true);
+			if (entidad){
+				Log().Get(TAG,logDEBUG) << "Seleccione: "<< entidad->getNombre();
+			} else {
+				Log().Get(TAG,logDEBUG) << "No seleccione nada";
+			}
 
-			point = this->renderer->proyectedPoint(point, this->escenario->getSize());
-
-			this->mensajero->moverProtagonista(point);
+			// si no seleccione nada, muevo al protagonista
+			if (!entidad){
+				point = this->renderer->proyectedPoint(point, this->escenario->getSize());
+				this->mensajero->moverProtagonista(point);
+			}
 		}
 	}
 	return pressedR;

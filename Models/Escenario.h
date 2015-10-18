@@ -55,6 +55,7 @@ class Escenario {
 		list<Entity*> getListaEntidades(); // Se usa para agregar las vistas de las entidades
 		MobileModel* getProtagonista();
 		bool eliminarRecursoConID(int id);
+		Entity* getEntidadEnPosicion(SDL_Point point, bool ignoreCosechables); //recibe una posicion logica
 
 		bool inicializacionCorrecta;
 
