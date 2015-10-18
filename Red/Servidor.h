@@ -13,7 +13,7 @@ public:
 	Servidor();
 	virtual ~Servidor();
 	void empezar(int port);
-private:
+	// Para uso interno
 	bool existeUsuario(char* nombre);
 	bool usuarioLogueado(char* nombre);
 };
