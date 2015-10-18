@@ -67,6 +67,11 @@ void ServerGameController::actualizarProtagonista(){
 }
 
 void ServerGameController::moverProtagonista(SDL_Point point) {
+	/*SDL_Point origen = this->escenario->getProtagonista()->getPosicion();
+	camino = this->escenario->obtenerCaminoMinimo(origen,{point.x,point.y});
+	this->escenario->getProtagonista()->setCamino(camino);
+	*/
+
 	this->escenario->getProtagonista()->setDestination(point.x,point.y);
 }
 

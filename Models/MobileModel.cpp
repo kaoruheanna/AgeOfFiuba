@@ -79,7 +79,7 @@ bool MobileModel::updatePosition() {
 			this->camino.pop();
 			this->destinationX = destination.x;
 			this->destinationY = destination.y;
-			return wasMoving!=this->moving; //aca que deberia devolver?
+			return true; //aca que deberia devolver?
 		}
 	}
 
@@ -108,4 +108,19 @@ void MobileModel::update(MobileModel* other) {
 	this->moving = other->isMoving();
 	this->posicion = other->getPosicion();
 }
+
+void MobileModel::addDestination(int destinationX, int destionationY){
+	this->camino.push({destinationX,destinationY});
+}
+
+SDL_Point MobileModel::getNextDestination(){
+	SDL_Point destination = this->camino.front();
+	this->camino.pop();
+	return destination;
+}
+
+void MobileModel::setCamino(queue<SDL_Point> nuevo_camino){
+	this->camino.swap(nuevo_camino);
+}
+
 
