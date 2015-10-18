@@ -131,5 +131,8 @@ int MobileModel::getValueForResource(string resourceName) {
 void MobileModel::update(MobileModel* other) {
 	this->moving = other->isMoving();
 	this->posicion = other->getPosicion();
+	for(auto resourceName : this->getResourcesNames()) {
+		this->resourcesCounter[resourceName] = other->getValueForResource(resourceName);
+	}
 }
 

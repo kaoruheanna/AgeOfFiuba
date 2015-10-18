@@ -49,6 +49,7 @@ private:
 	void initPersonaje();
 	void initEntities();
 	bool inicializado();
+	void setMessageForSelectedEntity(Entity* entity);
 
 	// Metodos y variables para que no se vaya el scroll del mapa
 	SDL_Point intialPointWindowWrapper;
