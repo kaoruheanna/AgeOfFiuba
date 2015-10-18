@@ -27,12 +27,13 @@ public:
 	void setX(int x);
 	void setY(int y);
 	void setDestination(int destinationX, int destionationY);
-	void updatePosition();
+	bool updatePosition();
 	bool isMoving();
 	void addResourceToCollect(string resourceName);
 	void didCollectResource(string resourceName);
 	list<string> getResourcesNames();
 	int getValueForResource(string resourceName);
+	void update(MobileModel* other);
 
 private:
 	int destinationX;

@@ -1,30 +1,33 @@
 /*
- * GameController.h
+ * ClientGameController.h
  *
- *  Created on: Aug 30, 2015
- *      Author: kaoru
+ *  Created on: Oct 15, 2015
+ *      Author: dario
  */
 
-#ifndef GAMECONTROLLER_H_
-#define GAMECONTROLLER_H_
+#ifndef CONTROLLERS_CLIENTGAMECONTROLLER_H_
+#define CONTROLLERS_CLIENTGAMECONTROLLER_H_
 
 #include "../Views/Renderer.h"
 #include "../Models/MobileModel.h"
-#include "../Configuration/GameConfiguration.h"
 #include "../Models/Escenario.h"
+#include "../Configuration/GameConfiguration.h"
+#include "Mensajero.h"
 
 using namespace std;
 
 class EscenarioView;
 class MiniEscenarioView;
 
-class GameController {
+class ClientGameController : public MensajeroCliente{
 public:
-	GameController(GameConfiguration *config);
-	virtual ~GameController();
+	ClientGameController(Mensajero *mensajero);
+	virtual ~ClientGameController();
 	bool play();
 
 private:
+	Mensajero* mensajero;
+
 	bool shouldQuit;
 	EscenarioView *escenarioView;
 	MiniEscenarioView *miniEscenarioView;
@@ -55,8 +58,14 @@ private:
 
 	SDL_Point getMaxVertixForPoint(int yPosition);
 	void agregarEntidades(list<Entity*> entidades);
+	void agregarEntidad(Entity* entidad);
 	void actualizarEntidades(list<Entity*> entidades);
 	void loopEscenario();
+
+	//Mensajero Cliente
+	virtual void apareceRecurso(Resource* recurso);
+	virtual void desapareceRecurso(Resource* recurso);
+	virtual void actualizaPersonaje(MobileModel* entity);
 };
 
-#endif /* GAMECONTROLLER_H_ */
+#endif /* CONTROLLERS_CLIENTGAMECONTROLLER_H_ */

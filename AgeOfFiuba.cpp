@@ -1,12 +1,14 @@
 /*This source code copyrighted by Lazy Foo' Productions (2004-2015)
 and may not be redistributed without written permission.*/
 
+
+#include <iostream>
+#include <thread>
 //Using SDL, SDL_image, standard IO, and strings
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <string>
-#include "Controllers/GameController.h"
 #include "Utils/Log.h"
 #include "Configuration/GameConfiguration.h"
 #include "GlobalConstants.h"
@@ -14,6 +16,16 @@ and may not be redistributed without written permission.*/
 #include "Red/Cliente.h"
 #include "Red/Servidor.h"
 #include "inttypes.h"
+
+#include "Controllers/ClientGameController.h"
+#include "Controllers/MensajeroLocal.h"
+#include "Controllers/ServerGameController.h"
+
+GameConfiguration *configuration;
+ServerGameController *serverGameController;
+void startServer() {
+	serverGameController->play();
+}
 
 int main( int argc, char* args[] )
 {
@@ -61,15 +73,31 @@ int main( int argc, char* args[] )
 		}
 		return 0;
 	}
+
+	// Simula el cliente servidor poniendo a correr el servidor en otro thread.
+	// Se comunican mediante Mensajero
+
+	// If no arguments then start the YAML game
+	configuration = new GameConfiguration(CONFIG_CUSTOM);
+	serverGameController = new ServerGameController(configuration);
+	serverGameController->init();
+	std::thread startServerThread(startServer);
+
 	// If no arguments then start the YAML game
 	bool shouldRestart = false;
 	do {
-		GameConfiguration *configuration = new GameConfiguration(CONFIG_CUSTOM);
-		GameController *gameController = new GameController(configuration);
-		shouldRestart = gameController->play();
+		Mensajero* mensajero = new MensajeroLocal(serverGameController);
+		ClientGameController *clientGameController = new ClientGameController(mensajero);
+		shouldRestart = clientGameController->play();
 
-		delete gameController;
-		delete configuration;
+		delete clientGameController;
+		delete mensajero;
+
 	} while(shouldRestart);
+	delete serverGameController;
+	delete configuration;
+
 	return 0;
 }
+
+
