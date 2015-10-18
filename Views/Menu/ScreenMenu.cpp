@@ -34,4 +34,9 @@ void ScreenMenu::render(Renderer* renderer) {
 	this->statusMenu->render(renderer);
 }
 
+void ScreenMenu::setMessages(std::string firstMessage, std::string secondMessage) {
+	this->statusMenu->setMessageForFirstLabel(firstMessage);
+	this->statusMenu->setMessageForSecondLabel(secondMessage);
+}
+
 

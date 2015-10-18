@@ -247,19 +247,24 @@ bool ClientGameController::pollEvents(){
 			SDL_Point point = this->renderer->windowToMapPoint({x,y});
 			Entity *entidad = this->escenario->getEntidadEnPosicion(point,true);
 			if (entidad){
-				Log().Get(TAG,logDEBUG) << "Seleccione: "<< entidad->getNombre();
+				this->setMessageForSelectedEntity(entidad);
 			} else {
-				Log().Get(TAG,logDEBUG) << "No seleccione nada";
+				this->setMessageForSelectedEntity(this->escenario->getProtagonista());
 			}
 
-			// si no seleccione nada, muevo al protagonista
-			if (!entidad){
-				point = this->renderer->proyectedPoint(point, this->escenario->getSize());
-				this->mensajero->moverProtagonista(point);
-			}
+			point = this->renderer->proyectedPoint(point, this->escenario->getSize());
+			this->mensajero->moverProtagonista(point);
 		}
 	}
 	return pressedR;
+}
+
+void ClientGameController::setMessageForSelectedEntity(Entity* entity){
+	if (entity == this->escenario->getProtagonista()){
+		this->renderer->setMessagesInMenu("Protagonista",entity->getNombre());
+		return;
+	}
+	this->renderer->setMessagesInMenu("Entidad",entity->getNombre());
 }
 
 

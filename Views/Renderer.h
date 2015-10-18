@@ -58,6 +58,7 @@ public:
 	void fogUpdate(int posicionX, int posicionY);
 	FogOfWar* getFog();
 	void setProtagonista(MobileModel *protagonista);
+	void setMessagesInMenu(std::string firstMessage, std::string secondMessage);
 
 private:
 	bool successfullInit;
