@@ -510,4 +510,7 @@ FogOfWar* Renderer::getFog(){
 	return this->fog;
 }
 
+void Renderer::setProtagonista(MobileModel *protagonista) {
+	this->topBar->setProtagonista(protagonista);
+}
 

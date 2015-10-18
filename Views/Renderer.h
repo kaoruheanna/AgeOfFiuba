@@ -57,6 +57,7 @@ public:
 	void setFog(int ancho, int alto);
 	void fogUpdate(int posicionX, int posicionY);
 	FogOfWar* getFog();
+	void setProtagonista(MobileModel *protagonista);
 
 private:
 	bool successfullInit;
@@ -88,6 +89,7 @@ private:
 	int menuOriginY();
 	void setDrawableForView(View* view);
 	void setDrawableForMiniView(MiniView* view);
+
 };
 
 #endif /* RENDERER_H_ */

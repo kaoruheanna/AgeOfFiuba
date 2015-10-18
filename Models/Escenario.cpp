@@ -19,12 +19,12 @@ Escenario::Escenario(EscenarioConfig escenario, list<TipoConfig> tipos) {
 	this->updated = true;
 	if(this->name == ""){
 		this->name = "sinNombre";
-		Log().Get("Escenario", logWARNING) << "El escenario tiene que tener un nombre. Usando nombre "<< this->name;
+		Log().Get(TAG, logWARNING) << "El escenario tiene que tener un nombre. Usando nombre "<< this->name;
 	}
 	if(escenario.getSizeX() < 1){
-		Log().Get("Escenario", logWARNING) << "El escenario " << this->name << " tiene que ser al menos una unidad de ancho. Cargando escenario default.";
+		Log().Get(TAG, logWARNING) << "El escenario " << this->name << " tiene que ser al menos una unidad de ancho. Cargando escenario default.";
 	} else if(escenario.getSizeY() < 1){
-		Log().Get("Escenario", logWARNING) << "El escenario " << this->name << " tiene que ser al menos una unidad de alto. Cargando escenario default.";
+		Log().Get(TAG, logWARNING) << "El escenario " << this->name << " tiene que ser al menos una unidad de alto. Cargando escenario default.";
 	} else {
 		this->mundo = new Map(escenario.getSizeX(), escenario.getSizeY(),TILE_WIDTH_PIXELS,TILE_HEIGHT_PIXELS);
 		factory = new EntityFactory(this->mundo, sizeByType);
@@ -32,9 +32,9 @@ Escenario::Escenario(EscenarioConfig escenario, list<TipoConfig> tipos) {
 		this->protagonista =  factory->crearProtagonista(escenario.getProtagonista().getTipo(),
 											{escenario.getProtagonista().getX(), escenario.getProtagonista().getY()});
 		if(protagonista == NULL){
-			Log().Get("Escenario", logWARNING) << "El escenario " << this->name << " no pudo crear al protagonista. Cargando escenario default.";
+			Log().Get(TAG, logWARNING) << "El escenario " << this->name << " no pudo crear al protagonista. Cargando escenario default.";
 		} else if(!this->agregarEntidad(protagonista)){
-			Log().Get("Escenario", logWARNING) << "El escenario " << this->name << " no pudo agregar el protagonista al mapa. Cargando escenario default.";
+			Log().Get(TAG, logWARNING) << "El escenario " << this->name << " no pudo agregar el protagonista al mapa. Cargando escenario default.";
 			delete this->protagonista;
 		} else {
 			this->inicializacionCorrecta = true;
@@ -44,11 +44,11 @@ Escenario::Escenario(EscenarioConfig escenario, list<TipoConfig> tipos) {
 			for (configEntidad = configs.begin(); configEntidad != configs.end(); ++configEntidad){
 				Entity* entidad = this->crearEntidad(*configEntidad, false);
 				if(entidad == NULL){
-					Log().Get("Escenario", logWARNING) << "La entidad N° "<< indice <<" del escenario " << this->name << " no pudo ser creada.";
+					Log().Get(TAG, logWARNING) << "La entidad N° "<< indice <<" del escenario " << this->name << " no pudo ser creada.";
 				} else {
 					if(!this->construirEntidad(entidad, entidad->getPosicion())){
 						delete entidad;
-						Log().Get("Escenario", logWARNING) << "La entidad N° "<< indice <<" del escenario " << this->name << " no fue agregada al mapa. La misma no puede estar en la misma posicion que otra entidad.";
+						Log().Get(TAG, logWARNING) << "La entidad N° "<< indice <<" del escenario " << this->name << " no fue agregada al mapa. La misma no puede estar en la misma posicion que otra entidad.";
 					}
 				}
 				indice++;
@@ -61,6 +61,13 @@ Escenario::Escenario(EscenarioConfig escenario, list<TipoConfig> tipos) {
 	}
 	//Inicializar resources Manager
 	this->resourcesManager = new ResourcesManager(this);
+
+	for (int i = 0; i < RESOURCES_QTY; i++){
+//		Log().Get(TAG, logDEBUG) << "tengo el resource: "<< this->resourcesManager->ResourceTypes()[i];
+		const char* resourceName = this->resourcesManager->ResourceTypes()[i];
+		this->protagonista->addResourceToCollect(resourceName);
+	}
+
 
 }
 
@@ -103,8 +110,10 @@ bool Escenario::cosecharEnPosicion(SDL_Point point) {
 		SDL_Point position = this->mundo->getTileForPosition(entidadReal->getPosicion());
 		if ((position.x == point.x) &&
 			(position.y == point.y) &&
-			(entidadReal != protagonista) &&
+			(entidadReal != this->protagonista) &&
 			entidadReal->Cosechable) {
+				Log().Get(TAG, logDEBUG) << "Cosechado resource: "<<entidadReal->getNombre();
+				this->protagonista->didCollectResource(entidadReal->getNombre().c_str());
 				entidades.erase(entidad);
 				return true;
 		}
@@ -117,9 +126,8 @@ void Escenario::loop() {
 	updated = false;
 	this->protagonista->updatePosition();
 
-	SDL_Point point = this->mundo->getTileForPosition(protagonista->getPosicion());
+	SDL_Point point = this->mundo->getTileForPosition(this->protagonista->getPosicion());
 	updated = this->cosecharEnPosicion(point);
-
 
 	list<Entity*> entidadesAInsertar = resourcesManager->InsertResourcesForNewLoopOnMap();
 	if (entidadesAInsertar.size() > 0) {

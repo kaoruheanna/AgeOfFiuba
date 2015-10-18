@@ -97,4 +97,28 @@ bool MobileModel::isMoving() {
 	return this->moving;
 }
 
+void MobileModel::addResourceToCollect(const char* resourceName) {
+	this->resourcesCounter[resourceName] = 12;
+}
+
+void MobileModel::didCollectResource(const char* resourceName) {
+	int value = this->resourcesCounter[resourceName];
+	value++;
+	this->resourcesCounter[resourceName] = value;
+	Log().Get(TAG, logDEBUG) << "resource "<< resourceName <<": "<<this->resourcesCounter[resourceName];
+}
+
+list<const char *> MobileModel::getResourcesNames() {
+	list<const char*> names;
+	for(std::map<const char *,int>::iterator iter = this->resourcesCounter.begin(); iter != this->resourcesCounter.end(); ++iter) 	{
+		const char* name = iter->first;
+		names.push_back(name);
+	}
+	return names;
+}
+
+int MobileModel::getValueForResource(const char* resourceName) {
+	return this->resourcesCounter[resourceName];
+}
+
 

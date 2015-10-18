@@ -155,6 +155,7 @@ void GameController::initPersonaje() {
 	MobileView *personajeView = new MobileView(this->escenario->getProtagonista()->getNombre());
 	personajeView->setModel(this->escenario->getProtagonista());
 	this->escenarioView->addEntityView(personajeView);
+	this->renderer->setProtagonista(this->escenario->getProtagonista());
 	this->renderer->updatedEscenario();
 
 	// agrego mini vista del personaje

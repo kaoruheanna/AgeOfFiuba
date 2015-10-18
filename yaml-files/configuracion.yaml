@@ -14,7 +14,23 @@ tipos:
 
  - nombre: piedra
    imagen: img/Mossy_Stone_Brick.png
-   miniImagen: img/tile_black.png
+   miniImagen: img/tile_blue.png
+   ancho_base: 1
+   alto_base : 1
+   pixel_ref_x: 25
+   pixel_ref_y: 25
+   
+ - nombre: comida
+   imagen: img/comida.png
+   miniImagen: img/tile_blue.png
+   ancho_base: 1
+   alto_base : 1
+   pixel_ref_x: 25
+   pixel_ref_y: 25
+   
+ - nombre: madera
+   imagen: img/madera.png
+   miniImagen: img/tile_blue.png
    ancho_base: 1
    alto_base : 1
    pixel_ref_x: 25
