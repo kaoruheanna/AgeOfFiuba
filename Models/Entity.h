@@ -32,8 +32,6 @@ public:
 	string getNombre();
 	void setPosicion(SDL_Point);
 
-
-
 	string toString();
 
 	Entity(string nombre, SDL_Point posicion, int ancho_base, int alto_base);

@@ -19,17 +19,10 @@ MensajeroLocal::MensajeroLocal(ServerGameController* server) : Mensajero() {
 
 MensajeroLocal::~MensajeroLocal() {}
 
-GameConfiguration* MensajeroLocal::obtenerConfiguracion(){
-	return this->server->getConfig();
+void MensajeroLocal::configEscenario(const string path) {
+	this->cliente->configEscenario(path);
 }
 
-bool MensajeroLocal::inicializado() {
-	return this->server->inicializado();
-}
-
-Escenario* MensajeroLocal::obtenerEscenario() {
-	return new Escenario(this->server->escenario->escenarioConfig,this->server->escenario->tiposConfigList);
-}
 
 void MensajeroLocal::addClient(MensajeroCliente* client) {
 	this->cliente = client;

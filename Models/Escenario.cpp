@@ -76,6 +76,11 @@ void Escenario::init() {
 	}
 	//Inicializar resources Manager
 	this->resourcesManager = new ResourcesManager(this);
+	for (int i = 0; i < RESOURCES_QTY; i++){
+		const char* resourceName = this->resourcesManager->ResourceTypes()[i];
+		string str(resourceName);
+		this->protagonista->addResourceToCollect(str);
+	}
 }
 
 Escenario::Escenario(EscenarioConfig config, list<TipoConfig> tipos) :  escenarioConfig(config), tiposConfigList(tipos){
@@ -101,7 +106,8 @@ bool Escenario::construirEntidad(Entity* entidad,SDL_Point posicion){
 		entidad->setPosicion(posicion);
 		this->agregarEntidad(entidad);
 		return true;
-	}else return false;
+	}
+	return false;
 }
 
 MobileModel* Escenario::getProtagonista() {
@@ -114,7 +120,6 @@ list<Entity*> Escenario::getListaEntidades(){
 
 //Devuelve true si lo pudo borrar
 bool Escenario::eliminarRecursoConID(int id) {
-	//return this->mundo->mapeableInPosition(point);
 	list<Entity*>::iterator entidad;
 	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
 		Resource* entidadReal = (Resource*)(*entidad);
@@ -128,15 +133,15 @@ bool Escenario::eliminarRecursoConID(int id) {
 
 //Devuelve true si cosecho algo
 bool Escenario::cosecharEnPosicion(SDL_Point point) {
-	//return this->mundo->mapeableInPosition(point);
 	list<Entity*>::iterator entidad;
 	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
-		Entity* entidadReal = (*entidad);
+		Resource* entidadReal = (Resource*)(*entidad);
 		SDL_Point position = this->mundo->getTileForPosition(entidadReal->getPosicion());
 		if ((position.x == point.x) &&
 			(position.y == point.y) &&
-			(entidadReal != protagonista) &&
 			entidadReal->Cosechable) {
+				entidadReal->cosechar();
+				this->protagonista->didCollectResource(entidadReal->getNombre());
 				this->delegate->desapareceEntidad(entidadReal);
 				entidades.erase(entidad);
 				return true;
@@ -145,15 +150,46 @@ bool Escenario::cosecharEnPosicion(SDL_Point point) {
 	return false;
 }
 
+Entity* Escenario::getEntidadEnPosicion(SDL_Point point, bool ignoreCosechables) {
+	SDL_Point tile = this->mundo->getTileForPosition(point);
+	list<Entity*>::iterator entidad;
+
+	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
+		Entity* entidadReal = (*entidad);
+
+		if (!ignoreCosechables || !(entidadReal->Cosechable)){
+			std::pair<SDL_Point,SDL_Point> pair = this->getTilesCoordinatesForEntity(entidadReal);
+			int minTileX = pair.first.x;
+			int maxTileX = pair.second.x;
+			int minTileY = pair.first.y;
+			int maxTileY = pair.second.y;
+			bool sameX = ((tile.x >= minTileX) && (tile.x <= maxTileX));
+			bool sameY = ((tile.y >= minTileY) && (tile.y <= maxTileY));
+
+			if (sameX && sameY){
+				return entidadReal;
+			}
+		}
+	}
+	return NULL;
+}
+
+std::pair<SDL_Point,SDL_Point> Escenario::getTilesCoordinatesForEntity(Entity *entity){
+	SDL_Point minTile = this->mundo->getTileForPosition(entity->getPosicion());
+	int maxTileX = (minTile.x + entity->getAnchoBase());
+	int maxTileY = (minTile.y + entity->getAltoBase());
+	SDL_Point maxTile = {maxTileX,maxTileY};
+	return std::make_pair(minTile,maxTile);
+}
+
 //Actualiza todos los modelos en un nuevo loop
 void Escenario::loop() {
 	if(this->protagonista->updatePosition()) {
 		this->delegate->actualizaPersonaje(this->protagonista);
 	}
 
-	SDL_Point point = this->mundo->getTileForPosition(protagonista->getPosicion());
+	SDL_Point point = this->mundo->getTileForPosition(this->protagonista->getPosicion());
 	updated = this->cosecharEnPosicion(point);
-
 
 	list<Entity*> entidadesAInsertar = resourcesManager->InsertResourcesForNewLoopOnMap();
 	if (entidadesAInsertar.size() > 0) {

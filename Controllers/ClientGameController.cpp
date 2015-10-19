@@ -24,13 +24,14 @@ static const string TAG = "ClientGameController";
 
 ClientGameController::ClientGameController(Mensajero *mensajero) {
 	this->mensajero = mensajero;
+	this->config = NULL;
 
 	this->shouldQuit = false;
 	this->renderer = NULL;
 	this->escenario = NULL;
 	this->escenarioView = NULL;
 	this->miniEscenarioView = NULL;
-	this->config = NULL;
+
 	this->middlePoint = 0;
 	this->vertixSlope = 0;
 }
@@ -96,6 +97,8 @@ void ClientGameController::initEntities(){
 }
 
 void ClientGameController::initPersonaje() {
+	this->renderer->setProtagonista(this->escenario->getProtagonista());
+
 	// Agrego vista del personaje
 	MobileView *personajeView = new MobileView(this->escenario->getProtagonista()->getNombre());
 	personajeView->setModel(this->escenario->getProtagonista());
@@ -116,7 +119,7 @@ float ClientGameController::scrollingSpeed(int z, int min, int max) {
 		return 0;
 	}
 
-	int margenScroll = this->config->getMargenScroll();
+	int margenScroll = this->config->configuracion.getScroll();
 	int scrollInferior = (min + margenScroll);
 	int scrollSuperior = (max - margenScroll);
 
@@ -162,7 +165,7 @@ void ClientGameController::initWindowSizes() {
 	vertixSlope = -1 * (intialWindowWrapperTop.x - intialWindowWrapperLeft.x) / (intialWindowWrapperTop.y - intialWindowWrapperLeft.y);
 	middlePoint = -1 * intialWindowWrapperLeft.y;
 
-	intialPointWindowWrapper.x = -intialWindowWrapperLeft.x + (this->config->getPantallaAncho()/2);
+	intialPointWindowWrapper.x = -intialWindowWrapperLeft.x + (this->config->pantalla.getAncho()/2);
 	intialPointWindowWrapper.y = -intialWindowWrapperTop.y;
 
 	finalPointWindowWrapper.x = -intialWindowWrapperRight.x;
@@ -186,11 +189,11 @@ SDL_Point ClientGameController::getMaxVertixForPoint(int yPosition) {
 	if(yPosition < middlePoint){
 		// If is the bottom half of the map then the slope is inverted
 		int invertedYPosition = 2* middlePoint - yPosition;
-		maxVertix.x = vertixSlope * invertedYPosition + this->config->getPantallaAncho();
+		maxVertix.x = vertixSlope * invertedYPosition + this->config->pantalla.getAlto();
 		maxVertix.y = -1 * vertixSlope * invertedYPosition;
 	} else {
 		maxVertix.x = vertixSlope * yPosition;
-		maxVertix.y = this->config->getPantallaAncho() - vertixSlope * yPosition;
+		maxVertix.y = this->config->pantalla.getAncho() - vertixSlope * yPosition;
 	}
 	return maxVertix;
 }
@@ -243,13 +246,30 @@ bool ClientGameController::pollEvents(){
 			int x, y;
 			SDL_GetMouseState(&x, &y);
 			SDL_Point point = this->renderer->windowToMapPoint({x,y});
+			Entity *entidad = this->escenario->getEntidadEnPosicion(point,true);
+			std::pair<SDL_Point,SDL_Point> tiles;
+			if (entidad && (entidad != this->escenario->getProtagonista())){
+				this->setMessageForSelectedEntity(entidad);
+				tiles = this->escenario->getTilesCoordinatesForEntity(entidad);
+				this->renderer->setSelectedTilesCoordinates(true,tiles);
+			} else {
+				this->setMessageForSelectedEntity(this->escenario->getProtagonista());
+				this->renderer->setSelectedTilesCoordinates(false,tiles);
+			}
 
 			point = this->renderer->proyectedPoint(point, this->escenario->getSize());
-
 			this->mensajero->moverProtagonista(point);
 		}
 	}
 	return pressedR;
+}
+
+void ClientGameController::setMessageForSelectedEntity(Entity* entity){
+	if (entity == this->escenario->getProtagonista()){
+		this->renderer->setMessagesInMenu("Protagonista",entity->getNombre());
+		return;
+	}
+	this->renderer->setMessagesInMenu("Entidad",entity->getNombre());
 }
 
 
@@ -266,16 +286,14 @@ void ClientGameController::close() {
 	this->miniEscenarioView = NULL;
 }
 
-// Mixtos
 bool ClientGameController::play() {
-	while( !this->mensajero->inicializado()) {
-		return false;
-	}
-	this->config = this->mensajero->obtenerConfiguracion();
-	this->escenario = this->mensajero->obtenerEscenario();
 	this->mensajero->addClient(this);
 
-	this->renderer = new Renderer(this->config->getPantallaAncho(),this->config->getPantallaAlto(), this->config->getTipos());
+	while (!this->inicializado()) {
+		this->sleep();
+	}
+
+	this->renderer = new Renderer(this->config->pantalla.getAncho(),this->config->pantalla.getAlto(), this->escenario->tiposConfigList);
 		if (!this->renderer->canDraw()){
 			Log().Get(TAG,logERROR) << "Failed to initialize Renderer!";
 			this->close();
@@ -313,16 +331,39 @@ void ClientGameController::sleep(){
 }
 
 void ClientGameController::actualizaPersonaje(MobileModel* entity) {
+	if (!this->inicializado())
+		return;
+
 	this->escenario->getProtagonista()->update(entity);
 }
 
 void ClientGameController::apareceRecurso(Resource* recurso) {
+	if (!this->inicializado())
+			return;
+
 	this->escenario->agregarEntidad(recurso);
 	actualizarEntidades(this->escenario->getListaEntidades());
 }
 
 void ClientGameController::desapareceRecurso(Resource* recurso){
+	if (!this->inicializado())
+		return;
+
 	if(this->escenario->eliminarRecursoConID(recurso->id)) {
 		actualizarEntidades(this->escenario->getListaEntidades());
 	}
+}
+
+void ClientGameController::configEscenario(const string path) {
+	this->config = new GameConfiguration(path);
+	this->escenario = new Escenario(this->config->getEscenario(), this->config->getTipos());
+}
+
+void ClientGameController::errorDeLogueo() {
+	printf("Cliente - error de logueo\n");
+	this->shouldQuit = true;
+}
+
+bool ClientGameController::inicializado() {
+	return escenario && escenario->inicializacionCorrecta;
 }

@@ -11,6 +11,8 @@
 #include <string>
 #include <queue>
 #include "Entity.h"
+#include <map>
+#include <list>
 
 using namespace std;
 
@@ -27,6 +29,10 @@ public:
 	void setDestination(int destinationX, int destionationY);
 	bool updatePosition();
 	bool isMoving();
+	void addResourceToCollect(string resourceName);
+	void didCollectResource(string resourceName);
+	list<string> getResourcesNames();
+	int getValueForResource(string resourceName);
 	void update(MobileModel* other);
 	void addDestination(int destinationX, int destionationY);
 	SDL_Point getNextDestination();
@@ -37,6 +43,7 @@ private:
 	int destinationX;
 	int destinationY;
 	bool moving;
+	std::map<string,int> resourcesCounter;
 
 	int getSpeed();
 };

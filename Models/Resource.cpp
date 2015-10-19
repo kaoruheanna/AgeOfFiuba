@@ -16,5 +16,9 @@ Resource::Resource( const Resource& other ) : Entity(other) {
 	this->id = other.id;
 };
 
+void Resource::cosechar() {
+	this->Cosechable = false;
+}
+
 Resource::~Resource() {}
 

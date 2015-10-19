@@ -9,18 +9,16 @@
 #include "../Renderer.h"
 #include "../Menu/TextLabel.h"
 #include <string>
+using namespace std;
 
-ResourceCounter::ResourceCounter(int x,int y,int width,int height,char *resourceName) {
+ResourceCounter::ResourceCounter(int x,int y,int width,int height,string resourceName) {
 	this->x = x;
 	this->y = y;
 	this->width = width;
 	this->height = height;
 	this->resourceName = resourceName;
 	this->label = new TextLabel(x,y);
-
-	string name(this->resourceName);
-
-	this->label->setMessage(name+": 10");
+	this->setResourceValue(0);
 }
 
 ResourceCounter::~ResourceCounter() {
@@ -33,5 +31,20 @@ void ResourceCounter::render(Renderer* renderer) {
 	renderer->draw(point,color);
 
 	this->label->render(renderer);
+}
+
+void ResourceCounter::setResourceValue(int value) {
+	string name(this->resourceName);
+
+	string valueString;
+	ostringstream convert;
+	convert << value;
+	valueString = convert.str();
+
+	this->label->setMessage(name+": "+valueString);
+}
+
+string ResourceCounter::getResourceName() {
+	return this->resourceName;
 }
 

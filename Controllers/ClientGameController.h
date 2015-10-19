@@ -19,7 +19,7 @@ using namespace std;
 class EscenarioView;
 class MiniEscenarioView;
 
-class ClientGameController : public MensajeroCliente{
+class ClientGameController : public Mensajero{ // Era Mensajero Clientes
 public:
 	ClientGameController(Mensajero *mensajero);
 	virtual ~ClientGameController();
@@ -33,7 +33,7 @@ private:
 	MiniEscenarioView *miniEscenarioView;
 	Renderer *renderer;
 	Escenario* escenario;
-	GameConfiguration *config;
+	GameConfiguration* config;
 
 	bool pollEvents();
 	void updateWindow();
@@ -48,6 +48,8 @@ private:
 	void initMap();
 	void initPersonaje();
 	void initEntities();
+	bool inicializado();
+	void setMessageForSelectedEntity(Entity* entity);
 
 	// Metodos y variables para que no se vaya el scroll del mapa
 	SDL_Point intialPointWindowWrapper;
@@ -63,6 +65,8 @@ private:
 	void loopEscenario();
 
 	//Mensajero Cliente
+	virtual void errorDeLogueo();
+	virtual void configEscenario(const string path);
 	virtual void apareceRecurso(Resource* recurso);
 	virtual void desapareceRecurso(Resource* recurso);
 	virtual void actualizaPersonaje(MobileModel* entity);

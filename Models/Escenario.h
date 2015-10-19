@@ -15,6 +15,7 @@
 #include "../Factories/EntityFactory.h"
 #include "../Utils/ResourcesManager.h"
 #include "FogOfWar.h"
+using namespace std;
 
 class EscenarioDelagate {
 public:
@@ -24,8 +25,6 @@ public:
 	virtual void desapareceEntidad(Entity* recurso){};
 	virtual void actualizaPersonaje(MobileModel* entity){};
 };
-
-using namespace std;
 
 class Escenario {
 	private:
@@ -56,6 +55,8 @@ class Escenario {
 		list<Entity*> getListaEntidades(); // Se usa para agregar las vistas de las entidades
 		MobileModel* getProtagonista();
 		bool eliminarRecursoConID(int id);
+		Entity* getEntidadEnPosicion(SDL_Point point, bool ignoreCosechables); //recibe una posicion logica
+		std::pair<SDL_Point,SDL_Point> getTilesCoordinatesForEntity(Entity *entity); //devuelve un par con el min y maxTile
 
 		bool inicializacionCorrecta;
 

@@ -20,12 +20,10 @@ public:
 	virtual void addClient(MensajeroCliente* client);
 
 	//Metodos Cliente->Servidor
-	virtual GameConfiguration* obtenerConfiguracion();
-	virtual Escenario* obtenerEscenario();
-	virtual bool inicializado();
 	virtual void moverProtagonista(SDL_Point point);
 
 	//Metodos Servidor->Cliente
+	virtual void configEscenario(const string path);
 	virtual void apareceRecurso(Resource* recurso);
 	virtual void desapareceRecurso(Resource* recurso);
 	virtual void actualizaPersonaje(MobileModel* entity);

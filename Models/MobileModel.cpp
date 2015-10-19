@@ -104,9 +104,36 @@ bool MobileModel::isMoving() {
 	return this->moving;
 }
 
+void MobileModel::addResourceToCollect(string resourceName) {
+	this->resourcesCounter[resourceName] = 0;
+}
+
+void MobileModel::didCollectResource(string resourceName) {
+	int value = this->resourcesCounter[resourceName];
+	value++;
+	this->resourcesCounter[resourceName] = value;
+	Log().Get(TAG, logDEBUG) << "resource "<< resourceName <<": "<<this->resourcesCounter[resourceName];
+}
+
+list<string> MobileModel::getResourcesNames() {
+	list<string> names;
+	for(std::map<string,int>::iterator iter = this->resourcesCounter.begin(); iter != this->resourcesCounter.end(); ++iter) 	{
+		string name = iter->first;
+		names.push_back(name);
+	}
+	return names;
+}
+
+int MobileModel::getValueForResource(string resourceName) {
+	return this->resourcesCounter[resourceName];
+}
+
 void MobileModel::update(MobileModel* other) {
 	this->moving = other->isMoving();
 	this->posicion = other->getPosicion();
+	for(auto resourceName : this->getResourcesNames()) {
+		this->resourcesCounter[resourceName] = other->getValueForResource(resourceName);
+	}
 }
 
 void MobileModel::addDestination(int destinationX, int destionationY){

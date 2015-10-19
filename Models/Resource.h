@@ -17,6 +17,8 @@ public:
 	Resource(int id, string nombre, SDL_Point posicion, int ancho_base = 1, int alto_base = 1);
 	virtual ~Resource();
 	int id;
+
+	void cosechar();
 };
 
 #endif /* MODELS_RESOURCE_H_ */
