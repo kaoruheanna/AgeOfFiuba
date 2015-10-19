@@ -12,6 +12,7 @@
 #include <sstream>
 #include "../Utils/Log.h"
 #include "../GlobalConstants.h"
+#include "../Red/Serializable.h"
 using namespace std;
 
 const std::string TAG = "MobileModel";
@@ -56,6 +57,14 @@ void MobileModel::setY(int y) {
 void MobileModel::setDestination(int destinationX, int destionationY) {
 	this->destinationX = destinationX;
 	this->destinationY = destionationY;
+}
+
+int MobileModel::getDestinationX() {
+	return this->destinationX;
+}
+
+int MobileModel::getDestinationY() {
+	return this->destinationY;
 }
 
 int MobileModel::getSpeed() {
@@ -140,6 +149,7 @@ void MobileModel::update(MobileModel* other) {
 	}
 }
 
+
 void MobileModel::addDestination(int destinationX, int destionationY){
 	this->path.push({destinationX,destinationY});
 }
@@ -157,5 +167,51 @@ void MobileModel::setPath(queue<SDL_Point> new_path){
 void MobileModel::clearPath(){
 	queue<SDL_Point,deque<SDL_Point>> empty;
 	this->path.swap(empty);
+}
+
+
+// TODO mandar y recibir los recursos
+
+// Metodos de serializacion
+
+const int blockCount = 3;
+int MobileModel::getTotalBlockCount() {
+	return blockCount + Entity::getTotalBlockCount();
+}
+
+int MobileModel::getBlockSizeFromIndex(int currentIndex) {
+	int realIndex =  currentIndex - Entity::getTotalBlockCount();
+	if ((realIndex == 0) || (realIndex == 1)) {
+		return sizeof(int);
+	} else if (realIndex == 2) {
+		return sizeof(bool);
+	}
+	return Entity::getBlockSizeFromIndex(currentIndex);
+}
+
+void MobileModel::getBlockFromIndex(int currentIndex, void* buffer) {
+	int realIndex =  currentIndex - Entity::getTotalBlockCount();
+	if (realIndex < 0) {
+		Entity::getBlockFromIndex(currentIndex, buffer);
+	} else if(realIndex == 0){
+		memcpy(buffer, &this->destinationX, sizeof(int));
+	} else if (realIndex == 1){
+		memcpy(buffer, &this->destinationY, sizeof(int));
+	} else if (realIndex == 2) {
+		memcpy(buffer, &this->moving, sizeof(bool));
+	}
+}
+
+void MobileModel::deserialize(int totalBlockCount, int currentBlock, void* blockData) {
+	int realBlock =  currentBlock - Entity::getTotalBlockCount();
+	if (realBlock < 0) {
+		Entity::deserialize(totalBlockCount,currentBlock,blockData);
+	} else if(realBlock == 0){
+		memcpy(&this->destinationX, blockData, sizeof(int));
+	} else if(realBlock == 1) {
+		memcpy(&this->destinationY, blockData, sizeof(int));
+	} else {
+		memcpy(&this->moving, blockData, sizeof(int));
+	}
 }
 

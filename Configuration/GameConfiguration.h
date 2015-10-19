@@ -30,6 +30,7 @@ public:
 	int getMargenScroll();
 	list<TipoConfig> getTipos();
 	EscenarioConfig getEscenario();
+	const std::string getPath();
 
 	std::string getNombreEscenario();
 	int getTamanioX();
@@ -42,6 +43,7 @@ private:
 	void loadFile(const string archivoAParsear);
 	void auxiliar();
 	YAML::Node nodoRaiz;
+	std::string path;
 
 	list<TipoConfig> tipos;
 	EscenarioConfig escenario;

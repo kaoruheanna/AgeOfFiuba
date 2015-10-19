@@ -21,6 +21,10 @@ GameConfiguration::GameConfiguration(){
 	this->parseYAML(CONFIG_DEFAULT);
 }
 
+const std::string GameConfiguration::getPath() {
+	return this->path;
+}
+
 GameConfiguration::~GameConfiguration(){
 }
 
@@ -54,15 +58,18 @@ int GameConfiguration::getTamanioY(){
 
 //ESTA FUNCION VA A COMPROBAR QUE EL ARCHIVO RESPETE LAS ESPECIFICACIONES DE YAML, NO VERIFICA LA VALIDACION DE VALORES
 void GameConfiguration::loadFile(const string archivoAParsear){
+	this->path = archivoAParsear;
 	try{
 	this->nodoRaiz = YAML::LoadFile(archivoAParsear);
 		if (!nodoRaiz["pantalla"] && !nodoRaiz["configuracion"] && !nodoRaiz["tipos"] && !nodoRaiz["esceario"]){
 			this->nodoRaiz = YAML::LoadFile(CONFIG_DEFAULT);
+			this->path = CONFIG_DEFAULT;
 			Log().Get(TAG,logERROR) << "El archivo no tiene ninguno de los campos necesarios";
 		}
 	}
 	catch ( YAML::Exception& error){
 		this->nodoRaiz = YAML::LoadFile(CONFIG_DEFAULT);
+		this->path = CONFIG_DEFAULT;
 		Log().Get(TAG,logWARNING) << "El archivo indicado como parametro no existe o no respeta la sintaxis de YAML, se carga el archivo por defecto";
 	}
 }

@@ -18,7 +18,7 @@ class Mensajero;
 
 using namespace std;
 
-class ServerGameController : public EscenarioDelagate{
+class ServerGameController : public EscenarioDelagate, public Mensajero{
 public:
 	ServerGameController(GameConfiguration *config);
 	virtual ~ServerGameController();
@@ -26,9 +26,14 @@ public:
 	bool inicializado();
 
 	void play();
-	void moverProtagonista(SDL_Point point);
+
+	virtual void moverProtagonista(MobileModel* entity);
+
 	Escenario* escenario;
 	virtual void addMensajero(Mensajero *mensajero);
+	bool userExists(char* username);
+	bool userActive(char* username);
+	void addUser(char* username);
 	void init();
 
 	//EscenarioDelegate

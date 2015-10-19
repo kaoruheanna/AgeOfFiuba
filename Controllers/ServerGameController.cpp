@@ -18,11 +18,11 @@ ServerGameController::ServerGameController(GameConfiguration *config) :  config(
 ServerGameController::~ServerGameController() {}
 
 
-void escenarioInicializado(list<Mensajero*> mensajeros,Escenario* escenario) {
+void escenarioInicializado(list<Mensajero*> mensajeros,Escenario* escenario, const string path) {
 	list<Mensajero*>::iterator mensajero;
 	for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
 		Mensajero* mensajeroReal = (*mensajero);
-		mensajeroReal->configEscenario(CONFIG_CUSTOM);
+		mensajeroReal->configEscenario(path);
 	}
 }
 
@@ -43,7 +43,7 @@ void ServerGameController::init() {
 		}
 	}
 	this->escenario->delegate = this;
-	escenarioInicializado(this->mensajeros,this->escenario);
+	escenarioInicializado(this->mensajeros,this->escenario,this->config->getPath());
 }
 
 void ServerGameController::play() {
@@ -76,18 +76,27 @@ void ServerGameController::actualizarProtagonista(){
 	}
 }
 
+/*
 void ServerGameController::moverProtagonista(SDL_Point point) {
 	SDL_Point origen = this->escenario->getProtagonista()->getPosicion();
 	queue <SDL_Point> camino = this->escenario->getPath(origen,{point.x,point.y});
 	this->escenario->getProtagonista()->setPath(camino);
 
 	//this->escenario->getProtagonista()->setDestination(point.x,point.y);
+*/
+
+void ServerGameController::moverProtagonista(MobileModel* model) {
+	this->escenario->getProtagonista()
+			->setDestination(
+				model->getDestinationX(),
+				model->getDestinationY()
+			);
 }
 
 void ServerGameController::addMensajero(Mensajero* mensajero) {
 	this->mensajeros.push_back(mensajero);
 	if(escenario->inicializacionCorrecta) {
-		mensajero->configEscenario(CONFIG_CUSTOM);
+		mensajero->configEscenario(this->config->getPath());
 	}
 }
 
@@ -115,3 +124,16 @@ void ServerGameController::desapareceEntidad(Entity* recurso) {
 	}
 }
 
+// TODO Implementar el manejo de usuarios
+
+bool ServerGameController::userExists(char* username) {
+	return false;
+}
+
+bool ServerGameController::userActive(char* username) {
+	return false;
+}
+
+void ServerGameController::addUser(char* username) {
+
+}

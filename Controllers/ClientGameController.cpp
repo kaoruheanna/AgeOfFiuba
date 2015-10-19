@@ -258,7 +258,10 @@ bool ClientGameController::pollEvents(){
 			}
 
 			point = this->renderer->proyectedPoint(point, this->escenario->getSize());
-			this->mensajero->moverProtagonista(point);
+			MobileModel* auxModel = new MobileModel();
+			auxModel->setDestination(point.x, point.y);
+			this->mensajero->moverProtagonista(auxModel);
+			delete auxModel;
 		}
 	}
 	return pressedR;
