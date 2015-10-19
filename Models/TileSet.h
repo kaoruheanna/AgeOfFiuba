@@ -68,7 +68,7 @@ public:
 	int distancia(Posicion a, Posicion b); // heuristica a usar en A* (distancia euclideana)
 	int valorArista(Posicion a, Posicion b);
 	bool esVecino(Posicion a, Posicion b);
-	pointMap caminoMinimo(Posicion origen, Posicion destino, Posicion *destino_alternativo);
+	pointMap caminoMinimo(Posicion origen, Posicion destino, Posicion &destino_real);
 	deque<SDL_Point> obtenerCamino(SDL_Point origen, SDL_Point destino);
 
 	virtual ~TileSet();
