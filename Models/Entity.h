@@ -17,12 +17,12 @@ using namespace std;
 class Entity : public Mapeable{
 private:
 	//int id;
-	string nombre;
 	int ancho_base; //x
 	int alto_base; //y
 
 
 protected:
+	string nombre;
 	SDL_Point posicion;  // posicion en el mapa (coordenadas logicas)
 
 public:

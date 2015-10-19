@@ -21,10 +21,10 @@ public:
 	virtual void configEscenario(const string path);
 	//virtual void apareceRecurso(Resource* recurso);
 	//virtual void desapareceRecurso(Resource* recurso);
-	//virtual void actualizaPersonaje(MobileModel* entity);
+	virtual void actualizaPersonaje(MobileModel* entity);
 	// Metodos Cliente -> Servidor
 	virtual void loguearse(char* nombre);
-	//virtual void moverProtagonista(SDL_Point point);
+	virtual void moverProtagonista(MobileModel* model);
 private:
 	int socket;
 	Mensajero* escucha;

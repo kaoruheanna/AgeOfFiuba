@@ -11,12 +11,13 @@
 #include <string>
 #include <queue>
 #include "Entity.h"
+#include "../Red/Serializable.h"
 #include <map>
 #include <list>
 
 using namespace std;
 
-class MobileModel: public Entity {
+class MobileModel: public Entity, public Serializable {
 public:
 	MobileModel();
 	MobileModel(string nombre, SDL_Point posicion, int ancho_base, int alto_base);
@@ -27,6 +28,8 @@ public:
 	void setX(int x);
 	void setY(int y);
 	void setDestination(int destinationX, int destionationY);
+	int getDestinationX();
+	int getDestinationY();
 	bool updatePosition();
 	bool isMoving();
 	void addResourceToCollect(string resourceName);
@@ -34,7 +37,11 @@ public:
 	list<string> getResourcesNames();
 	int getValueForResource(string resourceName);
 	void update(MobileModel* other);
-
+	// Serializable methods
+	virtual int getTotalBlockCount();
+	virtual int getBlockSizeFromIndex(int currentIndex);
+	virtual void getBlockFromIndex(int currentIndex, void* buffer);
+	virtual void deserialize(int totalBlockCount, int currentBlock, void* blockData);
 private:
 	queue <SDL_Point,deque<SDL_Point>> camino;
 	int destinationX;
@@ -43,6 +50,11 @@ private:
 	std::map<string,int> resourcesCounter;
 
 	int getSpeed();
+
+	// Serializable methods
+	char* deserializeString(void* blockData);
+	void serializeString(char* string, void* buffer);
+	int serializeStringSize(char* string);
 };
 
 #endif /* MOBILEMODEL_H_ */

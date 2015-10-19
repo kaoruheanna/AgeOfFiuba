@@ -19,6 +19,7 @@
 
 #include "../GlobalConstants.h"
 #include "Mensaje.h"
+#include "MensajeroRed.h"
 #include "Archivo.h"
 
 struct InfoCliente {
@@ -77,43 +78,36 @@ void Servidor::empezar(int port) {
 void* atenderCliente(void* arg) {
 	InfoCliente* info = (InfoCliente*) arg;
 	printf("Servidor - Empezo la conexion\n");
-	bool stopClientTalk = false;
 
 	// Espera la info del login para el usuario
 	Mensaje* mensaje = new Mensaje(VACIO, "server");
 	printf("Servidor - Esperando mensaje\n");
 	int resultado = recibirSerializable(info->socket, mensaje);
 	printf("Servidor - Recibi resultado: %i con mensaje: %s\n", resultado, mensaje->toString());
-	while(!stopClientTalk){
-		if(resultado <= 0){
-			printf("Servidor - Se corto la conexion\n");
-			stopClientTalk = true;
-		} else {
-			if(!info->servidor->existeUsuario(mensaje->getSender()) ||
-					!info->servidor->usuarioLogueado(mensaje->getSender())){
-				delete mensaje;
-				mensaje = new Mensaje(ESCENARIO, "server");
-				resultado = enviarSerializable(info->socket, mensaje);
-				printf("Servidor - Responde al mensaje con resultado: %i\n", resultado);
-				Archivo* configuracion = new Archivo("yaml-files/configuracion.yaml");
-				resultado = enviarSerializable(info->socket, configuracion);
-				delete configuracion;
-				printf("Servidor - Responde al mensaje con resultado: %i\n", resultado);
-				printf("Servidor - Esperando mensaje\n");
-				resultado = recibirSerializable(info->socket, mensaje);
-				printf("Servidor - Recibi resultado: %i con mensaje: %s\n", resultado, mensaje->toString());
-				// A partir de aca esta el flow comun de datos...
-				// TODO el server indica todos los modelos que se cambiaron
-			} else {
-				delete mensaje;
-				mensaje = new Mensaje(ERROR_NOMBRE_TOMADO, "server");
-				resultado = enviarSerializable(info->socket, mensaje);
-				printf("Servidor - Responde al mensaje con resultado: %i\n", resultado);
-				stopClientTalk = true;
+	if(resultado <= 0){
+		delete mensaje;
+		printf("Servidor - Se corto la conexion\n");
+	} else {
+		if(!info->servidor->modelos->userExists(mensaje->getSender()) ||
+				!info->servidor->modelos->userActive(mensaje->getSender())){
+			if(!info->servidor->modelos->userExists(mensaje->getSender())){
+				info->servidor->modelos->addUser(mensaje->getSender());
 			}
+			delete mensaje;
+			// Si se pudo loguear empieza el flow con el controller
+			MensajeroRed* mensajero = new MensajeroRed(info->socket);
+			mensajero->setMensajero(info->servidor->modelos);
+			info->servidor->modelos->addMensajero(mensajero);
+			mensajero->esperaMensaje();
+			delete mensajero;
+		} else {
+			delete mensaje;
+			mensaje = new Mensaje(ERROR_NOMBRE_TOMADO, "server");
+			resultado = enviarSerializable(info->socket, mensaje);
+			printf("Servidor - Responde al mensaje con resultado: %i\n", resultado);
 		}
 	}
-	delete mensaje;
+
 	printf("Servidor - Termino la conexion\n");
 	free(arg);
 	return NULL;
@@ -125,12 +119,4 @@ void* simularModelos(void* arg) {
 	modelos->init();
 	modelos->play();
 	return NULL;
-}
-
-bool Servidor::existeUsuario(char* nombre) {
-	return false;
-}
-
-bool Servidor::usuarioLogueado(char* nombre) {
-	return false;
 }

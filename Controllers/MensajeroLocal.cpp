@@ -29,8 +29,8 @@ void MensajeroLocal::addClient(MensajeroCliente* client) {
 	this->server->addMensajero(this);
 }
 
-void MensajeroLocal::moverProtagonista(SDL_Point point) {
-	this->server->moverProtagonista(point);
+void MensajeroLocal::moverProtagonista(MobileModel* model) {
+	this->server->moverProtagonista(model);
 }
 
 void MensajeroLocal::apareceRecurso(Resource* recurso){

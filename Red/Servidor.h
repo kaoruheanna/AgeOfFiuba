@@ -17,9 +17,6 @@ public:
 	Servidor();
 	virtual ~Servidor();
 	void empezar(int port);
-	// Para uso interno
-	bool existeUsuario(char* nombre);
-	bool usuarioLogueado(char* nombre);
 };
 
 #endif /* RED_SERVIDOR_H_ */

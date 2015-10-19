@@ -6,6 +6,7 @@
  */
 
 #include "../GlobalConstants.h"
+#include "../Models/MobileModel.h"
 #include "MensajeroRed.h"
 #include "Mensaje.h"
 #include "Archivo.h"
@@ -29,7 +30,9 @@ void MensajeroRed::setMensajero(Mensajero* escucha) {
 void MensajeroRed::esperaMensaje() {
 	Mensaje* recibido = new Mensaje(VACIO, "nada");
 	Archivo* configuracion = NULL;
+	MobileModel* modelo = NULL;
 	int resultado = recibirSerializable(this->socket, recibido);
+	printf("MensajeroRed - Recibi resultado: %i con mensaje: %s\n", resultado, recibido->toString());
 	while(resultado > 0){
 		switch(recibido->getType()){
 			case LOGIN:
@@ -42,8 +45,23 @@ void MensajeroRed::esperaMensaje() {
 			case ESCENARIO:
 				configuracion = new Archivo(CONFIG_CLIENT.c_str());
 				resultado = recibirSerializable(this->socket, configuracion);
+				printf("MensajeroRed - Recibi escenario con resultado: %i\n", resultado);
 				delete configuracion;
 				this->escucha->configEscenario(CONFIG_CLIENT);
+				break;
+			case APARECE_PERSONAJE:
+				modelo = new MobileModel();
+				resultado = recibirSerializable(this->socket, modelo);
+				printf("MensajeroRed - Recibi personaje con resultado: %i\n", resultado);
+				this->escucha->actualizaPersonaje(modelo);
+				delete modelo;
+				break;
+			case MOVER_PERSONAJE:
+				modelo = new MobileModel();
+				resultado = recibirSerializable(this->socket, modelo);
+				printf("MensajeroRed - Recibi personaje con resultado: %i\n", resultado);
+				this->escucha->moverProtagonista(modelo);
+				delete modelo;
 				break;
 			default:
 				resultado = -1; // No se pudo entender el mensaje => Cerrar la conexion
@@ -74,11 +92,27 @@ void MensajeroRed::configEscenario(const string path) {
 }
 //virtual void apareceRecurso(Resource* recurso);
 //virtual void desapareceRecurso(Resource* recurso);
-//virtual void actualizaPersonaje(MobileModel* entity);
+void MensajeroRed::actualizaPersonaje(MobileModel* entity) {
+	Mensaje* mensaje = new Mensaje(APARECE_PERSONAJE, "server");
+	int resultado = enviarSerializable(this->socket, mensaje);
+	printf("Cliente - actualizaPersonaje con resultado: %i\n", resultado);
+	delete mensaje;
+	resultado = enviarSerializable(this->socket, entity);
+	printf("Cliente - personaje con resultado: %i\n", resultado);
+}
 // Metodos Cliente -> Servidor
 void MensajeroRed::loguearse(char* nombre) {
 	Mensaje* mensaje = new Mensaje(LOGIN, nombre);
 	int resultado = enviarSerializable(this->socket, mensaje);
 	printf("Cliente - loguearse con resultado: %i\n", resultado);
 	delete mensaje;
+}
+
+void MensajeroRed::moverProtagonista(MobileModel* entity) {
+	Mensaje* mensaje = new Mensaje(MOVER_PERSONAJE, "todo"); // TODO agregar el nombre
+	int resultado = enviarSerializable(this->socket, mensaje);
+	printf("Cliente - moverProtagonista con resultado: %i\n", resultado);
+	delete mensaje;
+	resultado = enviarSerializable(this->socket, entity);
+	printf("Cliente - personaje con resultado: %i\n", resultado);
 }

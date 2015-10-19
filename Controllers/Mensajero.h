@@ -34,7 +34,7 @@ public:
 
 	// Metodos Cliente -> Servidor
 	virtual void loguearse(char* nombre){};
-	virtual void moverProtagonista(SDL_Point point){};
+	virtual void moverProtagonista(MobileModel* entity){};
 
 };
 #endif /* CONTROLLERS_MENSAJERO_H_ */

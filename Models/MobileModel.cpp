@@ -12,6 +12,7 @@
 #include <sstream>
 #include "../Utils/Log.h"
 #include "../GlobalConstants.h"
+#include "../Red/Serializable.h"
 using namespace std;
 
 const std::string TAG = "MobileModel";
@@ -56,6 +57,14 @@ void MobileModel::setY(int y) {
 void MobileModel::setDestination(int destinationX, int destionationY) {
 	this->destinationX = destinationX;
 	this->destinationY = destionationY;
+}
+
+int MobileModel::getDestinationX() {
+	return this->destinationX;
+}
+
+int MobileModel::getDestinationY() {
+	return this->destinationY;
 }
 
 int MobileModel::getSpeed() {
@@ -134,5 +143,62 @@ void MobileModel::update(MobileModel* other) {
 	for(auto resourceName : this->getResourcesNames()) {
 		this->resourcesCounter[resourceName] = other->getValueForResource(resourceName);
 	}
+}
+
+// TODO mandar y recibir los recursos
+
+// Metodos de serializacion
+int MobileModel::getTotalBlockCount() {
+	return 4;
+}
+
+int MobileModel::getBlockSizeFromIndex(int currentIndex) {
+	if(currentIndex == 0){
+		return this->serializeStringSize((char*)this->nombre.c_str());
+	} else if(currentIndex == 1){
+		return sizeof(SDL_Point);
+	}
+	return sizeof(int);
+}
+
+void MobileModel::getBlockFromIndex(int currentIndex, void* buffer) {
+	if(currentIndex == 0){
+		this->serializeString((char*)this->nombre.c_str(), buffer);
+	} else if(currentIndex == 1){
+		memcpy(buffer, &this->posicion, sizeof(SDL_Point));
+	} else if(currentIndex == 2){
+		memcpy(buffer, &this->destinationX, sizeof(int));
+	} else {
+		memcpy(buffer, &this->destinationY, sizeof(int));
+	}
+}
+
+void MobileModel::deserialize(int totalBlockCount, int currentBlock, void* blockData) {
+	if(currentBlock == 0){
+		char* nombre = this->deserializeString(blockData);
+		this->nombre = string(nombre);
+		free(nombre);
+	} else if(currentBlock == 1){
+		memcpy(&this->posicion, blockData, sizeof(SDL_Point));
+	} else if(currentBlock == 2){
+		memcpy(&this->destinationX, blockData, sizeof(int));
+	} else {
+		memcpy(&this->destinationY, blockData, sizeof(int));
+	}
+}
+
+char* MobileModel::deserializeString(void* blockData) {
+	char* toDeserialize = (char*) blockData;
+	char* string = (char*) malloc(this->serializeStringSize(toDeserialize));
+	this->serializeString(toDeserialize, (void*) string);
+	return string;
+}
+
+void MobileModel::serializeString(char* string, void* buffer) {
+	strcpy((char*) buffer, string);
+}
+
+int MobileModel::serializeStringSize(char* string) {
+	return strlen(string) + 1;
 }
 

@@ -20,7 +20,7 @@ public:
 	virtual void addClient(MensajeroCliente* client);
 
 	//Metodos Cliente->Servidor
-	virtual void moverProtagonista(SDL_Point point);
+	virtual void moverProtagonista(MobileModel* model);
 
 	//Metodos Servidor->Cliente
 	virtual void configEscenario(const string path);
