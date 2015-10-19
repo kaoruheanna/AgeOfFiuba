@@ -36,10 +36,12 @@ public:
 	void update(MobileModel* other);
 	void addDestination(int destinationX, int destionationY);
 	SDL_Point getNextDestination();
-	void setCamino(queue<SDL_Point> nuevo_camino);
+	void setPath(queue<SDL_Point> new_path);
+	void clearPath();
+
 
 private:
-	queue <SDL_Point,deque<SDL_Point>> camino;
+	queue <SDL_Point,deque<SDL_Point>> path;
 	int destinationX;
 	int destinationY;
 	bool moving;

@@ -69,7 +69,7 @@ public:
 	int valorArista(Posicion a, Posicion b);
 	bool esVecino(Posicion a, Posicion b);
 	pointMap caminoMinimo(Posicion origen, Posicion destino, Posicion *destino_alternativo);
-	list<SDL_Point> obtenerCamino(SDL_Point origen, SDL_Point destino);
+	deque<SDL_Point> obtenerCamino(SDL_Point origen, SDL_Point destino);
 
 	virtual ~TileSet();
 };

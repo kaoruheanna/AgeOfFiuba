@@ -12,8 +12,7 @@ class Map {
 		int ancho;
 
 		//matriz de tiles
-		//tile default -> es la baldosa que se va a dibujar en todo el mapa.
-		int tile_ancho;//estos tienen que estar definidos por el tile default
+		int tile_ancho;
 		int tile_alto;
 		TileSet* baldosas;
 
@@ -39,6 +38,9 @@ class Map {
 
 		SDL_Point getTileForPosition(SDL_Point point);
 		SDL_Point getPositionForTile(SDL_Point point);
+		SDL_Point getCenteredPositionForTile(SDL_Point point);
+
+		queue<SDL_Point> obtenerCamino(SDL_Point origen, SDL_Point destino);
 
 		Map(int alto, int ancho, int tile_ancho, int tile_alto);
 		virtual ~Map();

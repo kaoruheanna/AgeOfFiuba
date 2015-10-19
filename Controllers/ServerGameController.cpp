@@ -77,12 +77,11 @@ void ServerGameController::actualizarProtagonista(){
 }
 
 void ServerGameController::moverProtagonista(SDL_Point point) {
-	/*SDL_Point origen = this->escenario->getProtagonista()->getPosicion();
-	queue <SDL_Point> camino = this->escenario->obtenerCaminoMinimo(origen,{point.x,point.y});
-	this->escenario->getProtagonista()->setCamino(camino);
-	*/
+	SDL_Point origen = this->escenario->getProtagonista()->getPosicion();
+	queue <SDL_Point> camino = this->escenario->getPath(origen,{point.x,point.y});
+	this->escenario->getProtagonista()->setPath(camino);
 
-	this->escenario->getProtagonista()->setDestination(point.x,point.y);
+	//this->escenario->getProtagonista()->setDestination(point.x,point.y);
 }
 
 void ServerGameController::addMensajero(Mensajero* mensajero) {

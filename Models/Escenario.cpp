@@ -217,3 +217,7 @@ void Escenario::vaciarEntidades(){
 SDL_Point Escenario::getSize(){
 	return this->mundo->getPositionForTile({this->mundo->getHeight(), this->mundo->getWidth()});
 }
+
+queue<SDL_Point> Escenario::getPath(SDL_Point origen, SDL_Point destino){
+	return this->mundo->obtenerCamino(origen, destino);
+}
