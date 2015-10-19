@@ -202,7 +202,6 @@ void Escenario::loop() {
 Entity* Escenario::crearEntidad(EntidadConfig config, bool esProtagonista) {
 	SDL_Point posicion = {config.getX(), config.getY()};
 	string tipo = config.getTipo();
-
 	return factory->crearEntidad(tipo, posicion, esProtagonista);
 }
 

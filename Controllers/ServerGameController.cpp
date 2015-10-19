@@ -80,8 +80,8 @@ void ServerGameController::moverProtagonista(MobileModel* model) {
 	SDL_Point origen = this->escenario->getProtagonista()->getPosicion();
 	queue <SDL_Point> camino = this->escenario->getPath(origen,{model->getDestinationX(),model->getDestinationY()});
 	this->escenario->getProtagonista()->setPath(camino);
-	/*
-	this->escenario->getProtagonista()
+
+	/*this->escenario->getProtagonista()
 			->setDestination(
 				model->getDestinationX(),
 				model->getDestinationY()
