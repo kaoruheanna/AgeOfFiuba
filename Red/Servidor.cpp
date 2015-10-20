@@ -99,6 +99,7 @@ void* atenderCliente(void* arg) {
 			mensajero->setMensajero(info->servidor->modelos);
 			info->servidor->modelos->addMensajero(mensajero);
 			mensajero->esperaMensaje();
+			info->servidor->modelos->removeMensajero(mensajero);
 			delete mensajero;
 		} else {
 			delete mensaje;

@@ -32,6 +32,7 @@ public:
 
 	Escenario* escenario;
 	virtual void addMensajero(Mensajero *mensajero);
+	void removeMensajero(Mensajero *mesajero);
 	bool userExists(char* username);
 	bool userActive(char* username);
 	void addUser(char* username);
