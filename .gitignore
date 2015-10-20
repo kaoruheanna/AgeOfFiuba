@@ -39,3 +39,4 @@ local.properties
 .texlipse
 /Debug/
 /Release/
+/core
