@@ -162,6 +162,16 @@ void ClientGameController::initWindowSizes() {
 
 	finalPointWindowWrapper.x = -intialWindowWrapperRight.x;
 	finalPointWindowWrapper.y = -intialWindowWrapperBottom.y;
+
+	/*
+	Log().Get(TAG) << "Pos inicial " << this->renderer->mainTilePosition.x << "," << this->renderer->mainTilePosition.y;
+
+	SDL_Point posicionInicial = this->renderer->mapToWindowPoint(posicionInicialProtagonista);
+	//posicionInicial.x = -posicionInicial.x + (this->config->pantalla.getAncho()/2);
+	//posicionInicial.y = -posicionInicial.y + this->config->pantalla.getAlto()/2;
+	this->renderer->mainTilePosition = posicionInicial;
+	Log().Get(TAG) << "Pos seteada " << posicionInicial.x << "," << posicionInicial.y;*/
+
 }
 
 float ClientGameController::scrollingSpeedX(int x) {
@@ -311,6 +321,8 @@ bool ClientGameController::play() {
 			return false;
 		}
 
+
+
 	this->initMap();
 	this->updated = true;
 	this->initWindowSizes();
@@ -365,6 +377,7 @@ void ClientGameController::actualizaPersonaje(MobileModel* entity) {
 	if(protagonista == NULL){
 		this->escenario->addUser((char*)entity->getUsername().c_str(), entity->getPosicion());
 		protagonista = this->escenario->getUserModel(entity->getUsername());
+		posicionInicialProtagonista = protagonista->getPosicion();
 	}
 	protagonista->update(entity);
 }

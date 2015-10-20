@@ -56,6 +56,8 @@ private:
 	SDL_Point intialPointWindowWrapper;
 	SDL_Point finalPointWindowWrapper;
 
+	SDL_Point posicionInicialProtagonista;
+
 	int vertixSlope;
 	int middlePoint;
 
