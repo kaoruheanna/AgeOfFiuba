@@ -51,29 +51,44 @@ void ClientGameController::agregarEntidad(Entity* entidad) {
 	this->miniEscenarioView->addEntityMiniView(miniView);
 }
 
-void ClientGameController::agregarEntidades(list<Entity*> entidades) {
-	bool updated = false;
-	list<Entity*>::iterator entidad;
-	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
-		Entity* entidadReal = (*entidad);
-		if (entidadReal != this->escenario->getProtagonista()) {
-			updated = true;
-			this->agregarEntidad(entidadReal);
-		}
+void ClientGameController::agregarPersonaje(MobileModel* personaje) {
+	bool esProtagonista = (personaje->getUsername().compare(this->username) == 0);
+	if(esProtagonista){
+		this->renderer->setProtagonista(this->escenario->getProtagonista());
 	}
-	if (updated){
-		this->renderer->updatedEscenario();
-		this->renderer->updatedMiniEscenario();
-	}
+
+	// Agrego vista del personaje
+	MobileView *personajeView = new MobileView(personaje->getNombre());
+	personajeView->setModel(personaje);
+	this->escenarioView->addEntityView(personajeView);
+
+	// Agrego mini vista del personaje
+	string miniPersonajeName = MiniView::NombreDrawableFromNombreTipo(personaje->getNombre());
+	MiniView *miniPersonajeView = new MiniView(miniPersonajeName);
+	miniPersonajeView->setModel(personaje);
+	this->miniEscenarioView->addEntityMiniView(miniPersonajeView);
 }
 
 void ClientGameController::actualizarEntidades(list<Entity*> entidades) {
 	this->escenarioView->getEntitiesView()->clear();
 	this->miniEscenarioView->getEntitiesMiniView()->clear();
-	// Agrego vista del personaje
-	this->initPersonaje();
-
-	this->agregarEntidades(entidades);
+	// Agrego todos los personajes
+	map<string, MobileModel*>::iterator found;
+	for(found = this->escenario->usuarios.begin(); found != this->escenario->usuarios.end(); ++found){
+		this->agregarPersonaje(found->second);
+	}
+	// Agrego el resto de las entidades
+	string nombre = this->escenario->getProtagonista()->getNombre();
+	list<Entity*>::iterator entidad;
+	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
+		Entity* entidadReal = (*entidad);
+		if (nombre.compare(entidadReal->getNombre()) != 0) {
+			this->agregarEntidad(entidadReal);
+		}
+	}
+	// Refrescar las vistas
+	this->renderer->updatedEscenario();
+	this->renderer->updatedMiniEscenario();
 }
 
 void ClientGameController::initMap(){
@@ -88,29 +103,6 @@ void ClientGameController::initMap(){
 	miniMapView->setModel(this->escenario->mundo);
 	this->miniEscenarioView = new MiniEscenarioView(miniMapView);
 	this->renderer->setMiniEscenarioView(this->miniEscenarioView);
-}
-
-void ClientGameController::initEntities(){
-	// Agrego todas las vistas (siempre que no sean el protagonista)
-	list<Entity*> entidades = escenario->getListaEntidades();
-	this->agregarEntidades(entidades);
-}
-
-void ClientGameController::initPersonaje() {
-	this->renderer->setProtagonista(this->escenario->getProtagonista());
-
-	// Agrego vista del personaje
-	MobileView *personajeView = new MobileView(this->escenario->getProtagonista()->getNombre());
-	personajeView->setModel(this->escenario->getProtagonista());
-	this->escenarioView->addEntityView(personajeView);
-	this->renderer->updatedEscenario();
-
-	// agrego mini vista del personaje
-	string miniPersonajeName = MiniView::NombreDrawableFromNombreTipo(this->escenario->getProtagonista()->getNombre());
-	MiniView *miniPersonajeView = new MiniView(miniPersonajeName);
-	miniPersonajeView->setModel(this->escenario->getProtagonista());
-	this->miniEscenarioView->addEntityMiniView(miniPersonajeView);
-	this->renderer->updatedMiniEscenario();
 }
 
 float ClientGameController::scrollingSpeed(int z, int min, int max) {
@@ -313,8 +305,7 @@ bool ClientGameController::play() {
 		}
 
 	this->initMap();
-	this->initEntities();
-	this->initPersonaje();
+	this->updated = true;
 	this->initWindowSizes();
 
 	this->renderer->setFog(this->escenario->mundo->getWidth(),this->escenario->mundo->getHeight());

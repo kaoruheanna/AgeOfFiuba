@@ -47,8 +47,6 @@ private:
 	void moveToPoint(SDL_Point point);
 	void initWindowSizes();
 	void initMap();
-	void initPersonaje();
-	void initEntities();
 	bool inicializado();
 	void setMessageForSelectedEntity(Entity* entity);
 
@@ -60,8 +58,8 @@ private:
 	int middlePoint;
 
 	SDL_Point getMaxVertixForPoint(int yPosition);
-	void agregarEntidades(list<Entity*> entidades);
 	void agregarEntidad(Entity* entidad);
+	void agregarPersonaje(MobileModel* personaje);
 	void actualizarEntidades(list<Entity*> entidades);
 	void loopEscenario();
 
