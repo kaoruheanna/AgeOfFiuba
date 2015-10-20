@@ -268,16 +268,28 @@ void Renderer::drawEscenario() {
 	this->escenarioView->render(this);
 
 	// Order the views in the "paintor style" drawing
-	/*this->drawablesToPaint.sort(drawOrder);
+	this->drawablesToPaint.sort(drawOrder);
 
 	list< pair<SDL_Point, Drawable*> >::iterator toPaint;
 	for(toPaint = this->drawablesToPaint.begin(); toPaint != this->drawablesToPaint.end(); ++toPaint) {
 		Drawable* drawable = toPaint->second;
 		SDL_Point windowPoint = this->mapToWindowPoint(toPaint->first);
 		SDL_Rect renderQuad = drawable->getRectToDraw(windowPoint.x, windowPoint.y);
-		SDL_RenderCopy(sdlRenderer, drawable->getTexture(), drawable->getClipRect(), &renderQuad);
+
+		SDL_Point currentTile = { toPaint->first.x / TILE_HEIGHT_PIXELS, toPaint->first.y / TILE_HEIGHT_PIXELS };
+		EstadoDeVisibilidad currentTileState = this->fog->getEstado(currentTile.x,currentTile.y);
+
+		if (currentTileState != OCULTO){
+			if (currentTileState == VISIBLE){
+					SDL_SetTextureColorMod( drawable->getTexture(), FOG_VISIBLE,FOG_VISIBLE,FOG_VISIBLE );
+			} else if (currentTileState == NUBLADO) {
+					SDL_SetTextureColorMod( drawable->getTexture(), FOG_VISITED,FOG_VISITED,FOG_VISITED );
+			}
+
+			SDL_RenderCopy(sdlRenderer, drawable->getTexture(), drawable->getClipRect(), &renderQuad);
+		}
 	}
-	this->drawablesToPaint.clear();*/
+	this->drawablesToPaint.clear();
 }
 
 void Renderer::drawMenu(){
@@ -360,6 +372,12 @@ void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable) {
 		return;
 	}
 
+	if(this->drawablesByInstanceName.find(TILE_DEFAULT_NAME)->second != drawable){
+		// si no es un tile, lo guarda para dibujar despues
+		this->drawablesToPaint.push_back(pair<SDL_Point, Drawable*>(mapRect, drawable));
+		return;
+	}
+
 	SDL_Point currentTile = { mapPositionX / TILE_HEIGHT_PIXELS, mapPositionY / TILE_HEIGHT_PIXELS };
 	EstadoDeVisibilidad currentTileState = this->fog->getEstado(currentTile.x,currentTile.y);
 
@@ -373,12 +391,6 @@ void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable) {
 	} else if (currentTileState == NUBLADO) {
 		SDL_SetTextureColorMod( drawable->getTexture(), FOG_VISITED,FOG_VISITED,FOG_VISITED );
 	}
-
-	/*if(this->drawablesByInstanceName.find(TILE_DEFAULT_NAME)->second != drawable){
-		// si no es un tile, lo guarda para dibujar despues
-		this->drawablesToPaint.push_back(pair<SDL_Point, Drawable*>(mapRect, drawable));
-		return;
-	}*/
 
 	//si es un tile lo dibuja ahora
 	if (this->hasSelectedTiles){
