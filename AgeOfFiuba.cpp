@@ -82,6 +82,7 @@ int main( int argc, char* args[] )
 	configuration = new GameConfiguration(CONFIG_CUSTOM);
 	serverGameController = new ServerGameController(configuration);
 	serverGameController->init();
+	serverGameController->addUser("solo-play");
 	pthread_t thread;
 	pthread_create(&thread, NULL, startServer, (void*)NULL);
 
@@ -91,6 +92,7 @@ int main( int argc, char* args[] )
 	do {
 		Mensajero* mensajero = new MensajeroLocal(serverGameController);
 		ClientGameController *clientGameController = new ClientGameController(mensajero);
+		clientGameController->username = "solo-play";
 		shouldRestart = clientGameController->play();
 
 		delete clientGameController;
