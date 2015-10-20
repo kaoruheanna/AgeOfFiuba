@@ -268,7 +268,7 @@ void Renderer::drawEscenario() {
 	this->escenarioView->render(this);
 
 	// Order the views in the "paintor style" drawing
-	this->drawablesToPaint.sort(drawOrder);
+	/*this->drawablesToPaint.sort(drawOrder);
 
 	list< pair<SDL_Point, Drawable*> >::iterator toPaint;
 	for(toPaint = this->drawablesToPaint.begin(); toPaint != this->drawablesToPaint.end(); ++toPaint) {
@@ -277,7 +277,7 @@ void Renderer::drawEscenario() {
 		SDL_Rect renderQuad = drawable->getRectToDraw(windowPoint.x, windowPoint.y);
 		SDL_RenderCopy(sdlRenderer, drawable->getTexture(), drawable->getClipRect(), &renderQuad);
 	}
-	this->drawablesToPaint.clear();
+	this->drawablesToPaint.clear();*/
 }
 
 void Renderer::drawMenu(){
@@ -374,11 +374,11 @@ void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable) {
 		SDL_SetTextureColorMod( drawable->getTexture(), FOG_VISITED,FOG_VISITED,FOG_VISITED );
 	}
 
-	if(this->drawablesByInstanceName.find(TILE_DEFAULT_NAME)->second != drawable){
+	/*if(this->drawablesByInstanceName.find(TILE_DEFAULT_NAME)->second != drawable){
 		// si no es un tile, lo guarda para dibujar despues
 		this->drawablesToPaint.push_back(pair<SDL_Point, Drawable*>(mapRect, drawable));
 		return;
-	}
+	}*/
 
 	//si es un tile lo dibuja ahora
 	if (this->hasSelectedTiles){
