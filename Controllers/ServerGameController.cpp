@@ -75,17 +75,18 @@ void ServerGameController::enviarEventos() {
 			mensajeroReal->apareceRecurso((Resource*)entidadReal);
 		}
 	}
-	recursos.clear();
 
 	list<Entity*>::iterator entidadEliminada;
 	for (entidadEliminada = recursosEliminados.begin(); entidadEliminada != recursosEliminados.end(); ++entidadEliminada){
 		Entity* entidadReal = (*entidadEliminada);
+		recursos.remove(entidadReal);
 		list<Mensajero*>::iterator mensajero;
 		for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
 			Mensajero* mensajeroReal = (*mensajero);
 			mensajeroReal->desapareceRecurso((Resource*)entidadReal);
 		}
 	}
+	recursosEliminados.clear();
 }
 
 void ServerGameController::loopEscenario() {
