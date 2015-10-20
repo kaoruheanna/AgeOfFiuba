@@ -84,9 +84,13 @@ std::list<Posicion> TileSet::vecinos(Posicion baldosa){
 }
 
 
+
+
+
 //Devuelve el valor heuristico de ir de "a" a "b"
 int TileSet::distancia(Posicion a, Posicion b){
 	return sqrt( pow((b.first - a.first),2) + pow((b.second - a.second), 2));
+	//return abs(b.first - a.first) + abs(b.second - a.second);
 }
 
 //Devuelve el valor de ir de "a" a "b" en la grilla (a y b son vecinos)
@@ -98,13 +102,24 @@ int TileSet::valorArista(Posicion a, Posicion b){
 	return this->distancia(a,b);
 }
 
+bool TileSet::posicionValida(Posicion posicion){
+	return (posicion.first>=0) and (posicion.first < this->ancho)
+			and (posicion.second>=0) and (posicion.second < this->alto);
+}
+
+bool TileSet::posicionOcupada(Posicion posicion){
+	return this->matriz[posicion.first][posicion.second];
+}
+
 bool TileSet::esVecino(Posicion a, Posicion b){
-	if (a.first >= 0 and a.second >= 0 and a.first < this->ancho and a.second < this->alto){
-		if (b.first >= 0 and b.second >= 0 and b.first < this->ancho and b.second < this->alto){
-			if (this->distancia(a,b) >= 1 and (this->distancia(a,b)) < 2){
-				if (!(this->matriz[a.first][a.second])or(this->matriz[b.first][b.second])){
-					return true;
-				}
+	if (this->posicionValida(a) and this->posicionValida(b)
+			and !(this->posicionOcupada(a) or this->posicionOcupada(b))){
+		float distanciaX = b.first - a.first;
+		float distanciaY = b.second - a.second;
+		if (distanciaX<=1 and distanciaY<=1 and (fabs(distanciaX) + fabs(distanciaY)!=0)){
+			if (!(this->posicionOcupada({a.first+distanciaX,a.second})
+					or this->posicionOcupada({a.first,a.second+distanciaY}))){
+				return true;
 			}
 		}
 	}
@@ -118,7 +133,7 @@ pointMap TileSet::caminoMinimo(Posicion origen, Posicion destino, Posicion &dest
 	costMap costo_hasta_ahora;
 	Posicion posible_destino;
 
-	if (this->matriz[destino.first][destino.second]){
+	if (this->posicionOcupada(destino)){
 		desde_donde_vino [origen] = origen;
 		destino_real = origen;
 		return desde_donde_vino;
