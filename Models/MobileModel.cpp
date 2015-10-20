@@ -183,15 +183,18 @@ void MobileModel::clearPath(){
 // TODO mandar y recibir los recursos
 
 // Metodos de serializacion
-
-const int blockCount = 4;
+//TODO desharcodear los recursos o harcodearlos en todos lados igual
 int MobileModel::getTotalBlockCount() {
-	return blockCount + Entity::getTotalBlockCount();
+	return 7 + Entity::getTotalBlockCount();
 }
 
 int MobileModel::getBlockSizeFromIndex(int currentIndex) {
 	int realIndex =  currentIndex - Entity::getTotalBlockCount();
-	if ((realIndex == 0) || (realIndex == 1)) {
+	if (	(realIndex == 0) ||
+			(realIndex == 1) ||
+			(realIndex == 4) ||
+			(realIndex == 5) ||
+			(realIndex == 6)) {
 		return sizeof(int);
 	} else if (realIndex == 2) {
 		return sizeof(bool);
@@ -211,8 +214,14 @@ void MobileModel::getBlockFromIndex(int currentIndex, void* buffer) {
 		memcpy(buffer, &this->destinationY, sizeof(int));
 	} else if (realIndex == 2) {
 		memcpy(buffer, &this->moving, sizeof(bool));
-	} else {
+	} else if (realIndex == 3) {
 		this->serializeString((char*) this->username.c_str(), buffer);
+	} else if(realIndex == 4){
+		memcpy(buffer, &this->resourcesCounter["comida"], sizeof(int));
+	} else if (realIndex == 5){
+		memcpy(buffer, &this->resourcesCounter["madera"], sizeof(int));
+	}else if(realIndex == 6){
+		memcpy(buffer, &this->resourcesCounter["piedra"], sizeof(int));
 	}
 }
 
@@ -226,10 +235,16 @@ void MobileModel::deserialize(int totalBlockCount, int currentBlock, void* block
 		memcpy(&this->destinationY, blockData, sizeof(int));
 	} else if(realBlock == 2){
 		memcpy(&this->moving, blockData, sizeof(int));
-	} else {
+	} else if (realBlock == 3) {
 		char* username = this->deserializeString(blockData);
 		this->username = string(username);
 		free(username);
+	}  else if(realBlock == 4){
+		memcpy(&this->resourcesCounter["comida"], blockData, sizeof(int));
+	} else if(realBlock == 5) {
+		memcpy(&this->resourcesCounter["madera"], blockData, sizeof(int));
+	} else if(realBlock == 6) {
+		memcpy(&this->resourcesCounter["piedra"], blockData, sizeof(int));
 	}
 }
 
