@@ -78,14 +78,14 @@ void ServerGameController::enviarEventos() {
 	list<Mensajero*>::iterator mensajero;
 	for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
 		Mensajero* mensajeroReal = (*mensajero);
-		aparecenRecursos(mensajeroReal,this->recursos);
+		aparecenRecursos(mensajeroReal,this->recursosAgregados);
 	}
-	this->recursos.clear();
+	this->recursosAgregados.clear();
 
 	list<Entity*>::iterator entidadEliminada;
 	for (entidadEliminada = recursosEliminados.begin(); entidadEliminada != recursosEliminados.end(); ++entidadEliminada){
 		Entity* entidadReal = (*entidadEliminada);
-		recursos.remove(entidadReal);
+		recursosAgregados.remove(entidadReal);
 		list<Mensajero*>::iterator mensajero;
 		for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
 			Mensajero* mensajeroReal = (*mensajero);
@@ -93,6 +93,15 @@ void ServerGameController::enviarEventos() {
 		}
 	}
 	recursosEliminados.clear();
+
+	for(auto nuevoMensajero : this->mensajerosAgregados) {
+		this->mensajeros.push_back(nuevoMensajero);
+		if(escenario->inicializacionCorrecta) {
+			nuevoMensajero->configEscenario(this->config->getPath());
+			aparecenRecursos(nuevoMensajero,this->escenario->getListaRecursos());
+		}
+	}
+	this->mensajerosAgregados.clear();
 }
 
 void ServerGameController::loopEscenario() {
@@ -126,12 +135,6 @@ void ServerGameController::moverProtagonista(MobileModel* model) {
 	if(protagonista == NULL){
 		Log().Get(TAG, logERROR) << "El personaje: " << model->getUsername() << " no existe";
 	} else {
-		//Directo
-		/*this->escenario->getProtagonista()->setDestination(
-				moverPersonajeAlPunto->first,moverPersonajeAlPunto->second);*/
-
-		//Con caminno minimo
-
 		SDL_Point origen = protagonista->getPosicion();
 		queue <SDL_Point> camino = this->escenario->getPath(origen,{model->getDestinationX(),model->getDestinationY()});
 		protagonista->setPath(camino);
@@ -140,11 +143,7 @@ void ServerGameController::moverProtagonista(MobileModel* model) {
 }
 
 void ServerGameController::addMensajero(Mensajero* mensajero) {
-	this->mensajeros.push_back(mensajero);
-	if(escenario->inicializacionCorrecta) {
-		mensajero->configEscenario(this->config->getPath());
-		aparecenRecursos(mensajero,this->escenario->getListaRecursos());
-	}
+	this->mensajerosAgregados.push_back(mensajero);
 }
 
 void ServerGameController::removeMensajero(Mensajero *mensajero) {
@@ -160,7 +159,7 @@ void ServerGameController::actualizaPersonaje(MobileModel* entity){
 }
 
 void ServerGameController::apareceEntidad(Entity* recurso) {
-	this->recursos.push_back(recurso);
+	this->recursosAgregados.push_back(recurso);
 }
 
 void ServerGameController::desapareceEntidad(Entity* recurso) {
