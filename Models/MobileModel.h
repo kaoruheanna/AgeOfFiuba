@@ -42,6 +42,9 @@ public:
 	void setPath(queue<SDL_Point> new_path);
 	void clearPath();
 
+	string getUsername();
+	void setUsername(string username);
+
 	// Serializable methods
 	virtual int getTotalBlockCount();
 	virtual int getBlockSizeFromIndex(int currentIndex);
@@ -53,6 +56,7 @@ private:
 	int destinationX;
 	int destinationY;
 	bool moving;
+	string username;
 	std::map<string,int> resourcesCounter;
 
 	int getSpeed();

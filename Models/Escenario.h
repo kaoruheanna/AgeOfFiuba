@@ -49,6 +49,7 @@ class Escenario {
 		void vaciarEntidades();
 		void loop();
 
+		MobileModel* generarNuevoProtagonista();
 		SDL_Point getSize();
 		Entity* crearEntidad(EntidadConfig config, bool esProtagonista);
 		Entity* crearEntidad(const string& tipo, SDL_Point posicion, bool esProtagonista);
@@ -67,6 +68,13 @@ class Escenario {
 		Escenario(string,int,int,int,int);//construye un mapa vacio
 		Escenario(EscenarioConfig escenario, list<TipoConfig> tipos);//Este constructor deberia recibir un game config
 		~Escenario();
+
+		// Manejo de varios personajes
+		map<string, MobileModel*> usuarios;
+
+		void addUser(char* userName);
+		void addUser(char* userName, SDL_Point position);
+		MobileModel* getUserModel(string username);
 };
 
 #endif

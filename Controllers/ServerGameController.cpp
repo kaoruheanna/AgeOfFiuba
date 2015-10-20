@@ -78,10 +78,10 @@ void ServerGameController::obtenerEventos() {
 }
 
 void ServerGameController::enviarEventos() {
-	if(debeActualizarPersonaje) {
-		debeActualizarPersonaje = false;
+	//if(debeActualizarPersonaje) {
+	//	debeActualizarPersonaje = false;
 		this->actualizarProtagonista();
-	}
+	//}
 
 	list<Entity*>::iterator entidad;
 	for (entidad = recursos.begin(); entidad != recursos.end(); ++entidad){
@@ -124,6 +124,11 @@ void ServerGameController::actualizarProtagonista(){
 	for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
 		Mensajero* mensajeroReal = (*mensajero);
 		mensajeroReal->actualizaPersonaje(this->escenario->getProtagonista());
+
+		map<string, MobileModel*>::iterator usuario;
+		for (usuario = this->escenario->usuarios.begin(); usuario != this->escenario->usuarios.end(); ++usuario){
+			mensajeroReal->actualizaPersonaje(usuario->second);
+		}
 	}
 }
 
@@ -167,7 +172,7 @@ void ServerGameController::desapareceEntidad(Entity* recurso) {
 // TODO Implementar el manejo de usuarios
 
 bool ServerGameController::userExists(char* username) {
-	return false;
+	return (this->escenario->getUserModel(username) != NULL);
 }
 
 bool ServerGameController::userActive(char* username) {
@@ -175,5 +180,5 @@ bool ServerGameController::userActive(char* username) {
 }
 
 void ServerGameController::addUser(char* username) {
-
+	this->escenario->addUser(username);
 }

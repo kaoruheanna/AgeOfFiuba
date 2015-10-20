@@ -342,7 +342,12 @@ void ClientGameController::actualizaPersonaje(MobileModel* entity) {
 	if (!this->inicializado())
 		return;
 
-	this->escenario->getProtagonista()->update(entity);
+	MobileModel* protagonista = this->escenario->getUserModel(entity->getUsername());
+	if(protagonista == NULL){
+		this->escenario->addUser((char*)entity->getUsername().c_str(), entity->getPosicion());
+		protagonista = this->escenario->getUserModel(entity->getUsername());
+	}
+	protagonista->update(entity);
 }
 
 void ClientGameController::apareceRecurso(Resource* recurso) {

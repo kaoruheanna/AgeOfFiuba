@@ -233,3 +233,62 @@ queue<SDL_Point> Escenario::getPath(SDL_Point origen, SDL_Point destino){
 	cout<<destino.x<<","<<destino.y<<endl;
 	return this->mundo->obtenerCamino(origen, destino);
 }
+
+// Para manejar varios protagonistas
+MobileModel* Escenario::generarNuevoProtagonista() {
+	int posicionX = rand() % this->mundo->getWidth();
+	int posicionY = rand() % this->mundo->getHeight();
+	// TODO asegurar una posicion vacia
+	MobileModel* nuevoProtagonista = factory->crearProtagonista(
+		escenarioConfig.getProtagonista().getTipo(),
+		{ posicionX, posicionY }
+	);
+
+	return nuevoProtagonista;
+}
+
+void Escenario::addUser(char* username) {
+	int posicionX = rand() % this->mundo->getWidth();
+	int posicionY = rand() % this->mundo->getHeight();
+	// TODO asegurar una posicion vacia
+	MobileModel* userModel = factory->crearProtagonista(
+			escenarioConfig.getProtagonista().getTipo(),
+			{ posicionX, posicionY }
+		);
+	userModel->setUsername(username);
+	if(!this->agregarEntidad(userModel)){
+		printf("ERROR - Protagonista no se puede agregar al escenario\n");
+	} else {
+		printf("Agregado protagonista a la posicion: %i %i\n", posicionX, posicionY);
+	}
+	this->usuarios.insert(pair<string, MobileModel*>(username, userModel));
+}
+
+void Escenario::addUser(char* username, SDL_Point position) {
+	MobileModel* userModel = factory->crearProtagonista(
+			escenarioConfig.getProtagonista().getTipo(),
+			{ 0, 0 }
+		);
+	userModel->setUsername(username);
+	userModel->setX(position.x);
+	userModel->setY(position.y);
+	if(!this->agregarEntidad(userModel)){
+		printf("ERROR - Protagonista no se puede agregar al escenario");
+	} else {
+		printf("Agregado protagonista a la posicion: %i %i", position.x, position.y);
+	}
+	this->usuarios.insert(pair<string, MobileModel*>(username, userModel));
+}
+
+MobileModel* Escenario::getUserModel(string username) {
+	if(username == ""){
+		// TODO eliminar cuando halla varios protagonistas de verdad !!
+		return this->protagonista;
+	}
+	MobileModel* userModel = NULL;
+	map<string, MobileModel*>::iterator found = this->usuarios.find(username);
+	if(found != this->usuarios.end()){
+		userModel = found->second;
+	}
+	return userModel;
+}
