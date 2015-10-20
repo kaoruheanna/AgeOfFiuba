@@ -34,6 +34,7 @@ private:
 	Renderer *renderer;
 	Escenario* escenario;
 	GameConfiguration* config;
+	bool updated;
 
 	bool pollEvents();
 	void updateWindow();

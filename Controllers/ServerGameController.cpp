@@ -13,6 +13,8 @@ static const string TAG = "ServerGameController";
 
 ServerGameController::ServerGameController(GameConfiguration *config) :  config(config) {
 	escenario = NULL;
+	debeActualizarPersonaje = false;
+	moverPersonajeAlPunto= NULL;
 }
 
 ServerGameController::~ServerGameController() {}
@@ -57,9 +59,58 @@ void ServerGameController::play() {
 	}
 }
 
-void ServerGameController::loopEscenario() {
-	this->escenario->loop();
+void ServerGameController::obtenerEventos() {
+	if (this->moverPersonajeAlPunto != NULL) {
+		Log().Get(TAG) << "Personaje se mueve al " << this->moverPersonajeAlPunto->first << " , " << this->moverPersonajeAlPunto->second;
+		//Directo
+		this->escenario->getProtagonista()->setDestination(
+				moverPersonajeAlPunto->first,moverPersonajeAlPunto->second);
+
+		//Con caminno minimo
+		/*
+		SDL_Point origen = this->escenario->getProtagonista()->getPosicion();
+		queue <SDL_Point> camino = this->escenario->getPath(origen,{moverPersonajeAlPunto->first,moverPersonajeAlPunto->second});
+		this->escenario->getProtagonista()->setPath(camino);
+		 */
+		delete this->moverPersonajeAlPunto;
+		this->moverPersonajeAlPunto = NULL;
+	}
 }
+
+void ServerGameController::enviarEventos() {
+	if(debeActualizarPersonaje) {
+		debeActualizarPersonaje = false;
+		this->actualizarProtagonista();
+	}
+
+	list<Entity*>::iterator entidad;
+	for (entidad = recursos.begin(); entidad != recursos.end(); ++entidad){
+		Entity* entidadReal = (*entidad);
+		list<Mensajero*>::iterator mensajero;
+		for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
+			Mensajero* mensajeroReal = (*mensajero);
+			mensajeroReal->apareceRecurso((Resource*)entidadReal);
+		}
+	}
+	recursos.clear();
+
+	list<Entity*>::iterator entidadEliminada;
+	for (entidadEliminada = recursosEliminados.begin(); entidadEliminada != recursosEliminados.end(); ++entidadEliminada){
+		Entity* entidadReal = (*entidadEliminada);
+		list<Mensajero*>::iterator mensajero;
+		for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
+			Mensajero* mensajeroReal = (*mensajero);
+			mensajeroReal->desapareceRecurso((Resource*)entidadReal);
+		}
+	}
+}
+
+void ServerGameController::loopEscenario() {
+	this->obtenerEventos();
+	this->escenario->loop();
+	this->enviarEventos();
+}
+
 bool ServerGameController::inicializado() {
 	return this->escenario && this->escenario->inicializacionCorrecta;
 }
@@ -77,15 +128,13 @@ void ServerGameController::actualizarProtagonista(){
 }
 
 void ServerGameController::moverProtagonista(MobileModel* model) {
-	SDL_Point origen = this->escenario->getProtagonista()->getPosicion();
-	queue <SDL_Point> camino = this->escenario->getPath(origen,{model->getDestinationX(),model->getDestinationY()});
-	this->escenario->getProtagonista()->setPath(camino);
-
-	/*this->escenario->getProtagonista()
-			->setDestination(
-				model->getDestinationX(),
-				model->getDestinationY()
-			);*/
+	if(this->moverPersonajeAlPunto) {
+		delete this->moverPersonajeAlPunto;
+	}
+	this->moverPersonajeAlPunto = new Posicion();
+	this->moverPersonajeAlPunto->first = model->getDestinationX();
+	this->moverPersonajeAlPunto->second = model->getDestinationY();
+	Log().Get(TAG) << "Callbac se mueve al " << this->moverPersonajeAlPunto->first << " , " << this->moverPersonajeAlPunto->second;
 }
 
 void ServerGameController::addMensajero(Mensajero* mensajero) {
@@ -100,23 +149,15 @@ void ServerGameController::sleep(){
 }
 
 void ServerGameController::actualizaPersonaje(MobileModel* entity){
-	this->actualizarProtagonista();
+	this->debeActualizarPersonaje = true;
 }
 
 void ServerGameController::apareceEntidad(Entity* recurso) {
-	list<Mensajero*>::iterator mensajero;
-	for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
-		Mensajero* mensajeroReal = (*mensajero);
-		mensajeroReal->apareceRecurso((Resource*)recurso);
-	}
+	this->recursos.push_back(recurso);
 }
 
 void ServerGameController::desapareceEntidad(Entity* recurso) {
-	list<Mensajero*>::iterator mensajero;
-	for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
-		Mensajero* mensajeroReal = (*mensajero);
-		mensajeroReal->desapareceRecurso((Resource*)recurso);
-	}
+	this->recursosEliminados.push_back(recurso);
 }
 
 // TODO Implementar el manejo de usuarios

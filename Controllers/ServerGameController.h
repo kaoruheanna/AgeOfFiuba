@@ -8,6 +8,7 @@
 #ifndef CONTROLLERS_SERVERGAMECONTROLLER_H_
 #define CONTROLLERS_SERVERGAMECONTROLLER_H_
 
+
 #include "../Models/MobileModel.h"
 #include "../Models/Escenario.h"
 #include "../Configuration/GameConfiguration.h"
@@ -44,9 +45,15 @@ private:
 	GameConfiguration *config;
 	list<Mensajero*> mensajeros;
 	void loopEscenario();
+	void obtenerEventos();
+	void enviarEventos();
 	void actualizarProtagonista();
 	void sleep();
 
+	list<Entity*> recursos;
+	list<Entity*> recursosEliminados;
+	bool debeActualizarPersonaje;
+	Posicion* moverPersonajeAlPunto;
 };
 
 #endif /* CONTROLLERS_SERVERGAMECONTROLLER_H_ */
