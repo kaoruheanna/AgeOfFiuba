@@ -86,7 +86,7 @@ SDL_Point Map::getPositionForTile(SDL_Point point) {
 }
 
 SDL_Point Map::getCenteredPositionForTile(SDL_Point point) {
-	return { point.x * TILE_SIZE+TILE_SIZE/2, point.y * TILE_SIZE+TILE_SIZE/2};
+	return {point.x * TILE_SIZE + (TILE_SIZE/2), point.y * TILE_SIZE+ (TILE_SIZE/2)};
 }
 
 queue <SDL_Point> Map::obtenerCamino(SDL_Point origen, SDL_Point destino){
@@ -106,7 +106,5 @@ queue <SDL_Point> Map::obtenerCamino(SDL_Point origen, SDL_Point destino){
 		punto = this->getCenteredPositionForTile(punto);
 		camino2.push(punto);
 	}
-
 	return camino2;
-
 }

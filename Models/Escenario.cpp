@@ -230,5 +230,6 @@ SDL_Point Escenario::getSize(){
 }
 
 queue<SDL_Point> Escenario::getPath(SDL_Point origen, SDL_Point destino){
+	cout<<destino.x<<","<<destino.y<<endl;
 	return this->mundo->obtenerCamino(origen, destino);
 }
