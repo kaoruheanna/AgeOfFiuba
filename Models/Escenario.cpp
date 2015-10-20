@@ -148,6 +148,18 @@ bool Escenario::eliminarRecursoConID(int id) {
 	return false;
 }
 
+list<Entity*> Escenario::getListaRecursos() {
+	list<Entity*>resources;
+	list<Entity*>::iterator entidad;
+	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
+		Resource* entidadReal = (Resource*)(*entidad);
+		if (entidadReal->Cosechable) {
+				resources.push_back(entidadReal);
+		}
+	}
+	return resources;
+}
+
 //Devuelve true si cosecho algo
 bool Escenario::cosecharEnPosicion(SDL_Point point, MobileModel* protagonista) {
 	list<Entity*>::iterator entidad;
