@@ -45,6 +45,9 @@ public:
 	string getUsername();
 	void setUsername(string username);
 
+	bool isActive();
+	void setActive(bool active);
+
 	// Serializable methods
 	virtual int getTotalBlockCount();
 	virtual int getBlockSizeFromIndex(int currentIndex);
@@ -57,6 +60,7 @@ private:
 	int destinationY;
 	bool moving;
 	string username;
+	bool userActive;
 	std::map<string,int> resourcesCounter;
 
 	int getSpeed();

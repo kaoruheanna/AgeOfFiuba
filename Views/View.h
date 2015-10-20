@@ -20,6 +20,7 @@ public:
 	virtual ~View();
 	virtual void render(Renderer* renderer);
 	void setDrawable(Drawable *drawable);
+	virtual void setDrawableDeshabilitado(Drawable *drawable);
 	void setOrigin(int x, int y);
 	std::string getType();
 

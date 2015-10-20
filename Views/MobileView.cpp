@@ -11,15 +11,21 @@
 
 MobileView::MobileView(std::string type): View(type) {
 	this->model = NULL;
+	this->auxDrawable = NULL;
 	this->lastOrigin = this->origin;
+	this->isActive = true;
 }
 
 MobileView::~MobileView() {
-	// TODO Auto-generated destructor stub
+	this->auxDrawable = NULL;
 }
 
 void MobileView::setModel(MobileModel *model) {
 	this->model = model;
+}
+
+void MobileView::setDrawableDeshabilitado(Drawable *drawable) {
+	this->auxDrawable = drawable;
 }
 
 SDL_Point MobileView::getOrigin(){
@@ -36,6 +42,14 @@ SDL_Point MobileView::getOrigin(){
 }
 
 void MobileView::render(Renderer* renderer) {
+	if(this->isActive != this->model->isActive()){
+		this->isActive = this->model->isActive();
+		Drawable* swap = this->drawable;
+		if(this->auxDrawable != NULL){
+			this->drawable = this->auxDrawable;
+			this->auxDrawable = swap;
+		}
+	}
 	MotionDirection currentDirection = this->getMotionDirection();
 	this->animationStatus = this->drawable->getAnimation(currentDirection,this->model->isMoving(),this->animationStatus);
 	View::render(renderer);

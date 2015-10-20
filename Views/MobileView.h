@@ -16,6 +16,7 @@ public:
 	MobileView(std::string type);
 	virtual ~MobileView();
 	void setModel(MobileModel *model);
+	virtual void setDrawableDeshabilitado(Drawable *drawable);
 	MotionDirection getMotionDirection();
 	void render(Renderer* renderer);
 
@@ -23,6 +24,8 @@ protected:
 	SDL_Point getOrigin();
 
 private:
+	Drawable* auxDrawable;
+	bool isActive;
 	MobileModel *model;
 	SDL_Point lastOrigin;
 };

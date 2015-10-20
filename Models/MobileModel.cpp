@@ -23,6 +23,7 @@ MobileModel::MobileModel() : Entity("", {0, 0}, 1, 1){
 	this->moving = false;
 	this->Cosechable = false;
 	this->username = "";
+	this->userActive = false;
 }
 
 MobileModel::MobileModel(string nombre, SDL_Point posicion, int ancho_base, int alto_base)
@@ -32,10 +33,24 @@ MobileModel::MobileModel(string nombre, SDL_Point posicion, int ancho_base, int 
 	this->moving = false;
 	this->Cosechable = false;
 	this->username = "";
+	this->userActive = false;
 }
 
 MobileModel::~MobileModel() {
 	// TODO Auto-generated destructor stub
+}
+
+bool MobileModel::isActive() {
+	return this->userActive;
+}
+
+void MobileModel::setActive(bool active) {
+	this->userActive = active;
+	if(!active){ // Hacer que se deje de mover al desactivarse
+		this->clearPath();
+		this->moving = false;
+		this->setDestination(this->getX(), this->getY());
+	}
 }
 
 string MobileModel::getUsername() {
@@ -152,6 +167,7 @@ int MobileModel::getValueForResource(string resourceName) {
 }
 
 void MobileModel::update(MobileModel* other) {
+	this->userActive = other->isActive();
 	this->moving = other->isMoving();
 	this->posicion = other->getPosicion();
 	for(auto resourceName : this->getResourcesNames()) {
@@ -185,7 +201,7 @@ void MobileModel::clearPath(){
 // Metodos de serializacion
 //TODO desharcodear los recursos o harcodearlos en todos lados igual
 int MobileModel::getTotalBlockCount() {
-	return 7 + Entity::getTotalBlockCount();
+	return 8 + Entity::getTotalBlockCount();
 }
 
 int MobileModel::getBlockSizeFromIndex(int currentIndex) {
@@ -200,6 +216,8 @@ int MobileModel::getBlockSizeFromIndex(int currentIndex) {
 		return sizeof(bool);
 	} else if(realIndex == 3){
 		return this->serializeStringSize((char*) this->username.c_str());
+	} else if(realIndex == 7){
+		return sizeof(bool);
 	}
 	return Entity::getBlockSizeFromIndex(currentIndex);
 }
@@ -220,8 +238,10 @@ void MobileModel::getBlockFromIndex(int currentIndex, void* buffer) {
 		memcpy(buffer, &this->resourcesCounter["comida"], sizeof(int));
 	} else if (realIndex == 5){
 		memcpy(buffer, &this->resourcesCounter["madera"], sizeof(int));
-	}else if(realIndex == 6){
+	} else if(realIndex == 6){
 		memcpy(buffer, &this->resourcesCounter["piedra"], sizeof(int));
+	} else if(realIndex == 7){
+		memcpy(buffer, &this->userActive, sizeof(bool));
 	}
 }
 
@@ -245,6 +265,8 @@ void MobileModel::deserialize(int totalBlockCount, int currentBlock, void* block
 		memcpy(&this->resourcesCounter["madera"], blockData, sizeof(int));
 	} else if(realBlock == 6) {
 		memcpy(&this->resourcesCounter["piedra"], blockData, sizeof(int));
+	} else if(realBlock == 7){
+		memcpy(&this->userActive, blockData, sizeof(bool));
 	}
 }
 

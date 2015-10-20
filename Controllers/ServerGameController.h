@@ -37,6 +37,8 @@ public:
 	bool userActive(char* username);
 	void addUser(char* username);
 	void init();
+	void setUserActive(char* username);
+	void setUserInactive(char* username);
 
 	//EscenarioDelegate
 	virtual void actualizaPersonaje(MobileModel* entity);
