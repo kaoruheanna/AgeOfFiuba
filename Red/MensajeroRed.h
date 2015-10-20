@@ -28,6 +28,7 @@ public:
 private:
 	int socket;
 	Mensajero* escucha;
+	char* sender;
 };
 
 #endif /* RED_MENSAJERORED_H_ */
