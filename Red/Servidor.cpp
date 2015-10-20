@@ -88,11 +88,14 @@ void* atenderCliente(void* arg) {
 		delete mensaje;
 		printf("Servidor - Se corto la conexion\n");
 	} else {
-		if(!info->servidor->modelos->userExists(mensaje->getSender()) ||
-				!info->servidor->modelos->userActive(mensaje->getSender())){
-			if(!info->servidor->modelos->userExists(mensaje->getSender())){
-				info->servidor->modelos->addUser(mensaje->getSender());
+		char* username = (char*) malloc(strlen(mensaje->getSender()) + 1);
+		strcpy(username, mensaje->getSender());
+		if(!info->servidor->modelos->userExists(username) ||
+				!info->servidor->modelos->userActive(username)){
+			if(!info->servidor->modelos->userExists(username)){
+				info->servidor->modelos->addUser(username);
 			}
+			info->servidor->modelos->setUserActive(username);
 			delete mensaje;
 			// Si se pudo loguear empieza el flow con el controller
 			MensajeroRed* mensajero = new MensajeroRed(info->socket);
@@ -100,6 +103,7 @@ void* atenderCliente(void* arg) {
 			info->servidor->modelos->addMensajero(mensajero);
 			mensajero->esperaMensaje();
 			info->servidor->modelos->removeMensajero(mensajero);
+			info->servidor->modelos->setUserInactive(username);
 			delete mensajero;
 		} else {
 			delete mensaje;
@@ -107,6 +111,7 @@ void* atenderCliente(void* arg) {
 			resultado = enviarSerializable(info->socket, mensaje);
 			printf("Servidor - Responde al mensaje con resultado: %i\n", resultado);
 		}
+		free(username);
 	}
 
 	printf("Servidor - Termino la conexion\n");

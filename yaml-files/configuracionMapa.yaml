@@ -47,6 +47,7 @@ tipos:
 
  - nombre: soldado
    imagen: img/vlad.png
+   imagenDeshabilitado: img/vlad_grey.png
    ancho_base: 1
    alto_base : 1
    pixel_ref_x: 25

@@ -17,6 +17,7 @@ TipoConfig::TipoConfig() {
 	this->delay = 0;
 	this->fps = 0;
 	this->imagen = "";
+	this->imagenDeshabilitado = "";
 	this->miniImagen = "";
 	this->nombre = "";
 	this->pixelRefX = (TILE_WIDTH_PIXELS/2);
@@ -39,6 +40,7 @@ TipoConfig::TipoConfig(YAML::Node nodo): TipoConfig(){
 	this->minimapPixelRefType = TipoConfig::getIntAttribute(nodo, "mini_map_pixel_ref_type", this->minimapPixelRefType);
 
 	this->imagen = TipoConfig::getStringAttribute(nodo, "imagen", this->imagen);
+	this->imagenDeshabilitado = TipoConfig::getStringAttribute(nodo, "imagenDeshabilitado", this->imagenDeshabilitado);
 	this->miniImagen = TipoConfig::getStringAttribute(nodo, "miniImagen", this->miniImagen);
 	this->nombre = TipoConfig::getStringAttribute(nodo, "nombre", this->nombre);
 	if(this->nombre == ""){
@@ -49,6 +51,9 @@ TipoConfig::TipoConfig(YAML::Node nodo): TipoConfig(){
 	}
 	if(this->miniImagen == ""){
 		Log().Get(TAG,logERROR) << "Mini Imagen no puede ser null para tipo TipoConfig";
+	}
+	if(this->imagenDeshabilitado == ""){
+		this->imagenDeshabilitado = this->imagen;
 	}
 }
 
@@ -115,6 +120,9 @@ string TipoConfig::getNombre() {
 }
 string TipoConfig::getImagen() {
 	return this->imagen;
+}
+string TipoConfig::getImagenDeshabilitado() {
+	return this->imagenDeshabilitado;
 }
 string TipoConfig::getMiniImagen() {
 	return this->miniImagen;

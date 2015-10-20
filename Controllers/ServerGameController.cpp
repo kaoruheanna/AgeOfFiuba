@@ -166,9 +166,26 @@ bool ServerGameController::userExists(char* username) {
 }
 
 bool ServerGameController::userActive(char* username) {
-	return false;
+	if(!this->userExists(username)){
+		return false;
+	}
+	return this->escenario->getUserModel(username)->isActive();
 }
 
 void ServerGameController::addUser(char* username) {
 	this->escenario->addUser(username);
+}
+
+void ServerGameController::setUserActive(char* username) {
+	MobileModel* user = this->escenario->getUserModel(username);
+	if(user != NULL){
+		user->setActive(true);
+	}
+}
+
+void ServerGameController::setUserInactive(char* username) {
+	MobileModel* user = this->escenario->getUserModel(username);
+	if(user != NULL){
+		user->setActive(false);
+	}
 }

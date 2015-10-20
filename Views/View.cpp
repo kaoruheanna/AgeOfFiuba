@@ -21,6 +21,10 @@ View::~View() {
 	this->drawable = NULL;
 }
 
+void View::setDrawableDeshabilitado(Drawable *drawable) {
+
+}
+
 void View::render(Renderer* renderer ) {
 	SDL_Point point = this->getOrigin();
 	this->drawable->animate(this->animationStatus);

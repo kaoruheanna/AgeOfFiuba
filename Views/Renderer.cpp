@@ -107,6 +107,7 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 		  Log().Get(TAG,logWARNING) << "Tipo N°" << i << " es incorrecto. Deberia tener nombre e imagen.";
 
 	  } else {
+		  // Cargar textura comun
 		  Drawable *nodoDrawable = this->getDrawableFromTipoConfig(tipo);
 		  bool textureLoaded = nodoDrawable->loadTextureFromFile(tipo.getImagen(), this->sdlRenderer);
 		  if(textureLoaded){
@@ -115,6 +116,18 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 			  );
 		  } else {
 			  Log().Get(TAG,logWARNING) << "Tipo N°" << i << " no se pudo cargar la imagen.";
+		  }
+		  // Cargar textura deshabilitado
+		  if(tipo.getImagenDeshabilitado().compare(tipo.getImagen()) != 0){
+			  nodoDrawable = this->getDrawableFromTipoConfig(tipo);
+			  textureLoaded = nodoDrawable->loadTextureFromFile(tipo.getImagenDeshabilitado(), this->sdlRenderer);
+			  if(textureLoaded){
+				  this->drawablesByInstanceName.insert(
+					std::pair<std::string,Drawable*>(tipo.getNombre() + "-deshabilitado", nodoDrawable)
+				  );
+			  } else {
+				  Log().Get(TAG,logWARNING) << "Tipo N°" << i << " no se pudo cargar la imagen.";
+			  }
 		  }
 	  }
 	  i++;
@@ -474,6 +487,12 @@ void Renderer::setDrawableForView(View* view){
 		drawable = this->missingImageDrawable;
 	}
 	view->setDrawable(drawable);
+	// Find deshabilited drawable
+	found = this->drawablesByInstanceName.find(view->getType() + "-deshabilitado");
+	if(found != this->drawablesByInstanceName.end()){
+		drawable = found->second;
+	}
+	view->setDrawableDeshabilitado(drawable);
 }
 
 // MINIMAP
