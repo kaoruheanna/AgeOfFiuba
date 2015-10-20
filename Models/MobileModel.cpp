@@ -22,6 +22,7 @@ MobileModel::MobileModel() : Entity("", {0, 0}, 1, 1){
 	this->posicion.y = 0;
 	this->moving = false;
 	this->Cosechable = false;
+	this->username = "";
 }
 
 MobileModel::MobileModel(string nombre, SDL_Point posicion, int ancho_base, int alto_base)
@@ -30,10 +31,19 @@ MobileModel::MobileModel(string nombre, SDL_Point posicion, int ancho_base, int 
 	this->destinationY = posicion.y;
 	this->moving = false;
 	this->Cosechable = false;
+	this->username = "";
 }
 
 MobileModel::~MobileModel() {
 	// TODO Auto-generated destructor stub
+}
+
+string MobileModel::getUsername() {
+	return this->username;
+}
+
+void MobileModel::setUsername(string username) {
+	this->username = string(username);
 }
 
 int MobileModel::getX() {
@@ -174,7 +184,7 @@ void MobileModel::clearPath(){
 
 // Metodos de serializacion
 
-const int blockCount = 3;
+const int blockCount = 4;
 int MobileModel::getTotalBlockCount() {
 	return blockCount + Entity::getTotalBlockCount();
 }
@@ -185,6 +195,8 @@ int MobileModel::getBlockSizeFromIndex(int currentIndex) {
 		return sizeof(int);
 	} else if (realIndex == 2) {
 		return sizeof(bool);
+	} else if(realIndex == 3){
+		return this->serializeStringSize((char*) this->username.c_str());
 	}
 	return Entity::getBlockSizeFromIndex(currentIndex);
 }
@@ -199,6 +211,8 @@ void MobileModel::getBlockFromIndex(int currentIndex, void* buffer) {
 		memcpy(buffer, &this->destinationY, sizeof(int));
 	} else if (realIndex == 2) {
 		memcpy(buffer, &this->moving, sizeof(bool));
+	} else {
+		this->serializeString((char*) this->username.c_str(), buffer);
 	}
 }
 
@@ -210,8 +224,12 @@ void MobileModel::deserialize(int totalBlockCount, int currentBlock, void* block
 		memcpy(&this->destinationX, blockData, sizeof(int));
 	} else if(realBlock == 1) {
 		memcpy(&this->destinationY, blockData, sizeof(int));
-	} else {
+	} else if(realBlock == 2){
 		memcpy(&this->moving, blockData, sizeof(int));
+	} else {
+		char* username = this->deserializeString(blockData);
+		this->username = string(username);
+		free(username);
 	}
 }
 
