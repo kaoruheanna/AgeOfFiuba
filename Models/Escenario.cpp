@@ -33,7 +33,8 @@ void Escenario::init() {
 		this->mundo = new Map(escenarioConfig.getSizeX(), escenarioConfig.getSizeY(),
 				TILE_WIDTH_PIXELS, TILE_HEIGHT_PIXELS);
 		factory = new EntityFactory(this->mundo, sizeByType);
-		this->protagonista = factory->crearProtagonista(
+		this->protagonista = NULL;
+		/*this->protagonista = factory->crearProtagonista(
 				escenarioConfig.getProtagonista().getTipo(),
 				{ escenarioConfig.getProtagonista().getX(),
 						escenarioConfig.getProtagonista().getY() });
@@ -44,7 +45,7 @@ void Escenario::init() {
 			Log().Get("Escenario", logWARNING) << "El escenario " << this->name
 					<< " no pudo agregar el protagonista al mapa. Cargando escenario default.";
 			delete this->protagonista;
-		} else {
+		} else {*/
 			this->inicializacionCorrecta = true;
 			list<EntidadConfig>::iterator configEntidad;
 			list<EntidadConfig> configs = escenarioConfig.getEntidades();
@@ -67,7 +68,7 @@ void Escenario::init() {
 				}
 				indice++;
 			}
-		}
+		//}
 	}
 
 	if (!this->inicializacionCorrecta && this->mundo != NULL) {
@@ -76,11 +77,6 @@ void Escenario::init() {
 	}
 	//Inicializar resources Manager
 	this->resourcesManager = new ResourcesManager(this);
-	for (int i = 0; i < RESOURCES_QTY; i++){
-		const char* resourceName = this->resourcesManager->ResourceTypes()[i];
-		string str(resourceName);
-		this->protagonista->addResourceToCollect(str);
-	}
 }
 
 Escenario::Escenario(EscenarioConfig config, list<TipoConfig> tipos) :  escenarioConfig(config), tiposConfigList(tipos){
@@ -114,6 +110,15 @@ MobileModel* Escenario::getProtagonista() {
 	return this->protagonista;
 }
 
+void Escenario::setProtagonista(MobileModel* protagonista) {
+	this->protagonista = protagonista;
+	for (int i = 0; i < RESOURCES_QTY; i++){
+		const char* resourceName = this->resourcesManager->ResourceTypes()[i];
+		string str(resourceName);
+		this->protagonista->addResourceToCollect(str);
+	}
+}
+
 list<Entity*> Escenario::getListaEntidades(){
 	return this->entidades;
 }
@@ -144,7 +149,7 @@ bool Escenario::eliminarRecursoConID(int id) {
 }
 
 //Devuelve true si cosecho algo
-bool Escenario::cosecharEnPosicion(SDL_Point point) {
+bool Escenario::cosecharEnPosicion(SDL_Point point, MobileModel* protagonista) {
 	list<Entity*>::iterator entidad;
 	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
 		Resource* entidadReal = (Resource*)(*entidad);
@@ -153,7 +158,7 @@ bool Escenario::cosecharEnPosicion(SDL_Point point) {
 			(position.y == point.y) &&
 			entidadReal->Cosechable) {
 				entidadReal->cosechar();
-				this->protagonista->didCollectResource(entidadReal->getNombre());
+				protagonista->didCollectResource(entidadReal->getNombre());
 				this->delegate->desapareceEntidad(entidadReal);
 				entidades.erase(entidad);
 				return true;
@@ -196,12 +201,23 @@ std::pair<SDL_Point,SDL_Point> Escenario::getTilesCoordinatesForEntity(Entity *e
 
 //Actualiza todos los modelos en un nuevo loop
 void Escenario::loop() {
-	if(this->protagonista->updatePosition()) {
-		this->delegate->actualizaPersonaje(this->protagonista);
+	updated = false;
+	bool actualizarPersonajes = false;
+	MobileModel* protagonista = NULL;
+	map<string, MobileModel*>::iterator found;
+	for(found = this->usuarios.begin(); found != this->usuarios.end(); ++found){
+		protagonista = found->second;
+		if(protagonista->updatePosition()) {
+			actualizarPersonajes = true;
+		}
+
+		SDL_Point point = this->mundo->getTileForPosition(protagonista->getPosicion());
+		updated = updated || this->cosecharEnPosicion(point, protagonista);
 	}
 
-	SDL_Point point = this->mundo->getTileForPosition(this->protagonista->getPosicion());
-	updated = this->cosecharEnPosicion(point);
+	if(actualizarPersonajes){
+		this->delegate->actualizaPersonaje(protagonista);
+	}
 
 	list<Entity*> entidadesAInsertar = resourcesManager->InsertResourcesForNewLoopOnMap();
 	if (entidadesAInsertar.size() > 0) {
@@ -235,18 +251,6 @@ queue<SDL_Point> Escenario::getPath(SDL_Point origen, SDL_Point destino){
 }
 
 // Para manejar varios protagonistas
-MobileModel* Escenario::generarNuevoProtagonista() {
-	int posicionX = rand() % this->mundo->getWidth();
-	int posicionY = rand() % this->mundo->getHeight();
-	// TODO asegurar una posicion vacia
-	MobileModel* nuevoProtagonista = factory->crearProtagonista(
-		escenarioConfig.getProtagonista().getTipo(),
-		{ posicionX, posicionY }
-	);
-
-	return nuevoProtagonista;
-}
-
 void Escenario::addUser(char* username) {
 	int posicionX = rand() % this->mundo->getWidth();
 	int posicionY = rand() % this->mundo->getHeight();
@@ -281,10 +285,6 @@ void Escenario::addUser(char* username, SDL_Point position) {
 }
 
 MobileModel* Escenario::getUserModel(string username) {
-	if(username == ""){
-		// TODO eliminar cuando halla varios protagonistas de verdad !!
-		return this->protagonista;
-	}
 	MobileModel* userModel = NULL;
 	map<string, MobileModel*>::iterator found = this->usuarios.find(username);
 	if(found != this->usuarios.end()){

@@ -259,6 +259,7 @@ bool ClientGameController::pollEvents(){
 
 			point = this->renderer->proyectedPoint(point, this->escenario->getSize());
 			MobileModel* auxModel = new MobileModel();
+			auxModel->setUsername(username);
 			auxModel->setDestination(point.x, point.y);
 			this->mensajero->moverProtagonista(auxModel);
 			delete auxModel;
@@ -295,6 +296,14 @@ bool ClientGameController::play() {
 	while (!this->inicializado()) {
 		this->sleep();
 	}
+
+	MobileModel* protagonista = this->escenario->getUserModel(this->username);
+	while(protagonista == NULL){
+		this->sleep();
+		protagonista = this->escenario->getUserModel(this->username);
+	}
+
+	this->escenario->setProtagonista(protagonista);
 
 	this->renderer = new Renderer(this->config->pantalla.getAncho(),this->config->pantalla.getAlto(), this->escenario->tiposConfigList);
 		if (!this->renderer->canDraw()){

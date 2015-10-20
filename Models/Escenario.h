@@ -33,7 +33,7 @@ class Escenario {
 		MobileModel* protagonista;
 		ResourcesManager* resourcesManager;
 
-		bool cosecharEnPosicion(SDL_Point point);
+		bool cosecharEnPosicion(SDL_Point point, MobileModel* protagonista);
 		void init();
 
 	public:
@@ -49,12 +49,12 @@ class Escenario {
 		void vaciarEntidades();
 		void loop();
 
-		MobileModel* generarNuevoProtagonista();
 		SDL_Point getSize();
 		Entity* crearEntidad(EntidadConfig config, bool esProtagonista);
 		Entity* crearEntidad(const string& tipo, SDL_Point posicion, bool esProtagonista);
 		list<Entity*> getListaEntidades(); // Se usa para agregar las vistas de las entidades
 		MobileModel* getProtagonista();
+		void setProtagonista(MobileModel* protagonista);
 		bool eliminarRecursoConID(int id);
 		bool existeRecursoConID(int id);
 		Entity* getEntidadEnPosicion(SDL_Point point, bool ignoreCosechables); //recibe una posicion logica

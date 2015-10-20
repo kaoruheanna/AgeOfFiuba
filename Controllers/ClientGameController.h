@@ -24,7 +24,7 @@ public:
 	ClientGameController(Mensajero *mensajero);
 	virtual ~ClientGameController();
 	bool play();
-
+	string username;
 private:
 	Mensajero* mensajero;
 

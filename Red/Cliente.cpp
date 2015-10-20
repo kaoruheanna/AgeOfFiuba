@@ -104,6 +104,7 @@ void Cliente::empezar(char* ip, int port) {
 void* loguearse(void* args) {
 	InfoLoguearse* info = (InfoLoguearse*) args;
 	info->mensajero->loguearse((char*)info->nombre);
+	info->controller->username = string(info->nombre);
 	info->controller->play();
 	free(args);
 	return NULL;

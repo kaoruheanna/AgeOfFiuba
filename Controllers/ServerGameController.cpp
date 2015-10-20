@@ -14,7 +14,7 @@ static const string TAG = "ServerGameController";
 ServerGameController::ServerGameController(GameConfiguration *config) :  config(config) {
 	escenario = NULL;
 	debeActualizarPersonaje = false;
-	moverPersonajeAlPunto= NULL;
+	moverPersonajeAlPunto = NULL;
 }
 
 ServerGameController::~ServerGameController() {}
@@ -60,28 +60,11 @@ void ServerGameController::play() {
 }
 
 void ServerGameController::obtenerEventos() {
-	if (this->moverPersonajeAlPunto != NULL) {
-		Log().Get(TAG) << "Personaje se mueve al " << this->moverPersonajeAlPunto->first << " , " << this->moverPersonajeAlPunto->second;
-		//Directo
-		/*this->escenario->getProtagonista()->setDestination(
-				moverPersonajeAlPunto->first,moverPersonajeAlPunto->second);*/
 
-		//Con caminno minimo
-
-		SDL_Point origen = this->escenario->getProtagonista()->getPosicion();
-		queue <SDL_Point> camino = this->escenario->getPath(origen,{moverPersonajeAlPunto->first,moverPersonajeAlPunto->second});
-		this->escenario->getProtagonista()->setPath(camino);
-
-		delete this->moverPersonajeAlPunto;
-		this->moverPersonajeAlPunto = NULL;
-	}
 }
 
 void ServerGameController::enviarEventos() {
-	//if(debeActualizarPersonaje) {
-	//	debeActualizarPersonaje = false;
-		this->actualizarProtagonista();
-	//}
+	this->actualizarProtagonista();
 
 	list<Entity*>::iterator entidad;
 	for (entidad = recursos.begin(); entidad != recursos.end(); ++entidad){
@@ -123,8 +106,6 @@ void ServerGameController::actualizarProtagonista(){
 	list<Mensajero*>::iterator mensajero;
 	for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
 		Mensajero* mensajeroReal = (*mensajero);
-		mensajeroReal->actualizaPersonaje(this->escenario->getProtagonista());
-
 		map<string, MobileModel*>::iterator usuario;
 		for (usuario = this->escenario->usuarios.begin(); usuario != this->escenario->usuarios.end(); ++usuario){
 			mensajeroReal->actualizaPersonaje(usuario->second);
@@ -133,13 +114,22 @@ void ServerGameController::actualizarProtagonista(){
 }
 
 void ServerGameController::moverProtagonista(MobileModel* model) {
-	if(this->moverPersonajeAlPunto) {
-		delete this->moverPersonajeAlPunto;
+	// TODO volver a hacer sincronico
+	MobileModel* protagonista = this->escenario->getUserModel(model->getUsername());
+	if(protagonista == NULL){
+		Log().Get(TAG, logERROR) << "El personaje: " << model->getUsername() << " no existe";
+	} else {
+		//Directo
+		/*this->escenario->getProtagonista()->setDestination(
+				moverPersonajeAlPunto->first,moverPersonajeAlPunto->second);*/
+
+		//Con caminno minimo
+
+		SDL_Point origen = protagonista->getPosicion();
+		queue <SDL_Point> camino = this->escenario->getPath(origen,{model->getDestinationX(),model->getDestinationY()});
+		protagonista->setPath(camino);
+		Log().Get(TAG, logDEBUG) << "El personaje: " << model->getUsername() << " se mueve al: " << model->getDestinationX() << " , " << model->getDestinationY();
 	}
-	this->moverPersonajeAlPunto = new Posicion();
-	this->moverPersonajeAlPunto->first = model->getDestinationX();
-	this->moverPersonajeAlPunto->second = model->getDestinationY();
-	Log().Get(TAG) << "Callbac se mueve al " << this->moverPersonajeAlPunto->first << " , " << this->moverPersonajeAlPunto->second;
 }
 
 void ServerGameController::addMensajero(Mensajero* mensajero) {

@@ -41,7 +41,6 @@ void MensajeroRed::esperaMensaje() {
 				break;
 			case ERROR_NOMBRE_TOMADO:
 				this->escucha->errorDeLogueo();
-				resultado = -1; // Usuario ya tomado
 				break;
 			case ESCENARIO:
 				configuracion = new Archivo(CONFIG_CLIENT.c_str());
