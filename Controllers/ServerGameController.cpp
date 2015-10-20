@@ -97,8 +97,6 @@ void ServerGameController::enviarEventos() {
 	for(auto nuevoMensajero : this->mensajerosAgregados) {
 		this->mensajeros.push_back(nuevoMensajero);
 		if(escenario->inicializacionCorrecta) {
-			nuevoMensajero->configEscenario(this->config->getPath());
-			// TODO this->escenario->getFogOfWar(username) para obtener el fog of war
 			aparecenRecursos(nuevoMensajero,this->escenario->getListaRecursos());
 		}
 	}
@@ -143,8 +141,13 @@ void ServerGameController::moverProtagonista(MobileModel* model) {
 	}
 }
 
-void ServerGameController::addMensajero(Mensajero* mensajero) {
+void ServerGameController::addMensajero(Mensajero *mensajero, char* username) {
 	this->mensajerosAgregados.push_back(mensajero);
+	if(escenario->inicializacionCorrecta) {
+		// TODO this->escenario->getFogOfWar(username) para obtener el fog of war
+
+		mensajero->configEscenario(this->config->getPath(),this->escenario->getFogOfWar(username));
+	}
 }
 
 void ServerGameController::removeMensajero(Mensajero *mensajero) {
