@@ -543,8 +543,18 @@ void Renderer::setDrawableForMiniView(MiniView* view){
 	view->setDrawable(drawable);
 }
 
-void Renderer::drawInMiniMap(int mapPositionX, int mapPositionY, Drawable* drawable) {
+void Renderer::drawInMiniMap(int mapPositionX, int mapPositionY, Drawable* drawable, bool admiteNublado) {
 	SDL_Point windowPoint = {0,0};
+
+	SDL_Point currentTile = { mapPositionX / TILE_HEIGHT_PIXELS, mapPositionY / TILE_HEIGHT_PIXELS };
+	EstadoDeVisibilidad currentTileState = this->fog->getEstado(currentTile.x,currentTile.y);
+
+	if (currentTileState == OCULTO){return;}
+
+	if (currentTileState == NUBLADO && !admiteNublado){
+		return;
+	}
+
 	// Cambio a coordenadas isometricas
 	windowPoint.x = (mapPositionX  - mapPositionY);
 	windowPoint.y = (mapPositionX  + mapPositionY) / 2;
@@ -560,15 +570,13 @@ void Renderer::drawInMiniMap(int mapPositionX, int mapPositionY, Drawable* drawa
 	renderQuad.w = (originalQuad.w * factor);
 	renderQuad.h = (originalQuad.h * factor);
 
-	SDL_Point currentTile = { mapPositionX / TILE_HEIGHT_PIXELS, mapPositionY / TILE_HEIGHT_PIXELS };
-	EstadoDeVisibilidad currentTileState = this->fog->getEstado(currentTile.x,currentTile.y);
-	if (currentTileState != OCULTO){
-			if(currentTileState == VISIBLE) SDL_SetTextureColorMod( drawable->getTexture(), FOG_VISIBLE,FOG_VISIBLE,FOG_VISIBLE );
-			else if(currentTileState == NUBLADO) SDL_SetTextureColorMod( drawable->getTexture(), FOG_VISITED,FOG_VISITED,FOG_VISITED );
+
+	if(currentTileState == VISIBLE) SDL_SetTextureColorMod( drawable->getTexture(), FOG_VISIBLE,FOG_VISIBLE,FOG_VISIBLE );
+	else if(currentTileState == NUBLADO) SDL_SetTextureColorMod( drawable->getTexture(), FOG_VISITED,FOG_VISITED,FOG_VISITED );
 
 
 	SDL_RenderCopy(sdlRenderer, drawable->getTexture(), NULL, &renderQuad);
-	}
+
 }
 
 void Renderer::setFog(int ancho,int alto){

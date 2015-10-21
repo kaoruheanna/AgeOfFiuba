@@ -53,7 +53,7 @@ public:
 	void updatedEscenario();
 	void setMiniEscenarioView(MiniEscenarioView *miniEscenarioView);
 	void updatedMiniEscenario();
-	void drawInMiniMap(int mapPositionX, int mapPositionY, Drawable* drawable);
+	void drawInMiniMap(int mapPositionX, int mapPositionY, Drawable* drawable, bool admiteNublado);
 	SDL_Point escenarioSize();
 	void setFog(int ancho, int alto);
 	void fogUpdate(int posicionX, int posicionY);
