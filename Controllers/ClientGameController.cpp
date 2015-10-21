@@ -163,15 +163,12 @@ void ClientGameController::initWindowSizes() {
 	finalPointWindowWrapper.x = -intialWindowWrapperRight.x;
 	finalPointWindowWrapper.y = -intialWindowWrapperBottom.y;
 
-	/*
+
 	Log().Get(TAG) << "Pos inicial " << this->renderer->mainTilePosition.x << "," << this->renderer->mainTilePosition.y;
 
 	SDL_Point posicionInicial = this->renderer->mapToWindowPoint(posicionInicialProtagonista);
-	//posicionInicial.x = -posicionInicial.x + (this->config->pantalla.getAncho()/2);
-	//posicionInicial.y = -posicionInicial.y + this->config->pantalla.getAlto()/2;
-	this->renderer->mainTilePosition = posicionInicial;
-	Log().Get(TAG) << "Pos seteada " << posicionInicial.x << "," << posicionInicial.y;*/
-
+	this->moveToPoint({	-posicionInicial.x + this->config->pantalla.getAncho(),
+						-posicionInicial.y + (this->config->pantalla.getAlto()/2)});
 }
 
 float ClientGameController::scrollingSpeedX(int x) {
