@@ -101,7 +101,7 @@ void* atenderCliente(void* arg) {
 			// Si se pudo loguear empieza el flow con el controller
 			MensajeroRed* mensajero = new MensajeroRed(info->socket);
 			mensajero->setMensajero(info->servidor->modelos);
-			info->servidor->modelos->addMensajero(mensajero);
+			info->servidor->modelos->addMensajero(mensajero, username);
 			pthread_t pinger; // Thread que verifica que la conexion sea correcta
 			pthread_create(&pinger, NULL, pingearCliente, (void*)mensajero);
 			mensajero->esperaMensaje();

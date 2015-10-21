@@ -221,6 +221,7 @@ void Escenario::loop() {
 		protagonista = found->second;
 		if(protagonista->updatePosition()) {
 			actualizarPersonajes = true;
+			this->actualizarFogOfWar(protagonista);
 		}
 
 		SDL_Point point = this->mundo->getTileForPosition(protagonista->getPosicion());
@@ -303,4 +304,31 @@ MobileModel* Escenario::getUserModel(string username) {
 		userModel = found->second;
 	}
 	return userModel;
+}
+
+void Escenario::actualizarFogOfWar(MobileModel* user) {
+	string username = user->getUsername();
+	FogOfWar* fog = NULL;
+	map<string, FogOfWar*>::iterator found = this->fogForUser.find(username);
+	if(found != this->fogForUser.end()){
+		fog = found->second;
+	} else {
+		fog = new FogOfWar(this->mundo->getWidth(),this->mundo->getHeight());
+		this->fogForUser.insert(pair<string, FogOfWar*>(username, fog));
+	}
+	SDL_Point positionCharacter = user->getPosicion();
+	positionCharacter = this->mundo->getTileForPosition(positionCharacter);
+	fog->update(positionCharacter.x,positionCharacter.y);
+}
+
+FogOfWar* Escenario::getFogOfWar(char* username) {
+	FogOfWar* fog = NULL;
+	map<string, FogOfWar*>::iterator found = this->fogForUser.find(username);
+	if(found != this->fogForUser.end()){
+		fog = found->second;
+	} else {
+		fog = new FogOfWar(this->mundo->getWidth(),this->mundo->getHeight());
+		this->fogForUser.insert(pair<string, FogOfWar*>(username, fog));
+	}
+	return fog;
 }

@@ -19,14 +19,14 @@ MensajeroLocal::MensajeroLocal(ServerGameController* server) : Mensajero() {
 
 MensajeroLocal::~MensajeroLocal() {}
 
-void MensajeroLocal::configEscenario(const string path) {
-	this->cliente->configEscenario(path);
+void MensajeroLocal::configEscenario(const string path, FogOfWar* fog) {
+	this->cliente->configEscenario(path, NULL);
 }
 
 
 void MensajeroLocal::addClient(MensajeroCliente* client) {
 	this->cliente = client;
-	this->server->addMensajero(this);
+	this->server->addMensajero(this, "");
 }
 
 void MensajeroLocal::moverProtagonista(MobileModel* model) {

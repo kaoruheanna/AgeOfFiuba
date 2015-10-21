@@ -23,7 +23,7 @@ public:
 	virtual void moverProtagonista(MobileModel* model);
 
 	//Metodos Servidor->Cliente
-	virtual void configEscenario(const string path);
+	virtual void configEscenario(const string path, FogOfWar* fog);
 	virtual void apareceRecurso(Resource* recurso);
 	virtual void desapareceRecurso(Resource* recurso);
 	virtual void actualizaPersonaje(MobileModel* entity);

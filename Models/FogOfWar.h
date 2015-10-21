@@ -10,6 +10,7 @@
 
 #include <list>
 #include "Escenario.h"
+#include "../Red/Serializable.h"
 
 enum EstadoDeVisibilidad{
 	OCULTO,
@@ -19,8 +20,9 @@ enum EstadoDeVisibilidad{
 
 
 
-class FogOfWar {
+class FogOfWar: public Serializable {
 public:
+	FogOfWar();
 	FogOfWar(int ancho, int alto);
 	void initialice();
 	void update(int posicionX, int posicionY);
@@ -28,8 +30,11 @@ public:
 	void close();
 	~FogOfWar();
 
-
-
+	// Serializable methods
+	virtual int getTotalBlockCount();
+	virtual int getBlockSizeFromIndex(int currentIndex);
+	virtual void getBlockFromIndex(int currentIndex, void* buffer);
+	virtual void deserialize(int totalBlockCount, int currentBlock, void* blockData);
 private:
 	EstadoDeVisibilidad** matrizDeVisibilidad;
 	int ancho;

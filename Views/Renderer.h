@@ -64,6 +64,7 @@ public:
 	void setCartel(string message);
 	void hideCartel();
 
+	FogOfWar* fog;
 private:
 	bool successfullInit;
 	SDL_Window* window;
@@ -78,7 +79,6 @@ private:
 	TTF_Font *textFont;
 	EscenarioView *escenarioView;
 	MiniEscenarioView *miniEscenarioView;
-	FogOfWar* fog;
 	std::pair<SDL_Point,SDL_Point> selectedTilesCoordinates;
 	bool hasSelectedTiles;
 

@@ -26,6 +26,8 @@ public:
 	virtual void actualizaPersonaje(MobileModel* entity){};
 };
 
+class FogOfWar;
+
 class Escenario {
 	private:
 		string name;
@@ -43,11 +45,14 @@ class Escenario {
 		bool updated;
 
 		EscenarioDelagate* delegate;
+		map<string, FogOfWar*> fogForUser;
 
 		bool agregarEntidad(Entity*);
 		bool construirEntidad(Entity*,SDL_Point);
 		void vaciarEntidades();
 		void loop();
+		void actualizarFogOfWar(MobileModel* user);
+		FogOfWar* getFogOfWar(char* username);
 
 		SDL_Point getSize();
 		Entity* crearEntidad(EntidadConfig config, bool esProtagonista);

@@ -32,6 +32,7 @@ void MensajeroRed::esperaMensaje() {
 	Archivo* configuracion = NULL;
 	MobileModel* modelo = NULL;
 	Resource* resource = NULL;
+	FogOfWar* fog = NULL;
 	int resultado = recibirSerializable(this->socket, recibido);
 	printf("MensajeroRed - Recibi resultado: %i con mensaje: %s\n", resultado, recibido->toString());
 	while(resultado > 0){
@@ -47,7 +48,9 @@ void MensajeroRed::esperaMensaje() {
 				resultado = recibirSerializable(this->socket, configuracion);
 				//printf("MensajeroRed - Recibi escenario con resultado: %i\n", resultado);
 				delete configuracion;
-				this->escucha->configEscenario(CONFIG_CLIENT);
+				fog = new FogOfWar();
+				resultado = recibirSerializable(this->socket, fog);
+				this->escucha->configEscenario(CONFIG_CLIENT, fog);
 				break;
 			case APARECE_PERSONAJE:
 				modelo = new MobileModel();
@@ -110,7 +113,7 @@ void MensajeroRed::errorDeLogueo() {
 	//printf("Servidor - Responde al mensaje con resultado: %i\n", resultado);
 	delete mensaje;
 }
-void MensajeroRed::configEscenario(const string path) {
+void MensajeroRed::configEscenario(const string path, FogOfWar* fog) {
 	Mensaje* mensaje = new Mensaje(ESCENARIO, this->sender);
 	int resultado = enviarSerializable(this->socket, mensaje);
 	printf("Cliente - configEscenario con resultado: %i\n", resultado);
@@ -119,6 +122,7 @@ void MensajeroRed::configEscenario(const string path) {
 	resultado = enviarSerializable(this->socket, archivo);
 	printf("Cliente - yaml con resultado: %i\n", resultado);
 	delete archivo;
+	resultado = enviarSerializable(this->socket, fog);
 }
 
 void MensajeroRed::apareceRecurso(Resource* recurso) {

@@ -36,6 +36,8 @@ private:
 	Renderer *renderer;
 	Escenario* escenario;
 	GameConfiguration* config;
+
+	FogOfWar* fogAux;
 	bool updated;
 
 	bool pollEvents();
@@ -67,7 +69,7 @@ private:
 
 	//Mensajero Cliente
 	virtual void errorDeLogueo();
-	virtual void configEscenario(const string path);
+	virtual void configEscenario(const string path, FogOfWar* fog);
 	virtual void apareceRecurso(Resource* recurso);
 	virtual void desapareceRecurso(Resource* recurso);
 	virtual void actualizaPersonaje(MobileModel* entity);

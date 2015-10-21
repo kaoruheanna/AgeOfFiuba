@@ -98,6 +98,7 @@ void ServerGameController::enviarEventos() {
 		this->mensajeros.push_back(nuevoMensajero);
 		if(escenario->inicializacionCorrecta) {
 			nuevoMensajero->configEscenario(this->config->getPath());
+			// TODO this->escenario->getFogOfWar(username) para obtener el fog of war
 			aparecenRecursos(nuevoMensajero,this->escenario->getListaRecursos());
 		}
 	}

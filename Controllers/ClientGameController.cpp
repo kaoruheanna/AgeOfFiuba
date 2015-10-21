@@ -315,7 +315,12 @@ bool ClientGameController::play() {
 	this->updated = true;
 	this->initWindowSizes();
 
-	this->renderer->setFog(this->escenario->mundo->getWidth(),this->escenario->mundo->getHeight());
+	if(this->fogAux != NULL){
+		this->renderer->fog = this->fogAux;
+		this->fogAux = NULL;
+	} else {
+		this->renderer->setFog(this->escenario->mundo->getWidth(),this->escenario->mundo->getHeight());
+	}
 	SDL_Point positionCharacter = {0,0};
 
 	bool shouldRestart = false;
@@ -388,7 +393,8 @@ void ClientGameController::desapareceRecurso(Resource* recurso){
 	}
 }
 
-void ClientGameController::configEscenario(const string path) {
+void ClientGameController::configEscenario(const string path, FogOfWar* fog) {
+	this->fogAux = fog;
 	this->config = new GameConfiguration(path);
 	this->escenario = new Escenario(this->config->getEscenario(), this->config->getTipos());
 }

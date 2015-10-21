@@ -19,6 +19,13 @@ FogOfWar::FogOfWar(int ancho, int alto){
 	this->TilesVisitados.clear();
 }
 
+FogOfWar::FogOfWar() {
+	this->ancho = -1;
+	this->alto = -1;
+	this->matrizDeVisibilidad = NULL;
+	this->TilesVisitados.clear();
+}
+
 void FogOfWar::initialice(){
 	int i;
 	int j;
@@ -72,4 +79,54 @@ void FogOfWar::close(){
 
 FogOfWar::~FogOfWar() {
 	// TODO Auto-generated destructor stub
+}
+
+// Serializable methods
+int FogOfWar::getTotalBlockCount() {
+	return this->alto * this->ancho + 2;
+}
+int FogOfWar::getBlockSizeFromIndex(int currentIndex) {
+	if(currentIndex < 2){
+		return sizeof(int);
+	}
+	return sizeof(EstadoDeVisibilidad);
+}
+void FogOfWar::getBlockFromIndex(int currentIndex, void* buffer) {
+	if(currentIndex < 2){
+		if(currentIndex == 0){
+			memcpy(buffer, &this->alto, sizeof(int));
+		} else {
+			memcpy(buffer, &this->ancho, sizeof(int));
+		}
+		return;
+	}
+	currentIndex = currentIndex - 2;
+	int fila = currentIndex % this->ancho;
+	int columna = currentIndex - (fila * this->ancho);
+	EstadoDeVisibilidad estado = this->matrizDeVisibilidad[fila][columna];
+	memcpy(buffer, &estado, sizeof(EstadoDeVisibilidad));
+}
+void FogOfWar::deserialize(int totalBlockCount, int currentBlock, void* blockData) {
+	if(currentBlock < 2){
+		if(currentBlock == 0){
+			memcpy(&this->alto, blockData, sizeof(int));
+		} else {
+			memcpy(&this->ancho, blockData, sizeof(int));
+			// Init array
+			EstadoDeVisibilidad** matriz = new EstadoDeVisibilidad*[ancho];
+			for (int x = 0; x < ancho; ++x){
+				matriz[x] = new EstadoDeVisibilidad[alto];
+			}
+			this->matrizDeVisibilidad = matriz;
+			this->initialice();
+			this->TilesVisitados.clear();
+		}
+		return;
+	}
+	currentBlock = currentBlock - 2;
+	int fila = currentBlock % this->ancho;
+	int columna = currentBlock - (fila * this->ancho);
+	EstadoDeVisibilidad estado;
+	memcpy(&estado, blockData, sizeof(EstadoDeVisibilidad));
+	this->matrizDeVisibilidad[fila][columna] = estado;
 }

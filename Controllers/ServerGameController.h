@@ -14,6 +14,7 @@
 #include "../Configuration/GameConfiguration.h"
 #include "MensajeroServidor.h"
 #include "Mensajero.h"
+#include "../Models/FogOfWar.h"
 
 class Mensajero;
 
@@ -31,7 +32,7 @@ public:
 	virtual void moverProtagonista(MobileModel* entity);
 
 	Escenario* escenario;
-	virtual void addMensajero(Mensajero *mensajero);
+	virtual void addMensajero(Mensajero *mensajero, char* username);
 	void removeMensajero(Mensajero *mesajero);
 	bool userExists(char* username);
 	bool userActive(char* username);

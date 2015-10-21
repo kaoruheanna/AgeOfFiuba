@@ -12,6 +12,7 @@
 #include "../Models/MobileModel.h"
 #include "../Models/Escenario.h"
 #include "../Configuration/GameConfiguration.h"
+#include "../Models/FogOfWar.h"
 
 class MensajeroCliente {
 public:
@@ -22,7 +23,8 @@ public:
 	virtual void ping(){};
 	// Metodos Servidor -> Cliente
 	virtual void errorDeLogueo(){};
-	virtual void configEscenario(const string path){};
+	virtual void configEscenario(const string path, FogOfWar* fog){};
+	virtual void recibirForOfWar(FogOfWar* fog){};
 	virtual void apareceRecurso(Resource* recurso){};
 	virtual void desapareceRecurso(Resource* recurso){};
 	virtual void actualizaPersonaje(MobileModel* entity){};
