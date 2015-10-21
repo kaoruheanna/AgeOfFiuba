@@ -95,6 +95,9 @@ void Cliente::empezar(char* ip, int port) {
 	pthread_create(&pinger, NULL, pingear, (void*)info);
 	pthread_create(&thread, NULL, loguearse, (void*)info);
 	mensajero->esperaMensaje();
+	while(clientGameController->isAlive()){
+		sleep(1);
+	}
 	pthread_cancel(thread);
 	pthread_cancel(pinger);
 	free(info);

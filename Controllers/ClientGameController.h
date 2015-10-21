@@ -24,11 +24,13 @@ public:
 	ClientGameController(Mensajero *mensajero);
 	virtual ~ClientGameController();
 	bool play();
+	bool isAlive();
 	string username;
 private:
 	Mensajero* mensajero;
 
 	bool shouldQuit;
+	bool serverError;
 	EscenarioView *escenarioView;
 	MiniEscenarioView *miniEscenarioView;
 	Renderer *renderer;

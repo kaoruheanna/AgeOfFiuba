@@ -233,7 +233,7 @@ bool ClientGameController::pollEvents(){
 			pressedR = true;
 		}
 
-		if (e.type == SDL_MOUSEBUTTONDOWN){
+		if (e.type == SDL_MOUSEBUTTONDOWN && !this->serverError){
 			//Get mouse position
 			int x, y;
 			SDL_GetMouseState(&x, &y);
@@ -319,8 +319,9 @@ bool ClientGameController::play() {
 	SDL_Point positionCharacter = {0,0};
 
 	bool shouldRestart = false;
+
 	//While application is running
-	while( !this->shouldQuit && !shouldRestart ) {
+	while( !this->shouldQuit && !shouldRestart && !this->serverError ) {
 		if(this->updated) {
 			actualizarEntidades(this->escenario->getListaEntidades());
 			this->updated = false;
@@ -338,8 +339,18 @@ bool ClientGameController::play() {
 		this->mensajero->ping();
 	}
 
+	while( !this->shouldQuit && !shouldRestart ){
+		shouldRestart = this->pollEvents();
+		this->renderer->drawViews();
+		this->sleep();
+	}
+
 	this->close();
 	return shouldRestart;
+}
+
+bool ClientGameController::isAlive() {
+	return !this->shouldQuit;
 }
 
 void ClientGameController::sleep(){
@@ -383,8 +394,13 @@ void ClientGameController::configEscenario(const string path) {
 }
 
 void ClientGameController::errorDeLogueo() {
-//	this->renderer->setCartel("Muestro el cartel");
-	this->shouldQuit = true;
+	if(this->renderer != NULL){
+		this->renderer->setCartel("Hay un error en la conexion.");
+		this->serverError = true;
+	} else {
+		printf("El nombre escrito ya esta tomado. Por favor elija otro.");
+		this->shouldQuit = true;
+	}
 }
 
 bool ClientGameController::inicializado() {
