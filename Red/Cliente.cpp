@@ -110,6 +110,7 @@ void* loguearse(void* args) {
 	info->mensajero->loguearse((char*)info->nombre);
 	info->controller->username = string(info->nombre);
 	info->controller->play();
+	shutdown(info->mensajero->getSocket(), 2); // Cerrar controller => Cerrar el socket
 	return NULL;
 }
 
