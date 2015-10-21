@@ -93,14 +93,13 @@ SDL_Point Map::getCenteredPositionForTile(SDL_Point point) {
 
 queue <SDL_Point> Map::obtenerCamino(SDL_Point origen, SDL_Point destino){
 	queue<SDL_Point> camino2;
+	SDL_Point punto;
 
 	//transformo las coordenadas a tiles.
 	SDL_Point origenMap = this->getTileForPosition(origen);
 	SDL_Point destinoMap = this->getTileForPosition(destino);
 
 	deque <SDL_Point> camino = this->baldosas->obtenerCamino(origenMap, destinoMap);
-
-	SDL_Point punto;
 
 	while (!camino.empty()){
 		punto = camino.back();
