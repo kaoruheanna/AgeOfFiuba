@@ -57,6 +57,14 @@ void Entity::setPosicion(SDL_Point nueva_posicion){
 	this -> posicion = nueva_posicion;
 }
 
+bool Entity::esJugador() {
+	return false;
+}
+
+string Entity::getNombreAMostrar() {
+	return this->nombre;
+}
+
 
 //Serializar
 // Metodos de serializacion

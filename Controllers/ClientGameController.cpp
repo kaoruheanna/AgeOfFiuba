@@ -261,11 +261,18 @@ bool ClientGameController::pollEvents(){
 }
 
 void ClientGameController::setMessageForSelectedEntity(Entity* entity){
-	if (entity == this->escenario->getProtagonista()){
-		this->renderer->setMessagesInMenu("Protagonista",entity->getNombre());
+	if (!(entity->esJugador())){
+		this->renderer->setMessagesInMenu("Entidad",entity->getNombreAMostrar());
 		return;
 	}
-	this->renderer->setMessagesInMenu("Entidad",entity->getNombre());
+
+	if (entity == this->escenario->getProtagonista()){
+		this->renderer->setMessagesInMenu("Protagonista",entity->getNombreAMostrar());
+		return;
+	}
+
+	this->renderer->setMessagesInMenu("Jugador",entity->getNombreAMostrar());
+
 }
 
 

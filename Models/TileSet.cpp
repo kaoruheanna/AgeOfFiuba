@@ -62,7 +62,6 @@ bool TileSet::sectorEstaBloqueado(SDL_Point origen, SDL_Point fin){
 			if (this->matriz[i][j]) return true;
 		}
 	}
-
 	return false;
 }
 
@@ -83,12 +82,13 @@ std::list<Posicion> TileSet::vecinos(Posicion baldosa){
 	return lista_de_vecinos;
 }
 
-
-
-
+int TileSet::distancia(Posicion a, Posicion b){
+	//return sqrt( pow((b.first - a.first),2) + pow((b.second - a.second), 2));
+	return abs(b.first - a.first) + abs(b.second - a.second);
+}
 
 //Devuelve el valor heuristico de ir de "a" a "b"
-int TileSet::distancia(Posicion a, Posicion b){
+int TileSet::heuristica(Posicion a, Posicion b){
 	return sqrt( pow((b.first - a.first),2) + pow((b.second - a.second), 2));
 	//return abs(b.first - a.first) + abs(b.second - a.second);
 }
@@ -153,7 +153,7 @@ pointMap TileSet::caminoMinimo(Posicion origen, Posicion destino, Posicion &dest
 			int nuevo_costo = costo_hasta_ahora[actual] + this->valorArista(actual, prox);
 			if (!costo_hasta_ahora.count(prox) || nuevo_costo < costo_hasta_ahora[prox]) {
 				costo_hasta_ahora[prox] = nuevo_costo;
-				int prioridad = nuevo_costo + this->distancia(prox, destino); // distancia es la heuristica
+				int prioridad = nuevo_costo + this->heuristica(prox, destino); // distancia es la heuristica
 				frontera.put(prox, prioridad);
 				desde_donde_vino[prox] = actual;
 				posible_destino = prox;
@@ -176,8 +176,7 @@ deque<SDL_Point> TileSet::obtenerCamino(SDL_Point origen, SDL_Point destino){
 	Posicion orig = {origen.x, origen.y};
 
 	if (lugares.empty()){ //si no tengo un camino
-		camino.push_back(origen);
-		return camino; //si no existe el camino minimo devuelvo el origen.
+		return camino; //si no existe el camino minimo devuelvo el camino vacio.
 	}
 	Posicion actual = destino_real;
 	while (actual != orig){

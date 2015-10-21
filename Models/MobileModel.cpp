@@ -195,6 +195,13 @@ void MobileModel::clearPath(){
 	this->path.swap(empty);
 }
 
+bool MobileModel::esJugador() {
+	return true;
+}
+
+string MobileModel::getNombreAMostrar(){
+	return this->username;
+}
 
 // TODO mandar y recibir los recursos
 

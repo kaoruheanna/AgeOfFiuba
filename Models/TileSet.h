@@ -66,6 +66,7 @@ public:
 
 	std::list<Posicion> vecinos(Posicion baldosa);
 	int distancia(Posicion a, Posicion b); // heuristica a usar en A* (distancia euclideana)
+	int heuristica(Posicion a, Posicion b);
 	int valorArista(Posicion a, Posicion b);
 	bool esVecino(Posicion a, Posicion b);
 	bool posicionValida(Posicion posicion);
