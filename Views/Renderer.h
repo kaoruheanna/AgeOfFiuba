@@ -29,6 +29,7 @@ class EscenarioView;
 class MiniEscenarioView;
 class MiniView;
 class TopBar;
+class Cartel;
 
 class Renderer {
 public:
@@ -60,6 +61,8 @@ public:
 	void setProtagonista(MobileModel *protagonista);
 	void setMessagesInMenu(std::string firstMessage, std::string secondMessage);
 	void setSelectedTilesCoordinates(bool selected,std::pair<SDL_Point,SDL_Point> tiles);
+	void setCartel(string message);
+	void hideCartel();
 
 private:
 	bool successfullInit;
@@ -71,6 +74,7 @@ private:
 	Drawable* miniMissingImageDrawable;
 	ScreenMenu* screenMenu;
 	TopBar* topBar;
+	Cartel* cartel;
 	TTF_Font *textFont;
 	EscenarioView *escenarioView;
 	MiniEscenarioView *miniEscenarioView;
@@ -89,6 +93,7 @@ private:
 	void drawTopBar();
 	void drawMenu();
 	void drawEscenario();
+	void drawCartelIfShould();
 	void drawMiniEscenario();
 	int menuOriginY();
 	void setDrawableForView(View* view);

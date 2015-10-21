@@ -15,6 +15,7 @@
 #include "Menu/MiniMapView.h"
 #include "Menu/MiniView.h"
 #include "TopBar/TopBar.h"
+#include "Cartel/Cartel.h"
 
 const std::string TAG = "Renderer";
 
@@ -33,6 +34,7 @@ Renderer::Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos) {
 	this->topBar = new TopBar(this->screenWidth,TOP_BAR_HEIGHT);
 	this->fog = NULL;
 	this->hasSelectedTiles = false;
+	this->cartel = NULL;
 
 	bool didInitSDL = this->initSDL();
 	bool didLoadMedia = this->loadMedia(tipos);
@@ -222,6 +224,10 @@ void Renderer::close() {
 	delete this->screenMenu;
 	delete this->topBar;
 
+	if (this->cartel){
+		delete this->cartel;
+	}
+
 	//Destroy window
 	SDL_DestroyRenderer(this->sdlRenderer);
 	SDL_DestroyWindow(this->window);
@@ -303,6 +309,14 @@ void Renderer::drawEscenario() {
 		}
 	}
 	this->drawablesToPaint.clear();
+
+	this->drawCartelIfShould();
+}
+
+void Renderer::drawCartelIfShould(){
+	if (this->cartel){
+		this->cartel->render(this);
+	}
 }
 
 void Renderer::drawMenu(){
@@ -576,4 +590,20 @@ void Renderer::setMessagesInMenu(std::string firstMessage, std::string secondMes
 void Renderer::setSelectedTilesCoordinates(bool selected,std::pair<SDL_Point,SDL_Point> tiles){
 	this->hasSelectedTiles = selected;
 	this->selectedTilesCoordinates = tiles;
+}
+
+void Renderer::setCartel(string message){
+	if (!this->cartel){
+		int x = (this->screenWidth - CARTEL_WIDTH) / 2;
+		int y = 100;
+		this->cartel = new Cartel(x,y);
+	}
+	this->cartel->setMessage(message);
+}
+
+void Renderer::hideCartel(){
+	if (this->cartel){
+		delete this->cartel;
+		this->cartel = NULL;
+	}
 }

@@ -382,7 +382,7 @@ void ClientGameController::configEscenario(const string path) {
 }
 
 void ClientGameController::errorDeLogueo() {
-	printf("Cliente - error de logueo\n");
+//	this->renderer->setCartel("Muestro el cartel");
 	this->shouldQuit = true;
 }
 
