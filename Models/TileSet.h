@@ -65,6 +65,7 @@ public:
 	bool sectorEstaBloqueado(SDL_Point, SDL_Point);
 
 	std::list<Posicion> vecinos(Posicion baldosa);
+	std::list<Posicion> vecinosTotales(Posicion baldosa); //devuelve todas las posiciones adyacentes
 	int distancia(Posicion a, Posicion b); // heuristica a usar en A* (distancia euclideana)
 	int heuristica(Posicion a, Posicion b);
 	int valorArista(Posicion a, Posicion b);
@@ -73,6 +74,8 @@ public:
 	bool posicionOcupada(Posicion posicion);
 	pointMap caminoMinimo(Posicion origen, Posicion destino, Posicion &destino_real);
 	deque<SDL_Point> obtenerCamino(SDL_Point origen, SDL_Point destino);
+	Posicion buscarDestinoMasCercano(Posicion origen, Posicion destino);
+
 
 	virtual ~TileSet();
 };

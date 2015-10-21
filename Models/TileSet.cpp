@@ -82,6 +82,22 @@ std::list<Posicion> TileSet::vecinos(Posicion baldosa){
 	return lista_de_vecinos;
 }
 
+std::list<Posicion> TileSet::vecinosTotales(Posicion baldosa){
+	list<Posicion>lista_de_vecinos;
+	int x = baldosa.first;
+	int y = baldosa.second;
+	for (int i=-1; i<2; i++){
+		for (int j=-1; j<2; j++){
+			int x_v = x+i;
+			int y_v = y+j;
+			if (this->posicionValida({x_v,y_v})){
+				lista_de_vecinos.push_front({x_v,y_v});
+			}
+		}
+	}
+	return lista_de_vecinos;
+}
+
 int TileSet::distancia(Posicion a, Posicion b){
 	//return sqrt( pow((b.first - a.first),2) + pow((b.second - a.second), 2));
 	return abs(b.first - a.first) + abs(b.second - a.second);
@@ -132,11 +148,11 @@ pointMap TileSet::caminoMinimo(Posicion origen, Posicion destino, Posicion &dest
 	pointMap desde_donde_vino;
 	costMap costo_hasta_ahora;
 	Posicion posible_destino;
+	Posicion destino_a = destino;
 
 	if (this->posicionOcupada(destino)){
-		desde_donde_vino [origen] = origen;
-		destino_real = origen;
-		return desde_donde_vino;
+		list<Posicion> vacio;
+		destino_a = this->buscarDestinoMasCercano(origen, destino);
 	}
 
 	desde_donde_vino [origen] = origen;
@@ -144,8 +160,8 @@ pointMap TileSet::caminoMinimo(Posicion origen, Posicion destino, Posicion &dest
 
 	while (!frontera.empty()) {
 		Posicion actual = frontera.get();
-		if (actual == destino) {
-			destino_real = destino;
+		if (actual == destino_a) {
+			destino_real = destino_a;
 			return desde_donde_vino;
 		}
 
@@ -153,7 +169,7 @@ pointMap TileSet::caminoMinimo(Posicion origen, Posicion destino, Posicion &dest
 			int nuevo_costo = costo_hasta_ahora[actual] + this->valorArista(actual, prox);
 			if (!costo_hasta_ahora.count(prox) || nuevo_costo < costo_hasta_ahora[prox]) {
 				costo_hasta_ahora[prox] = nuevo_costo;
-				int prioridad = nuevo_costo + this->heuristica(prox, destino); // distancia es la heuristica
+				int prioridad = nuevo_costo + this->heuristica(prox, destino_a); // distancia es la heuristica
 				frontera.put(prox, prioridad);
 				desde_donde_vino[prox] = actual;
 				posible_destino = prox;
@@ -161,10 +177,29 @@ pointMap TileSet::caminoMinimo(Posicion origen, Posicion destino, Posicion &dest
 			}
 		}
 	}
-	if (destino_real != destino){
+	if (destino_real != destino_a){
 		cout<<"recorro todo"<<endl;
+		destino_a = this->buscarDestinoMasCercano(origen, destino);
+		return this->caminoMinimo(origen,destino_a,destino_real);
 	}
+
 	return desde_donde_vino; // si sale del while es porque no llego al destino, el camino es hasta el lugar mas cercano al destino.
+}
+
+Posicion TileSet::buscarDestinoMasCercano(Posicion origen, Posicion destino){
+	/*Posicion nuevo_destino = destino;
+	int dx = origen.first - destino.first;
+	int dy = origen.second - destino.second;
+	dx = dx/sqrt(pow(dx,2)+pow(dy,2));
+	dy = dy/sqrt(pow(dx,2)+pow(dy,2));
+	int i = 0;
+	while (this->posicionOcupada(nuevo_destino)){
+		nuevo_destino = {destino.first+(dx*i),destino.second+(dy*i)};
+		i++;
+	}
+	return nuevo_destino;*/
+
+	return origen;
 }
 
 deque<SDL_Point> TileSet::obtenerCamino(SDL_Point origen, SDL_Point destino){
@@ -175,9 +210,13 @@ deque<SDL_Point> TileSet::obtenerCamino(SDL_Point origen, SDL_Point destino){
 	deque<SDL_Point> camino;
 	Posicion orig = {origen.x, origen.y};
 
-	if (lugares.empty()){ //si no tengo un camino
+	//todo si no puedo llegar a mi destino no hago nada, habria que buscar la posicion mas cercana.
+	if (lugares.empty()){
 		return camino; //si no existe el camino minimo devuelvo el camino vacio.
 	}
+	/*if (destino_real.first != destino.x or destino_real.second != destino.y){
+		return camino;
+	}*/
 	Posicion actual = destino_real;
 	while (actual != orig){
 		camino.push_back({actual.first, actual.second});
