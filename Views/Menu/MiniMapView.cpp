@@ -28,7 +28,7 @@ void MiniMapView::render(Renderer* renderer ){
 	for (int i=0; i<width ; i++){
 		for (int j=0; j<height; j++){
 			SDL_Point point = this->model->getPositionForTile({ j, i });
-			renderer->drawInMiniMap(point.x, point.y, this->drawable);
+			renderer->drawInMiniMap(point.x, point.y, this->drawable,true);
 		}
 	}
 }

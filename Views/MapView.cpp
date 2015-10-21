@@ -29,7 +29,7 @@ void MapView::render(Renderer* renderer ){
 	for (int i=0; i<width ; i++){
 		for (int j=0; j<height; j++){
 			SDL_Point point = this->model->getPositionForTile({ j, i });
-			renderer->draw(point.x, point.y, this->drawable);
+			renderer->draw(point.x, point.y, this->drawable,true);
 		}
 	}
 }

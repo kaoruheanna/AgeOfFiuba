@@ -45,41 +45,44 @@ void MensajeroRed::esperaMensaje() {
 			case ESCENARIO:
 				configuracion = new Archivo(CONFIG_CLIENT.c_str());
 				resultado = recibirSerializable(this->socket, configuracion);
-				printf("MensajeroRed - Recibi escenario con resultado: %i\n", resultado);
+				//printf("MensajeroRed - Recibi escenario con resultado: %i\n", resultado);
 				delete configuracion;
 				this->escucha->configEscenario(CONFIG_CLIENT);
 				break;
 			case APARECE_PERSONAJE:
 				modelo = new MobileModel();
 				resultado = recibirSerializable(this->socket, modelo);
-				printf("MensajeroRed - Recibi personaje con resultado: %i\n", resultado);
+				//printf("MensajeroRed - Recibi personaje con resultado: %i\n", resultado);
 				this->escucha->actualizaPersonaje(modelo);
 				delete modelo;
 				break;
 			case MOVER_PERSONAJE:
 				modelo = new MobileModel();
 				resultado = recibirSerializable(this->socket, modelo);
-				printf("MensajeroRed - Recibi personaje con resultado: %i y sender: %s\n", resultado, recibido->getSender());
+				//printf("MensajeroRed - Recibi personaje con resultado: %i y sender: %s\n", resultado, recibido->getSender());
 				this->escucha->moverProtagonista(modelo);
 				delete modelo;
 				break;
 			case APARECE_RECURSO:
 				resource = new Resource();
 				resultado = recibirSerializable(this->socket, resource);
-				printf("MensajeroRed - Recibi aparece resource con resultado: %i\n", resultado);
+				//printf("MensajeroRed - Recibi aparece resource con resultado: %i\n", resultado);
 				this->escucha->apareceRecurso(resource);
 				delete resource;
 				break;
 			case DESAPARECE_RECURSO:
 				resource = new Resource();
 				resultado = recibirSerializable(this->socket, resource);
-				printf("MensajeroRed - Recibi  desaparece resource con resultado: %i\n", resultado);
+				//printf("MensajeroRed - Recibi  desaparece resource con resultado: %i\n", resultado);
 				this->escucha->desapareceRecurso(resource);
 				delete resource;
+				break;
+			case PING:
 				break;
 			default:
 				resultado = -1; // No se pudo entender el mensaje => Cerrar la conexion
 		}
+		this->connectionAlive = (resultado > 0);
 		if(resultado > 0){
 			resultado = recibirSerializable(this->socket, recibido);
 		}
@@ -87,11 +90,22 @@ void MensajeroRed::esperaMensaje() {
 	delete recibido;
 }
 
+int MensajeroRed::getSocket() {
+	return this->socket;
+}
+
+void MensajeroRed::ping(){
+	Mensaje* mensaje = new Mensaje(PING, this->sender);
+	int resultado = enviarSerializable(this->socket, mensaje);
+	//printf("MensajeroRed - Pingea con resultado: %i\n", resultado);
+	delete mensaje;
+}
+
 // Metodos Servidor -> Cliente
 void MensajeroRed::errorDeLogueo() {
 	Mensaje* mensaje = new Mensaje(ERROR_NOMBRE_TOMADO, this->sender);
 	int resultado = enviarSerializable(this->socket, mensaje);
-	printf("Servidor - Responde al mensaje con resultado: %i\n", resultado);
+	//printf("Servidor - Responde al mensaje con resultado: %i\n", resultado);
 	delete mensaje;
 }
 void MensajeroRed::configEscenario(const string path) {
@@ -107,22 +121,22 @@ void MensajeroRed::configEscenario(const string path) {
 
 void MensajeroRed::apareceRecurso(Resource* recurso) {
 	Mensaje* mensaje = new Mensaje(APARECE_RECURSO, this->sender);
-	printf("Cliente - apareceRecurso para enviar\n");
+	//printf("Cliente - apareceRecurso para enviar\n");
 	int resultado = enviarSerializable(this->socket, mensaje);
-	printf("Cliente - apareceRecurso con resultado: %i\n", resultado);
+	//printf("Cliente - apareceRecurso con resultado: %i\n", resultado);
 	delete mensaje;
 	resultado = enviarSerializable(this->socket, recurso);
-	printf("Cliente - apareceRecurso con resultado: %i\n", resultado);
+	//printf("Cliente - apareceRecurso con resultado: %i\n", resultado);
 }
 
 void MensajeroRed::desapareceRecurso(Resource* recurso) {
 	Mensaje* mensaje = new Mensaje(DESAPARECE_RECURSO, this->sender);
-	printf("Cliente - desapareceRecurso para enviar\n");
+	//printf("Cliente - desapareceRecurso para enviar\n");
 	int resultado = enviarSerializable(this->socket, mensaje);
-	printf("Cliente - desapareceRecurso con resultado: %i\n", resultado);
+	//printf("Cliente - desapareceRecurso con resultado: %i\n", resultado);
 	delete mensaje;
 	resultado = enviarSerializable(this->socket, recurso);
-	printf("Cliente - desapareceRecurso con resultado: %i\n", resultado);
+	//printf("Cliente - desapareceRecurso con resultado: %i\n", resultado);
 }
 
 void MensajeroRed::actualizaPersonaje(MobileModel* entity) {

@@ -36,6 +36,7 @@ Servidor::~Servidor() {
 
 void* atenderCliente(void* infoCliente);
 void* simularModelos(void* modelos);
+void* pingearCliente(void* args);
 
 void Servidor::empezar(int port) {
 	int sd = socket(AF_INET, SOCK_STREAM, 0);
@@ -101,7 +102,10 @@ void* atenderCliente(void* arg) {
 			MensajeroRed* mensajero = new MensajeroRed(info->socket);
 			mensajero->setMensajero(info->servidor->modelos);
 			info->servidor->modelos->addMensajero(mensajero);
+			pthread_t pinger; // Thread que verifica que la conexion sea correcta
+			pthread_create(&pinger, NULL, pingearCliente, (void*)mensajero);
 			mensajero->esperaMensaje();
+			pthread_cancel(pinger);
 			info->servidor->modelos->removeMensajero(mensajero);
 			info->servidor->modelos->setUserInactive(username);
 			delete mensajero;
@@ -116,6 +120,18 @@ void* atenderCliente(void* arg) {
 
 	printf("Servidor - Termino la conexion\n");
 	free(arg);
+	return NULL;
+}
+
+void* pingearCliente(void* args) {
+	MensajeroRed* mensajero = (MensajeroRed*) args;
+	do{
+		mensajero->connectionAlive = false;
+		printf("Server - Checkeando conexion...\n");
+		sleep(1);
+	} while(mensajero->connectionAlive);
+	printf("Server - Cerrando conexion...\n");
+	shutdown(mensajero->getSocket(), 2); // No conexion => Cerrar el socket
 	return NULL;
 }
 

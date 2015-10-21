@@ -28,6 +28,15 @@ void escenarioInicializado(list<Mensajero*> mensajeros,Escenario* escenario, con
 	}
 }
 
+void aparecenRecursos(Mensajero* mensajero,list<Entity*> recursos) {
+	list<Entity*>::iterator entidad;
+	for (entidad = recursos.begin(); entidad != recursos.end(); ++entidad){
+		Entity* entidadReal = (*entidad);
+		Log().Get(TAG) << entidadReal->getNombre();
+		mensajero->apareceRecurso((Resource*)entidadReal);
+	}
+}
+
 void ServerGameController::init() {
 	// Crear modelos a partir de la configuracion
 	this->escenario = new Escenario(this->config->getEscenario(),
@@ -66,15 +75,12 @@ void ServerGameController::obtenerEventos() {
 void ServerGameController::enviarEventos() {
 	this->actualizarProtagonista();
 
-	list<Entity*>::iterator entidad;
-	for (entidad = recursos.begin(); entidad != recursos.end(); ++entidad){
-		Entity* entidadReal = (*entidad);
-		list<Mensajero*>::iterator mensajero;
-		for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
-			Mensajero* mensajeroReal = (*mensajero);
-			mensajeroReal->apareceRecurso((Resource*)entidadReal);
-		}
+	list<Mensajero*>::iterator mensajero;
+	for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
+		Mensajero* mensajeroReal = (*mensajero);
+		aparecenRecursos(mensajeroReal,this->recursos);
 	}
+	this->recursos.clear();
 
 	list<Entity*>::iterator entidadEliminada;
 	for (entidadEliminada = recursosEliminados.begin(); entidadEliminada != recursosEliminados.end(); ++entidadEliminada){
@@ -137,6 +143,7 @@ void ServerGameController::addMensajero(Mensajero* mensajero) {
 	this->mensajeros.push_back(mensajero);
 	if(escenario->inicializacionCorrecta) {
 		mensajero->configEscenario(this->config->getPath());
+		aparecenRecursos(mensajero,this->escenario->getListaRecursos());
 	}
 }
 

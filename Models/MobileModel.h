@@ -42,7 +42,8 @@ public:
 	SDL_Point getNextPosition();
 	void setPath(queue<SDL_Point> new_path);
 	void clearPath();
-
+	bool esJugador();
+	string getNombreAMostrar();
 	string getUsername();
 	void setUsername(string username);
 

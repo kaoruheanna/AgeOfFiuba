@@ -15,6 +15,7 @@
 #include "Menu/MiniMapView.h"
 #include "Menu/MiniView.h"
 #include "TopBar/TopBar.h"
+#include "Cartel/Cartel.h"
 
 const std::string TAG = "Renderer";
 
@@ -33,6 +34,7 @@ Renderer::Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos) {
 	this->topBar = new TopBar(this->screenWidth,TOP_BAR_HEIGHT);
 	this->fog = NULL;
 	this->hasSelectedTiles = false;
+	this->cartel = NULL;
 
 	bool didInitSDL = this->initSDL();
 	bool didLoadMedia = this->loadMedia(tipos);
@@ -222,6 +224,10 @@ void Renderer::close() {
 	delete this->screenMenu;
 	delete this->topBar;
 
+	if (this->cartel){
+		delete this->cartel;
+	}
+
 	//Destroy window
 	SDL_DestroyRenderer(this->sdlRenderer);
 	SDL_DestroyWindow(this->window);
@@ -303,6 +309,14 @@ void Renderer::drawEscenario() {
 		}
 	}
 	this->drawablesToPaint.clear();
+
+	this->drawCartelIfShould();
+}
+
+void Renderer::drawCartelIfShould(){
+	if (this->cartel){
+		this->cartel->render(this);
+	}
 }
 
 void Renderer::drawMenu(){
@@ -375,7 +389,7 @@ SDL_Point Renderer::proyectedPoint(SDL_Point mapPoint, SDL_Point plano){
 }
 
 // draw Drawable
-void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable) {
+void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable,bool admiteNublado) {
 	SDL_Point mapRect = { mapPositionX, mapPositionY };
 	SDL_Point windowPoint = this->mapToWindowPoint(mapRect);
 	SDL_Rect renderQuad = drawable->getRectToDraw(windowPoint.x, windowPoint.y);
@@ -385,17 +399,21 @@ void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable) {
 		return;
 	}
 
-	if(this->drawablesByInstanceName.find(TILE_DEFAULT_NAME)->second != drawable){
-		// si no es un tile, lo guarda para dibujar despues
-		this->drawablesToPaint.push_back(pair<SDL_Point, Drawable*>(mapRect, drawable));
-		return;
-	}
-
 	SDL_Point currentTile = { mapPositionX / TILE_HEIGHT_PIXELS, mapPositionY / TILE_HEIGHT_PIXELS };
 	EstadoDeVisibilidad currentTileState = this->fog->getEstado(currentTile.x,currentTile.y);
 
 	if (currentTileState == OCULTO){
 		// como todavia esta oculto no lo dibujo
+		return;
+	}
+
+	if((currentTileState == NUBLADO) && !admiteNublado){
+		return;
+	}
+
+	if(this->drawablesByInstanceName.find(TILE_DEFAULT_NAME)->second != drawable){
+		// si no es un tile, lo guarda para dibujar despues
+		this->drawablesToPaint.push_back(pair<SDL_Point, Drawable*>(mapRect, drawable));
 		return;
 	}
 
@@ -525,8 +543,18 @@ void Renderer::setDrawableForMiniView(MiniView* view){
 	view->setDrawable(drawable);
 }
 
-void Renderer::drawInMiniMap(int mapPositionX, int mapPositionY, Drawable* drawable) {
+void Renderer::drawInMiniMap(int mapPositionX, int mapPositionY, Drawable* drawable, bool admiteNublado) {
 	SDL_Point windowPoint = {0,0};
+
+	SDL_Point currentTile = { mapPositionX / TILE_HEIGHT_PIXELS, mapPositionY / TILE_HEIGHT_PIXELS };
+	EstadoDeVisibilidad currentTileState = this->fog->getEstado(currentTile.x,currentTile.y);
+
+	if (currentTileState == OCULTO){return;}
+
+	if (currentTileState == NUBLADO && !admiteNublado){
+		return;
+	}
+
 	// Cambio a coordenadas isometricas
 	windowPoint.x = (mapPositionX  - mapPositionY);
 	windowPoint.y = (mapPositionX  + mapPositionY) / 2;
@@ -542,15 +570,13 @@ void Renderer::drawInMiniMap(int mapPositionX, int mapPositionY, Drawable* drawa
 	renderQuad.w = (originalQuad.w * factor);
 	renderQuad.h = (originalQuad.h * factor);
 
-	SDL_Point currentTile = { mapPositionX / TILE_HEIGHT_PIXELS, mapPositionY / TILE_HEIGHT_PIXELS };
-	EstadoDeVisibilidad currentTileState = this->fog->getEstado(currentTile.x,currentTile.y);
-	if (currentTileState != OCULTO){
-			if(currentTileState == VISIBLE) SDL_SetTextureColorMod( drawable->getTexture(), FOG_VISIBLE,FOG_VISIBLE,FOG_VISIBLE );
-			else if(currentTileState == NUBLADO) SDL_SetTextureColorMod( drawable->getTexture(), FOG_VISITED,FOG_VISITED,FOG_VISITED );
+
+	if(currentTileState == VISIBLE) SDL_SetTextureColorMod( drawable->getTexture(), FOG_VISIBLE,FOG_VISIBLE,FOG_VISIBLE );
+	else if(currentTileState == NUBLADO) SDL_SetTextureColorMod( drawable->getTexture(), FOG_VISITED,FOG_VISITED,FOG_VISITED );
 
 
 	SDL_RenderCopy(sdlRenderer, drawable->getTexture(), NULL, &renderQuad);
-	}
+
 }
 
 void Renderer::setFog(int ancho,int alto){
@@ -576,4 +602,20 @@ void Renderer::setMessagesInMenu(std::string firstMessage, std::string secondMes
 void Renderer::setSelectedTilesCoordinates(bool selected,std::pair<SDL_Point,SDL_Point> tiles){
 	this->hasSelectedTiles = selected;
 	this->selectedTilesCoordinates = tiles;
+}
+
+void Renderer::setCartel(string message){
+	if (!this->cartel){
+		int x = (this->screenWidth - CARTEL_WIDTH) / 2;
+		int y = 100;
+		this->cartel = new Cartel(x,y);
+	}
+	this->cartel->setMessage(message);
+}
+
+void Renderer::hideCartel(){
+	if (this->cartel){
+		delete this->cartel;
+		this->cartel = NULL;
+	}
 }

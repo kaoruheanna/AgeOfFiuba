@@ -53,6 +53,7 @@ class Escenario {
 		Entity* crearEntidad(EntidadConfig config, bool esProtagonista);
 		Entity* crearEntidad(const string& tipo, SDL_Point posicion, bool esProtagonista);
 		list<Entity*> getListaEntidades(); // Se usa para agregar las vistas de las entidades
+		list<Entity*> getListaRecursos(); // Se usa para agregar las vistas de las entidades
 		MobileModel* getProtagonista();
 		void setProtagonista(MobileModel* protagonista);
 		bool eliminarRecursoConID(int id);

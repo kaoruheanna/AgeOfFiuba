@@ -29,6 +29,7 @@ class EscenarioView;
 class MiniEscenarioView;
 class MiniView;
 class TopBar;
+class Cartel;
 
 class Renderer {
 public:
@@ -38,7 +39,7 @@ public:
 	virtual ~Renderer();
 	void close();
 	void drawViews();
-	void draw(int mapPositionX, int mapPositionY, Drawable* drawable); // draw Drawable
+	void draw(int mapPositionX, int mapPositionY, Drawable* drawable, bool admiteNublado); // draw Drawable
 	void draw(SDL_Rect rect, SDL_Color color); // draw shape
 	void drawTextureInRect(SDL_Texture *texture,SDL_Rect rect);
 	SDL_Point mapToWindowPoint(SDL_Point mapPoint);
@@ -52,7 +53,7 @@ public:
 	void updatedEscenario();
 	void setMiniEscenarioView(MiniEscenarioView *miniEscenarioView);
 	void updatedMiniEscenario();
-	void drawInMiniMap(int mapPositionX, int mapPositionY, Drawable* drawable);
+	void drawInMiniMap(int mapPositionX, int mapPositionY, Drawable* drawable, bool admiteNublado);
 	SDL_Point escenarioSize();
 	void setFog(int ancho, int alto);
 	void fogUpdate(int posicionX, int posicionY);
@@ -60,6 +61,8 @@ public:
 	void setProtagonista(MobileModel *protagonista);
 	void setMessagesInMenu(std::string firstMessage, std::string secondMessage);
 	void setSelectedTilesCoordinates(bool selected,std::pair<SDL_Point,SDL_Point> tiles);
+	void setCartel(string message);
+	void hideCartel();
 
 private:
 	bool successfullInit;
@@ -71,6 +74,7 @@ private:
 	Drawable* miniMissingImageDrawable;
 	ScreenMenu* screenMenu;
 	TopBar* topBar;
+	Cartel* cartel;
 	TTF_Font *textFont;
 	EscenarioView *escenarioView;
 	MiniEscenarioView *miniEscenarioView;
@@ -89,6 +93,7 @@ private:
 	void drawTopBar();
 	void drawMenu();
 	void drawEscenario();
+	void drawCartelIfShould();
 	void drawMiniEscenario();
 	int menuOriginY();
 	void setDrawableForView(View* view);

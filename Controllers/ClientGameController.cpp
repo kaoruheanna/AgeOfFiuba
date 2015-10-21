@@ -261,11 +261,18 @@ bool ClientGameController::pollEvents(){
 }
 
 void ClientGameController::setMessageForSelectedEntity(Entity* entity){
-	if (entity == this->escenario->getProtagonista()){
-		this->renderer->setMessagesInMenu("Protagonista",entity->getNombre());
+	if (!(entity->esJugador())){
+		this->renderer->setMessagesInMenu("Entidad",entity->getNombreAMostrar());
 		return;
 	}
-	this->renderer->setMessagesInMenu("Entidad",entity->getNombre());
+
+	if (entity == this->escenario->getProtagonista()){
+		this->renderer->setMessagesInMenu("Protagonista",entity->getNombreAMostrar());
+		return;
+	}
+
+	this->renderer->setMessagesInMenu("Jugador",entity->getNombreAMostrar());
+
 }
 
 
@@ -328,6 +335,7 @@ bool ClientGameController::play() {
 
 		this->renderer->drawViews();
 		this->sleep();
+		this->mensajero->ping();
 	}
 
 	this->close();
@@ -375,7 +383,7 @@ void ClientGameController::configEscenario(const string path) {
 }
 
 void ClientGameController::errorDeLogueo() {
-	printf("Cliente - error de logueo\n");
+//	this->renderer->setCartel("Muestro el cartel");
 	this->shouldQuit = true;
 }
 

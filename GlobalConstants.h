@@ -16,6 +16,8 @@ const int SCROLL_SPEED = 20;
 const int MENU_HEIGHT = 130;
 const int MENU_SPACING = 10;
 const int TOP_BAR_HEIGHT = 30;
+const int CARTEL_WIDTH = 300;
+const int CARTEL_HEIGHT = 100;
 
 //TILES
 const std::string TILE_DEFAULT_NAME = "tileDefault";

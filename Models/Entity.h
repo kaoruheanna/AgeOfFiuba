@@ -36,7 +36,8 @@ public:
 	int getAltoBase();
 	string getNombre();
 	void setPosicion(SDL_Point);
-
+	virtual bool esJugador();
+	virtual string getNombreAMostrar();
 	string toString();
 
 	// Serializable methods
