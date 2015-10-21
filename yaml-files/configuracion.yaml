@@ -137,5 +137,5 @@ escenario:
    
    protagonista:
    - tipo: soldado
-     x: 6
+     x: 10
      y: 3

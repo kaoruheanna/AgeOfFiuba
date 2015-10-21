@@ -39,6 +39,7 @@ public:
 	void update(MobileModel* other);
 	void addDestination(int destinationX, int destionationY);
 	SDL_Point getNextDestination();
+	SDL_Point getNextPosition();
 	void setPath(queue<SDL_Point> new_path);
 	void clearPath();
 
