@@ -389,7 +389,7 @@ SDL_Point Renderer::proyectedPoint(SDL_Point mapPoint, SDL_Point plano){
 }
 
 // draw Drawable
-void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable) {
+void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable,bool admiteNublado) {
 	SDL_Point mapRect = { mapPositionX, mapPositionY };
 	SDL_Point windowPoint = this->mapToWindowPoint(mapRect);
 	SDL_Rect renderQuad = drawable->getRectToDraw(windowPoint.x, windowPoint.y);
@@ -399,17 +399,21 @@ void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable) {
 		return;
 	}
 
-	if(this->drawablesByInstanceName.find(TILE_DEFAULT_NAME)->second != drawable){
-		// si no es un tile, lo guarda para dibujar despues
-		this->drawablesToPaint.push_back(pair<SDL_Point, Drawable*>(mapRect, drawable));
-		return;
-	}
-
 	SDL_Point currentTile = { mapPositionX / TILE_HEIGHT_PIXELS, mapPositionY / TILE_HEIGHT_PIXELS };
 	EstadoDeVisibilidad currentTileState = this->fog->getEstado(currentTile.x,currentTile.y);
 
 	if (currentTileState == OCULTO){
 		// como todavia esta oculto no lo dibujo
+		return;
+	}
+
+	if((currentTileState == NUBLADO) && !admiteNublado){
+		return;
+	}
+
+	if(this->drawablesByInstanceName.find(TILE_DEFAULT_NAME)->second != drawable){
+		// si no es un tile, lo guarda para dibujar despues
+		this->drawablesToPaint.push_back(pair<SDL_Point, Drawable*>(mapRect, drawable));
 		return;
 	}
 

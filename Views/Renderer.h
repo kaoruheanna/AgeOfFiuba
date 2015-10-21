@@ -39,7 +39,7 @@ public:
 	virtual ~Renderer();
 	void close();
 	void drawViews();
-	void draw(int mapPositionX, int mapPositionY, Drawable* drawable); // draw Drawable
+	void draw(int mapPositionX, int mapPositionY, Drawable* drawable, bool admiteNublado); // draw Drawable
 	void draw(SDL_Rect rect, SDL_Color color); // draw shape
 	void drawTextureInRect(SDL_Texture *texture,SDL_Rect rect);
 	SDL_Point mapToWindowPoint(SDL_Point mapPoint);

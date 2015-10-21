@@ -52,7 +52,11 @@ void MobileView::render(Renderer* renderer) {
 	}
 	MotionDirection currentDirection = this->getMotionDirection();
 	this->animationStatus = this->drawable->getAnimation(currentDirection,this->model->isMoving(),this->animationStatus);
-	View::render(renderer);
+	SDL_Point point = this->getOrigin();
+	this->drawable->animate(this->animationStatus);
+	renderer->draw(point.x, point.y, this->drawable,false);
+
+	//View::render(renderer);
 }
 
 // REVISAR EL TEMA CON LA ROTACION

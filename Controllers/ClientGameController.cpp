@@ -335,6 +335,7 @@ bool ClientGameController::play() {
 
 		this->renderer->drawViews();
 		this->sleep();
+		this->mensajero->ping();
 	}
 
 	this->close();
