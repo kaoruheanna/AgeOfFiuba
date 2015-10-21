@@ -53,7 +53,10 @@ private:
 	void actualizarProtagonista();
 	void sleep();
 
-	list<Entity*> recursos;
+	//Para actualizar
+	list<Mensajero*> mensajerosAgregados;
+
+	list<Entity*> recursosAgregados;
 	list<Entity*> recursosEliminados;
 	bool debeActualizarPersonaje;
 	Posicion* moverPersonajeAlPunto;

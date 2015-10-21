@@ -95,6 +95,9 @@ void Cliente::empezar(char* ip, int port) {
 	pthread_create(&pinger, NULL, pingear, (void*)info);
 	pthread_create(&thread, NULL, loguearse, (void*)info);
 	mensajero->esperaMensaje();
+	while(clientGameController->isAlive()){
+		sleep(1);
+	}
 	pthread_cancel(thread);
 	pthread_cancel(pinger);
 	free(info);
@@ -110,6 +113,7 @@ void* loguearse(void* args) {
 	info->mensajero->loguearse((char*)info->nombre);
 	info->controller->username = string(info->nombre);
 	info->controller->play();
+	shutdown(info->mensajero->getSocket(), 2); // Cerrar controller => Cerrar el socket
 	return NULL;
 }
 

@@ -40,7 +40,7 @@ void MensajeroRed::esperaMensaje() {
 				this->escucha->loguearse(recibido->getSender());
 				break;
 			case ERROR_NOMBRE_TOMADO:
-				this->escucha->errorDeLogueo();
+				resultado = -1;
 				break;
 			case ESCENARIO:
 				configuracion = new Archivo(CONFIG_CLIENT.c_str());
@@ -79,12 +79,14 @@ void MensajeroRed::esperaMensaje() {
 				break;
 			case PING:
 				break;
-			default:
-				resultado = -1; // No se pudo entender el mensaje => Cerrar la conexion
+			default: // No se pudo entender el mensaje
+				resultado = -1;
 		}
 		this->connectionAlive = (resultado > 0);
 		if(resultado > 0){
 			resultado = recibirSerializable(this->socket, recibido);
+		} else {
+			this->escucha->errorDeLogueo();
 		}
 	}
 	delete recibido;
