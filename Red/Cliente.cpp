@@ -41,6 +41,7 @@ struct InfoLoguearse {
 };
 
 void* loguearse(void* args);
+void* pingear(void* args);
 
 void Cliente::empezar(char* ip, int port) {
 	int sd = socket(AF_INET, SOCK_STREAM, 0);
@@ -90,10 +91,13 @@ void Cliente::empezar(char* ip, int port) {
 	info->controller = clientGameController;
 	info->nombre = userName.c_str();
 	pthread_t thread;
+	pthread_t pinger; // Thread que verifica que la conexion sea correcta
+	pthread_create(&pinger, NULL, pingear, (void*)info);
 	pthread_create(&thread, NULL, loguearse, (void*)info);
 	mensajero->esperaMensaje();
 	pthread_cancel(thread);
-
+	pthread_cancel(pinger);
+	free(info);
 	delete clientGameController;
 	delete mensajero;
 
@@ -106,6 +110,17 @@ void* loguearse(void* args) {
 	info->mensajero->loguearse((char*)info->nombre);
 	info->controller->username = string(info->nombre);
 	info->controller->play();
-	free(args);
+	return NULL;
+}
+
+void* pingear(void* args) {
+	InfoLoguearse* info = (InfoLoguearse*) args;
+	do{
+		info->mensajero->connectionAlive = false;
+		printf("Cliente - Checkeando conexion...\n");
+		sleep(1);
+	} while(info->mensajero->connectionAlive);
+	printf("Cliente - Cerrando conexion...\n");
+	shutdown(info->mensajero->getSocket(), 2); // No conexion => Cerrar el socket
 	return NULL;
 }

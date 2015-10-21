@@ -16,6 +16,8 @@ public:
 	virtual ~MensajeroRed();
 	void setMensajero(Mensajero* escucha);
 	void esperaMensaje();
+	// Todos
+	virtual void ping();
 	// Metodos Servidor -> Cliente
 	virtual void errorDeLogueo();
 	virtual void configEscenario(const string path);
@@ -25,6 +27,9 @@ public:
 	// Metodos Cliente -> Servidor
 	virtual void loguearse(char* nombre);
 	virtual void moverProtagonista(MobileModel* model);
+	// Metodos para checkear estado de la conexion
+	bool connectionAlive;
+	int getSocket();
 private:
 	int socket;
 	Mensajero* escucha;

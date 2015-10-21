@@ -18,6 +18,8 @@ public:
 	MensajeroCliente(){};
 	virtual ~MensajeroCliente(){};
 
+	// Todos
+	virtual void ping(){};
 	// Metodos Servidor -> Cliente
 	virtual void errorDeLogueo(){};
 	virtual void configEscenario(const string path){};

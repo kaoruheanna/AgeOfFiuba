@@ -11,14 +11,15 @@
 #include "Serializable.h"
 
 enum MensajeType {
-	VACIO, /* Para inicializar los mensajes / Pingear (???) */
+	VACIO, /* Para inicializar los mensajes */
 	LOGIN, /* Cliente => Servidor: Pide login con nombre */
 	ERROR_NOMBRE_TOMADO, /* Servidor => Cliente: El usuario existe y esta conectado */
 	ESCENARIO, /* Servidor => Cliente: Se logueo con el usuario y le esta mandando la info inicial */
 	MOVER_PERSONAJE, /* Cliente => Servidor: Mover su personaje a la posicion */
 	APARECE_PERSONAJE, /* Servidor => Cliente: Indica la posicion y estado de un personaje */
 	APARECE_RECURSO, /* Servidor => Cliente: Indica que hay un recurso y en que posicion */
-	DESAPARECE_RECURSO /* Servidor => Cliente: Indica que se consumio un recurso */
+	DESAPARECE_RECURSO, /* Servidor => Cliente: Indica que se consumio un recurso */
+	PING /* Para probar si el servidor / cliente esta conectado */
 };
 
 class Mensaje: public Serializable {
