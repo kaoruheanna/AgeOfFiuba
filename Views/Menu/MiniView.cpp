@@ -44,7 +44,11 @@ void MiniView::render(Renderer* renderer ) {
 		for (int j = 0; j < tilesInY; j++){
 			int mapPositionX = (this->origin.x + i*TILE_HEIGHT_PIXELS);
 			int mapPositionY = (this->origin.y + j*TILE_HEIGHT_PIXELS);
-			renderer->drawInMiniMap(mapPositionX,mapPositionY, this->drawable,!(this->model->Cosechable));
+			bool admiteNublado = true;
+			if ((this->model->Cosechable) || (this->model->esJugador())) {
+				admiteNublado = false;
+			}
+			renderer->drawInMiniMap(mapPositionX,mapPositionY, this->drawable,admiteNublado);
 			}
 	}
 }

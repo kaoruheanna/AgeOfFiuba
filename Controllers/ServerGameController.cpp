@@ -96,10 +96,7 @@ void ServerGameController::enviarEventos() {
 
 	for(auto nuevoMensajero : this->mensajerosAgregados) {
 		this->mensajeros.push_back(nuevoMensajero);
-		if(escenario->inicializacionCorrecta) {
-			nuevoMensajero->configEscenario(this->config->getPath());
-			aparecenRecursos(nuevoMensajero,this->escenario->getListaRecursos());
-		}
+		aparecenRecursos(nuevoMensajero,this->escenario->getListaRecursos());
 	}
 	this->mensajerosAgregados.clear();
 }
@@ -144,6 +141,9 @@ void ServerGameController::moverProtagonista(MobileModel* model) {
 
 void ServerGameController::addMensajero(Mensajero* mensajero) {
 	this->mensajerosAgregados.push_back(mensajero);
+	if(escenario->inicializacionCorrecta) {
+		mensajero->configEscenario(this->config->getPath());
+	}
 }
 
 void ServerGameController::removeMensajero(Mensajero *mensajero) {

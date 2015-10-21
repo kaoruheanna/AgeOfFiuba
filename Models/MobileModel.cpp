@@ -10,6 +10,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <cmath>
 #include "../Utils/Log.h"
 #include "../GlobalConstants.h"
 #include "../Red/Serializable.h"
@@ -97,7 +98,7 @@ int MobileModel::getSpeed() {
 }
 
 bool MobileModel::updatePosition() {
-	bool wasMoving = this->moving;
+	bool wasMoving = this -> moving;
 	double speed = (double)this->getSpeed();
 
 	double deltaX = (double)(this->destinationX - this->posicion.x);
@@ -107,17 +108,13 @@ bool MobileModel::updatePosition() {
 	if ((deltaX == 0) && (deltaY == 0)){
 		if (this->path.empty()){
 			this->moving = false;
-			/*queue <SDL_Point,deque<SDL_Point>> n_q;
-			n_q.push({100,100});
-			n_q.push({500,200});
-			n_q.push({100,300});
-			this->setPath(n_q);*/
-			return wasMoving!=this->moving;
+			return wasMoving != this->moving;
 		}else{//si la cola de camino no esta vacia tengo que seguir caminando
 			SDL_Point destination = this->getNextDestination();
 			this->destinationX = destination.x;
 			this->destinationY = destination.y;
-			return true;
+			deltaX = (double)(this->destinationX - this->posicion.x);
+			deltaY = (double)(this->destinationY - this->posicion.y);
 		}
 	}
 
@@ -184,6 +181,26 @@ SDL_Point MobileModel::getNextDestination(){
 	SDL_Point destination = this->path.front();
 	this->path.pop();
 	return destination;
+}
+
+SDL_Point MobileModel::getNextPosition(){
+	if (!this->moving){
+		return this->posicion;
+	}
+
+	double speed = (double)this->getSpeed();
+	double deltaX = (double)(this->destinationX - this->posicion.x);
+	double deltaY = (double)(this->destinationY - this->posicion.y);
+	double hypotenuse = sqrt (pow(deltaX,2) + pow(deltaY,2.0));
+
+	if (hypotenuse < speed){return {this->destinationX, this->destinationY};}
+
+	double displacementX = round(speed * (deltaX / hypotenuse));
+	double displacementY = round(speed * (deltaY / hypotenuse));
+
+	int x = this->posicion.x + (int)displacementX;
+	int y = this->posicion.y + (int)displacementY;
+	return {x,y};
 }
 
 void MobileModel::setPath(queue<SDL_Point> new_path){
