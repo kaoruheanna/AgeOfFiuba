@@ -28,7 +28,7 @@ void View::setDrawableDeshabilitado(Drawable *drawable) {
 void View::render(Renderer* renderer ) {
 	SDL_Point point = this->getOrigin();
 	this->drawable->animate(this->animationStatus);
-	renderer->draw(point.x, point.y, this->drawable);
+	renderer->draw(point.x, point.y, this->drawable,true);
 }
 
 void View::setDrawable(Drawable *drawable){
