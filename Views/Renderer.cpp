@@ -241,7 +241,7 @@ void Renderer::close() {
 }
 
 // Start drawing from left to right scaning from top to bottom
-bool drawOrder (pair<SDL_Point, Drawable*> first,pair<SDL_Point, Drawable*> second) {
+bool drawOrder (pair<SDL_Point, DrawableWithState> first,pair<SDL_Point, DrawableWithState> second) {
 	SDL_Point firstPoint = first.first;
 	SDL_Point secondPoint = second.first;
 	if((firstPoint.x + firstPoint.y) < (secondPoint.x + secondPoint.y)){
@@ -289,11 +289,15 @@ void Renderer::drawEscenario() {
 	// Order the views in the "paintor style" drawing
 	this->drawablesToPaint.sort(drawOrder);
 
-	list< pair<SDL_Point, Drawable*> >::iterator toPaint;
+	list< pair<SDL_Point, DrawableWithState> >::iterator toPaint;
 	for(toPaint = this->drawablesToPaint.begin(); toPaint != this->drawablesToPaint.end(); ++toPaint) {
-		Drawable* drawable = toPaint->second;
+		Drawable* drawable = toPaint->second.drawable;
 		SDL_Point windowPoint = this->mapToWindowPoint(toPaint->first);
 		SDL_Rect renderQuad = drawable->getRectToDraw(windowPoint.x, windowPoint.y);
+		SDL_Rect* clipRect = NULL;
+		if(toPaint->second.hasRect){
+			clipRect = &toPaint->second.rect;
+		}
 
 		SDL_Point currentTile = { toPaint->first.x / TILE_HEIGHT_PIXELS, toPaint->first.y / TILE_HEIGHT_PIXELS };
 		EstadoDeVisibilidad currentTileState = this->fog->getEstado(currentTile.x,currentTile.y);
@@ -305,7 +309,7 @@ void Renderer::drawEscenario() {
 					SDL_SetTextureColorMod( drawable->getTexture(), FOG_VISITED,FOG_VISITED,FOG_VISITED );
 			}
 
-			SDL_RenderCopy(sdlRenderer, drawable->getTexture(), drawable->getClipRect(), &renderQuad);
+			SDL_RenderCopy(sdlRenderer, drawable->getTexture(), clipRect, &renderQuad);
 		}
 	}
 	this->drawablesToPaint.clear();
@@ -413,7 +417,13 @@ void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable,bool 
 
 	if(this->drawablesByInstanceName.find(TILE_DEFAULT_NAME)->second != drawable){
 		// si no es un tile, lo guarda para dibujar despues
-		this->drawablesToPaint.push_back(pair<SDL_Point, Drawable*>(mapRect, drawable));
+		DrawableWithState state;
+		state.drawable = drawable;
+		state.hasRect = (drawable->getClipRect() != NULL);
+		if(state.hasRect){
+			state.rect = *drawable->getClipRect();
+		}
+		this->drawablesToPaint.push_back(pair<SDL_Point, DrawableWithState>(mapRect, state));
 		return;
 	}
 

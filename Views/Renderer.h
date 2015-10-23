@@ -31,6 +31,12 @@ class MiniView;
 class TopBar;
 class Cartel;
 
+struct DrawableWithState {
+	Drawable* drawable;
+	SDL_Rect rect;
+	bool hasRect;
+};
+
 class Renderer {
 public:
 	SDL_Point mainTilePosition;
@@ -68,7 +74,7 @@ private:
 	bool successfullInit;
 	SDL_Window* window;
 	SDL_Renderer* sdlRenderer;
-	list< pair<SDL_Point,Drawable*> > drawablesToPaint;
+	list< pair<SDL_Point,DrawableWithState> > drawablesToPaint;
 	std::map<std::string, Drawable*> drawablesByInstanceName;
 	Drawable* missingImageDrawable;
 	Drawable* miniMissingImageDrawable;
