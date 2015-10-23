@@ -220,7 +220,9 @@ string MobileModel::getNombreAMostrar(){
 	return this->username;
 }
 
-// TODO mandar y recibir los recursos
+EntityType MobileModel::getClass() {
+	return MOBILE_MODEL;
+}
 
 // Metodos de serializacion
 //TODO desharcodear los recursos o harcodearlos en todos lados igual
@@ -278,7 +280,7 @@ void MobileModel::deserialize(int totalBlockCount, int currentBlock, void* block
 	} else if(realBlock == 1) {
 		memcpy(&this->destinationY, blockData, sizeof(int));
 	} else if(realBlock == 2){
-		memcpy(&this->moving, blockData, sizeof(int));
+		memcpy(&this->moving, blockData, sizeof(bool));
 	} else if (realBlock == 3) {
 		char* username = this->deserializeString(blockData);
 		this->username = string(username);

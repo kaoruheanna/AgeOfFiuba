@@ -50,6 +50,8 @@ public:
 	bool isActive();
 	void setActive(bool active);
 
+	virtual EntityType getClass();
+
 	// Serializable methods
 	virtual int getTotalBlockCount();
 	virtual int getBlockSizeFromIndex(int currentIndex);

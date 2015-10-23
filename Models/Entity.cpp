@@ -112,3 +112,7 @@ void Entity::serializeString(char* string, void* buffer) {
 int Entity::serializeStringSize(char* string) {
 	return strlen(string) + 1;
 }
+
+EntityType Entity::getClass() {
+	return ENTITY;
+}

@@ -34,6 +34,9 @@ ClientGameController::ClientGameController(Mensajero *mensajero) {
 
 	this->middlePoint = 0;
 	this->vertixSlope = 0;
+
+	this->updated = false;
+	this->serverError = false;
 }
 
 ClientGameController::~ClientGameController() {}

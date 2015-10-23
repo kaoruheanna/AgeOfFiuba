@@ -127,9 +127,11 @@ list<Entity*> Escenario::getListaEntidades(){
 bool Escenario::existeRecursoConID(int id) {
 	list<Entity*>::iterator entidad;
 	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
-		Resource* entidadReal = (Resource*)(*entidad);
-		if (entidadReal->id == id) {
-				return true;
+		if((*entidad)->getClass() == RESOURCE){
+			Resource* entidadReal = (Resource*)(*entidad);
+			if (entidadReal->id == id) {
+					return true;
+			}
 		}
 	}
 	return false;
@@ -139,10 +141,12 @@ bool Escenario::existeRecursoConID(int id) {
 bool Escenario::eliminarRecursoConID(int id) {
 	list<Entity*>::iterator entidad;
 	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
-		Resource* entidadReal = (Resource*)(*entidad);
-		if (entidadReal->id == id) {
-				entidades.erase(entidad);
-				return true;
+		if((*entidad)->getClass() == RESOURCE){
+			Resource* entidadReal = (Resource*)(*entidad);
+			if (entidadReal->id == id) {
+					entidades.erase(entidad);
+					return true;
+			}
 		}
 	}
 	return false;
@@ -152,9 +156,11 @@ list<Entity*> Escenario::getListaRecursos() {
 	list<Entity*>resources;
 	list<Entity*>::iterator entidad;
 	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
-		Resource* entidadReal = (Resource*)(*entidad);
-		if (entidadReal->Cosechable) {
-				resources.push_back(entidadReal);
+		if((*entidad)->getClass() == RESOURCE){
+			Resource* entidadReal = (Resource*)(*entidad);
+			if (entidadReal->Cosechable) {
+					resources.push_back(entidadReal);
+			}
 		}
 	}
 	return resources;
@@ -164,16 +170,18 @@ list<Entity*> Escenario::getListaRecursos() {
 bool Escenario::cosecharEnPosicion(SDL_Point point, MobileModel* protagonista) {
 	list<Entity*>::iterator entidad;
 	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
-		Resource* entidadReal = (Resource*)(*entidad);
-		SDL_Point position = this->mundo->getTileForPosition(entidadReal->getPosicion());
-		if ((position.x == point.x) &&
-			(position.y == point.y) &&
-			entidadReal->Cosechable) {
-				entidadReal->cosechar();
-				protagonista->didCollectResource(entidadReal->getNombre());
-				this->delegate->desapareceEntidad(entidadReal);
-				entidades.erase(entidad);
-				return true;
+		if((*entidad)->getClass() == RESOURCE){
+			Resource* entidadReal = (Resource*)(*entidad);
+			SDL_Point position = this->mundo->getTileForPosition(entidadReal->getPosicion());
+			if ((position.x == point.x) &&
+				(position.y == point.y) &&
+				entidadReal->Cosechable) {
+					entidadReal->cosechar();
+					protagonista->didCollectResource(entidadReal->getNombre());
+					this->delegate->desapareceEntidad(entidadReal);
+					entidades.erase(entidad);
+					return true;
+			}
 		}
 	}
 	return false;

@@ -56,3 +56,7 @@ void Resource::deserialize(int totalBlockCount, int currentBlock, void* blockDat
 	}
 }
 
+EntityType Resource::getClass() {
+	return RESOURCE;
+}
+

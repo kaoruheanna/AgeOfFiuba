@@ -17,6 +17,7 @@ MensajeroRed::MensajeroRed(int socket) {
 	this->socket = socket;
 	this->escucha = NULL;
 	this->sender = "server";
+	this->connectionAlive = false;
 }
 
 MensajeroRed::~MensajeroRed() {

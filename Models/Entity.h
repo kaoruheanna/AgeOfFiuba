@@ -15,6 +15,12 @@
 
 using namespace std;
 
+enum EntityType {
+	ENTITY,
+	MOBILE_MODEL,
+	RESOURCE
+};
+
 class Entity : public Mapeable, public Serializable{
 private:
 	//int id;
@@ -49,6 +55,8 @@ public:
 	Entity(string nombre, SDL_Point posicion, int ancho_base, int alto_base);
 	Entity(string,int,int);
 	~Entity();
+
+	virtual EntityType getClass();
 };
 
 #endif /* ENTIDAD_H_ */
