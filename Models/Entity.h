@@ -45,6 +45,7 @@ public:
 	virtual bool esJugador();
 	virtual string getNombreAMostrar();
 	string toString();
+	virtual bool admiteNublado();
 
 	// Serializable methods
 	virtual int getTotalBlockCount();

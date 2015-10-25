@@ -10,10 +10,8 @@
 
 class Mapeable {
 public:
-	Mapeable(){Cosechable = false;};
+	Mapeable(){};
 	virtual ~Mapeable(){};
-
-	bool Cosechable;
 };
 
 #endif /* MODELS_MAPEABLE_H_ */

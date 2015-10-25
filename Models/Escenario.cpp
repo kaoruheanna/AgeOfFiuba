@@ -117,7 +117,7 @@ list<Entity*> Escenario::getListaEntidades(){
 	return this->entidades;
 }
 
-//Devuelve true si lo pudo borrar
+//Devuelve true si lo pudo encontrar
 bool Escenario::existeRecursoConID(int id) {
 	list<Entity*>::iterator entidad;
 	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
@@ -152,7 +152,7 @@ list<Entity*> Escenario::getListaRecursos() {
 	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
 		if((*entidad)->getClass() == RESOURCE){
 			Resource* entidadReal = (Resource*)(*entidad);
-			if (entidadReal->Cosechable) {
+			if (entidadReal->getClass() == RESOURCE) {
 					resources.push_back(entidadReal);
 			}
 		}
@@ -160,25 +160,23 @@ list<Entity*> Escenario::getListaRecursos() {
 	return resources;
 }
 
-Entity* Escenario::getEntidadEnPosicion(SDL_Point point, bool ignoreCosechables) {
+Entity* Escenario::getEntidadEnPosicion(SDL_Point point) {
 	SDL_Point tile = this->mundo->getTileForPosition(point);
 	list<Entity*>::iterator entidad;
 
 	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
 		Entity* entidadReal = (*entidad);
 
-		if (!ignoreCosechables || !(entidadReal->Cosechable)){
-			std::pair<SDL_Point,SDL_Point> pair = this->getTilesCoordinatesForEntity(entidadReal);
-			int minTileX = pair.first.x;
-			int maxTileX = pair.second.x;
-			int minTileY = pair.first.y;
-			int maxTileY = pair.second.y;
-			bool sameX = ((tile.x >= minTileX) && (tile.x <= maxTileX));
-			bool sameY = ((tile.y >= minTileY) && (tile.y <= maxTileY));
+		std::pair<SDL_Point,SDL_Point> pair = this->getTilesCoordinatesForEntity(entidadReal);
+		int minTileX = pair.first.x;
+		int maxTileX = pair.second.x;
+		int minTileY = pair.first.y;
+		int maxTileY = pair.second.y;
+		bool sameX = ((tile.x >= minTileX) && (tile.x <= maxTileX));
+		bool sameY = ((tile.y >= minTileY) && (tile.y <= maxTileY));
 
-			if (sameX && sameY){
-				return entidadReal;
-			}
+		if (sameX && sameY){
+			return entidadReal;
 		}
 	}
 	return NULL;

@@ -116,3 +116,7 @@ int Entity::serializeStringSize(char* string) {
 EntityType Entity::getClass() {
 	return ENTITY;
 }
+
+bool Entity::admiteNublado() {
+	return this->getClass()!=RESOURCE;
+}
