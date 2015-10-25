@@ -27,19 +27,19 @@ ConfiguracionConfig::~ConfiguracionConfig() {
 void ConfiguracionConfig::verificarDatos(){
 		if (this->nodoConfiguracion.IsSequence() && this->nodoConfiguracion.size() <= 2){
 			if (!this->verificarVelocidad()){
-				Log().Get(TAG,logWARNING) << "La velocidad del personaje es invalida, se usa el valor por defecto";
+//				Log().Get(TAG,logWARNING) << "La velocidad del personaje es invalida, se usa el valor por defecto";
 				this->nodoConfiguracion[0]["vel_personaje"] = VELOCIDAD_PERSONAJE_DEFAULT;
 			}
 			if (!this->verificarScroll()){
-				Log().Get(TAG,logWARNING) << "Margen de scroll invalido, se utiliza valor por defecto";
+//				Log().Get(TAG,logWARNING) << "Margen de scroll invalido, se utiliza valor por defecto";
 				this->nodoConfiguracion[1]["margen_scroll"] = MARGEN_SCROLL_DEFAULT;
 			}
 		}
 		else{
 			//AMBOS VALORES ESTAN EQUIVOCADOS O EL CAMPO ES INEXISTENTE
-			Log().Get(TAG,logWARNING) << "La velocidad del personaje es invalida, se usa el valor por defecto";
+//			Log().Get(TAG,logWARNING) << "La velocidad del personaje es invalida, se usa el valor por defecto";
 			this->nodoConfiguracion[0]["vel_personaje"] = VELOCIDAD_PERSONAJE_DEFAULT;
-			Log().Get(TAG,logWARNING) << "Margen de scroll invalido, se utiliza valor por defecto";
+//			Log().Get(TAG,logWARNING) << "Margen de scroll invalido, se utiliza valor por defecto";
 			this->nodoConfiguracion[1]["margen_scroll"] = MARGEN_SCROLL_DEFAULT;
 		}
 }

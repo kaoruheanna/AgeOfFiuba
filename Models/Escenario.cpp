@@ -280,9 +280,9 @@ void Escenario::addUser(char* username) {
 	);
 	userModel->setUsername(username);
 	if(!this->agregarEntidad(userModel)){
-		printf("ERROR - Protagonista no se puede agregar al escenario\n");
+		Log().Get("Escenario", logDEBUG) << "1) Protagonista no se pudo agregar al escenario";
 	} else {
-		printf("Agregado protagonista a la posicion: %i %i\n", posicion.x, posicion.y);
+		Log().Get("Escenario", logDEBUG) << "1) Agregado "<<username<<" a la posicion "<<posicion.x<<" "<<posicion.y;
 	}
 	this->usuarios.insert(pair<string, MobileModel*>(username, userModel));
 }
@@ -296,9 +296,9 @@ void Escenario::addUser(char* username, SDL_Point position) {
 	userModel->setX(position.x);
 	userModel->setY(position.y);
 	if(!this->agregarEntidad(userModel)){
-		printf("ERROR - Protagonista no se puede agregar al escenario");
+		Log().Get("Escenario", logDEBUG) << "2) Protagonista no se pudo agregar al escenario";
 	} else {
-		printf("Agregado protagonista a la posicion: %i %i", position.x, position.y);
+		Log().Get("Escenario", logDEBUG) << "2) Agregado "<<username<<" a la posicion "<<position.x<<" "<<position.y;
 	}
 	this->usuarios.insert(pair<string, MobileModel*>(username, userModel));
 }
