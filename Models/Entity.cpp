@@ -122,5 +122,5 @@ EntityType Entity::getClass() {
 }
 
 bool Entity::admiteNublado() {
-	return true;
+	return this->getClass()!=MOBILE_MODEL;
 }

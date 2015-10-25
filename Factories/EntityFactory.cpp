@@ -60,10 +60,10 @@ SDL_Point EntityFactory::getSize(const string& tipo) {
 }
 
 MobileModel* EntityFactory::crearProtagonista(const string& tipo, SDL_Point posicion) {
-	return (MobileModel*)this->crearEntidad(tipo,posicion,true);
+	return (MobileModel*)this->crearEntidad(tipo,posicion);
 }
 
-Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion, bool esProtagonista) {
+Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion) {
 	static int id;
 	if (!id) {
 		id = 0;
@@ -74,7 +74,7 @@ Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion, bool
 		Log().Get("Escenario", logWARNING) << "La entidad tiene que tener un tipo. Descartando entidad.";
 		return NULL;
 	}
-	SDL_Point pos = this->getPositionForTile(tipo,posicion,esProtagonista);
+	SDL_Point pos = this->getPositionForTile(tipo,posicion,(this->tipos[tipo].getCategoria() == "warrior"));
 	SDL_Point size = this->getSize(tipo);
 
 	if (this->tipos[tipo].getCategoria() == "warrior") {

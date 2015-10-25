@@ -46,7 +46,7 @@ void Escenario::init() {
 			int indice = 0;
 			for (configEntidad = configs.begin();
 					configEntidad != configs.end(); ++configEntidad) {
-				Entity* entidad = this->crearEntidad(*configEntidad, false);
+				Entity* entidad = this->crearEntidad(*configEntidad);
 				if (entidad == NULL) {
 					Log().Get("Escenario", logWARNING) << "La entidad N° "
 							<< indice << " del escenario " << this->name
@@ -245,10 +245,10 @@ bool Escenario::tileOcupadoForUsername(TileCoordinate tile,string username){
 }
 
 
-Entity* Escenario::crearEntidad(EntidadConfig config, bool esProtagonista) {
+Entity* Escenario::crearEntidad(EntidadConfig config) {
 	SDL_Point posicion = {config.getX(), config.getY()};
 	string tipo = config.getTipo();
-	return factory->crearEntidad(tipo, posicion, esProtagonista);
+	return factory->crearEntidad(tipo, posicion);
 }
 
 void Escenario::vaciarEntidades(){
