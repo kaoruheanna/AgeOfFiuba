@@ -38,7 +38,7 @@ class Map {
 		Entity* sacarEntidad(Entity*);
 
 		SDL_Point getTileForPosition(SDL_Point point);
-		SDL_Point getPositionForTile(SDL_Point point);
+		SDL_Point getPositionForTile(SDL_Point point,bool centered = false);
 		SDL_Point getCenteredPositionForTile(SDL_Point point);
 
 		queue<SDL_Point> obtenerCamino(SDL_Point origen, SDL_Point destino);

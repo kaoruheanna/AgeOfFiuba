@@ -15,7 +15,7 @@ EntityFactory::EntityFactory(Map *mundo, map<string, SDL_Point> sizeByType) {
 
 EntityFactory::~EntityFactory() {}
 
-SDL_Point EntityFactory::getPosition(const string& tipo, SDL_Point posicion) {
+SDL_Point EntityFactory::getPositionForTile(const string& tipo, SDL_Point posicion,bool centered) {
 	if (posicion.x < 0 || posicion.x >= this->mundo->getWidth()) {
 		posicion.x = 0;
 		Log().Get("Escenario", logWARNING) << "La entidad " << tipo
@@ -27,7 +27,7 @@ SDL_Point EntityFactory::getPosition(const string& tipo, SDL_Point posicion) {
 				<< " esta fuera del mapa en alto. Asumida posicion y = 0.";
 	}
 	// Cambia de coordenadas tile a coordenadas mapa "pixel"
-	return this->mundo->getPositionForTile(posicion);
+	return this->mundo->getPositionForTile(posicion,centered);
 }
 
 SDL_Point EntityFactory::getSize(const string& tipo, SDL_Point posicion) {
@@ -63,7 +63,7 @@ Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion, bool
 		Log().Get("Escenario", logWARNING) << "La entidad tiene que tener un tipo. Descartando entidad.";
 		return NULL;
 	}
-	SDL_Point pos = this->getPosition(tipo,posicion);
+	SDL_Point pos = this->getPositionForTile(tipo,posicion,esProtagonista);
 	SDL_Point size = this->getSize(tipo,posicion);
 
 	if (esProtagonista) {
@@ -84,7 +84,7 @@ Resource* EntityFactory::crearRecurso(const string& tipo, SDL_Point posicion) {
 		Log().Get("Escenario", logWARNING) << "La entidad tiene que tener un tipo. Descartando entidad.";
 		return NULL;
 	}
-	SDL_Point pos = this->getPosition(tipo,posicion);
+	SDL_Point pos = this->getPositionForTile(tipo,posicion);
 	SDL_Point size = this->getSize(tipo,posicion);
 
 	return new Resource(id, tipo, pos, size.x, size.y);

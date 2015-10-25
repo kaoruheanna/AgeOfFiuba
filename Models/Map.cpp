@@ -97,8 +97,14 @@ const int TILE_SIZE = 64;
 SDL_Point Map::getTileForPosition(SDL_Point point) {
 	return { point.x / TILE_SIZE, point.y / TILE_SIZE };
 }
-SDL_Point Map::getPositionForTile(SDL_Point point) {
-	return { point.x * TILE_SIZE, point.y * TILE_SIZE };
+SDL_Point Map::getPositionForTile(SDL_Point point, bool centered) {
+	int x = point.x * TILE_SIZE;
+	int y = point.y * TILE_SIZE;
+	if (centered){
+		x += TILE_SIZE/2;
+		y += TILE_SIZE/2;
+	}
+	return {x , y};
 }
 
 SDL_Point Map::getCenteredPositionForTile(SDL_Point point) {
