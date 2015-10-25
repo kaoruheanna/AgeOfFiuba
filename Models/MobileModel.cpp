@@ -28,8 +28,8 @@ MobileModel::MobileModel() : Entity(0,"", {0, 0}, 1, 1){
 	this->userActive = false;
 }
 
-MobileModel::MobileModel(string nombre, SDL_Point posicion, int ancho_base, int alto_base)
-: Entity(0,nombre, posicion, ancho_base, alto_base){
+MobileModel::MobileModel(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base)
+: Entity(id,nombre, posicion, ancho_base, alto_base){
 	this->destinationX = posicion.x;
 	this->destinationY = posicion.y;
 	this->moving = false;

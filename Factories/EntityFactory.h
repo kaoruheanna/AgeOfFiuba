@@ -16,7 +16,7 @@
 #include <SDL2/SDL.h>
 #include "../Models/Entity.h"
 #include "../Models/Resource.h"
-#include "../Models/MobileModel.h"
+#include "../Models/Warrior.h"
 #include "../Configuration/TipoConfig.h"
 
 using namespace std;

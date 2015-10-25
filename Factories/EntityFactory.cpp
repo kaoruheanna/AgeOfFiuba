@@ -77,8 +77,8 @@ Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion, bool
 	SDL_Point pos = this->getPositionForTile(tipo,posicion,esProtagonista);
 	SDL_Point size = this->getSize(tipo);
 
-	if (esProtagonista) {
-		return new MobileModel(tipo, pos, size.x,size.y);
+	if (this->tipos[tipo].getCategoria() == "warrior") {
+		return new Warrior(id, tipo, pos, size.x,size.y);
 	}
 	if (this->tipos[tipo].getCategoria() == "resource") {
 		return new Resource(id, tipo, pos, size.x, size.y);

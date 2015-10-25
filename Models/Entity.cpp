@@ -122,5 +122,5 @@ EntityType Entity::getClass() {
 }
 
 bool Entity::admiteNublado() {
-	return this->getClass()!=RESOURCE;
+	return true;
 }

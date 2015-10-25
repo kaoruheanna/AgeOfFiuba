@@ -13,7 +13,7 @@ tipos:
    miniImagen: img/tile_blue.png
 
  - nombre: piedra
-   categoria: recurso
+   categoria: resource
    imagen: img/Mossy_Stone_Brick.png
    miniImagen: img/tile_blue.png
    ancho_base: 1
@@ -22,7 +22,7 @@ tipos:
    pixel_ref_y: 25
    
  - nombre: comida
-   categoria: recurso
+   categoria: resource
    imagen: img/comida.png
    miniImagen: img/tile_blue.png
    ancho_base: 1
@@ -66,6 +66,7 @@ tipos:
    alto_frame: 145
 
  - nombre: soldado
+   categoria: warrior
    imagen: img/vlad1.png
    imagenDeshabilitado: img/vlad_grey.png
    miniImagen: img/tile_red.png
@@ -106,9 +107,9 @@ escenario:
    - [x: 1, y: 7, tipo: casa]
    
    
-   - [x: 4, y: 2, tipo: comida]
-   - [x: 5, y: 2, tipo: comida]
-   - [x: 6, y: 2, tipo: comida]
+   - [x: 4, y: 2, tipo: piedra]
+   - [x: 5, y: 2, tipo: piedra]
+   - [x: 6, y: 2, tipo: piedra]
    - [x: 7, y: 2, tipo: arbol]
    - [x: 7, y: 3, tipo: arbol]
    - [x: 7, y: 4, tipo: arbol]

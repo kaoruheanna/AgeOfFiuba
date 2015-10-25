@@ -20,7 +20,7 @@ using namespace std;
 class MobileModel: public Entity{
 public:
 	MobileModel();
-	MobileModel(string nombre, SDL_Point posicion, int ancho_base, int alto_base);
+	MobileModel(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base);
 	virtual ~MobileModel();
 
 	int getX();
