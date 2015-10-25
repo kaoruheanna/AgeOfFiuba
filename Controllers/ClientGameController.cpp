@@ -248,16 +248,24 @@ bool ClientGameController::pollEvents(){
 			int x, y;
 			SDL_GetMouseState(&x, &y);
 			SDL_Point point = this->renderer->windowToMapPoint({x,y});
+			Entity *entidad = this->escenario->getEntidadEnPosicion(point);
 
 			if(e.button.button == SDL_BUTTON_RIGHT) {
-				point = this->renderer->proyectedPoint(point, this->escenario->getSize());
-				MobileModel* auxModel = new MobileModel();
-				auxModel->setUsername(username);
-				auxModel->setDestination(point.x, point.y);
-				this->mensajero->moverProtagonista(auxModel);
-				delete auxModel;
+				if(entidad && (selectedEntity!=entidad)) {
+					//Interactuar la seleccionada con la nueva entidad
+
+				} else {
+					// Mover el personaje seleccionado a la nueva posicion
+					// TODO Eliminar harcodeo de protagonista
+					point = this->renderer->proyectedPoint(point, this->escenario->getSize());
+					MobileModel* auxModel = new MobileModel();
+					auxModel->setUsername(username);
+					auxModel->setDestination(point.x, point.y);
+					this->mensajero->moverProtagonista(auxModel);
+					delete auxModel;
+				}
 			} else {
-				Entity *entidad = this->escenario->getEntidadEnPosicion(point);
+				selectedEntity = entidad;
 				std::pair<SDL_Point,SDL_Point> tiles;
 				if (entidad && (entidad != this->escenario->getProtagonista())){
 					this->setMessageForSelectedEntity(entidad);
@@ -389,7 +397,7 @@ void ClientGameController::apareceRecurso(Resource* recurso) {
 	if (!this->inicializado())
 			return;
 
-	if(!this->escenario->existeRecursoConID(recurso->id)) {
+	if(!this->escenario->existeRecursoConID(recurso->getId())) {
 		this->escenario->agregarEntidad(new Resource(*recurso));
 	}
 	this->updated = true;
@@ -399,7 +407,7 @@ void ClientGameController::desapareceRecurso(Resource* recurso){
 	if (!this->inicializado())
 		return;
 
-	if(this->escenario->eliminarRecursoConID(recurso->id)) {
+	if(this->escenario->eliminarRecursoConID(recurso->getId())) {
 		this->updated = true;
 	}
 }

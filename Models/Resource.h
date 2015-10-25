@@ -18,7 +18,6 @@ public:
 	Resource(int id, string nombre, SDL_Point posicion, int ancho_base = 1, int alto_base = 1);
 	virtual ~Resource();
 	virtual EntityType getClass();
-	int id;
 
 	void cosechar();
 

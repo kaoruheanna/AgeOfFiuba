@@ -10,16 +10,16 @@ using namespace std;
 
 const string TAG ="Entity";
 
-Entity::Entity(string nombre, SDL_Point posicion, int ancho_base, int alto_base){
+Entity::Entity(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base){
 	this->nombre = nombre;
 	this->posicion = posicion;
 	this->ancho_base = ancho_base;
 	this->alto_base = alto_base;
-
+	this->id = id;
 }
 
-Entity::Entity(string nombre, int ancho_base, int alto_base){
-
+Entity::Entity(int id,string nombre, int ancho_base, int alto_base){
+	this->id = id;
 	this->nombre = nombre;
 	this->posicion = {-1,-1}; // posicion invalida hace referencia a que no tiene posicion en el mapa.
 	this->ancho_base = ancho_base;
@@ -39,6 +39,10 @@ string Entity::toString(){
 
 string Entity::getNombre() {
 	return this->nombre;
+}
+
+int Entity::getId() {
+	return this->id;
 }
 
 SDL_Point Entity::getPosicion(){

@@ -28,6 +28,7 @@ public:
 	string username;
 private:
 	Mensajero* mensajero;
+	Entity* selectedEntity;
 
 	bool shouldQuit;
 	bool serverError;

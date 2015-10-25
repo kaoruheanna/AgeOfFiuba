@@ -84,7 +84,7 @@ Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion, bool
 		return new Resource(id, tipo, pos, size.x, size.y);
 	}
 
-	return new Entity(tipo, pos, size.x, size.y);
+	return new Entity(id,tipo, pos, size.x, size.y);
 }
 
 Resource* EntityFactory::crearRecurso(const string& tipo, SDL_Point posicion) {

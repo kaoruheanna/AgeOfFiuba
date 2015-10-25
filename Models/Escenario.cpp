@@ -123,7 +123,7 @@ bool Escenario::existeRecursoConID(int id) {
 	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
 		if((*entidad)->getClass() == RESOURCE){
 			Resource* entidadReal = (Resource*)(*entidad);
-			if (entidadReal->id == id) {
+			if (entidadReal->getId() == id) {
 					return true;
 			}
 		}
@@ -137,7 +137,7 @@ bool Escenario::eliminarRecursoConID(int id) {
 	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
 		if((*entidad)->getClass() == RESOURCE){
 			Resource* entidadReal = (Resource*)(*entidad);
-			if (entidadReal->id == id) {
+			if (entidadReal->getId() == id) {
 					entidades.erase(entidad);
 					return true;
 			}

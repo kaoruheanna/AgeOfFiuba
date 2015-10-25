@@ -30,6 +30,7 @@ private:
 protected:
 	string nombre;
 	SDL_Point posicion;  // posicion en el mapa (coordenadas logicas)
+	int id;
 
 	// Serializable methods
 	char* deserializeString(void* blockData);
@@ -37,6 +38,7 @@ protected:
 	int serializeStringSize(char* string);
 
 public:
+	int getId();
 	SDL_Point getPosicion();
 	int getAnchoBase();
 	int getAltoBase();
@@ -53,8 +55,8 @@ public:
 	virtual void getBlockFromIndex(int currentIndex, void* buffer);
 	virtual void deserialize(int totalBlockCount, int currentBlock, void* blockData);
 
-	Entity(string nombre, SDL_Point posicion, int ancho_base, int alto_base);
-	Entity(string,int,int);
+	Entity(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base);
+	Entity(int id,string,int,int);
 	~Entity();
 
 	virtual EntityType getClass();
