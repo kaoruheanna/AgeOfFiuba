@@ -90,6 +90,7 @@ void MensajeroRed::esperaMensaje() {
 			this->escucha->errorDeLogueo();
 		}
 	}
+	this->escucha->errorDeLogueo();
 	delete recibido;
 }
 
