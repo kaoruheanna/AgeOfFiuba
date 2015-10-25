@@ -35,6 +35,7 @@ public:
 	int getAltoFrame();
 	int getAnchoFrame();
 	int getMinimapPixelRefType();
+	string getCategoria();
 
 private:
 	string nombre;
@@ -50,6 +51,7 @@ private:
 	int altoFrame;
 	int anchoFrame;
 	int minimapPixelRefType;
+	string categoria;
 
 	static int getIntAttribute(YAML::Node nodo, string attributeName, int defaultValue);
 	static string getStringAttribute(YAML::Node nodo, string attributeName, string defaultValue);

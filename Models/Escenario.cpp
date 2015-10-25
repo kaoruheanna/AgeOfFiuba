@@ -7,13 +7,7 @@ const string TAG = "Escenario";
 
 
 void Escenario::init() {
-	map<string, SDL_Point> sizeByType;
-	list<TipoConfig>::iterator tipo;
-	for (tipo = tiposConfigList.begin(); tipo != tiposConfigList.end(); ++tipo) {
-		sizeByType.insert(
-				pair<string, SDL_Point>(tipo->getNombre(), {
-						tipo->getAnchoBase(), tipo->getAltoBase() }));
-	}
+
 	this->name = escenarioConfig.getNombre();
 	this->inicializacionCorrecta = false;
 	this->updated = true;
@@ -32,7 +26,7 @@ void Escenario::init() {
 	} else {
 		this->mundo = new Map(escenarioConfig.getSizeX(), escenarioConfig.getSizeY(),
 				TILE_WIDTH_PIXELS, TILE_HEIGHT_PIXELS);
-		factory = new EntityFactory(this->mundo, sizeByType);
+		factory = new EntityFactory(this->mundo, tiposConfigList);
 		this->protagonista = NULL;
 		/*this->protagonista = factory->crearProtagonista(
 				escenarioConfig.getProtagonista().getTipo(),
@@ -166,27 +160,6 @@ list<Entity*> Escenario::getListaRecursos() {
 	return resources;
 }
 
-//Devuelve true si cosecho algo
-bool Escenario::cosecharEnPosicion(SDL_Point point, MobileModel* protagonista) {
-	list<Entity*>::iterator entidad;
-	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
-		if((*entidad)->getClass() == RESOURCE){
-			Resource* entidadReal = (Resource*)(*entidad);
-			SDL_Point position = this->mundo->getTileForPosition(entidadReal->getPosicion());
-			if ((position.x == point.x) &&
-				(position.y == point.y) &&
-				entidadReal->Cosechable) {
-					entidadReal->cosechar();
-					protagonista->didCollectResource(entidadReal->getNombre());
-					this->delegate->desapareceEntidad(entidadReal);
-					entidades.erase(entidad);
-					return true;
-			}
-		}
-	}
-	return false;
-}
-
 Entity* Escenario::getEntidadEnPosicion(SDL_Point point, bool ignoreCosechables) {
 	SDL_Point tile = this->mundo->getTileForPosition(point);
 	list<Entity*>::iterator entidad;
@@ -245,8 +218,6 @@ void Escenario::loop() {
 
 		SDL_Point currentTile = this->mundo->getTileForPosition(protagonista->getPosicion());
 		this->tilesWithUsers[protagonista->getUsername()] = TileCoordinate(currentTile.x,currentTile.y);
-
-		updated = (updated || this->cosecharEnPosicion(currentTile, protagonista));
 	}
 
 

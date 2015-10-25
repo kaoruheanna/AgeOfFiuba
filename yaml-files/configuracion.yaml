@@ -1,7 +1,7 @@
 ---
 pantalla:
- - alto: 640
- - ancho: 800
+ - alto: 800
+ - ancho: 1200
 
 configuracion:
  - vel_personaje: 3
@@ -13,6 +13,7 @@ tipos:
    miniImagen: img/tile_blue.png
 
  - nombre: piedra
+   categoria: recurso
    imagen: img/Mossy_Stone_Brick.png
    miniImagen: img/tile_blue.png
    ancho_base: 1
@@ -21,12 +22,13 @@ tipos:
    pixel_ref_y: 25
    
  - nombre: comida
+   categoria: recurso
    imagen: img/comida.png
    miniImagen: img/tile_blue.png
    ancho_base: 1
    alto_base : 1
-   pixel_ref_x: 25
-   pixel_ref_y: 25
+   pixel_ref_x: 0
+   pixel_ref_y: 0
    
  - nombre: madera
    imagen: img/madera.png
@@ -100,13 +102,13 @@ escenario:
    size_y: 20
    
    entidades:
-   - [x: 4, y: 11, tipo: archeryRange]
+
    - [x: 1, y: 7, tipo: casa]
    
    
-   - [x: 4, y: 2, tipo: arbol]
-   - [x: 5, y: 2, tipo: arbol]
-   - [x: 6, y: 2, tipo: arbol]
+   - [x: 4, y: 2, tipo: comida]
+   - [x: 5, y: 2, tipo: comida]
+   - [x: 6, y: 2, tipo: comida]
    - [x: 7, y: 2, tipo: arbol]
    - [x: 7, y: 3, tipo: arbol]
    - [x: 7, y: 4, tipo: arbol]

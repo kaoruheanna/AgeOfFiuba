@@ -9,20 +9,14 @@
 
 Resource::Resource() : Entity("", {0, 0}, 1, 1) {
 	this->id = 0;
-	this->Cosechable = true;
 }
 Resource::Resource(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base): Entity(nombre, posicion, ancho_base, alto_base) {
 	this->id = id;
-	this->Cosechable = true;
 }
 
 Resource::Resource( const Resource& other ) : Entity(other) {
 	this->id = other.id;
 };
-
-void Resource::cosechar() {
-	this->Cosechable = false;
-}
 
 Resource::~Resource() {}
 

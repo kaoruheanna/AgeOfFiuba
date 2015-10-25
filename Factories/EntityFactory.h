@@ -17,22 +17,23 @@
 #include "../Models/Entity.h"
 #include "../Models/Resource.h"
 #include "../Models/MobileModel.h"
+#include "../Configuration/TipoConfig.h"
 
 using namespace std;
 
 class EntityFactory {
 public:
-	EntityFactory(Map *mundo, map<string, SDL_Point> sizeByType);
+	EntityFactory(Map *mundo, list<TipoConfig> tiposConfigList);
 	virtual ~EntityFactory();
 	MobileModel* crearProtagonista(const string& tipo, SDL_Point posicion);
 	Entity* crearEntidad(const string& tipo, SDL_Point posicion, bool esProtagonista = false);
 	Resource* crearRecurso(const string& tipo, SDL_Point posicion);
 private:
-	map<string, SDL_Point> sizeByType;
 	Map *mundo;
+	map<string, TipoConfig> tipos;
 
 	SDL_Point getPositionForTile(const string& tipo, SDL_Point posicion, bool centered = false);
-	SDL_Point getSize(const string& tipo, SDL_Point posicion);
+	SDL_Point getSize(const string& tipo);
 };
 
 #endif /* FACTORIES_ENTITYFACTORY_H_ */

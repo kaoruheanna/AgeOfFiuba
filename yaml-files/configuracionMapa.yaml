@@ -84,7 +84,7 @@ escenario:
    size_y: 15
    
    entidades:
-   - [x: 6, y: 4, tipo: archeryRange]
+
    - [x: 2, y: 5, tipo: casa]
    - [x: 9, y: 15, tipo: tierra]
    - [x: 9, y: 16, tipo: tierra]
