@@ -29,7 +29,8 @@ class Map {
 		void setAll(int,int,int,int);
 		void setTileDimensions(int,int);
 
-
+		// Devuelve una posicion de tile al azar o -1, -1 si no hay
+		SDL_Point getEmptyTile();
 		SDL_Point posicionRelativaRect(SDL_Rect,SDL_Point);
 
 		bool construirEntidad(Entity*,SDL_Point);

@@ -27,9 +27,8 @@ const char * ResourcesManager::getNewResourceType() {
 }
 
 Resource* ResourcesManager::getNewResource() {
-	int posicionX = rand() % this->escenario->mundo->getWidth();
-	int posicionY = rand() % this->escenario->mundo->getHeight();
-	Resource *resource = this->escenario->factory->crearRecurso(this->getNewResourceType(),{ posicionX, posicionY });
+	SDL_Point posicion = this->escenario->mundo->getEmptyTile();
+	Resource *resource = this->escenario->factory->crearRecurso(this->getNewResourceType(), posicion);
 	if(resource == NULL){
 		Log().Get("Escenario", logWARNING) << "La entidad  del escenario  no pudo ser creada.";
 	} else {
@@ -38,7 +37,7 @@ Resource* ResourcesManager::getNewResource() {
 			Log().Get("Escenario", logWARNING) << "La entidad N°  del escenario  no fue agregada al mapa. La misma no puede estar en la misma posicion que otra entidad.";
 		}
 	}
-	Log().Get("Escenario") << "id: " << resource->id << " Se creo en " << posicionX << " , " << posicionY;
+	Log().Get("Escenario") << "id: " << resource->id << " Se creo en " << posicion.x << " , " << posicion.y;
 
 	return resource;
 }

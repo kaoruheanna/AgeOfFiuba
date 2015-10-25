@@ -273,18 +273,16 @@ queue<SDL_Point> Escenario::getPath(SDL_Point origen, SDL_Point destino){
 
 // Para manejar varios protagonistas
 void Escenario::addUser(char* username) {
-	int posicionX = rand() % this->mundo->getWidth();
-	int posicionY = rand() % this->mundo->getHeight();
-	// TODO asegurar una posicion vacia
+	SDL_Point posicion = this->mundo->getEmptyTile();
 	MobileModel* userModel = factory->crearProtagonista(
-			escenarioConfig.getProtagonista().getTipo(),
-			{ posicionX, posicionY }
-		);
+		escenarioConfig.getProtagonista().getTipo(),
+		posicion
+	);
 	userModel->setUsername(username);
 	if(!this->agregarEntidad(userModel)){
 		printf("ERROR - Protagonista no se puede agregar al escenario\n");
 	} else {
-		printf("Agregado protagonista a la posicion: %i %i\n", posicionX, posicionY);
+		printf("Agregado protagonista a la posicion: %i %i\n", posicion.x, posicion.y);
 	}
 	this->usuarios.insert(pair<string, MobileModel*>(username, userModel));
 }

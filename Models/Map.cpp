@@ -37,6 +37,20 @@ int Map::getTileWidth(){
 	return this->tile_ancho;
 }
 
+SDL_Point Map::getEmptyTile(){
+	SDL_Point tile = { -1, -1 };
+	int maxCount = this->ancho * this->alto;
+	int count = 0;
+	while((count < maxCount) && tile.x == -1){
+		tile = { rand() % this->ancho, rand() % this->alto };
+		if(this->baldosas->sectorEstaBloqueado(tile, { tile.x + 1, tile.y + 1 })){
+			tile = { -1, -1 };
+		}
+		count ++;
+	}
+	return tile;
+}
+
 /* posicion relativa. Rect refiere a la pantalla,
  * punto_m es un punto en las coordenadas del mapa (coordenadas absolutas).
  * Devuelve punto_v que seria el mismo punto pero respecto del mapa.*/
