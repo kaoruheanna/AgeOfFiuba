@@ -264,14 +264,14 @@ void Escenario::loop() {
 	for(found = this->usuarios.begin(); found != this->usuarios.end(); ++found){
 		protagonista = found->second;
 		//buscar si en el camino el personaje se topa con algo
-		if (this->comprobarColision(protagonista,false)){
+		/*if (this->comprobarColision(protagonista,false)){
 			cout<<"aloha"<<endl;
 			SDL_Point last_position = protagonista->getLastDestination();
 			SDL_Point crash_position = protagonista->getNextPosition();
 			protagonista->stopMoving();
 			//recalcular camino evitando crash position y yendo hasta last position
 
-		}
+		}*/
 		//hasta aca => muevo
 		if(protagonista->updatePosition()) {
 			actualizarPersonajes = true;
