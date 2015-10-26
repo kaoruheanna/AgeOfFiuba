@@ -65,8 +65,26 @@ bool TileSet::sectorEstaBloqueado(SDL_Point origen, SDL_Point fin){
 	return false;
 }
 
-//Devuelve todas las posiciones adyacentes a la baldosa, por las que se puede caminar
+bool TileSet::esVecino(Posicion a, Posicion b){
+	//devuelve si la posicion a es vecina a b.
+	//si a y b son validas(estan dentro del mapa) y, a o b no estan ocupadas:
+	if (this->posicionValida(a) and this->posicionValida(b)
+			and !(this->posicionOcupada(a) or this->posicionOcupada(b))){
+		float distanciaX = b.first - a.first;
+		float distanciaY = b.second - a.second;
+		//si la distancia es menor a 1(es decir son adyacentes) y no son la misma posicion.
+		if (distanciaX<=1 and distanciaY<=1 and (fabs(distanciaX) + fabs(distanciaY)!=0)){
+			if (!(this->posicionOcupada({a.first+distanciaX,a.second})
+					or this->posicionOcupada({a.first,a.second+distanciaY}))){
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 std::list<Posicion> TileSet::vecinos(Posicion baldosa){
+	//Devuelve todas las posiciones adyacentes a la baldosa, por las que se puede caminar
 	list<Posicion>lista_de_vecinos;
 	int x = baldosa.first;
 	int y = baldosa.second;
@@ -103,6 +121,13 @@ int TileSet::distancia(Posicion a, Posicion b){
 	return abs(b.first - a.first) + abs(b.second - a.second);
 }
 
+int TileSet::valorArista(Posicion a, Posicion b){
+	if  (!(this->esVecino(a,b))){
+		return -1;
+	}
+	return this->distancia(a,b);
+}
+
 //Devuelve el valor heuristico de ir de "a" a "b"
 int TileSet::heuristica(Posicion a, Posicion b){
 	return sqrt( pow((b.first - a.first),2) + pow((b.second - a.second), 2));
@@ -111,13 +136,6 @@ int TileSet::heuristica(Posicion a, Posicion b){
 
 //Devuelve el valor de ir de "a" a "b" en la grilla (a y b son vecinos)
 //Devuelve -1 si la arista no existe
-int TileSet::valorArista(Posicion a, Posicion b){
-	if  (!(this->esVecino(a,b))){
-		return -1;
-	}
-	return this->distancia(a,b);
-}
-
 bool TileSet::posicionValida(Posicion posicion){
 	return (posicion.first>=0) and (posicion.first < this->ancho)
 			and (posicion.second>=0) and (posicion.second < this->alto);
@@ -125,21 +143,6 @@ bool TileSet::posicionValida(Posicion posicion){
 
 bool TileSet::posicionOcupada(Posicion posicion){
 	return this->matriz[posicion.first][posicion.second];
-}
-
-bool TileSet::esVecino(Posicion a, Posicion b){
-	if (this->posicionValida(a) and this->posicionValida(b)
-			and !(this->posicionOcupada(a) or this->posicionOcupada(b))){
-		float distanciaX = b.first - a.first;
-		float distanciaY = b.second - a.second;
-		if (distanciaX<=1 and distanciaY<=1 and (fabs(distanciaX) + fabs(distanciaY)!=0)){
-			if (!(this->posicionOcupada({a.first+distanciaX,a.second})
-					or this->posicionOcupada({a.first,a.second+distanciaY}))){
-				return true;
-			}
-		}
-	}
-	return false;
 }
 
 pointMap TileSet::caminoMinimo(Posicion origen, Posicion destino, Posicion &destino_real){
