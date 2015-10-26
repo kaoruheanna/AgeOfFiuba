@@ -121,7 +121,7 @@ void* pingear(void* args) {
 	InfoLoguearse* info = (InfoLoguearse*) args;
 	do{
 		info->mensajero->connectionAlive = false;
-		printf("Cliente - Checkeando conexion...\n");
+//		printf("Cliente - Checkeando conexion...\n");
 		sleep(1);
 	} while(info->mensajero->connectionAlive);
 	printf("Cliente - Cerrando conexion...\n");

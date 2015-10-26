@@ -21,6 +21,8 @@ and may not be redistributed without written permission.*/
 #include "Controllers/MensajeroLocal.h"
 #include "Controllers/ServerGameController.h"
 
+#include <signal.h>
+
 GameConfiguration *configuration;
 ServerGameController *serverGameController;
 void * startServer(void* nothing) {
@@ -30,6 +32,7 @@ void * startServer(void* nothing) {
 
 int main( int argc, char* args[] )
 {
+	signal(SIGPIPE, SIG_IGN); // Stops the program to end on an socket error
 	// Detect arguments to startup server or client
 	if(argc > 1){
 		char* type = args[1];

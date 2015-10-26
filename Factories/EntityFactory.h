@@ -31,7 +31,7 @@ private:
 	map<string, SDL_Point> sizeByType;
 	Map *mundo;
 
-	SDL_Point getPosition(const string& tipo, SDL_Point posicion);
+	SDL_Point getPositionForTile(const string& tipo, SDL_Point posicion, bool centered = false);
 	SDL_Point getSize(const string& tipo, SDL_Point posicion);
 };
 

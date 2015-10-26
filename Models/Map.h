@@ -29,7 +29,8 @@ class Map {
 		void setAll(int,int,int,int);
 		void setTileDimensions(int,int);
 
-
+		// Devuelve una posicion de tile al azar o -1, -1 si no hay
+		SDL_Point getEmptyTile();
 		SDL_Point posicionRelativaRect(SDL_Rect,SDL_Point);
 
 		bool construirEntidad(Entity*,SDL_Point);
@@ -37,7 +38,7 @@ class Map {
 		Entity* sacarEntidad(Entity*);
 
 		SDL_Point getTileForPosition(SDL_Point point);
-		SDL_Point getPositionForTile(SDL_Point point);
+		SDL_Point getPositionForTile(SDL_Point point,bool centered = false);
 		SDL_Point getCenteredPositionForTile(SDL_Point point);
 
 		queue<SDL_Point> obtenerCamino(SDL_Point origen, SDL_Point destino);

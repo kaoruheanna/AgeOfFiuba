@@ -30,13 +30,13 @@ EscenarioConfig::~EscenarioConfig() {
 void EscenarioConfig::validarContenido(){
 	if (this->nodoEscenario.IsNull() || !this->nodoEscenario.IsSequence() || this->nodoEscenario.size() != 1){
 			this->cargarEscenarioPorDefecto();
-			Log().Get(TAG,logWARNING) << "No existe campo Escenario o es invalido, Se carga una configuracion por Defecto";
+//			Log().Get(TAG,logWARNING) << "No existe campo Escenario o es invalido, Se carga una configuracion por Defecto";
 			return;
 		}
 		else{
 			if (!this->verificarNombre()){
 				this->nombre = "NombreDefault";
-				Log().Get(TAG,logWARNING) << "El nombre del escenario es incorrecto, se carga un nombre por defecto";
+//				Log().Get(TAG,logWARNING) << "El nombre del escenario es incorrecto, se carga un nombre por defecto";
 			}
 			this->validarTamanio();
 			this->parsearProtagonista();
@@ -62,14 +62,14 @@ bool EscenarioConfig::verificarNombre(){
 void EscenarioConfig::validarTamanio(){
 	if (!this->validarINT("size_x")){
 		this->sizeX = TAMANIO_DEFAULT;
-		Log().Get(TAG,logWARNING) << "Tamanio X de pantalla invalido, se cargo el tamanio en X por defecto";
+//		Log().Get(TAG,logWARNING) << "Tamanio X de pantalla invalido, se cargo el tamanio en X por defecto";
 	}
 	else{
 			this->sizeX = this->nodoEscenario[0]["size_x"].as<int>();
 	}
 	if (!this->validarINT("size_y")){
 		this->sizeY = TAMANIO_DEFAULT;
-		Log().Get(TAG,logWARNING) << "Tamanio Y de pantalla invalido, se cargo el tamanio en X por defecto";
+//		Log().Get(TAG,logWARNING) << "Tamanio Y de pantalla invalido, se cargo el tamanio en X por defecto";
 	}
 	else{
 			this->sizeY = this->nodoEscenario[0]["size_y"].as<int>();
@@ -195,12 +195,13 @@ void EscenarioConfig::parsearEntidades(){
 				EntidadConfig newNodo = aux;
 				this->lista.push_back(newNodo);
 			}
-			else{Log().Get(TAG,logERROR) << "Mal formato de la entidad N°: " << i;}
+			else{
+//				Log().Get(TAG,logERROR) << "Mal formato de la entidad N°: " << i;
+			}
 		}
 	}
 	else{
-		Log().Get(TAG,logERROR) << "El formato del campo entidades no es correcto o no existe";
-
+//		Log().Get(TAG,logERROR) << "El formato del campo entidades no es correcto o no existe";
 	}
 }
 
