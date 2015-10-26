@@ -45,6 +45,10 @@ SDL_Point Entity::getPosicion(){
 	return this->posicion;
 }
 
+SDL_Point Entity::getNextPosicion(){
+	return this->posicion;
+}
+
 int Entity::getAnchoBase(){
 	return this->ancho_base;
 }

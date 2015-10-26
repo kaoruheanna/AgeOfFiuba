@@ -38,6 +38,7 @@ protected:
 
 public:
 	SDL_Point getPosicion();
+	SDL_Point getNextPosicion();
 	int getAnchoBase();
 	int getAltoBase();
 	string getNombre();

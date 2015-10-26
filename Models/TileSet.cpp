@@ -152,7 +152,8 @@ pointMap TileSet::caminoMinimo(Posicion origen, Posicion destino, Posicion &dest
 
 	if (this->posicionOcupada(destino)){
 		list<Posicion> vacio;
-		destino_a = this->buscarDestinoMasCercano(origen, destino);
+		destino_a = origen;
+		//destino_a = this->buscarDestinoMasCercano(origen, destino, desde_donde_vino);
 	}
 
 	desde_donde_vino [origen] = origen;
@@ -178,35 +179,29 @@ pointMap TileSet::caminoMinimo(Posicion origen, Posicion destino, Posicion &dest
 		}
 	}
 	if (destino_real != destino_a){
-		cout<<"recorro todo"<<endl;
-		destino_a = this->buscarDestinoMasCercano(origen, destino);
+		destino_a = this->buscarDestinoMasCercano(origen, destino, desde_donde_vino);
 		return this->caminoMinimo(origen,destino_a,destino_real);
 	}
 
 	return desde_donde_vino; // si sale del while es porque no llego al destino, el camino es hasta el lugar mas cercano al destino.
 }
 
-Posicion TileSet::buscarDestinoMasCercano(Posicion origen, Posicion destino){
-	/*Posicion nuevo_destino = destino;
-	int dx = origen.first - destino.first;
-	int dy = origen.second - destino.second;
-	dx = dx/sqrt(pow(dx,2)+pow(dy,2));
-	dy = dy/sqrt(pow(dx,2)+pow(dy,2));
-	int i = 0;
-	while (this->posicionOcupada(nuevo_destino)){
-		nuevo_destino = {destino.first+(dx*i),destino.second+(dy*i)};
-		i++;
+Posicion TileSet::buscarDestinoMasCercano(Posicion origen, Posicion destino, pointMap camino){
+	//return origen;
+	Posicion destino_cercano = origen;
+	cout<<"destino: "<<destino.first<<","<<destino.second<<endl;
+	for (pair <Posicion,Posicion> pos: camino){
+		if (this->distancia(pos.first,destino_cercano) < this->distancia(origen,destino_cercano)){
+			cout<<"Posicion: "<<pos.first.first<<","<<pos.first.second<<endl;
+			destino_cercano = pos.first;
+		}
 	}
-	return nuevo_destino;*/
-
-	return origen;
+	return destino_cercano;
 }
 
 deque<SDL_Point> TileSet::obtenerCamino(SDL_Point origen, SDL_Point destino){
 	Posicion destino_real;
-	cout<<"destino: "<<destino.x<<","<<destino.y<<endl;
 	pointMap lugares = this->caminoMinimo({origen.x,origen.y},{destino.x,destino.y}, destino_real);
-	cout<<"destino real: "<<destino_real.first<<","<<destino_real.second<<endl;
 	deque<SDL_Point> camino;
 	Posicion orig = {origen.x, origen.y};
 

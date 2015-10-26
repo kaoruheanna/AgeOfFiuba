@@ -74,7 +74,7 @@ public:
 	bool posicionOcupada(Posicion posicion);
 	pointMap caminoMinimo(Posicion origen, Posicion destino, Posicion &destino_real);
 	deque<SDL_Point> obtenerCamino(SDL_Point origen, SDL_Point destino);
-	Posicion buscarDestinoMasCercano(Posicion origen, Posicion destino);
+	Posicion buscarDestinoMasCercano(Posicion origen, Posicion destino, pointMap camino);
 
 
 	virtual ~TileSet();

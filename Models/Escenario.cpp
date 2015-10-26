@@ -187,6 +187,21 @@ bool Escenario::cosecharEnPosicion(SDL_Point point, MobileModel* protagonista) {
 	return false;
 }
 
+bool Escenario::hayEntidadEnPosicion(SDL_Point point, bool ignoreCosechables) {
+	//SDL_Point tile = this->mundo->getTileForPosition(point);
+	SDL_Point tile = point;
+	list<Entity*>::iterator entidad;
+	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
+		Entity* entidadReal = (*entidad);
+		SDL_Point posEntidad = this->mundo->getTileForPosition(entidadReal->getPosicion());
+		cout<<"caca: "<<posEntidad.x<<","<<posEntidad.y<<endl;
+		if (posEntidad.x == tile.x and posEntidad.y == tile.y){
+			return true;
+		}
+	}
+	return false;
+}
+
 Entity* Escenario::getEntidadEnPosicion(SDL_Point point, bool ignoreCosechables) {
 	SDL_Point tile = this->mundo->getTileForPosition(point);
 	list<Entity*>::iterator entidad;
@@ -211,6 +226,27 @@ Entity* Escenario::getEntidadEnPosicion(SDL_Point point, bool ignoreCosechables)
 	return NULL;
 }
 
+bool Escenario::comprobarColision(MobileModel* protagonista){
+	SDL_Point tile = this->mundo->getTileForPosition(protagonista->getNextPosition());
+	list<Entity*>::iterator entidad;
+	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
+		Entity* entidadReal = (*entidad);
+		SDL_Point posEntidad = this->mundo->getTileForPosition(entidadReal->getNextPosicion());
+		if (entidadReal->getClass() == MOBILE_MODEL){
+			//la entidad tiene que ser distinta a protagonista
+			if (entidadReal->getNombre() != protagonista->getNombre()){
+				if (posEntidad.x == tile.x and posEntidad.y == tile.y){
+					return true;
+				}
+			}
+		}else if (posEntidad.x == tile.x and posEntidad.y == tile.y){
+			return true;
+		}
+	}
+	return false;
+
+}
+
 std::pair<SDL_Point,SDL_Point> Escenario::getTilesCoordinatesForEntity(Entity *entity){
 	SDL_Point minTile = this->mundo->getTileForPosition(entity->getPosicion());
 	int maxTileX = (minTile.x + entity->getAnchoBase());
@@ -227,7 +263,11 @@ void Escenario::loop() {
 	map<string, MobileModel*>::iterator found;
 	for(found = this->usuarios.begin(); found != this->usuarios.end(); ++found){
 		protagonista = found->second;
-		SDL_Point pos = this->mundo->getTileForPosition(protagonista->getNextPosition());
+		//buscar si en el camino el personaje se topa con algo
+		/*if (this->comprobarColision(protagonista)){
+			protagonista->stopMoving();
+		}*/
+		//hasta aca => muevo
 		if(protagonista->updatePosition()) {
 			actualizarPersonajes = true;
 		}

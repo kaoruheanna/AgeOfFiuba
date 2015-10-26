@@ -183,6 +183,10 @@ SDL_Point MobileModel::getNextDestination(){
 	return destination;
 }
 
+SDL_Point MobileModel::getLastDestination(){
+	return this->path.back();
+}
+
 SDL_Point MobileModel::getNextPosition(){
 	if (!this->moving){
 		return this->posicion;
@@ -193,7 +197,9 @@ SDL_Point MobileModel::getNextPosition(){
 	double deltaY = (double)(this->destinationY - this->posicion.y);
 	double hypotenuse = sqrt (pow(deltaX,2) + pow(deltaY,2.0));
 
-	if (hypotenuse < speed){return {this->destinationX, this->destinationY};}
+	if (hypotenuse < speed){
+		return {this->destinationX, this->destinationY};
+	}
 
 	double displacementX = round(speed * (deltaX / hypotenuse));
 	double displacementY = round(speed * (deltaY / hypotenuse));
@@ -201,6 +207,12 @@ SDL_Point MobileModel::getNextPosition(){
 	int x = this->posicion.x + (int)displacementX;
 	int y = this->posicion.y + (int)displacementY;
 	return {x,y};
+}
+
+void MobileModel::stopMoving(){
+	this->destinationX = this->posicion.x;
+	this->destinationY = this->posicion.y;
+	this->clearPath();
 }
 
 void MobileModel::setPath(queue<SDL_Point> new_path){

@@ -40,12 +40,14 @@ public:
 	void addDestination(int destinationX, int destionationY);
 	SDL_Point getNextDestination();
 	SDL_Point getNextPosition();
+	SDL_Point getLastDestination();
 	void setPath(queue<SDL_Point> new_path);
 	void clearPath();
 	bool esJugador();
 	string getNombreAMostrar();
 	string getUsername();
 	void setUsername(string username);
+	void stopMoving();
 
 	bool isActive();
 	void setActive(bool active);
