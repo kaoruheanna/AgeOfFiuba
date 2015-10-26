@@ -62,7 +62,7 @@ class Escenario {
 		bool hayEntidadEnPosicion(SDL_Point point, bool ignoreCosechables);
 		std::pair<SDL_Point,SDL_Point> getTilesCoordinatesForEntity(Entity *entity); //devuelve un par con el min y maxTile
 		queue <SDL_Point> getPath(SDL_Point origen, SDL_Point destino);
-		bool comprobarColision(MobileModel* protagonista);
+		bool comprobarColision(MobileModel* protagonista, bool ignoreResources);
 
 		bool inicializacionCorrecta;
 

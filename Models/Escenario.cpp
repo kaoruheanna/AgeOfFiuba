@@ -194,7 +194,6 @@ bool Escenario::hayEntidadEnPosicion(SDL_Point point, bool ignoreCosechables) {
 	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
 		Entity* entidadReal = (*entidad);
 		SDL_Point posEntidad = this->mundo->getTileForPosition(entidadReal->getPosicion());
-		cout<<"caca: "<<posEntidad.x<<","<<posEntidad.y<<endl;
 		if (posEntidad.x == tile.x and posEntidad.y == tile.y){
 			return true;
 		}
@@ -226,7 +225,7 @@ Entity* Escenario::getEntidadEnPosicion(SDL_Point point, bool ignoreCosechables)
 	return NULL;
 }
 
-bool Escenario::comprobarColision(MobileModel* protagonista){
+bool Escenario::comprobarColision(MobileModel* protagonista,bool ignoreResources){
 	SDL_Point tile = this->mundo->getTileForPosition(protagonista->getNextPosition());
 	list<Entity*>::iterator entidad;
 	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
@@ -241,6 +240,7 @@ bool Escenario::comprobarColision(MobileModel* protagonista){
 			}
 		}else if (posEntidad.x == tile.x and posEntidad.y == tile.y){
 			return true;
+
 		}
 	}
 	return false;
@@ -264,9 +264,14 @@ void Escenario::loop() {
 	for(found = this->usuarios.begin(); found != this->usuarios.end(); ++found){
 		protagonista = found->second;
 		//buscar si en el camino el personaje se topa con algo
-		/*if (this->comprobarColision(protagonista)){
+		if (this->comprobarColision(protagonista,false)){
+			cout<<"aloha"<<endl;
+			SDL_Point last_position = protagonista->getLastDestination();
+			SDL_Point crash_position = protagonista->getNextPosition();
 			protagonista->stopMoving();
-		}*/
+			//recalcular camino evitando crash position y yendo hasta last position
+
+		}
 		//hasta aca => muevo
 		if(protagonista->updatePosition()) {
 			actualizarPersonajes = true;
@@ -313,16 +318,18 @@ queue<SDL_Point> Escenario::getPath(SDL_Point origen, SDL_Point destino){
 
 // Para manejar varios protagonistas
 void Escenario::addUser(char* username) {
-	SDL_Point posicion = this->mundo->getEmptyTile();
+	int posicionX = rand() % this->mundo->getWidth();
+	int posicionY = rand() % this->mundo->getHeight();
+	// TODO asegurar una posicion vacia
 	MobileModel* userModel = factory->crearProtagonista(
-		escenarioConfig.getProtagonista().getTipo(),
-		posicion
-	);
+			escenarioConfig.getProtagonista().getTipo(),
+			{ posicionX, posicionY }
+		);
 	userModel->setUsername(username);
 	if(!this->agregarEntidad(userModel)){
-		Log().Get("Escenario", logDEBUG) << "1) Protagonista no se pudo agregar al escenario";
+		printf("ERROR - Protagonista no se puede agregar al escenario\n");
 	} else {
-		Log().Get("Escenario", logDEBUG) << "1) Agregado "<<username<<" a la posicion "<<posicion.x<<" "<<posicion.y;
+		printf("Agregado protagonista a la posicion: %i %i\n", posicionX, posicionY);
 	}
 	this->usuarios.insert(pair<string, MobileModel*>(username, userModel));
 }
@@ -336,9 +343,9 @@ void Escenario::addUser(char* username, SDL_Point position) {
 	userModel->setX(position.x);
 	userModel->setY(position.y);
 	if(!this->agregarEntidad(userModel)){
-		Log().Get("Escenario", logDEBUG) << "2) Protagonista no se pudo agregar al escenario";
+		printf("ERROR - Protagonista no se puede agregar al escenario");
 	} else {
-		Log().Get("Escenario", logDEBUG) << "2) Agregado "<<username<<" a la posicion "<<position.x<<" "<<position.y;
+		printf("Agregado protagonista a la posicion: %i %i", position.x, position.y);
 	}
 	this->usuarios.insert(pair<string, MobileModel*>(username, userModel));
 }
