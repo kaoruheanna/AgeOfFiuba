@@ -143,21 +143,13 @@ bool TileSet::esVecino(Posicion a, Posicion b){
 }
 
 pointMap TileSet::caminoMinimo(Posicion origen, Posicion destino, Posicion &destino_real){
-	/* destino_real es el destino final del camino. Devuelve un mapa cuya clave es una posicion y
-	 * el valor es la posicion desde la cual se llega a la clave. Si la clave es igual al valor,
-	 * entonces es la posicion inicial. Si la clave es igual a destino_real es el final del camino.
-	 */
-
-	PriorityQueue<Posicion> frontera; //posiciones a evaluar.
+	PriorityQueue<Posicion> frontera;
 	frontera.put(origen, 0);
 	pointMap desde_donde_vino;
-	costMap costo_hasta_ahora; /*map cuya clave es una posicion y
-	 	 	 	 	 	 	 	 su valor es el costo (desde el origen hasta la posicion)
-	 	 	 	 	 	 	 	  calculado hasta el momento.*/
+	costMap costo_hasta_ahora;
 	Posicion posible_destino;
 	Posicion destino_a = destino;
 
-	//si el destino esta ocupado, entonces no me muevo.
 	if (this->posicionOcupada(destino)){
 		list<Posicion> vacio;
 		destino_a = origen;
@@ -167,44 +159,31 @@ pointMap TileSet::caminoMinimo(Posicion origen, Posicion destino, Posicion &dest
 	desde_donde_vino [origen] = origen;
 	costo_hasta_ahora[origen] = 0;
 
-	//mientras hayan posiciones para evaluar:
 	while (!frontera.empty()) {
-		//obtengo la proxima posicion a evaluar.
 		Posicion actual = frontera.get();
-		//si la posicion actual es igual al destino encontre el camino minimo.
 		if (actual == destino_a) {
 			destino_real = destino_a;
 			return desde_donde_vino;
 		}
 
-		//por cada vecino (= prox):
 		for (Posicion prox : this->vecinos(actual)) {
-			//calculo el nuevo costo
 			int nuevo_costo = costo_hasta_ahora[actual] + this->valorArista(actual, prox);
-			//si no hay costo calculado para prox o el nuevo costo es menor a el costo calculado anteriormente:
 			if (!costo_hasta_ahora.count(prox) || nuevo_costo < costo_hasta_ahora[prox]) {
-				//actualizo costo de prox
 				costo_hasta_ahora[prox] = nuevo_costo;
-				int prioridad = nuevo_costo + this->heuristica(prox, destino_a); // cuanto mas lejos este mayor es la prioridad
-				//agrego a la frontera la posicion
+				int prioridad = nuevo_costo + this->heuristica(prox, destino_a); // distancia es la heuristica
 				frontera.put(prox, prioridad);
-
 				desde_donde_vino[prox] = actual;
-
-				posible_destino = prox; //esto creo que esta de mas, seria: destino_real = prox;
-				destino_real = posible_destino; //hasta ahora mi destino es prox
+				posible_destino = prox;
+				destino_real = posible_destino;
 			}
 		}
 	}
-	// si sale del while es porque no llego al destino. (recorrio todo el mapa)
-	//si el destino_real es distinto al destino al cual quiero llegar:
-	//busco el destino mas cercano (hasta ahora devuelve el origen, es decir que no se mueve).
 	if (destino_real != destino_a){
 		destino_a = this->buscarDestinoMasCercano(origen, destino, desde_donde_vino);
 		return this->caminoMinimo(origen,destino_a,destino_real);
 	}
 
-	return desde_donde_vino;
+	return desde_donde_vino; // si sale del while es porque no llego al destino, el camino es hasta el lugar mas cercano al destino.
 }
 
 Posicion TileSet::buscarDestinoMasCercano(Posicion origen, Posicion destino, pointMap camino){
