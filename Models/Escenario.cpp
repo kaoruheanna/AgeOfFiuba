@@ -238,17 +238,12 @@ void Escenario::loop() {
 
 		SDL_Point point = this->mundo->getTileForPosition(protagonista->getPosicion());
 		updated = updated || this->cosecharEnPosicion(point, protagonista);
-		Log().Get("Escenario", logDEBUG) << "loop: "<<protagonista->getUsername();
+//		Log().Get("Escenario", logDEBUG) << "loop: "<<protagonista->getUsername();
 	}
-
-//	map<string,TileCoordinate>::iterator it;
-//	for (it = tilesWithUsers.begin(); it != tilesWithUsers.end(); it++){
-//		Log().Get("Escenario", logDEBUG) << it->first << ": ("<<it->second.first<<" , "<<it->second.second<<")";
-//	}
 
 
 	if(actualizarPersonajes){
-		Log().Get("Escenario", logDEBUG) << "actualizaPersonajes: "<<protagonista->getUsername();
+//		Log().Get("Escenario", logDEBUG) << "actualizaPersonajes: "<<protagonista->getUsername();
 		this->delegate->actualizaPersonaje(protagonista);
 	}
 

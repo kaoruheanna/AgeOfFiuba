@@ -93,7 +93,7 @@ std::list<TileCoordinate> TileSet::vecinosLibres(TileCoordinate baldosa,list<Til
 	list<TileCoordinate>::iterator it;
 	for (it = vecinos.begin();it != vecinos.end(); it++){
 		TileCoordinate tile = *it;
-		if (this->esVecino(tile,baldosa)){
+		if (this->esVecinoLibre(tile,baldosa,tilesOccupied)){
 			vecinosLibres.push_front(tile);
 		}
 	}
@@ -128,11 +128,8 @@ int TileSet::heuristica(TileCoordinate a, TileCoordinate b){
 }
 
 //Devuelve el valor de ir de "a" a "b" en la grilla (a y b son vecinos)
-//Devuelve -1 si la arista no existe
+//Debe recibir vecinos libres
 int TileSet::valorArista(TileCoordinate a, TileCoordinate b){
-	if  (!(this->esVecino(a,b))){
-		return -1;
-	}
 	return this->distancia(a,b);
 }
 
@@ -145,16 +142,40 @@ bool TileSet::posicionOcupada(TileCoordinate posicion){
 	return this->matriz[posicion.first][posicion.second];
 }
 
-bool TileSet::esVecino(TileCoordinate a, TileCoordinate b){
-	if (this->posicionValida(a) and this->posicionValida(b)
-			and !(this->posicionOcupada(a) or this->posicionOcupada(b))){
-		float distanciaX = b.first - a.first;
-		float distanciaY = b.second - a.second;
-		if (distanciaX<=1 and distanciaY<=1 and (fabs(distanciaX) + fabs(distanciaY)!=0)){
-			if (!(this->posicionOcupada({a.first+distanciaX,a.second})
-					or this->posicionOcupada({a.first,a.second+distanciaY}))){
-				return true;
-			}
+bool TileSet::esTileTransitable(TileCoordinate tile, list<TileCoordinate> tilesOccupied){
+	if (this->posicionOcupada(tile)){
+		return false;
+	}
+
+	list<TileCoordinate>::iterator it;
+	for (it = tilesOccupied.begin(); it != tilesOccupied.end();it++){
+		TileCoordinate tileWithPlayer = *it;
+		if (tileWithPlayer == tile){
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool TileSet::esVecinoLibre(TileCoordinate a, TileCoordinate b,list<TileCoordinate> tilesOccupied){
+	if (!this->posicionValida(a) || !this->posicionValida(b)){
+		return false; //si esta fuera del mapa return false
+	}
+
+	if (!this->esTileTransitable(a,tilesOccupied) || !this->esTileTransitable(b,tilesOccupied)){
+		return false;
+	}
+
+	float distanciaX = b.first - a.first;
+	float distanciaY = b.second - a.second;
+
+	//evita un efecto raro en las diagonales
+	if ((distanciaX<=1 and distanciaY<=1) and (fabs(distanciaX) + fabs(distanciaY)!=0)){
+		TileCoordinate diagonal = TileCoordinate(a.first+distanciaX,a.second);
+		TileCoordinate otraDiagonal = TileCoordinate(a.first,a.second+distanciaY);
+		if (this->esTileTransitable(diagonal,tilesOccupied) && this->esTileTransitable(otraDiagonal,tilesOccupied)){
+			return true;
 		}
 	}
 	return false;

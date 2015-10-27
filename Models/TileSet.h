@@ -70,11 +70,10 @@ public:
 	int distancia(TileCoordinate a, TileCoordinate b); // heuristica a usar en A* (distancia euclideana)
 	int heuristica(TileCoordinate a, TileCoordinate b);
 	int valorArista(TileCoordinate a, TileCoordinate b);
-	bool esVecino(TileCoordinate a, TileCoordinate b);
+	bool esVecinoLibre(TileCoordinate a, TileCoordinate b,list<TileCoordinate> tilesOccupied);
 	bool posicionValida(TileCoordinate posicion);
 	bool posicionOcupada(TileCoordinate posicion);
-//	pointMap caminoMinimo(TileCoordinate origen, TileCoordinate destino, TileCoordinate &destino_real);
-//	deque<SDL_Point> obtenerCamino(SDL_Point origen, SDL_Point destino);
+	bool esTileTransitable(TileCoordinate tile, list<TileCoordinate> tilesOccupied);
 	deque<SDL_Point> obtenerCaminoIgnoringTiles(TileCoordinate tileOrigen, TileCoordinate tileDestino,list<TileCoordinate> tilesOccupied);
 	pointMap calcularCaminoMinimoIgnoringTiles(TileCoordinate origen, TileCoordinate destino,TileCoordinate &destino_real, list<TileCoordinate> tilesOccupied);
 
