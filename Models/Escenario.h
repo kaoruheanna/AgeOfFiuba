@@ -59,10 +59,8 @@ class Escenario {
 		bool eliminarRecursoConID(int id);
 		bool existeRecursoConID(int id);
 		Entity* getEntidadEnPosicion(SDL_Point point, bool ignoreCosechables); //recibe una posicion logica
-		bool hayEntidadEnPosicion(SDL_Point point, bool ignoreCosechables);
 		std::pair<SDL_Point,SDL_Point> getTilesCoordinatesForEntity(Entity *entity); //devuelve un par con el min y maxTile
 		queue <SDL_Point> getPath(SDL_Point origen, SDL_Point destino);
-		bool comprobarColision(MobileModel* protagonista);
 
 		bool inicializacionCorrecta;
 
