@@ -1,4 +1,6 @@
 #include "Map.h"
+#include "Entity.h"
+#include "../GlobalConstants.h"
 
 Map::Map(int alto, int ancho, int tile_ancho, int tile_alto){
 	//el ancho y alto del tile se puede determinar con las dimensiones del tile default.
@@ -92,8 +94,6 @@ bool Map::construirEntidad(Entity* entidad, SDL_Point posicion){
 	return false;
 }
 
-const int TILE_SIZE = 64;
-
 SDL_Point Map::getTileForPosition(SDL_Point point) {
 	return { point.x / TILE_SIZE, point.y / TILE_SIZE };
 }
@@ -111,6 +111,7 @@ SDL_Point Map::getCenteredPositionForTile(SDL_Point point) {
 	return {point.x * TILE_SIZE + (TILE_SIZE/2), point.y * TILE_SIZE + (TILE_SIZE/2)};
 }
 
+/*
 queue <SDL_Point> Map::obtenerCamino(SDL_Point origen, SDL_Point destino){
 	queue<SDL_Point> camino2;
 	SDL_Point punto;
@@ -118,6 +119,27 @@ queue <SDL_Point> Map::obtenerCamino(SDL_Point origen, SDL_Point destino){
 	//transformo las coordenadas a tiles.
 	SDL_Point origenMap = this->getTileForPosition({origen.x-32,origen.y-32});
 	SDL_Point destinoMap = this->getTileForPosition({destino.x-32,destino.y-32});
+
+	deque <SDL_Point> camino = this->baldosas->obtenerCamino(origenMap, destinoMap);
+
+	while (!camino.empty()){
+		punto = camino.back();
+		camino.pop_back();
+		punto = this->getCenteredPositionForTile(punto);
+		camino2.push(punto);
+	}
+	return camino2;
+}
+*/
+
+queue <SDL_Point> Map::obtenerCaminoForEntity(SDL_Point origen, SDL_Point destino, Entity* entity){
+	queue<SDL_Point> camino2;
+	SDL_Point punto;
+
+	//transformo las coordenadas a tiles.
+	int offset = (TILE_SIZE/2);
+	SDL_Point origenMap = this->getTileForPosition({origen.x-offset,origen.y-offset});
+	SDL_Point destinoMap = this->getTileForPosition({destino.x-offset,destino.y-offset});
 
 	deque <SDL_Point> camino = this->baldosas->obtenerCamino(origenMap, destinoMap);
 

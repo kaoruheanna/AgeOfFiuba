@@ -131,12 +131,15 @@ void ServerGameController::moverProtagonista(MobileModel* model) {
 	MobileModel* protagonista = this->escenario->getUserModel(model->getUsername());
 	if(protagonista == NULL){
 		Log().Get(TAG, logERROR) << "El personaje: " << model->getUsername() << " no existe";
-	} else {
-		SDL_Point origen = protagonista->getPosicion();
-		queue <SDL_Point> camino = this->escenario->getPath(origen,{model->getDestinationX(),model->getDestinationY()});
-		protagonista->setPath(camino);
-		Log().Get(TAG, logDEBUG) << "El personaje: " << model->getUsername() << " se mueve al: " << model->getDestinationX() << " , " << model->getDestinationY();
+		return;
 	}
+
+	SDL_Point origen = protagonista->getPosicion();
+	SDL_Point destino = {model->getDestinationX(),model->getDestinationY()};
+//	queue <SDL_Point> camino = this->escenario->getPath(origen,{model->getDestinationX(),model->getDestinationY()});
+	queue <SDL_Point> camino = this->escenario->getCaminoForEntity(origen,destino,protagonista);
+	protagonista->setPath(camino);
+	Log().Get(TAG, logDEBUG) << "El personaje: " << model->getUsername() << " se mueve al: " << model->getDestinationX() << " , " << model->getDestinationY();
 }
 
 void ServerGameController::addMensajero(Mensajero* mensajero) {
