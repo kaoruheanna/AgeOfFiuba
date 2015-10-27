@@ -61,7 +61,7 @@ class Escenario {
 		Entity* getEntidadEnPosicion(SDL_Point point, bool ignoreCosechables); //recibe una posicion logica
 		std::pair<SDL_Point,SDL_Point> getTilesCoordinatesForEntity(Entity *entity); //devuelve un par con el min y maxTile
 //		queue <SDL_Point> getPath(SDL_Point origen, SDL_Point destino);
-		queue<SDL_Point> getCaminoForEntity(SDL_Point origen, SDL_Point destino,Entity *entity);
+		queue<SDL_Point> getCaminoForMobileModel(SDL_Point origen, SDL_Point destino,MobileModel *mobileModel);
 
 		bool inicializacionCorrecta;
 
@@ -73,6 +73,7 @@ class Escenario {
 
 		// Manejo de varios personajes
 		map<string, MobileModel*> usuarios;
+		map<string, TileCoordinate> tilesWithUsers;
 
 		void addUser(char* userName);
 		void addUser(char* userName, SDL_Point position);

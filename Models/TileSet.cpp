@@ -66,8 +66,9 @@ bool TileSet::sectorEstaBloqueado(SDL_Point origen, SDL_Point fin){
 	return false;
 }
 
-//Devuelve todas las posiciones adyacentes a la baldosa, por las que se puede caminar
-std::list<TileCoordinate> TileSet::vecinos(TileCoordinate baldosa){
+/*
+//Devuelve todas las posiciones adyacentes a la baldosa por las que se puede caminar
+std::list<TileCoordinate> TileSet::vecinosLibres(TileCoordinate baldosa,list<TileCoordinate> tilesOccupied){
 	list<TileCoordinate>lista_de_vecinos;
 	int x = baldosa.first;
 	int y = baldosa.second;
@@ -81,6 +82,22 @@ std::list<TileCoordinate> TileSet::vecinos(TileCoordinate baldosa){
 		}
 	}
 	return lista_de_vecinos;
+}
+*/
+
+//Devuelve todas las posiciones adyacentes a la baldosa por las que se puede caminar
+std::list<TileCoordinate> TileSet::vecinosLibres(TileCoordinate baldosa,list<TileCoordinate> tilesOccupied){
+	list<TileCoordinate>vecinosLibres;
+	list<TileCoordinate>vecinos = this->vecinosTotales(baldosa);
+
+	list<TileCoordinate>::iterator it;
+	for (it = vecinos.begin();it != vecinos.end(); it++){
+		TileCoordinate tile = *it;
+		if (this->esVecino(tile,baldosa)){
+			vecinosLibres.push_front(tile);
+		}
+	}
+	return vecinosLibres;
 }
 
 std::list<TileCoordinate> TileSet::vecinosTotales(TileCoordinate baldosa){
@@ -189,7 +206,7 @@ pointMap TileSet::caminoMinimo(TileCoordinate origen, TileCoordinate destino, Ti
 }
 */
 
-pointMap TileSet::calcularCaminoMinimoForEntity(TileCoordinate origen, TileCoordinate destino,TileCoordinate &destino_real, Entity *entity){
+pointMap TileSet::calcularCaminoMinimoIgnoringTiles(TileCoordinate origen, TileCoordinate destino,TileCoordinate &destino_real, list<TileCoordinate> tilesOccupied){
 	PriorityQueue<TileCoordinate> frontera;
 	frontera.put(origen, 0);
 	pointMap desde_donde_vino;
@@ -207,7 +224,7 @@ pointMap TileSet::calcularCaminoMinimoForEntity(TileCoordinate origen, TileCoord
 			return desde_donde_vino;
 		}
 
-		for (TileCoordinate prox : this->vecinos(actual)) {
+		for (TileCoordinate prox : this->vecinosLibres(actual,tilesOccupied)) {
 			int nuevo_costo = costo_hasta_ahora[actual] + this->valorArista(actual, prox);
 			if (!costo_hasta_ahora.count(prox) || nuevo_costo < costo_hasta_ahora[prox]) {
 				costo_hasta_ahora[prox] = nuevo_costo;
@@ -222,13 +239,13 @@ pointMap TileSet::calcularCaminoMinimoForEntity(TileCoordinate origen, TileCoord
 	if (destino_real != destino_a){
 		cout<<"recorro todo"<<endl;
 		destino_a = origen;
-		return this->calcularCaminoMinimoForEntity(origen,destino_a,destino_real,entity);
+		return this->calcularCaminoMinimoIgnoringTiles(origen,destino_a,destino_real,tilesOccupied);
 	}
 
 	return desde_donde_vino; // si sale del while es porque no llego al destino, el camino es hasta el lugar mas cercano al destino.
 }
 
-deque<SDL_Point> TileSet::obtenerCaminoForEntity(TileCoordinate tileOrigen, TileCoordinate tileDestino, Entity *entity){
+deque<SDL_Point> TileSet::obtenerCaminoIgnoringTiles(TileCoordinate tileOrigen, TileCoordinate tileDestino,list<TileCoordinate> tilesOccupied){
 	deque<SDL_Point> caminoVacio;
 	if (this->posicionOcupada(tileDestino)){
 		// Si esta ocupada, no hago nada
@@ -236,7 +253,7 @@ deque<SDL_Point> TileSet::obtenerCaminoForEntity(TileCoordinate tileOrigen, Tile
 	}
 
 	TileCoordinate destino_real;
-	pointMap lugares = this->calcularCaminoMinimoForEntity(tileOrigen,tileDestino,destino_real,entity);
+	pointMap lugares = this->calcularCaminoMinimoIgnoringTiles(tileOrigen,tileDestino,destino_real,tilesOccupied);
 
 	if (lugares.empty()){
 		return caminoVacio; //si no existe el camino minimo devuelvo el camino vacio.

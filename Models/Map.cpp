@@ -132,7 +132,7 @@ queue <SDL_Point> Map::obtenerCamino(SDL_Point origen, SDL_Point destino){
 }
 */
 
-queue <SDL_Point> Map::obtenerCaminoForEntity(SDL_Point origen, SDL_Point destino, Entity* entity){
+queue <SDL_Point> Map::obtenerCaminoIgnoringTiles(SDL_Point origen, SDL_Point destino,list<TileCoordinate> tilesOccupied){
 	queue<SDL_Point> camino2;
 	SDL_Point punto;
 
@@ -144,8 +144,7 @@ queue <SDL_Point> Map::obtenerCaminoForEntity(SDL_Point origen, SDL_Point destin
 	TileCoordinate origenCoordinate = TileCoordinate(tileOrigen.x,tileOrigen.y);
 	TileCoordinate destinoCoordinate = TileCoordinate(tileDestino.x,tileDestino.y);
 
-//	deque <SDL_Point> camino = this->tileSet->obtenerCamino(origenMap, destinoMap);
-	deque <SDL_Point> camino = this->tileSet->obtenerCaminoForEntity(origenCoordinate,destinoCoordinate,entity);
+	deque <SDL_Point> camino = this->tileSet->obtenerCaminoIgnoringTiles(origenCoordinate,destinoCoordinate,tilesOccupied);
 
 	while (!camino.empty()){
 		punto = camino.back();

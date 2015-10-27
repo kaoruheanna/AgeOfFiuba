@@ -221,6 +221,7 @@ std::pair<SDL_Point,SDL_Point> Escenario::getTilesCoordinatesForEntity(Entity *e
 
 //Actualiza todos los modelos en un nuevo loop
 void Escenario::loop() {
+
 	updated = false;
 	bool actualizarPersonajes = false;
 	MobileModel* protagonista = NULL;
@@ -232,11 +233,22 @@ void Escenario::loop() {
 			actualizarPersonajes = true;
 		}
 
+		SDL_Point aux = this->mundo->getTileForPosition(protagonista->getPosicion());
+		this->tilesWithUsers[protagonista->getUsername()] = TileCoordinate(aux.x,aux.y);
+
 		SDL_Point point = this->mundo->getTileForPosition(protagonista->getPosicion());
 		updated = updated || this->cosecharEnPosicion(point, protagonista);
+		Log().Get("Escenario", logDEBUG) << "loop: "<<protagonista->getUsername();
 	}
 
+//	map<string,TileCoordinate>::iterator it;
+//	for (it = tilesWithUsers.begin(); it != tilesWithUsers.end(); it++){
+//		Log().Get("Escenario", logDEBUG) << it->first << ": ("<<it->second.first<<" , "<<it->second.second<<")";
+//	}
+
+
 	if(actualizarPersonajes){
+		Log().Get("Escenario", logDEBUG) << "actualizaPersonajes: "<<protagonista->getUsername();
 		this->delegate->actualizaPersonaje(protagonista);
 	}
 
@@ -273,8 +285,20 @@ queue<SDL_Point> Escenario::getPath(SDL_Point origen, SDL_Point destino){
 }
 */
 
-queue<SDL_Point> Escenario::getCaminoForEntity(SDL_Point origen, SDL_Point destino,Entity *entity){
-	return this->mundo->obtenerCaminoForEntity(origen, destino,entity);
+queue<SDL_Point> Escenario::getCaminoForMobileModel(SDL_Point origen, SDL_Point destino,MobileModel *mobileModel){
+	list<TileCoordinate> tilesOccupied;
+
+	map<string,TileCoordinate>::iterator it;
+	for (it = tilesWithUsers.begin(); it != tilesWithUsers.end(); it++){
+//		Log().Get("Escenario", logDEBUG) << it->first << ": ("<<it->second.first<<" , "<<it->second.second<<")";
+		string username = it->first;
+		if (username != mobileModel->getUsername()){
+			TileCoordinate tile = it->second;
+			tilesOccupied.push_back(tile);
+		}
+	}
+
+	return this->mundo->obtenerCaminoIgnoringTiles(origen,destino,tilesOccupied);
 }
 
 // Para manejar varios protagonistas
