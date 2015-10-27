@@ -136,7 +136,6 @@ void ServerGameController::moverProtagonista(MobileModel* model) {
 
 	SDL_Point origen = protagonista->getPosicion();
 	SDL_Point destino = {model->getDestinationX(),model->getDestinationY()};
-//	queue <SDL_Point> camino = this->escenario->getPath(origen,{model->getDestinationX(),model->getDestinationY()});
 	queue <SDL_Point> camino = this->escenario->getCaminoForEntity(origen,destino,protagonista);
 	protagonista->setPath(camino);
 	Log().Get(TAG, logDEBUG) << "El personaje: " << model->getUsername() << " se mueve al: " << model->getDestinationX() << " , " << model->getDestinationY();

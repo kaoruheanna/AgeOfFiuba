@@ -73,11 +73,10 @@ public:
 	bool esVecino(TileCoordinate a, TileCoordinate b);
 	bool posicionValida(TileCoordinate posicion);
 	bool posicionOcupada(TileCoordinate posicion);
-	pointMap caminoMinimo(TileCoordinate origen, TileCoordinate destino, TileCoordinate &destino_real);
+//	pointMap caminoMinimo(TileCoordinate origen, TileCoordinate destino, TileCoordinate &destino_real);
 //	deque<SDL_Point> obtenerCamino(SDL_Point origen, SDL_Point destino);
 	deque<SDL_Point> obtenerCaminoForEntity(TileCoordinate tileOrigen, TileCoordinate tileDestino, Entity *entity);
-	TileCoordinate buscarDestinoMasCercano(TileCoordinate origen, TileCoordinate destino);
-
+	pointMap calcularCaminoMinimoForEntity(TileCoordinate origen, TileCoordinate destino,TileCoordinate &destino_real, Entity *entity);
 
 	virtual ~TileSet();
 };

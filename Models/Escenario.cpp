@@ -227,7 +227,7 @@ void Escenario::loop() {
 	map<string, MobileModel*>::iterator found;
 	for(found = this->usuarios.begin(); found != this->usuarios.end(); ++found){
 		protagonista = found->second;
-		SDL_Point pos = this->mundo->getTileForPosition(protagonista->getNextPosition());
+//		SDL_Point pos = this->mundo->getTileForPosition(protagonista->getNextPosition());
 		if(protagonista->updatePosition()) {
 			actualizarPersonajes = true;
 		}

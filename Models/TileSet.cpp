@@ -143,6 +143,7 @@ bool TileSet::esVecino(TileCoordinate a, TileCoordinate b){
 	return false;
 }
 
+/*
 pointMap TileSet::caminoMinimo(TileCoordinate origen, TileCoordinate destino, TileCoordinate &destino_real){
 	PriorityQueue<TileCoordinate> frontera;
 	frontera.put(origen, 0);
@@ -186,60 +187,63 @@ pointMap TileSet::caminoMinimo(TileCoordinate origen, TileCoordinate destino, Ti
 
 	return desde_donde_vino; // si sale del while es porque no llego al destino, el camino es hasta el lugar mas cercano al destino.
 }
-
-TileCoordinate TileSet::buscarDestinoMasCercano(TileCoordinate origen, TileCoordinate destino){
-	/*Posicion nuevo_destino = destino;
-	int dx = origen.first - destino.first;
-	int dy = origen.second - destino.second;
-	dx = dx/sqrt(pow(dx,2)+pow(dy,2));
-	dy = dy/sqrt(pow(dx,2)+pow(dy,2));
-	int i = 0;
-	while (this->posicionOcupada(nuevo_destino)){
-		nuevo_destino = {destino.first+(dx*i),destino.second+(dy*i)};
-		i++;
-	}
-	return nuevo_destino;*/
-
-	return origen;
-}
-
-/*
-deque<SDL_Point> TileSet::obtenerCamino(SDL_Point origen, SDL_Point destino){
-	TileCoordinate destino_real;
-	cout<<"destino: "<<destino.x<<","<<destino.y<<endl;
-	pointMap lugares = this->caminoMinimo({origen.x,origen.y},{destino.x,destino.y}, destino_real);
-	cout<<"destino real: "<<destino_real.first<<","<<destino_real.second<<endl;
-	deque<SDL_Point> camino;
-	TileCoordinate orig = {origen.x, origen.y};
-
-	//todo si no puedo llegar a mi destino no hago nada, habria que buscar la posicion mas cercana.
-	if (lugares.empty()){
-		return camino; //si no existe el camino minimo devuelvo el camino vacio.
-	}
-//	if (destino_real.first != destino.x or destino_real.second != destino.y){
-//		return camino;
-//	}
-	TileCoordinate actual = destino_real;
-	while (actual != orig){
-		camino.push_back({actual.first, actual.second});
-		actual = lugares[actual];
-	}
-	return camino;
-}
 */
 
+pointMap TileSet::calcularCaminoMinimoForEntity(TileCoordinate origen, TileCoordinate destino,TileCoordinate &destino_real, Entity *entity){
+	PriorityQueue<TileCoordinate> frontera;
+	frontera.put(origen, 0);
+	pointMap desde_donde_vino;
+	costMap costo_hasta_ahora;
+	TileCoordinate posible_destino;
+	TileCoordinate destino_a = destino;
+
+	desde_donde_vino [origen] = origen;
+	costo_hasta_ahora[origen] = 0;
+
+	while (!frontera.empty()) {
+		TileCoordinate actual = frontera.get();
+		if (actual == destino_a) {
+			destino_real = destino_a;
+			return desde_donde_vino;
+		}
+
+		for (TileCoordinate prox : this->vecinos(actual)) {
+			int nuevo_costo = costo_hasta_ahora[actual] + this->valorArista(actual, prox);
+			if (!costo_hasta_ahora.count(prox) || nuevo_costo < costo_hasta_ahora[prox]) {
+				costo_hasta_ahora[prox] = nuevo_costo;
+				int prioridad = nuevo_costo + this->heuristica(prox, destino_a); // distancia es la heuristica
+				frontera.put(prox, prioridad);
+				desde_donde_vino[prox] = actual;
+				posible_destino = prox;
+				destino_real = posible_destino;
+			}
+		}
+	}
+	if (destino_real != destino_a){
+		cout<<"recorro todo"<<endl;
+		destino_a = origen;
+		return this->calcularCaminoMinimoForEntity(origen,destino_a,destino_real,entity);
+	}
+
+	return desde_donde_vino; // si sale del while es porque no llego al destino, el camino es hasta el lugar mas cercano al destino.
+}
 
 deque<SDL_Point> TileSet::obtenerCaminoForEntity(TileCoordinate tileOrigen, TileCoordinate tileDestino, Entity *entity){
-	TileCoordinate destino_real;
-	pointMap lugares = this->caminoMinimo(tileOrigen,tileDestino, destino_real);
-	cout<<"destino real: "<<destino_real.first<<","<<destino_real.second<<endl;
-	deque<SDL_Point> camino;
+	deque<SDL_Point> caminoVacio;
+	if (this->posicionOcupada(tileDestino)){
+		// Si esta ocupada, no hago nada
+		return caminoVacio;
+	}
 
-	//todo si no puedo llegar a mi destino no hago nada, habria que buscar la posicion mas cercana.
+	TileCoordinate destino_real;
+	pointMap lugares = this->calcularCaminoMinimoForEntity(tileOrigen,tileDestino,destino_real,entity);
+
 	if (lugares.empty()){
-		return camino; //si no existe el camino minimo devuelvo el camino vacio.
+		return caminoVacio; //si no existe el camino minimo devuelvo el camino vacio.
 	}
 	TileCoordinate actual = destino_real;
+
+	deque<SDL_Point> camino;
 	while (actual != tileOrigen){
 		camino.push_back({actual.first, actual.second});
 		actual = lugares[actual];
