@@ -49,7 +49,7 @@ public:
 
 	bool isActive();
 	void setActive(bool active);
-
+	void olvidarCamino();
 	virtual EntityType getClass();
 
 	// Serializable methods

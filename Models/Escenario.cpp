@@ -228,22 +228,29 @@ void Escenario::loop() {
 	map<string, MobileModel*>::iterator found;
 	for(found = this->usuarios.begin(); found != this->usuarios.end(); ++found){
 		protagonista = found->second;
-//		SDL_Point pos = this->mundo->getTileForPosition(protagonista->getNextPosition());
+		SDL_Point oldPosition = protagonista->getPosicion();
+
 		if(protagonista->updatePosition()) {
-			actualizarPersonajes = true;
+			SDL_Point aux = this->mundo->getTileForPosition(protagonista->getPosicion());
+			TileCoordinate newTile = TileCoordinate(aux.x, aux.y);
+
+			// Si se cruza con otro usuario, lo freno y borro el camino
+			if (this->tileOcupadoForUsername(newTile,protagonista->getUsername())){
+				protagonista->setPosicion(oldPosition);
+				protagonista->olvidarCamino();
+			} else {
+				actualizarPersonajes = true;
+			}
 		}
 
-		SDL_Point aux = this->mundo->getTileForPosition(protagonista->getPosicion());
-		this->tilesWithUsers[protagonista->getUsername()] = TileCoordinate(aux.x,aux.y);
+		SDL_Point currentTile = this->mundo->getTileForPosition(protagonista->getPosicion());
+		this->tilesWithUsers[protagonista->getUsername()] = TileCoordinate(currentTile.x,currentTile.y);
 
-		SDL_Point point = this->mundo->getTileForPosition(protagonista->getPosicion());
-		updated = updated || this->cosecharEnPosicion(point, protagonista);
-//		Log().Get("Escenario", logDEBUG) << "loop: "<<protagonista->getUsername();
+		updated = (updated || this->cosecharEnPosicion(currentTile, protagonista));
 	}
 
 
 	if(actualizarPersonajes){
-//		Log().Get("Escenario", logDEBUG) << "actualizaPersonajes: "<<protagonista->getUsername();
 		this->delegate->actualizaPersonaje(protagonista);
 	}
 
@@ -252,6 +259,20 @@ void Escenario::loop() {
 		this->delegate->apareceEntidad(entidadesAInsertar.back());
 		this->entidades.splice(this->entidades.end(), entidadesAInsertar);
 	}
+}
+
+bool Escenario::tileOcupadoForUsername(TileCoordinate tile,string username){
+	map<string,TileCoordinate>::iterator it;
+	for (it = this->tilesWithUsers.begin(); it != this->tilesWithUsers.end(); it++){
+		string otroUsername = it->first;
+		if (username != otroUsername){
+			TileCoordinate tileOcupado = it->second;
+			if (tileOcupado == tile){
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 
@@ -273,19 +294,11 @@ SDL_Point Escenario::getSize(){
 	return this->mundo->getPositionForTile({this->mundo->getHeight(), this->mundo->getWidth()});
 }
 
-/*
-queue<SDL_Point> Escenario::getPath(SDL_Point origen, SDL_Point destino){
-	cout<<destino.x<<","<<destino.y<<endl;
-	return this->mundo->obtenerCamino(origen, destino);
-}
-*/
-
 queue<SDL_Point> Escenario::getCaminoForMobileModel(SDL_Point origen, SDL_Point destino,MobileModel *mobileModel){
 	list<TileCoordinate> tilesOccupied;
 
 	map<string,TileCoordinate>::iterator it;
-	for (it = tilesWithUsers.begin(); it != tilesWithUsers.end(); it++){
-//		Log().Get("Escenario", logDEBUG) << it->first << ": ("<<it->second.first<<" , "<<it->second.second<<")";
+	for (it = this->tilesWithUsers.begin(); it != this->tilesWithUsers.end(); it++){
 		string username = it->first;
 		if (username != mobileModel->getUsername()){
 			TileCoordinate tile = it->second;
