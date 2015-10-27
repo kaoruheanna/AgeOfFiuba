@@ -38,4 +38,6 @@ const std::string CONFIG_CLIENT = "yaml-files/configuracion_cliente.yaml";
 const int  FOG_VISIBLE = 255;
 const int  FOG_VISITED = 128;
 
+typedef std::pair <int,int> TileCoordinate;
+
 #endif /* GLOBALCONSTANTS_H_ */

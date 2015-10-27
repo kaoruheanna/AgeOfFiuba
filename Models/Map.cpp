@@ -8,7 +8,7 @@ Map::Map(int alto, int ancho, int tile_ancho, int tile_alto){
 	this -> ancho = ancho;
 	this -> tile_alto = tile_alto;
 	this -> tile_ancho = tile_ancho;
-	this -> baldosas = new TileSet(ancho,alto);
+	this -> tileSet = new TileSet(ancho,alto);
 	
 
 }
@@ -45,7 +45,7 @@ SDL_Point Map::getEmptyTile(){
 	int count = 0;
 	while((count < maxCount) && tile.x == -1){
 		tile = { rand() % this->ancho, rand() % this->alto };
-		if(this->baldosas->sectorEstaBloqueado(tile, { tile.x + 1, tile.y + 1 })){
+		if(this->tileSet->sectorEstaBloqueado(tile, { tile.x + 1, tile.y + 1 })){
 			tile = { -1, -1 };
 		}
 		count ++;
@@ -75,7 +75,7 @@ bool Map::puedoConstruir(Entity* entidad, SDL_Point tile){
 	}
 	//verificar que en todos los tiles que va a ocupar la entidad se pueda construir
 	SDL_Point fin = {size_x+tile.x-1, size_y+tile.y-1};
-	return !(this -> baldosas->sectorEstaBloqueado(tile,fin));
+	return !(this -> tileSet->sectorEstaBloqueado(tile,fin));
 }
 
 bool Map::construirEntidad(Entity* entidad, SDL_Point posicion){
@@ -85,7 +85,7 @@ bool Map::construirEntidad(Entity* entidad, SDL_Point posicion){
 			for (int j = 0; j < entidad->getAnchoBase(); j++){
 				SDL_Point tile = {i+tilePos.x,j+tilePos.y};
 				if(!entidad->Cosechable) {
-					this -> baldosas -> setTileInconstruible(tile);
+					this -> tileSet -> setTileInconstruible(tile);
 				}
 			}
 		}
@@ -138,10 +138,14 @@ queue <SDL_Point> Map::obtenerCaminoForEntity(SDL_Point origen, SDL_Point destin
 
 	//transformo las coordenadas a tiles.
 	int offset = (TILE_SIZE/2);
-	SDL_Point origenMap = this->getTileForPosition({origen.x-offset,origen.y-offset});
-	SDL_Point destinoMap = this->getTileForPosition({destino.x-offset,destino.y-offset});
+	SDL_Point tileOrigen = this->getTileForPosition({origen.x-offset,origen.y-offset});
+	SDL_Point tileDestino = this->getTileForPosition({destino.x-offset,destino.y-offset});
 
-	deque <SDL_Point> camino = this->baldosas->obtenerCamino(origenMap, destinoMap);
+	TileCoordinate origenCoordinate = TileCoordinate(tileOrigen.x,tileOrigen.y);
+	TileCoordinate destinoCoordinate = TileCoordinate(tileDestino.x,tileDestino.y);
+
+//	deque <SDL_Point> camino = this->tileSet->obtenerCamino(origenMap, destinoMap);
+	deque <SDL_Point> camino = this->tileSet->obtenerCaminoForEntity(origenCoordinate,destinoCoordinate,entity);
 
 	while (!camino.empty()){
 		punto = camino.back();
