@@ -18,14 +18,15 @@
 #include <unordered_map>
 #include <map>
 #include <utility>
+#include "../GlobalConstants.h"
 
 using namespace std;
 
-typedef pair <int,int> Posicion;
+class Entity;
 
 // unordered map mejoraria la eficiencia
-typedef map<Posicion, Posicion> pointMap;
-typedef map<Posicion,int> costMap;
+typedef map<TileCoordinate, TileCoordinate> pointMap;
+typedef map<TileCoordinate,int> costMap;
 
 template<typename T, typename Number=int>
 
@@ -64,18 +65,17 @@ public:
 	bool setTileInconstruible(SDL_Point);
 	bool sectorEstaBloqueado(SDL_Point, SDL_Point);
 
-	std::list<Posicion> vecinos(Posicion baldosa);
-	std::list<Posicion> vecinosTotales(Posicion baldosa); //devuelve todas las posiciones adyacentes
-	int distancia(Posicion a, Posicion b); // heuristica a usar en A* (distancia euclideana)
-	int heuristica(Posicion a, Posicion b);
-	int valorArista(Posicion a, Posicion b);
-	bool esVecino(Posicion a, Posicion b);
-	bool posicionValida(Posicion posicion);
-	bool posicionOcupada(Posicion posicion);
-	pointMap caminoMinimo(Posicion origen, Posicion destino, Posicion &destino_real);
-	deque<SDL_Point> obtenerCamino(SDL_Point origen, SDL_Point destino);
-	Posicion buscarDestinoMasCercano(Posicion origen, Posicion destino);
-
+	std::list<TileCoordinate> vecinosLibres(TileCoordinate baldosa,list<TileCoordinate> tilesOccupied);
+	std::list<TileCoordinate> vecinosTotales(TileCoordinate baldosa); //devuelve todas las posiciones adyacentes
+	int distancia(TileCoordinate a, TileCoordinate b); // heuristica a usar en A* (distancia euclideana)
+	int heuristica(TileCoordinate a, TileCoordinate b);
+	int valorArista(TileCoordinate a, TileCoordinate b);
+	bool esVecinoLibre(TileCoordinate a, TileCoordinate b,list<TileCoordinate> tilesOccupied);
+	bool posicionValida(TileCoordinate posicion);
+	bool posicionOcupada(TileCoordinate posicion);
+	bool esTileTransitable(TileCoordinate tile, list<TileCoordinate> tilesOccupied);
+	deque<SDL_Point> obtenerCaminoIgnoringTiles(TileCoordinate tileOrigen, TileCoordinate tileDestino,list<TileCoordinate> tilesOccupied);
+	pointMap calcularCaminoMinimoIgnoringTiles(TileCoordinate origen, TileCoordinate destino,TileCoordinate &destino_real, list<TileCoordinate> tilesOccupied);
 
 	virtual ~TileSet();
 };

@@ -59,7 +59,7 @@ private:
 	list<Entity*> recursosAgregados;
 	list<Entity*> recursosEliminados;
 	bool debeActualizarPersonaje;
-	Posicion* moverPersonajeAlPunto;
+	TileCoordinate* moverPersonajeAlPunto;
 };
 
 #endif /* CONTROLLERS_SERVERGAMECONTROLLER_H_ */

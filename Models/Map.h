@@ -6,6 +6,8 @@
 #include "Entity.h"
 #include "TileSet.h"
 
+class Entity;
+
 class Map {
 	private:
 		int alto;
@@ -14,12 +16,9 @@ class Map {
 		//matriz de tiles
 		int tile_ancho;
 		int tile_alto;
-		TileSet* baldosas;
-
-
+		TileSet* tileSet;
 
 	public:
-
 		int getHeight();
 		int getWidth();
 		int getTileHeight();
@@ -41,7 +40,8 @@ class Map {
 		SDL_Point getPositionForTile(SDL_Point point,bool centered = false);
 		SDL_Point getCenteredPositionForTile(SDL_Point point);
 
-		queue<SDL_Point> obtenerCamino(SDL_Point origen, SDL_Point destino);
+//		queue<SDL_Point> obtenerCamino(SDL_Point origen, SDL_Point destino);
+		queue <SDL_Point> obtenerCaminoIgnoringTiles(SDL_Point origen, SDL_Point destino,list<TileCoordinate> tilesOccupied);
 
 		Map(int alto, int ancho, int tile_ancho, int tile_alto);
 		virtual ~Map();

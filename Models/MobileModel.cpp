@@ -48,10 +48,14 @@ bool MobileModel::isActive() {
 void MobileModel::setActive(bool active) {
 	this->userActive = active;
 	if(!active){ // Hacer que se deje de mover al desactivarse
-		this->clearPath();
-		this->moving = false;
-		this->setDestination(this->getX(), this->getY());
+		this->olvidarCamino();
 	}
+}
+
+void MobileModel::olvidarCamino(){
+	this->clearPath();
+	this->moving = false;
+	this->setDestination(this->getX(), this->getY());
 }
 
 string MobileModel::getUsername() {

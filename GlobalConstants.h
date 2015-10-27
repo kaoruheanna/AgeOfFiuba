@@ -29,6 +29,7 @@ const std::string MINI_MISSING_IMAGE_PATH = "img/tile_purple.png";
 
 const int TILE_WIDTH_PIXELS = 128;
 const int TILE_HEIGHT_PIXELS = 64;
+const int TILE_SIZE = 64;
 
 const std::string CONFIG_DEFAULT = "yaml-files/configuracion.yaml";
 const std::string CONFIG_CUSTOM = "yaml-files/_configuracionMapa.yaml";
@@ -36,5 +37,7 @@ const std::string CONFIG_CLIENT = "yaml-files/configuracion_cliente.yaml";
 
 const int  FOG_VISIBLE = 255;
 const int  FOG_VISITED = 128;
+
+typedef std::pair <int,int> TileCoordinate;
 
 #endif /* GLOBALCONSTANTS_H_ */
