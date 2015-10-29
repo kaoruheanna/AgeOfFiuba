@@ -13,6 +13,7 @@
 class Renderer;
 class StatusMenu;
 class View;
+class ActionsMenu;
 
 class ScreenMenu {
 
@@ -26,6 +27,7 @@ private:
 	int width;
 	int height;
 	StatusMenu *statusMenu;
+	ActionsMenu *actionsMenu;
 };
 
 #endif /* SCREENMENU_H_ */

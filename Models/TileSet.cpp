@@ -66,25 +66,6 @@ bool TileSet::sectorEstaBloqueado(SDL_Point origen, SDL_Point fin){
 	return false;
 }
 
-/*
-//Devuelve todas las posiciones adyacentes a la baldosa por las que se puede caminar
-std::list<TileCoordinate> TileSet::vecinosLibres(TileCoordinate baldosa,list<TileCoordinate> tilesOccupied){
-	list<TileCoordinate>lista_de_vecinos;
-	int x = baldosa.first;
-	int y = baldosa.second;
-	for (int i=-1; i<2; i++){
-		for (int j=-1; j<2; j++){
-			int x_v = x+i;
-			int y_v = y+j;
-			if (this->esVecino({x_v,y_v},baldosa)){
-					lista_de_vecinos.push_front({x_v,y_v});
-			}
-		}
-	}
-	return lista_de_vecinos;
-}
-*/
-
 //Devuelve todas las posiciones adyacentes a la baldosa por las que se puede caminar
 std::list<TileCoordinate> TileSet::vecinosLibres(TileCoordinate baldosa,list<TileCoordinate> tilesOccupied){
 	list<TileCoordinate>vecinosLibres;
@@ -180,52 +161,6 @@ bool TileSet::esVecinoLibre(TileCoordinate a, TileCoordinate b,list<TileCoordina
 	}
 	return false;
 }
-
-/*
-pointMap TileSet::caminoMinimo(TileCoordinate origen, TileCoordinate destino, TileCoordinate &destino_real){
-	PriorityQueue<TileCoordinate> frontera;
-	frontera.put(origen, 0);
-	pointMap desde_donde_vino;
-	costMap costo_hasta_ahora;
-	TileCoordinate posible_destino;
-	TileCoordinate destino_a = destino;
-
-	if (this->posicionOcupada(destino)){
-		list<TileCoordinate> vacio;
-		destino_a = this->buscarDestinoMasCercano(origen, destino);
-	}
-
-	desde_donde_vino [origen] = origen;
-	costo_hasta_ahora[origen] = 0;
-
-	while (!frontera.empty()) {
-		TileCoordinate actual = frontera.get();
-		if (actual == destino_a) {
-			destino_real = destino_a;
-			return desde_donde_vino;
-		}
-
-		for (TileCoordinate prox : this->vecinos(actual)) {
-			int nuevo_costo = costo_hasta_ahora[actual] + this->valorArista(actual, prox);
-			if (!costo_hasta_ahora.count(prox) || nuevo_costo < costo_hasta_ahora[prox]) {
-				costo_hasta_ahora[prox] = nuevo_costo;
-				int prioridad = nuevo_costo + this->heuristica(prox, destino_a); // distancia es la heuristica
-				frontera.put(prox, prioridad);
-				desde_donde_vino[prox] = actual;
-				posible_destino = prox;
-				destino_real = posible_destino;
-			}
-		}
-	}
-	if (destino_real != destino_a){
-		cout<<"recorro todo"<<endl;
-		destino_a = this->buscarDestinoMasCercano(origen, destino);
-		return this->caminoMinimo(origen,destino_a,destino_real);
-	}
-
-	return desde_donde_vino; // si sale del while es porque no llego al destino, el camino es hasta el lugar mas cercano al destino.
-}
-*/
 
 pointMap TileSet::calcularCaminoMinimoIgnoringTiles(TileCoordinate origen, TileCoordinate destino,TileCoordinate &destino_real, list<TileCoordinate> tilesOccupied){
 	PriorityQueue<TileCoordinate> frontera;

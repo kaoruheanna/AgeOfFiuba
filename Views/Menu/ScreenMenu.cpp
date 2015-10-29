@@ -9,21 +9,36 @@
 #include "../Renderer.h"
 #include "StatusMenu.h"
 #include "../../GlobalConstants.h"
+#include "ActionsMenu.h"
 
 ScreenMenu::ScreenMenu(int width, int height) {
 	this->width = width;
 	this->height = height;
 
+	int statusWidth = width/4;
+	int elementsX = MENU_SPACING;
+	int elementsHeight = height-(2*MENU_SPACING);
+
 	this->statusMenu = new StatusMenu(
+		elementsX,
 		MENU_SPACING,
+		statusWidth,
+		elementsHeight
+	);
+
+	elementsX += (MENU_SPACING + statusWidth);
+
+	this->actionsMenu = new ActionsMenu(
+		elementsX,
 		MENU_SPACING,
-		width/2,
-		height-(2*MENU_SPACING)
+		width/3,
+		elementsHeight
 	);
 }
 
 ScreenMenu::~ScreenMenu() {
 	delete this->statusMenu;
+	delete this->actionsMenu;
 }
 
 void ScreenMenu::render(Renderer* renderer) {
@@ -32,6 +47,7 @@ void ScreenMenu::render(Renderer* renderer) {
 	renderer->draw(rect,color);
 
 	this->statusMenu->render(renderer);
+	this->actionsMenu->render(renderer);
 }
 
 void ScreenMenu::setMessages(std::string firstMessage, std::string secondMessage) {
