@@ -87,7 +87,10 @@ private:
 	FogOfWar* fog;
 	std::pair<SDL_Point,SDL_Point> selectedTilesCoordinates;
 	bool hasSelectedTiles;
-
+	SDL_Rect topBarRect;
+	SDL_Rect escenarioRect;
+	SDL_Rect menuRect;
+	SDL_Rect minimapRect;
 	int screenWidth;
 	int screenHeight;
 
@@ -104,7 +107,7 @@ private:
 	int menuOriginY();
 	void setDrawableForView(View* view);
 	void setDrawableForMiniView(MiniView* view);
-
+	void initRects();
 };
 
 #endif /* RENDERER_H_ */

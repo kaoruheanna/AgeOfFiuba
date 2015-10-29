@@ -39,6 +39,7 @@ Renderer::Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos) {
 	bool didInitSDL = this->initSDL();
 	bool didLoadMedia = this->loadMedia(tipos);
 	this->successfullInit = (didInitSDL && didLoadMedia);
+	this->initRects();
 }
 
 Renderer::~Renderer() {
@@ -265,24 +266,13 @@ void Renderer::drawViews() {
 }
 
 void Renderer::drawTopBar() {
-	SDL_Rect viewportRect;
-	viewportRect.x = 0;
-	viewportRect.y = 0;
-	viewportRect.w = this->screenWidth;
-	viewportRect.h = TOP_BAR_HEIGHT;
-	SDL_RenderSetViewport(this->sdlRenderer, &viewportRect);
-
+	SDL_RenderSetViewport(this->sdlRenderer, &this->topBarRect);
 	this->topBar->render(this);
 }
 
 void Renderer::drawEscenario() {
 	//set viewport
-	SDL_Rect viewportRect;
-	viewportRect.x = 0;
-	viewportRect.y = TOP_BAR_HEIGHT;
-	viewportRect.w = this->screenWidth;
-	viewportRect.h = this->menuOriginY();
-	SDL_RenderSetViewport(this->sdlRenderer, &viewportRect);
+	SDL_RenderSetViewport(this->sdlRenderer, &this->escenarioRect);
 
 	this->escenarioView->render(this);
 
@@ -324,30 +314,15 @@ void Renderer::drawCartelIfShould(){
 }
 
 void Renderer::drawMenu(){
-	SDL_Rect viewportRect;
-	viewportRect.x = 0;
-	viewportRect.y = this->menuOriginY();
-	viewportRect.w = this->screenWidth;
-	viewportRect.h = MENU_HEIGHT;
-	SDL_RenderSetViewport(this->sdlRenderer, &viewportRect);
+	SDL_RenderSetViewport(this->sdlRenderer, &this->menuRect);
 	this->screenMenu->render(this);
 }
 
 void Renderer::drawMiniEscenario(){
-	int height = MENU_HEIGHT-(2*MENU_SPACING);
-	int width = height * 2;
-	int x = (this->screenWidth - MENU_SPACING - width);
-	int y = (this->menuOriginY() +  MENU_SPACING);
-	this->miniMapMainTilePosition = {width/2,0};
+	this->miniMapMainTilePosition = {(this->minimapRect.w/2),0};
+	SDL_RenderSetViewport(this->sdlRenderer, &this->minimapRect);
 
-	SDL_Rect viewportRect;
-	viewportRect.x = x;
-	viewportRect.y = y;
-	viewportRect.w = width;
-	viewportRect.h = height;
-	SDL_RenderSetViewport(this->sdlRenderer, &viewportRect);
-
-	SDL_Rect rect = {0,0,width,height};
+	SDL_Rect rect = {0,0,this->minimapRect.w,this->minimapRect.h};
 	SDL_Color color = {0, 0, 0};
 	this->draw(rect,color);
 
@@ -628,4 +603,30 @@ void Renderer::hideCartel(){
 		delete this->cartel;
 		this->cartel = NULL;
 	}
+}
+
+void Renderer::initRects(){
+	//top bar
+	this->topBarRect.x = 0;
+	this->topBarRect.y = 0;
+	this->topBarRect.w = this->screenWidth;
+	this->topBarRect.h = TOP_BAR_HEIGHT;
+
+	// escenario
+	this->escenarioRect.x = 0;
+	this->escenarioRect.y = (this->topBarRect.y + this->topBarRect.h);
+	this->escenarioRect.w = this->screenWidth;
+	this->escenarioRect.h = this->menuOriginY();
+
+	// menu
+	this->menuRect.x = 0;
+	this->menuRect.y = this->menuOriginY();
+	this->menuRect.w = this->screenWidth;
+	this->menuRect.h = MENU_HEIGHT;
+
+	// minimap
+	this->minimapRect.h = MENU_HEIGHT-(2*MENU_SPACING);
+	this->minimapRect.w = this->minimapRect.h * 2;
+	this->minimapRect.x = (this->screenWidth - MENU_SPACING - this->minimapRect.w);
+	this->minimapRect.y = (this->menuOriginY() +  MENU_SPACING);
 }
