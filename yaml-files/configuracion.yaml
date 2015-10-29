@@ -29,16 +29,9 @@ tipos:
    alto_base : 1
    pixel_ref_x: 0
    pixel_ref_y: 0
-   
- - nombre: madera
-   imagen: img/madera.png
-   miniImagen: img/tile_blue.png
-   ancho_base: 1
-   alto_base : 1
-   pixel_ref_x: 25
-   pixel_ref_y: 25
 
  - nombre: casa
+   categoria: building
    imagen: img/casa2x2.png
    miniImagen: img/tile_orange.png
    ancho_base: 2
@@ -47,6 +40,7 @@ tipos:
    pixel_ref_y: 31
    
  - nombre: archeryRange
+   categoria: building
    imagen: img/archeryRange.png
    miniImagen: img/tile_orange.png
    ancho_base: 2
@@ -55,6 +49,7 @@ tipos:
    pixel_ref_y: 77
 
  - nombre: molino
+   categoria: building
    imagen: img/whatermill.png
    miniImagen: img/tile_orange.png
    ancho_base: 1
@@ -85,6 +80,7 @@ tipos:
    miniImagen: img/tile_yellow.png
  
  - nombre: arbol
+   categoria: resource
    imagen: img/tree1.png
    miniImagen: img/tile_yellow.png
    ancho_base: 1

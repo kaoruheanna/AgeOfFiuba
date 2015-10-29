@@ -12,6 +12,9 @@
 #include <SDL2/SDL.h>
 #include "../Red/Serializable.h"
 
+class Warrior;
+class Building;
+
 using namespace std;
 
 enum EntityType {
@@ -45,9 +48,15 @@ public:
 	void setPosicion(SDL_Point);
 	virtual bool esJugador();
 	virtual string getNombreAMostrar();
-	string toString();
 	virtual bool admiteNublado();
 
+	//Double Dispatch Intract en forma de visitor
+	virtual void interact(Entity* entity) {};
+	virtual void receiveInteraction(Entity* entity) {};
+	virtual void receiveInteraction(Building* entity) {};
+	virtual void receiveInteraction(Warrior* entity) {};
+
+	string toString();
 	// Serializable methods
 	virtual int getTotalBlockCount();
 	virtual int getBlockSizeFromIndex(int currentIndex);

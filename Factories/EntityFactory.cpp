@@ -96,6 +96,9 @@ Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion) {
 	if (this->tipos[tipo].getCategoria() == "resource") {
 		return new Resource(id, tipo, pos, size.x, size.y);
 	}
+	if (this->tipos[tipo].getCategoria() == "building") {
+		return new Building(id, tipo, pos, size.x,size.y);
+	}
 
 	return new Entity(id,tipo, pos, size.x, size.y);
 }

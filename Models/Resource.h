@@ -19,6 +19,8 @@ public:
 	virtual ~Resource();
 	virtual EntityType getClass();
 
+	virtual void interact(Entity* entity);
+	virtual void receiveInteraction(Warrior* entity);
 	void cosechar();
 
 	// Serializable methods

@@ -154,6 +154,7 @@ void ServerGameController::interactuar(int selectedEntityId, int targetEntityId)
 	}
 
 	Log().Get(TAG) << "Interactuar en el server " << selectedEntity->getNombre() << " " << targetEntity->getNombre();
+	selectedEntity->interact(targetEntity);
 }
 
 void ServerGameController::addMensajero(Mensajero* mensajero) {
