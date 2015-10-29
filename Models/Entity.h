@@ -10,7 +10,6 @@
 
 #include <string>
 #include <SDL2/SDL.h>
-#include "Mapeable.h"
 #include "../Red/Serializable.h"
 
 using namespace std;
@@ -21,7 +20,7 @@ enum EntityType {
 	RESOURCE
 };
 
-class Entity : public Mapeable, public Serializable{
+class Entity : public Serializable{
 private:
 	//int id;
 	int ancho_base; //x

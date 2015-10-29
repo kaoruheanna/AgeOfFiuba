@@ -37,6 +37,7 @@ ClientGameController::ClientGameController(Mensajero *mensajero) {
 
 	this->updated = false;
 	this->serverError = false;
+	this->selectedEntity = NULL;
 }
 
 ClientGameController::~ClientGameController() {}
@@ -253,7 +254,7 @@ bool ClientGameController::pollEvents(){
 			if(e.button.button == SDL_BUTTON_RIGHT) {
 				if(entidad && (selectedEntity!=entidad)) {
 					//Interactuar la seleccionada con la nueva entidad
-
+					this->mensajero->interactuar(this->getSelectedEntity()->getId(),entidad->getId());
 				} else {
 					// Mover el personaje seleccionado a la nueva posicion
 					// TODO Eliminar harcodeo de protagonista
@@ -266,6 +267,7 @@ bool ClientGameController::pollEvents(){
 				}
 			} else {
 				selectedEntity = entidad;
+
 				std::pair<SDL_Point,SDL_Point> tiles;
 				if (entidad && (entidad != this->escenario->getProtagonista())){
 					this->setMessageForSelectedEntity(entidad);
@@ -429,4 +431,10 @@ void ClientGameController::errorDeLogueo() {
 
 bool ClientGameController::inicializado() {
 	return escenario && escenario->inicializacionCorrecta;
+}
+
+Entity* ClientGameController::getSelectedEntity() {
+	// TODO Por ahora es siempre el protagonista pero hay q cambiar esto
+	// return this->selectedEntity;
+	return this->escenario->getProtagonista();
 }

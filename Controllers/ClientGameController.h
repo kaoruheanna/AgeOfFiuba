@@ -53,6 +53,8 @@ private:
 	bool inicializado();
 	void setMessageForSelectedEntity(Entity* entity);
 
+	Entity* getSelectedEntity();
+
 	// Metodos y variables para que no se vaya el scroll del mapa
 	SDL_Point intialPointWindowWrapper;
 	SDL_Point finalPointWindowWrapper;

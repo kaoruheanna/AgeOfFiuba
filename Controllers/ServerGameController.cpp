@@ -141,6 +141,21 @@ void ServerGameController::moverProtagonista(MobileModel* model) {
 	Log().Get(TAG, logDEBUG) << "El personaje: " << model->getUsername() << " se mueve al: " << model->getDestinationX() << " , " << model->getDestinationY();
 }
 
+void ServerGameController::interactuar(int selectedEntityId, int targetEntityId) {
+	Entity* selectedEntity = this->escenario->entidadConId(selectedEntityId);
+	Entity* targetEntity = this->escenario->entidadConId(targetEntityId);
+	if(!selectedEntity) {
+		Log().Get(TAG) << "No se encontro entidad con id " << selectedEntityId;
+		return;
+	}
+	if(!targetEntity) {
+		Log().Get(TAG) << "No se encontro entidad con id " << targetEntityId;
+		return;
+	}
+
+	Log().Get(TAG) << "Interactuar en el server " << selectedEntity->getNombre() << " " << targetEntity->getNombre();
+}
+
 void ServerGameController::addMensajero(Mensajero* mensajero) {
 	this->mensajerosAgregados.push_back(mensajero);
 	if(escenario->inicializacionCorrecta) {

@@ -29,6 +29,7 @@ public:
 	void play();
 
 	virtual void moverProtagonista(MobileModel* entity);
+	virtual void interactuar(int selectedEntityId, int targetEntityId);
 
 	Escenario* escenario;
 	virtual void addMensajero(Mensajero *mensajero);

@@ -9,6 +9,7 @@
 #include "../Utils/Log.h"
 
 const string TAG = "EntityFactory";
+int getId(bool reset = false);
 
 EntityFactory::EntityFactory(Map *mundo,list<TipoConfig> tiposConfigList) {
 	this->mundo = mundo;
@@ -16,6 +17,7 @@ EntityFactory::EntityFactory(Map *mundo,list<TipoConfig> tiposConfigList) {
 	for (tipo = tiposConfigList.begin(); tipo != tiposConfigList.end(); ++tipo) {
 		tipos[(*tipo).getNombre()] = *tipo;
 	}
+	getId(true);
 }
 
 EntityFactory::~EntityFactory() {}
@@ -63,12 +65,23 @@ MobileModel* EntityFactory::crearProtagonista(const string& tipo, SDL_Point posi
 	return (MobileModel*)this->crearEntidad(tipo,posicion);
 }
 
-Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion) {
+int getId(bool reset) {
 	static int id;
+
+	if (reset) {
+		id = 0;
+		return id;
+	}
+
 	if (!id) {
 		id = 0;
 	}
 	id++;
+	return id;
+}
+
+Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion) {
+	int id = getId(false);
 
 	if (tipo == "") {
 		Log().Get("Escenario", logWARNING) << "La entidad tiene que tener un tipo. Descartando entidad.";
