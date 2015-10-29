@@ -24,3 +24,20 @@ void Warrior::interact(Entity* entity) {
 void Warrior::receiveInteraction(Building* entity) {
 	Log().Get(TAG) << "Warrior receive interaction from building -> Do nothing";
 }
+
+// Metodos de serializacion
+int Warrior::getTotalBlockCount() {
+	return MobileModel::getTotalBlockCount();
+}
+
+int Warrior::getBlockSizeFromIndex(int currentIndex) {
+	return MobileModel::getBlockSizeFromIndex(currentIndex);
+}
+
+void Warrior::getBlockFromIndex(int currentIndex, void* buffer) {
+	MobileModel::getBlockFromIndex(currentIndex, buffer);
+}
+
+void Warrior::deserialize(int totalBlockCount, int currentBlock, void* blockData) {
+	MobileModel::deserialize(totalBlockCount,currentBlock,blockData);
+}

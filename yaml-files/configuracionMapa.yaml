@@ -12,9 +12,11 @@ tipos:
    imagen: img/agua.png
 
  - nombre: arbol
+   categoria: resource
    imagen: path/a/imagen.png
 
  - nombre: casa
+   categoria: building
    imagen: img/casa2x2.png
    ancho_base: 2
    alto_base : 2
@@ -46,6 +48,7 @@ tipos:
    alto_frame: 145
 
  - nombre: soldado
+   categoria: warrior
    imagen: img/vlad.png
    imagenDeshabilitado: img/vlad_grey.png
    ancho_base: 1

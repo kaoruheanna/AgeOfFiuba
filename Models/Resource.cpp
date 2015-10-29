@@ -30,33 +30,19 @@ void Resource::receiveInteraction(Warrior* entity) {
 // Serializar
 
 int Resource::getTotalBlockCount() {
-	return Entity::getTotalBlockCount() + 1;
+	return Entity::getTotalBlockCount();
 }
 
 int Resource::getBlockSizeFromIndex(int currentIndex) {
-	int realIndex =  currentIndex - Entity::getTotalBlockCount();
-	if (realIndex == 0) {
-		return sizeof(int);
-	}
 	return Entity::getBlockSizeFromIndex(currentIndex);
 }
 
 void Resource::getBlockFromIndex(int currentIndex, void* buffer) {
-	int realIndex =  currentIndex - Entity::getTotalBlockCount();
-	if (realIndex == 0) {
-		memcpy(buffer, &this->id, sizeof(int));
-	} else {
-		Entity::getBlockFromIndex(currentIndex, buffer);
-	}
+	Entity::getBlockFromIndex(currentIndex, buffer);
 }
 
 void Resource::deserialize(int totalBlockCount, int currentBlock, void* blockData) {
-	int realIndex =  currentBlock - Entity::getTotalBlockCount();
-	if (realIndex == 0) {
-		memcpy(&this->id, blockData, sizeof(int));
-	} else {
-		Entity::deserialize(totalBlockCount,currentBlock,blockData);
-	}
+	Entity::deserialize(totalBlockCount,currentBlock,blockData);
 }
 
 EntityType Resource::getClass() {
