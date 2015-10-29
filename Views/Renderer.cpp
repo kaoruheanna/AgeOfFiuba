@@ -630,3 +630,33 @@ void Renderer::initRects(){
 	this->minimapRect.x = (this->screenWidth - MENU_SPACING - this->minimapRect.w);
 	this->minimapRect.y = (this->menuOriginY() +  MENU_SPACING);
 }
+
+void Renderer::clickEvent(int x, int y, RendererInteractionDelegate *delegate) {
+	if (!this->isPixelInEscenario(x,y)){
+		Log().Get(TAG,logDEBUG) << "No estaba en el escenario";
+		return;
+	}
+
+	Log().Get(TAG,logDEBUG) << "Paso por el delegate";
+	delegate->clickEnEscenario(x,y);
+}
+
+bool Renderer::isPixelInEscenario(int x, int y){
+	return this->isPixelInRect(x,y,this->escenarioRect);
+}
+
+bool Renderer::isPixelInRect(int x, int y, SDL_Rect rect){
+	if (x < rect.x){
+		return false;
+	}
+	if (x > (rect.x + rect.w)){
+		return false;
+	}
+	if (y < rect.y){
+		return false;
+	}
+	if (y > (rect.y + rect.h)){
+		return false;
+	}
+	return true;
+}

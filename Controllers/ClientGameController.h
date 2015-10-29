@@ -19,13 +19,18 @@ using namespace std;
 class EscenarioView;
 class MiniEscenarioView;
 
-class ClientGameController : public Mensajero{ // Era Mensajero Clientes
+class ClientGameController : public Mensajero, public RendererInteractionDelegate{ // Era Mensajero Clientes
 public:
 	ClientGameController(Mensajero *mensajero);
 	virtual ~ClientGameController();
 	bool play();
 	bool isAlive();
+
+	//RendererInteractionDelegate
+	virtual void clickEnEscenario(int x, int y);
+
 	string username;
+
 private:
 	Mensajero* mensajero;
 
@@ -39,6 +44,7 @@ private:
 	bool updated;
 
 	bool pollEvents();
+//	void clickEnEscenario(int x,int y);
 	void updateWindow();
 	void close();
 	void sleep();
@@ -73,6 +79,7 @@ private:
 	virtual void apareceRecurso(Resource* recurso);
 	virtual void desapareceRecurso(Resource* recurso);
 	virtual void actualizaPersonaje(MobileModel* entity);
+
 };
 
 #endif /* CONTROLLERS_CLIENTGAMECONTROLLER_H_ */

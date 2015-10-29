@@ -31,6 +31,13 @@ class MiniView;
 class TopBar;
 class Cartel;
 
+class RendererInteractionDelegate {
+public:
+	RendererInteractionDelegate(){};
+	virtual ~RendererInteractionDelegate(){};
+	virtual void clickEnEscenario(int x, int y){};
+};
+
 struct DrawableWithState {
 	Drawable* drawable;
 	SDL_Rect rect;
@@ -69,6 +76,7 @@ public:
 	void setSelectedTilesCoordinates(bool selected,std::pair<SDL_Point,SDL_Point> tiles);
 	void setCartel(string message);
 	void hideCartel();
+	void clickEvent(int x, int y, RendererInteractionDelegate *delegate);
 
 private:
 	bool successfullInit;
@@ -108,6 +116,8 @@ private:
 	void setDrawableForView(View* view);
 	void setDrawableForMiniView(MiniView* view);
 	void initRects();
+	bool isPixelInEscenario(int x, int y);
+	bool isPixelInRect(int x, int y, SDL_Rect rect);
 };
 
 #endif /* RENDERER_H_ */

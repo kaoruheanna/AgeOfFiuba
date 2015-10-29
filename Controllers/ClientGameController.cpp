@@ -247,27 +247,31 @@ bool ClientGameController::pollEvents(){
 			//Get mouse position
 			int x, y;
 			SDL_GetMouseState(&x, &y);
-			SDL_Point point = this->renderer->windowToMapPoint({x,y});
-			Entity *entidad = this->escenario->getEntidadEnPosicion(point,true);
-			std::pair<SDL_Point,SDL_Point> tiles;
-			if (entidad && (entidad != this->escenario->getProtagonista())){
-				this->setMessageForSelectedEntity(entidad);
-				tiles = this->escenario->getTilesCoordinatesForEntity(entidad);
-				this->renderer->setSelectedTilesCoordinates(true,tiles);
-			} else {
-				this->setMessageForSelectedEntity(this->escenario->getProtagonista());
-				this->renderer->setSelectedTilesCoordinates(false,tiles);
-			}
-
-			point = this->renderer->proyectedPoint(point, this->escenario->getSize());
-			MobileModel* auxModel = new MobileModel();
-			auxModel->setUsername(username);
-			auxModel->setDestination(point.x, point.y);
-			this->mensajero->moverProtagonista(auxModel);
-			delete auxModel;
+			this->renderer->clickEvent(x,y,this);
 		}
 	}
 	return pressedR;
+}
+
+void ClientGameController::clickEnEscenario(int x,int y){
+	SDL_Point point = this->renderer->windowToMapPoint({x,y});
+	Entity *entidad = this->escenario->getEntidadEnPosicion(point,true);
+	std::pair<SDL_Point,SDL_Point> tiles;
+	if (entidad && (entidad != this->escenario->getProtagonista())){
+		this->setMessageForSelectedEntity(entidad);
+		tiles = this->escenario->getTilesCoordinatesForEntity(entidad);
+		this->renderer->setSelectedTilesCoordinates(true,tiles);
+	} else {
+		this->setMessageForSelectedEntity(this->escenario->getProtagonista());
+		this->renderer->setSelectedTilesCoordinates(false,tiles);
+	}
+
+	point = this->renderer->proyectedPoint(point, this->escenario->getSize());
+	MobileModel* auxModel = new MobileModel();
+	auxModel->setUsername(username);
+	auxModel->setDestination(point.x, point.y);
+	this->mensajero->moverProtagonista(auxModel);
+	delete auxModel;
 }
 
 void ClientGameController::setMessageForSelectedEntity(Entity* entity){
