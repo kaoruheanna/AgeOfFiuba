@@ -38,8 +38,8 @@ void FogOfWar::update(int posicionX, int posicionY){
 void FogOfWar::setInSight(int posicionX, int posicionY){
 	int coordenadaX;
 	int coordenadaY;
-	for (coordenadaX = (posicionX-1); coordenadaX <= (posicionX+1); ++coordenadaX){
-		for (coordenadaY = (posicionY-1); coordenadaY <= (posicionY+1); ++coordenadaY){
+	for (coordenadaX = (posicionX-2); coordenadaX <= (posicionX+2); ++coordenadaX){
+		for (coordenadaY = (posicionY-2); coordenadaY <= (posicionY+2); ++coordenadaY){
 			if (((coordenadaX >= 0) && (coordenadaY >= 0)) && ((coordenadaX < ancho) && (coordenadaY < alto))){
 			SDL_Point Tile = {coordenadaX,coordenadaY};
 			this->TilesVisitados.push_back(Tile);
