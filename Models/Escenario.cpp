@@ -122,7 +122,6 @@ Entity* Escenario::entidadConId(int id) {
 	list<Entity*>::iterator entidad;
 	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
 		Entity* entidadReal = *entidad;
-		Log().Get(TAG) << "Entidad con id " << entidadReal->getId();
 		if (entidadReal->getId() == id) {
 				return entidadReal;
 		}
