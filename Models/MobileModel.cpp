@@ -18,21 +18,21 @@ using namespace std;
 
 const std::string TAG = "MobileModel";
 
-MobileModel::MobileModel() : Entity("", {0, 0}, 1, 1){
+MobileModel::MobileModel() : Entity(0,"", {0, 0}, 1, 1){
 	this->posicion.x = 0;
 	this->posicion.y = 0;
+	this->destinationX = 0;
+	this->destinationY = 0;
 	this->moving = false;
-	this->Cosechable = false;
 	this->username = "";
 	this->userActive = false;
 }
 
-MobileModel::MobileModel(string nombre, SDL_Point posicion, int ancho_base, int alto_base)
-: Entity(nombre, posicion, ancho_base, alto_base){
+MobileModel::MobileModel(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base)
+: Entity(id,nombre, posicion, ancho_base, alto_base){
 	this->destinationX = posicion.x;
 	this->destinationY = posicion.y;
 	this->moving = false;
-	this->Cosechable = false;
 	this->username = "";
 	this->userActive = false;
 }

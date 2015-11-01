@@ -1,7 +1,7 @@
 ---
 pantalla:
- - alto: 640
- - ancho: 800
+ - alto: 700
+ - ancho: 1200
 
 configuracion:
  - vel_personaje: 3
@@ -13,6 +13,7 @@ tipos:
    miniImagen: img/tile_blue.png
 
  - nombre: piedra
+   categoria: resource
    imagen: img/Mossy_Stone_Brick.png
    miniImagen: img/tile_blue.png
    ancho_base: 1
@@ -21,22 +22,16 @@ tipos:
    pixel_ref_y: 25
    
  - nombre: comida
+   categoria: resource
    imagen: img/comida.png
    miniImagen: img/tile_blue.png
    ancho_base: 1
    alto_base : 1
-   pixel_ref_x: 25
-   pixel_ref_y: 25
-   
- - nombre: madera
-   imagen: img/madera.png
-   miniImagen: img/tile_blue.png
-   ancho_base: 1
-   alto_base : 1
-   pixel_ref_x: 25
-   pixel_ref_y: 25
+   pixel_ref_x: 0
+   pixel_ref_y: 0
 
  - nombre: casa
+   categoria: building
    imagen: img/casa2x2.png
    miniImagen: img/tile_orange.png
    ancho_base: 2
@@ -45,6 +40,7 @@ tipos:
    pixel_ref_y: 31
    
  - nombre: archeryRange
+   categoria: building
    imagen: img/archeryRange.png
    miniImagen: img/tile_orange.png
    ancho_base: 2
@@ -53,6 +49,7 @@ tipos:
    pixel_ref_y: 77
 
  - nombre: molino
+   categoria: building
    imagen: img/whatermill.png
    miniImagen: img/tile_orange.png
    ancho_base: 1
@@ -64,6 +61,7 @@ tipos:
    alto_frame: 145
 
  - nombre: soldado
+   categoria: warrior
    imagen: img/vlad1.png
    imagenDeshabilitado: img/vlad_grey.png
    miniImagen: img/tile_red.png
@@ -82,6 +80,7 @@ tipos:
    miniImagen: img/tile_yellow.png
  
  - nombre: arbol
+   categoria: recurso
    imagen: img/tree1.png
    miniImagen: img/tile_yellow.png
    ancho_base: 1
@@ -100,13 +99,13 @@ escenario:
    size_y: 20
    
    entidades:
-   - [x: 4, y: 11, tipo: archeryRange]
+
    - [x: 1, y: 7, tipo: casa]
    
    
-   - [x: 4, y: 2, tipo: arbol]
-   - [x: 5, y: 2, tipo: arbol]
-   - [x: 6, y: 2, tipo: arbol]
+   - [x: 4, y: 2, tipo: piedra]
+   - [x: 5, y: 2, tipo: piedra]
+   - [x: 6, y: 2, tipo: piedra]
    - [x: 7, y: 2, tipo: arbol]
    - [x: 7, y: 3, tipo: arbol]
    - [x: 7, y: 4, tipo: arbol]

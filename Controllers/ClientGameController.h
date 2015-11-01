@@ -27,12 +27,14 @@ public:
 	bool isAlive();
 
 	//RendererInteractionDelegate
-	virtual void clickEnEscenario(int x, int y);
+	virtual void leftClickEnEscenario(int x, int y);
+	virtual void rightClickEnEscenario(int x, int y);
 
 	string username;
 
 private:
 	Mensajero* mensajero;
+	Entity* selectedEntity;
 
 	bool shouldQuit;
 	bool serverError;
@@ -57,6 +59,8 @@ private:
 	void initMap();
 	bool inicializado();
 	void setMessageForSelectedEntity(Entity* entity);
+
+	Entity* getSelectedEntity();
 
 	// Metodos y variables para que no se vaya el scroll del mapa
 	SDL_Point intialPointWindowWrapper;

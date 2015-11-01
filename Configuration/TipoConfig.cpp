@@ -25,6 +25,7 @@ TipoConfig::TipoConfig() {
 	this->anchoFrame = 1;
 	this->altoFrame = 1;
 	this->minimapPixelRefType = MinimapPixelRefTypeDefault;
+	this->categoria = "building";
 }
 
 TipoConfig::TipoConfig(YAML::Node nodo): TipoConfig(){
@@ -43,6 +44,7 @@ TipoConfig::TipoConfig(YAML::Node nodo): TipoConfig(){
 	this->imagenDeshabilitado = TipoConfig::getStringAttribute(nodo, "imagenDeshabilitado", this->imagenDeshabilitado);
 	this->miniImagen = TipoConfig::getStringAttribute(nodo, "miniImagen", this->miniImagen);
 	this->nombre = TipoConfig::getStringAttribute(nodo, "nombre", this->nombre);
+	this->categoria = TipoConfig::getStringAttribute(nodo, "categoria", this->categoria);
 	if(this->nombre == ""){
 		Log().Get(TAG,logERROR) << "Nombre no puede ser null para tipo TipoConfig";
 	}
@@ -154,4 +156,8 @@ int TipoConfig::getAnchoFrame() {
 }
 int TipoConfig::getMinimapPixelRefType() {
 	return this->minimapPixelRefType;
+}
+
+string TipoConfig::getCategoria() {
+	return this->categoria;
 }

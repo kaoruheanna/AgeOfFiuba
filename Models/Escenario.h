@@ -51,15 +51,16 @@ class Escenario {
 		bool tileOcupadoForUsername(TileCoordinate tile,string username);
 
 		SDL_Point getSize();
-		Entity* crearEntidad(EntidadConfig config, bool esProtagonista);
-		Entity* crearEntidad(const string& tipo, SDL_Point posicion, bool esProtagonista);
+		Entity* crearEntidad(EntidadConfig config);
+		Entity* crearEntidad(const string& tipo, SDL_Point posicion);
 		list<Entity*> getListaEntidades(); // Se usa para agregar las vistas de las entidades
 		list<Entity*> getListaRecursos(); // Se usa para agregar las vistas de las entidades
 		MobileModel* getProtagonista();
 		void setProtagonista(MobileModel* protagonista);
 		bool eliminarRecursoConID(int id);
 		bool existeRecursoConID(int id);
-		Entity* getEntidadEnPosicion(SDL_Point point, bool ignoreCosechables); //recibe una posicion logica
+		Entity* entidadConId(int id);
+		Entity* getEntidadEnPosicion(SDL_Point point); //recibe una posicion logica
 		std::pair<SDL_Point,SDL_Point> getTilesCoordinatesForEntity(Entity *entity); //devuelve un par con el min y maxTile
 		queue<SDL_Point> getCaminoForMobileModel(SDL_Point origen, SDL_Point destino,MobileModel *mobileModel);
 

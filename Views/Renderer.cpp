@@ -631,14 +631,19 @@ void Renderer::initRects(){
 	this->minimapRect.y = (this->menuOriginY() +  MENU_SPACING);
 }
 
-void Renderer::clickEvent(int x, int y, RendererInteractionDelegate *delegate) {
+void Renderer::clickEvent(int x, int y, bool leftClick, RendererInteractionDelegate *delegate) {
 	if (!this->isPixelInEscenario(x,y)){
 		Log().Get(TAG,logDEBUG) << "No estaba en el escenario";
 		return;
 	}
 
 	Log().Get(TAG,logDEBUG) << "Paso por el delegate";
-	delegate->clickEnEscenario(x,y);
+	if (leftClick){
+		delegate->leftClickEnEscenario(x,y);
+	} else {
+		delegate->rightClickEnEscenario(x,y);
+	}
+
 }
 
 bool Renderer::isPixelInEscenario(int x, int y){

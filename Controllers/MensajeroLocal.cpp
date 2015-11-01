@@ -33,6 +33,10 @@ void MensajeroLocal::moverProtagonista(MobileModel* model) {
 	this->server->moverProtagonista(model);
 }
 
+void MensajeroLocal::interactuar(int selectedEntityId, int targetEntityId) {
+	this->server->interactuar(selectedEntityId, targetEntityId) ;
+}
+
 void MensajeroLocal::apareceRecurso(Resource* recurso){
 	this->cliente->apareceRecurso(new Resource(*recurso));
 }

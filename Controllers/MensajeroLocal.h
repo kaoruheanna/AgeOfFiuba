@@ -21,6 +21,7 @@ public:
 
 	//Metodos Cliente->Servidor
 	virtual void moverProtagonista(MobileModel* model);
+	virtual void interactuar(int selectedEntityId, int targetEntityId);
 
 	//Metodos Servidor->Cliente
 	virtual void configEscenario(const string path);

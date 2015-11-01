@@ -45,7 +45,7 @@ void MiniView::render(Renderer* renderer ) {
 			int mapPositionX = (this->origin.x + i*TILE_HEIGHT_PIXELS);
 			int mapPositionY = (this->origin.y + j*TILE_HEIGHT_PIXELS);
 			bool admiteNublado = true;
-			if ((this->model->Cosechable) || (this->model->esJugador())) {
+			if ((this->model->getClass()==RESOURCE) || (this->model->esJugador())) {
 				admiteNublado = false;
 			}
 			renderer->drawInMiniMap(mapPositionX,mapPositionY, this->drawable,admiteNublado);

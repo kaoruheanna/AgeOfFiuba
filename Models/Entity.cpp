@@ -10,16 +10,16 @@ using namespace std;
 
 const string TAG ="Entity";
 
-Entity::Entity(string nombre, SDL_Point posicion, int ancho_base, int alto_base){
+Entity::Entity(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base){
 	this->nombre = nombre;
 	this->posicion = posicion;
 	this->ancho_base = ancho_base;
 	this->alto_base = alto_base;
-
+	this->id = id;
 }
 
-Entity::Entity(string nombre, int ancho_base, int alto_base){
-
+Entity::Entity(int id,string nombre, int ancho_base, int alto_base){
+	this->id = id;
 	this->nombre = nombre;
 	this->posicion = {-1,-1}; // posicion invalida hace referencia a que no tiene posicion en el mapa.
 	this->ancho_base = ancho_base;
@@ -39,6 +39,10 @@ string Entity::toString(){
 
 string Entity::getNombre() {
 	return this->nombre;
+}
+
+int Entity::getId() {
+	return this->id;
 }
 
 SDL_Point Entity::getPosicion(){
@@ -69,22 +73,26 @@ string Entity::getNombreAMostrar() {
 //Serializar
 // Metodos de serializacion
 int Entity::getTotalBlockCount() {
-	return 2;
+	return 3;
 }
 
 int Entity::getBlockSizeFromIndex(int currentIndex) {
 	if(currentIndex == 0){
 		return this->serializeStringSize((char*)this->nombre.c_str());
-	} else {
+	} else if (currentIndex == 1 ){
 		return sizeof(SDL_Point);
+	} else {
+		return sizeof(int);
 	}
 }
 
 void Entity::getBlockFromIndex(int currentIndex, void* buffer) {
 	if(currentIndex == 0){
 		this->serializeString((char*)this->nombre.c_str(), buffer);
-	} else {
+	} else if (currentIndex == 1) {
 		memcpy(buffer, &this->posicion, sizeof(SDL_Point));
+	} else {
+		memcpy(buffer, &this->id, sizeof(int));
 	}
 }
 
@@ -95,6 +103,8 @@ void Entity::deserialize(int totalBlockCount, int currentBlock, void* blockData)
 		free(nombre);
 	} else if(currentBlock == 1){
 		memcpy(&this->posicion, blockData, sizeof(SDL_Point));
+	} else if (currentBlock == 2) {
+		memcpy(&this->id, blockData, sizeof(int));
 	}
 }
 
@@ -115,4 +125,8 @@ int Entity::serializeStringSize(char* string) {
 
 EntityType Entity::getClass() {
 	return ENTITY;
+}
+
+bool Entity::admiteNublado() {
+	return this->getClass()!=MOBILE_MODEL;
 }

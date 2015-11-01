@@ -37,6 +37,7 @@ ClientGameController::ClientGameController(Mensajero *mensajero) {
 
 	this->updated = false;
 	this->serverError = false;
+	this->selectedEntity = NULL;
 }
 
 ClientGameController::~ClientGameController() {}
@@ -247,25 +248,41 @@ bool ClientGameController::pollEvents(){
 			//Get mouse position
 			int x, y;
 			SDL_GetMouseState(&x, &y);
-			this->renderer->clickEvent(x,y,this);
+			bool leftClick = (e.button.button == SDL_BUTTON_LEFT);
+			this->renderer->clickEvent(x,y,leftClick,this);
 		}
 	}
 	return pressedR;
 }
 
-void ClientGameController::clickEnEscenario(int x,int y){
+void ClientGameController::leftClickEnEscenario(int x,int y){
 	SDL_Point point = this->renderer->windowToMapPoint({x,y});
-	Entity *entidad = this->escenario->getEntidadEnPosicion(point,true);
+	Entity *entidad = this->escenario->getEntidadEnPosicion(point);
+	this->selectedEntity = entidad;
+
 	std::pair<SDL_Point,SDL_Point> tiles;
 	if (entidad && (entidad != this->escenario->getProtagonista())){
 		this->setMessageForSelectedEntity(entidad);
 		tiles = this->escenario->getTilesCoordinatesForEntity(entidad);
 		this->renderer->setSelectedTilesCoordinates(true,tiles);
-	} else {
-		this->setMessageForSelectedEntity(this->escenario->getProtagonista());
-		this->renderer->setSelectedTilesCoordinates(false,tiles);
+		return;
 	}
 
+	this->setMessageForSelectedEntity(this->escenario->getProtagonista());
+	this->renderer->setSelectedTilesCoordinates(false,tiles);
+}
+
+void ClientGameController::rightClickEnEscenario(int x, int y) {
+	SDL_Point point = this->renderer->windowToMapPoint({x,y});
+	Entity *entidad = this->escenario->getEntidadEnPosicion(point);
+
+	if(entidad && (this->selectedEntity!=entidad)) {
+		//Interactuar la seleccionada con la nueva entidad
+		this->mensajero->interactuar(this->getSelectedEntity()->getId(),entidad->getId());
+		return;
+	}
+	// Mover el personaje seleccionado a la nueva posicion
+	// TODO Eliminar harcodeo de protagonista
 	point = this->renderer->proyectedPoint(point, this->escenario->getSize());
 	MobileModel* auxModel = new MobileModel();
 	auxModel->setUsername(username);
@@ -390,7 +407,7 @@ void ClientGameController::apareceRecurso(Resource* recurso) {
 	if (!this->inicializado())
 			return;
 
-	if(!this->escenario->existeRecursoConID(recurso->id)) {
+	if(!this->escenario->existeRecursoConID(recurso->getId())) {
 		this->escenario->agregarEntidad(new Resource(*recurso));
 	}
 	this->updated = true;
@@ -400,7 +417,7 @@ void ClientGameController::desapareceRecurso(Resource* recurso){
 	if (!this->inicializado())
 		return;
 
-	if(this->escenario->eliminarRecursoConID(recurso->id)) {
+	if(this->escenario->eliminarRecursoConID(recurso->getId())) {
 		this->updated = true;
 	}
 }
@@ -422,4 +439,10 @@ void ClientGameController::errorDeLogueo() {
 
 bool ClientGameController::inicializado() {
 	return escenario && escenario->inicializacionCorrecta;
+}
+
+Entity* ClientGameController::getSelectedEntity() {
+	// TODO Por ahora es siempre el protagonista pero hay q cambiar esto
+	// return this->selectedEntity;
+	return this->escenario->getProtagonista();
 }

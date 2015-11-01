@@ -35,7 +35,8 @@ class RendererInteractionDelegate {
 public:
 	RendererInteractionDelegate(){};
 	virtual ~RendererInteractionDelegate(){};
-	virtual void clickEnEscenario(int x, int y){};
+	virtual void leftClickEnEscenario(int x, int y){};
+	virtual void rightClickEnEscenario(int x, int y){};
 };
 
 struct DrawableWithState {
@@ -76,7 +77,7 @@ public:
 	void setSelectedTilesCoordinates(bool selected,std::pair<SDL_Point,SDL_Point> tiles);
 	void setCartel(string message);
 	void hideCartel();
-	void clickEvent(int x, int y, RendererInteractionDelegate *delegate);
+	void clickEvent(int x, int y, bool leftClick, RendererInteractionDelegate *delegate);
 
 private:
 	bool successfullInit;
