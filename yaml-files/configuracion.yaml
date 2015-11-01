@@ -62,8 +62,8 @@ tipos:
 
  - nombre: soldado
    categoria: warrior
-   imagen: img/vlad1.png
-   imagenDeshabilitado: img/vlad_grey.png
+   imagen: img/soldadoAge.png
+   imagenDeshabilitado: img/soldadoAge.png
    miniImagen: img/tile_red.png
    ancho_base: 1
    alto_base : 1
@@ -72,7 +72,7 @@ tipos:
    fps: 35
    delay: 0
    alto_frame: 50
-   ancho_frame: 50
+   ancho_frame: 51
    mini_map_pixel_ref_type: 1
 
  - nombre: tierra
@@ -101,8 +101,6 @@ escenario:
    entidades:
 
    - [x: 1, y: 7, tipo: casa]
-   
-   
    - [x: 4, y: 2, tipo: piedra]
    - [x: 5, y: 2, tipo: piedra]
    - [x: 6, y: 2, tipo: piedra]

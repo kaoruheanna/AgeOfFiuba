@@ -12,14 +12,14 @@
 #include "string"
 
 enum MotionDirection {
-	EAST = 0,
-	NORTH,
-	NORTH_EAST,
-	NORTH_WEST,
-	SOUTH,
-	SOUTH_EAST,
+	SOUTH = 0,
 	SOUTH_WEST,
 	WEST,
+	NORTH_WEST,
+	NORTH,
+	SOUTH_EAST,
+	EAST,
+	NORTH_EAST,
 };
 
 struct AnimationStatus {
