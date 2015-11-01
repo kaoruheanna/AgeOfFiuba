@@ -11,6 +11,7 @@
 #include <string>
 
 class Renderer;
+class RendererInteractionDelegate;
 class StatusMenu;
 class View;
 class ActionsMenu;
@@ -22,6 +23,7 @@ public:
 	virtual ~ScreenMenu();
 	void render(Renderer* renderer);
 	void setMessages(std::string firstMessage, std::string secondMessage);
+	void clickEvent(int x, int y, RendererInteractionDelegate *delegate);
 
 private:
 	int width;

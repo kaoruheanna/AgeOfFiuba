@@ -632,22 +632,30 @@ void Renderer::initRects(){
 }
 
 void Renderer::clickEvent(int x, int y, bool leftClick, RendererInteractionDelegate *delegate) {
-	if (!this->isPixelInEscenario(x,y)){
-		Log().Get(TAG,logDEBUG) << "No estaba en el escenario";
+	if (this->isPixelInEscenario(x,y)){
+		if (leftClick){
+			delegate->leftClickEnEscenario(x,y);
+		} else {
+			delegate->rightClickEnEscenario(x,y);
+		}
 		return;
 	}
 
-	Log().Get(TAG,logDEBUG) << "Paso por el delegate";
-	if (leftClick){
-		delegate->leftClickEnEscenario(x,y);
-	} else {
-		delegate->rightClickEnEscenario(x,y);
+	if (this->isPixelInMenu(x,y)){
+		//le resto el offset del viewport
+		int xMenu = x - this->menuRect.x;
+		int yMenu = y - this->menuRect.y;
+		this->screenMenu->clickEvent(xMenu,yMenu,delegate);
 	}
 
 }
 
 bool Renderer::isPixelInEscenario(int x, int y){
 	return this->isPixelInRect(x,y,this->escenarioRect);
+}
+
+bool Renderer::isPixelInMenu(int x, int y){
+	return this->isPixelInRect(x,y,this->menuRect);
 }
 
 bool Renderer::isPixelInRect(int x, int y, SDL_Rect rect){

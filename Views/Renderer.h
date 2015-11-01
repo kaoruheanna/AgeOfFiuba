@@ -37,6 +37,7 @@ public:
 	virtual ~RendererInteractionDelegate(){};
 	virtual void leftClickEnEscenario(int x, int y){};
 	virtual void rightClickEnEscenario(int x, int y){};
+	virtual void createEntityButtonPressed(string entityName){};
 };
 
 struct DrawableWithState {
@@ -118,6 +119,7 @@ private:
 	void setDrawableForMiniView(MiniView* view);
 	void initRects();
 	bool isPixelInEscenario(int x, int y);
+	bool isPixelInMenu(int x, int y);
 	bool isPixelInRect(int x, int y, SDL_Rect rect);
 };
 

@@ -29,6 +29,7 @@ public:
 	//RendererInteractionDelegate
 	virtual void leftClickEnEscenario(int x, int y);
 	virtual void rightClickEnEscenario(int x, int y);
+	virtual void createEntityButtonPressed(string entityName);
 
 	string username;
 
@@ -46,7 +47,6 @@ private:
 	bool updated;
 
 	bool pollEvents();
-//	void clickEnEscenario(int x,int y);
 	void updateWindow();
 	void close();
 	void sleep();

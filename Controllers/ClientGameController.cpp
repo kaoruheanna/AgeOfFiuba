@@ -255,58 +255,6 @@ bool ClientGameController::pollEvents(){
 	return pressedR;
 }
 
-void ClientGameController::leftClickEnEscenario(int x,int y){
-	SDL_Point point = this->renderer->windowToMapPoint({x,y});
-	Entity *entidad = this->escenario->getEntidadEnPosicion(point);
-	this->selectedEntity = entidad;
-
-	std::pair<SDL_Point,SDL_Point> tiles;
-	if (entidad && (entidad != this->escenario->getProtagonista())){
-		this->setMessageForSelectedEntity(entidad);
-		tiles = this->escenario->getTilesCoordinatesForEntity(entidad);
-		this->renderer->setSelectedTilesCoordinates(true,tiles);
-		return;
-	}
-
-	this->setMessageForSelectedEntity(this->escenario->getProtagonista());
-	this->renderer->setSelectedTilesCoordinates(false,tiles);
-}
-
-void ClientGameController::rightClickEnEscenario(int x, int y) {
-	SDL_Point point = this->renderer->windowToMapPoint({x,y});
-	Entity *entidad = this->escenario->getEntidadEnPosicion(point);
-
-	if(entidad && (this->selectedEntity!=entidad)) {
-		//Interactuar la seleccionada con la nueva entidad
-		this->mensajero->interactuar(this->getSelectedEntity()->getId(),entidad->getId());
-		return;
-	}
-	// Mover el personaje seleccionado a la nueva posicion
-	// TODO Eliminar harcodeo de protagonista
-	point = this->renderer->proyectedPoint(point, this->escenario->getSize());
-	MobileModel* auxModel = new MobileModel();
-	auxModel->setUsername(username);
-	auxModel->setDestination(point.x, point.y);
-	this->mensajero->moverProtagonista(auxModel);
-	delete auxModel;
-}
-
-void ClientGameController::setMessageForSelectedEntity(Entity* entity){
-	if (!(entity->esJugador())){
-		this->renderer->setMessagesInMenu("Entidad",entity->getNombreAMostrar());
-		return;
-	}
-
-	if (entity == this->escenario->getProtagonista()){
-		this->renderer->setMessagesInMenu("Protagonista",entity->getNombreAMostrar());
-		return;
-	}
-
-	this->renderer->setMessagesInMenu("Jugador",entity->getNombreAMostrar());
-
-}
-
-
 void ClientGameController::close() {
 	if (this->renderer){
 		this->renderer->close();
@@ -445,4 +393,62 @@ Entity* ClientGameController::getSelectedEntity() {
 	// TODO Por ahora es siempre el protagonista pero hay q cambiar esto
 	// return this->selectedEntity;
 	return this->escenario->getProtagonista();
+}
+
+/*
+ * RendererInteractionDelegate
+ */
+void ClientGameController::leftClickEnEscenario(int x,int y){
+	SDL_Point point = this->renderer->windowToMapPoint({x,y});
+	Entity *entidad = this->escenario->getEntidadEnPosicion(point);
+	this->selectedEntity = entidad;
+
+	std::pair<SDL_Point,SDL_Point> tiles;
+	if (entidad && (entidad != this->escenario->getProtagonista())){
+		this->setMessageForSelectedEntity(entidad);
+		tiles = this->escenario->getTilesCoordinatesForEntity(entidad);
+		this->renderer->setSelectedTilesCoordinates(true,tiles);
+		return;
+	}
+
+	this->setMessageForSelectedEntity(this->escenario->getProtagonista());
+	this->renderer->setSelectedTilesCoordinates(false,tiles);
+}
+
+void ClientGameController::rightClickEnEscenario(int x, int y) {
+	SDL_Point point = this->renderer->windowToMapPoint({x,y});
+	Entity *entidad = this->escenario->getEntidadEnPosicion(point);
+
+	if(entidad && (this->selectedEntity!=entidad)) {
+		//Interactuar la seleccionada con la nueva entidad
+		this->mensajero->interactuar(this->getSelectedEntity()->getId(),entidad->getId());
+		return;
+	}
+	// Mover el personaje seleccionado a la nueva posicion
+	// TODO Eliminar harcodeo de protagonista
+	point = this->renderer->proyectedPoint(point, this->escenario->getSize());
+	MobileModel* auxModel = new MobileModel();
+	auxModel->setUsername(username);
+	auxModel->setDestination(point.x, point.y);
+	this->mensajero->moverProtagonista(auxModel);
+	delete auxModel;
+}
+
+void ClientGameController::setMessageForSelectedEntity(Entity* entity){
+	if (!(entity->esJugador())){
+		this->renderer->setMessagesInMenu("Entidad",entity->getNombreAMostrar());
+		return;
+	}
+
+	if (entity == this->escenario->getProtagonista()){
+		this->renderer->setMessagesInMenu("Protagonista",entity->getNombreAMostrar());
+		return;
+	}
+
+	this->renderer->setMessagesInMenu("Jugador",entity->getNombreAMostrar());
+
+}
+
+void ClientGameController::createEntityButtonPressed(string entityName) {
+	Log().Get(TAG) << "Create entity button pressed: " << entityName;
 }
