@@ -435,17 +435,35 @@ void ClientGameController::rightClickEnEscenario(int x, int y) {
 }
 
 void ClientGameController::setMessageForSelectedEntity(Entity* entity){
+	string equipo = "";
+	switch(entity->getTeam()){
+		case RED:
+			equipo = "RED";
+			break;
+		case BLUE:
+			equipo = "BLUE";
+			break;
+		case GREEN:
+			equipo = "GREEN";
+			break;
+		case YELLOW:
+			equipo = "YELLOW";
+			break;
+		default:
+			equipo = "NEUTRAL";
+
+	}
 	if (!(entity->esJugador())){
-		this->renderer->setMessagesInMenu("Entidad",entity->getNombreAMostrar());
+		this->renderer->setMessagesInMenu("Entidad - "+ equipo,entity->getNombreAMostrar());
 		return;
 	}
 
 	if (entity == this->escenario->getProtagonista()){
-		this->renderer->setMessagesInMenu("Protagonista",entity->getNombreAMostrar());
+		this->renderer->setMessagesInMenu("Protagonista - "+ equipo,entity->getNombreAMostrar());
 		return;
 	}
 
-	this->renderer->setMessagesInMenu("Jugador",entity->getNombreAMostrar());
+	this->renderer->setMessagesInMenu("Jugador - "+ equipo,entity->getNombreAMostrar());
 
 }
 

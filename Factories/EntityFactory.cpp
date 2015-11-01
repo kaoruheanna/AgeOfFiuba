@@ -106,6 +106,22 @@ Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion) {
 	return new Entity(id,tipo, pos, size.x, size.y);
 }
 
+Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion, const string& equipo) {
+	Entity* entidad = this->crearEntidad(tipo, posicion);
+	if(equipo.compare("RED") == 0){
+		entidad->setTeam(RED);
+	} else if(equipo.compare("BLUE") == 0){
+		entidad->setTeam(BLUE);
+	} else if(equipo.compare("GREEN") == 0){
+		entidad->setTeam(GREEN);
+	} else if(equipo.compare("YELLOW") == 0){
+		entidad->setTeam(YELLOW);
+	} else {
+		entidad->setTeam(NEUTRAL);
+	}
+	return entidad;
+}
+
 Resource* EntityFactory::crearRecurso(const string& tipo, SDL_Point posicion) {
 	return (Resource*)this->crearEntidad(tipo,posicion);
 }

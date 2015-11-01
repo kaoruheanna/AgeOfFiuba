@@ -9,20 +9,30 @@
 #define CONFIGURATION_ENTIDADCONFIG_H_
 
 #include <string>
+#include <yaml-cpp/yaml.h>
+
+using namespace std;
 
 class EntidadConfig {
 public:
 	EntidadConfig();
-	EntidadConfig(int x, int y, std::string tipo); // TODO Borrar y parsearlo del YAML
+	EntidadConfig(YAML::Node nodo);
+	EntidadConfig(int x, int y, string tipo, string equipo); // TODO Borrar y parsearlo del YAML
 	virtual ~EntidadConfig();
 
 	int getX();
 	int getY();
-	std::string getTipo();
+	string getTipo();
+	string getEquipo();
 private:
 	int x;
 	int y;
-	std::string tipo;
+	string tipo;
+	string equipo;
+
+	static YAML::Node findNodeByName(YAML::Node nodo, string attributeName);
+	static int getIntAttribute(YAML::Node nodo, string attributeName, int defaultValue);
+	static string getStringAttribute(YAML::Node nodo, string attributeName, string defaultValue);
 };
 
 #endif /* CONFIGURATION_ENTIDADCONFIG_H_ */

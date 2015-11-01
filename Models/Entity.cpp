@@ -69,20 +69,29 @@ string Entity::getNombreAMostrar() {
 	return this->nombre;
 }
 
+void Entity::setTeam(Team team) {
+	this->team = team;
+}
+
+Team Entity::getTeam() {
+	return this->team;
+}
 
 //Serializar
 // Metodos de serializacion
 int Entity::getTotalBlockCount() {
-	return 3;
+	return 4;
 }
 
 int Entity::getBlockSizeFromIndex(int currentIndex) {
 	if(currentIndex == 0){
 		return this->serializeStringSize((char*)this->nombre.c_str());
-	} else if (currentIndex == 1 ){
+	} else if (currentIndex == 1){
 		return sizeof(SDL_Point);
-	} else {
+	} else if(currentIndex == 2){
 		return sizeof(int);
+	} else {
+		return sizeof(Team);
 	}
 }
 
@@ -91,8 +100,10 @@ void Entity::getBlockFromIndex(int currentIndex, void* buffer) {
 		this->serializeString((char*)this->nombre.c_str(), buffer);
 	} else if (currentIndex == 1) {
 		memcpy(buffer, &this->posicion, sizeof(SDL_Point));
-	} else {
+	} else if(currentIndex == 2){
 		memcpy(buffer, &this->id, sizeof(int));
+	} else if (currentIndex == 3){
+		memcpy(buffer, &this->team, sizeof(Team));
 	}
 }
 
@@ -105,6 +116,8 @@ void Entity::deserialize(int totalBlockCount, int currentBlock, void* blockData)
 		memcpy(&this->posicion, blockData, sizeof(SDL_Point));
 	} else if (currentBlock == 2) {
 		memcpy(&this->id, blockData, sizeof(int));
+	} else if (currentBlock == 3) {
+		memcpy(&this->team, blockData, sizeof(Team));
 	}
 }
 

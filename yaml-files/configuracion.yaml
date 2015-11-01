@@ -100,7 +100,7 @@ escenario:
    
    entidades:
 
-   - [x: 1, y: 7, tipo: casa]
+   - [x: 1, y: 7, tipo: casa, equipo: RED]
    - [x: 4, y: 2, tipo: piedra]
    - [x: 5, y: 2, tipo: piedra]
    - [x: 6, y: 2, tipo: piedra]

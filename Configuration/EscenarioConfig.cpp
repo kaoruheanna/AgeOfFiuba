@@ -89,101 +89,19 @@ bool EscenarioConfig::validarINT(std::string atributo){
 		return false;
 }
 
-bool EscenarioConfig::parsearEntidad(YAML::Node nodo, EntidadConfig &entidad){
-	std::string nombre;
-		int posX;
-		int posY;
-
-			if (nodo["x"] && nodo["x"].IsDefined() && nodo["x"].IsScalar()){
-				try {
-					if (nodo["x"].as<int>() >= 0){
-						posX = nodo["x"].as<int>();
-					}
-					else {return false;}
-				}catch(YAML::RepresentationException& error){
-						return false;
-					}
-				}
-			else {return false;}
-			if (nodo["y"] && nodo["y"].IsDefined() && nodo["y"].IsScalar()){
-					try {
-						if (nodo["y"].as<int>() >= 0){
-							posY = nodo["y"].as<int>();
-						}
-						else {return false;}
-					}catch(YAML::RepresentationException& error){
-							return false;
-						}
-			}
-			else {return false;}
-			if (nodo["tipo"] && nodo["tipo"].IsDefined() && nodo["tipo"].IsScalar()){
-							try {
-								if (nodo["tipo"].as<std::string>() != ""){
-									nombre = nodo["tipo"].as<std::string>();
-								}
-								else {return false;}
-							}catch(YAML::RepresentationException& error){
-									return false;
-								}
-					}
-			else {return false;}
-			entidad = EntidadConfig(posX,posY,nombre);
-			return true;
-}
-
 void EscenarioConfig::parsearProtagonista(){
-	EntidadConfig personajeParseado = EntidadConfig(0,0,"soldado");
+	EntidadConfig personajeParseado = EntidadConfig(0,0,"soldado", "NEUTRAL");
 	YAML::Node nodoProtagonista = this->nodoEscenario[0]["protagonista"];
 	if (nodoProtagonista.IsSequence() && nodoProtagonista.size() == 1 && !nodoProtagonista[0].IsNull()){
-		this->parsearEntidad(nodoProtagonista[0], personajeParseado);}
-	else {
+		try{
+			personajeParseado = EntidadConfig(nodoProtagonista[0]);
+		} catch(exception &e){
+//				Log().Get(TAG,logERROR) << "Mal formato del protagonista";
+		}
+	} else {
 		Log().Get(TAG,logWARNING) << "El protagonista no existe o se encuentra mal definido, se cargo el protagonista por defecto";
 	}
 	this->protagonista = personajeParseado;
-}
-
-bool EscenarioConfig::parsearEntidad2 (YAML::Node nodo, EntidadConfig &entidad){
-		std::string nombre;
-			int posX;
-			int posY;
-			if (nodo.size() == 3){
-				if (nodo[0]["x"] && nodo[0]["x"].IsDefined() && nodo[0]["x"].IsScalar()){
-					try {
-						if (nodo[0]["x"].as<int>() >= 0){
-							posX = nodo[0]["x"].as<int>();
-						}
-						else {return false;}
-					}catch(YAML::RepresentationException& error){
-							return false;
-						}
-					}
-				else {return false;}
-				if (nodo[1]["y"] && nodo[1]["y"].IsDefined() && nodo[1]["y"].IsScalar()){
-						try {
-							if (nodo[1]["y"].as<int>() >= 0){
-								posY = nodo[1]["y"].as<int>();
-							}
-							else {return false;}
-						}catch(YAML::RepresentationException& error){
-								return false;
-							}
-				}
-				else {return false;}
-				if (nodo[2]["tipo"] && nodo[2]["tipo"].IsDefined() && nodo[2]["tipo"].IsScalar()){
-								try {
-									if (nodo[2]["tipo"].as<std::string>() != ""){
-										nombre = nodo[2]["tipo"].as<std::string>();
-									}
-									else {return false;}
-								}catch(YAML::RepresentationException& error){
-										return false;
-									}
-						}
-				else {return false;}
-				entidad = EntidadConfig(posX,posY,nombre);
-				return true;
-			}
-			else{return false;}
 }
 
 void EscenarioConfig::parsearEntidades(){
@@ -191,11 +109,10 @@ void EscenarioConfig::parsearEntidades(){
 		YAML::Node nodoEntidades = this->nodoEscenario[0]["entidades"];
 		for (std::size_t i=0;i < nodoEntidades.size();i++) {
 			EntidadConfig aux ;//= EntidadConfig(0,0,"");
-			if (this->parsearEntidad2(nodoEntidades[i],aux)){
-				EntidadConfig newNodo = aux;
+			try{
+				EntidadConfig newNodo(nodoEntidades[i]);
 				this->lista.push_back(newNodo);
-			}
-			else{
+			} catch(exception &e){
 //				Log().Get(TAG,logERROR) << "Mal formato de la entidad N°: " << i;
 			}
 		}
@@ -226,4 +143,3 @@ int EscenarioConfig::getSizeY() {
 EntidadConfig EscenarioConfig::getProtagonista() {
 	return this->protagonista;
 }
-

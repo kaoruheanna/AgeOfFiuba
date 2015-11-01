@@ -23,6 +23,14 @@ enum EntityType {
 	RESOURCE
 };
 
+enum Team {
+	NEUTRAL,
+	RED,
+	BLUE,
+	GREEN,
+	YELLOW
+};
+
 class Entity : public Serializable{
 private:
 	//int id;
@@ -33,6 +41,7 @@ protected:
 	string nombre;
 	SDL_Point posicion;  // posicion en el mapa (coordenadas logicas)
 	int id;
+	Team team = NEUTRAL;
 
 	// Serializable methods
 	char* deserializeString(void* blockData);
@@ -49,6 +58,9 @@ public:
 	virtual bool esJugador();
 	virtual string getNombreAMostrar();
 	virtual bool admiteNublado();
+
+	void setTeam(Team team);
+	Team getTeam();
 
 	//Double Dispatch Intract en forma de visitor
 	virtual void interact(Entity* entity) {};

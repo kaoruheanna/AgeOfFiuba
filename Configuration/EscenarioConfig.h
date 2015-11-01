@@ -10,7 +10,10 @@
 
 #include <yaml-cpp/yaml.h>
 #include <list>
+#include <string>
 #include "EntidadConfig.h"
+
+using namespace std;
 
 const int TAMANIO_DEFAULT = 100;
 
@@ -35,9 +38,6 @@ private:
 	bool validarINT(std::string);
 	void parsearProtagonista();
 	void parsearEntidades();
-	bool parsearEntidad(YAML::Node nodo, EntidadConfig &entidad);
-	bool parsearEntidad2(YAML::Node nodo, EntidadConfig &entidad);
-
 
 	int sizeX;
 	int sizeY;

@@ -261,7 +261,7 @@ bool Escenario::tileOcupadoForUsername(TileCoordinate tile,string username){
 Entity* Escenario::crearEntidad(EntidadConfig config) {
 	SDL_Point posicion = {config.getX(), config.getY()};
 	string tipo = config.getTipo();
-	return factory->crearEntidad(tipo, posicion);
+	return factory->crearEntidad(tipo, posicion, config.getEquipo());
 }
 
 void Escenario::vaciarEntidades(){

@@ -27,6 +27,7 @@ public:
 	virtual ~EntityFactory();
 	MobileModel* crearProtagonista(const string& tipo, SDL_Point posicion);
 	Entity* crearEntidad(const string& tipo, SDL_Point posicion);
+	Entity* crearEntidad(const string& tipo, SDL_Point posicion, const string& equipo);
 	Resource* crearRecurso(const string& tipo, SDL_Point posicion);
 private:
 	Map *mundo;
