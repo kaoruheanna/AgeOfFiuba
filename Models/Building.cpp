@@ -29,7 +29,7 @@ void Building::receiveInteraction(Warrior* entity) {
 		return;
 	}
 
-	Escenario* escenario = EscenarioSingleton::get();
+	//Escenario* escenario = EscenarioSingleton::get();
 
 	// TODO Moverse hasta el lugar intermadio
 	//SDL_Point destino = {this->posicion.x,this->posicion.y};

@@ -14,6 +14,8 @@
 
 class Warrior;
 class Building;
+class Resource;
+class Worker;
 
 using namespace std;
 
@@ -80,6 +82,7 @@ public:
 	virtual void receiveInteraction(Entity* entity) {};
 	virtual void receiveInteraction(Building* entity) {};
 	virtual void receiveInteraction(Warrior* entity) {};
+	virtual void receiveInteraction(Worker *entity) {};
 
 	string toString();
 	// Serializable methods

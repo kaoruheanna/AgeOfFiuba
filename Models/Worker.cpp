@@ -16,3 +16,10 @@ Worker::~Worker() {
 	// TODO Auto-generated destructor stub
 }
 
+void Worker::interact(Entity* entity) {
+	entity->receiveInteraction(this);
+}
+
+int Worker::getPoderCosecha() {
+	return 1;
+}
