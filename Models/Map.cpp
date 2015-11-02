@@ -92,6 +92,16 @@ bool Map::construirEntidad(Entity* entidad, SDL_Point posicion){
 	return false;
 }
 
+void Map::sacarEntidad(Entity* entidad) {
+	SDL_Point tilePos = this->getTileForPosition(entidad->getPosicion());
+	for (int i = 0; i < entidad->getAnchoBase(); i++){
+		for (int j = 0; j < entidad->getAnchoBase(); j++){
+			SDL_Point tile = {i+tilePos.x,j+tilePos.y};
+			this->tileSet->setTileConstruible(tile);
+		}
+	}
+}
+
 SDL_Point Map::getTileForPosition(SDL_Point point) {
 	return { point.x / TILE_SIZE, point.y / TILE_SIZE };
 }
@@ -130,4 +140,18 @@ queue <SDL_Point> Map::obtenerCaminoIgnoringTiles(SDL_Point origen, SDL_Point de
 		camino2.push(punto);
 	}
 	return camino2;
+}
+
+int Map::getDistancia(SDL_Point from,SDL_Point to) {
+	//TODO agregar a este cálculo el tamaño de las entidades
+
+	int offset = (TILE_SIZE/2);
+
+	SDL_Point tileOrigen = this->getTileForPosition({from.x-offset,from.y-offset});
+	SDL_Point tileDestino = this->getTileForPosition({to.x-offset,to.y-offset});
+
+	int xDiff = abs(tileOrigen.x - tileDestino.x);
+	int yDiff = abs(tileOrigen.y - tileDestino.y);
+
+	return xDiff+yDiff;
 }

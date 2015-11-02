@@ -33,6 +33,7 @@ void MensajeroRed::esperaMensaje() {
 	Archivo* configuracion = NULL;
 	MobileModel* modelo = NULL;
 	Resource* resource = NULL;
+	Entity* entity = NULL;
 	User* user = NULL;
 	int resultado = recibirSerializable(this->socket, recibido);
 	printf("MensajeroRed - Recibi resultado: %i con mensaje: %s\n", resultado, recibido->toString());
@@ -81,6 +82,13 @@ void MensajeroRed::esperaMensaje() {
 				//printf("MensajeroRed - Recibi  desaparece resource con resultado: %i\n", resultado);
 				this->escucha->desapareceRecurso(resource);
 				delete resource;
+				break;
+			case ACTUALIZA_ENTIDAD:
+				entity = new Entity();
+				resultado = recibirSerializable(this->socket, entity);
+				//printf("MensajeroRed - Recibi  desaparece resource con resultado: %i\n", resultado);
+				this->escucha->actualizarEntidad(resource);
+				delete entity;
 				break;
 			case CAMBIO_USUARIO:
 				user = new User();
@@ -131,6 +139,16 @@ void MensajeroRed::configEscenario(const string path) {
 	resultado = enviarSerializable(this->socket, archivo);
 	printf("Cliente - yaml con resultado: %i\n", resultado);
 	delete archivo;
+}
+
+void MensajeroRed::actualizaEntity(Entity* entity) {
+	Mensaje* mensaje = new Mensaje(ACTUALIZA_ENTIDAD, this->sender);
+	//printf("Cliente - apareceRecurso para enviar\n");
+	int resultado = enviarSerializable(this->socket, mensaje);
+	//printf("Cliente - apareceRecurso con resultado: %i\n", resultado);
+	delete mensaje;
+	resultado = enviarSerializable(this->socket, entity);
+	//printf("Cliente - apareceRecurso con resultado: %i\n", resultado);
 }
 
 void MensajeroRed::apareceRecurso(Resource* recurso) {

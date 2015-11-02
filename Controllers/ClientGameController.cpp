@@ -381,9 +381,31 @@ void ClientGameController::desapareceRecurso(Resource* recurso){
 	if (!this->inicializado())
 		return;
 
-	if(this->escenario->eliminarRecursoConID(recurso->getId())) {
+	if(this->escenario->eliminarEntidadConID(recurso->getId())) {
 		this->updated = true;
 	}
+}
+
+void ClientGameController::actualizarEntidad(Entity* entity) {
+	if (!this->inicializado())
+			return;
+
+	Entity* newEntity = this->escenario->entidadConId(entity->getId());
+
+	if( newEntity->getClass() == MOBILE_MODEL) {
+		return;
+	}
+
+	if(newEntity) {
+		newEntity->update(entity);
+		if (!newEntity->estaViva()) {
+			this->escenario->eliminarEntidadConID(newEntity->getId());
+		}
+	} else {
+		this->escenario->agregarEntidad(entity);
+	}
+
+	this->updated = true;
 }
 
 void ClientGameController::configEscenario(const string path) {

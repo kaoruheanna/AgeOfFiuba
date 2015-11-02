@@ -17,12 +17,16 @@ Warrior::Warrior() {}
 
 Warrior::~Warrior() {}
 
-void Warrior::interact(Entity* entity) {
-	entity->receiveInteraction(this);
+void Warrior::doInteract() {
+	activeInteractionEntity->receiveInteraction(this);
 }
 
 void Warrior::receiveInteraction(Building* entity) {
 	Log().Get(TAG) << "Warrior receive interaction from building -> Do nothing";
+}
+
+int Warrior::getPoderAtaque() {
+	return 1;
 }
 
 // Metodos de serializacion
@@ -41,3 +45,12 @@ void Warrior::getBlockFromIndex(int currentIndex, void* buffer) {
 void Warrior::deserialize(int totalBlockCount, int currentBlock, void* blockData) {
 	MobileModel::deserialize(totalBlockCount,currentBlock,blockData);
 }
+
+// Should interact
+bool Warrior::shouldInteractWith(Entity* entity){
+	return entity->shouldReceiveInteraction(this);
+}
+
+bool Warrior::shouldReceiveInteraction(Entity* entity){return false;}
+bool Warrior::shouldReceiveInteraction(Building* entity){return true;}
+bool Warrior::shouldReceiveInteraction(Warrior* entity){return true;}

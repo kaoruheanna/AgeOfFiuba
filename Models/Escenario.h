@@ -21,9 +21,10 @@ class EscenarioDelagate {
 public:
 	EscenarioDelagate(){};
 	virtual ~EscenarioDelagate(){};
-	virtual void apareceEntidad(Entity* recurso){};
-	virtual void desapareceEntidad(Entity* recurso){};
-	virtual void actualizaPersonaje(MobileModel* entity){};
+	virtual void apareceEntidad(Entity* recurso) = 0;
+	virtual void desapareceEntidad(Entity* recurso) = 0;
+	virtual void actualizaPersonaje(MobileModel* entity) = 0;
+	virtual void actualizaEntidad(Entity* entity) = 0;
 };
 
 class Escenario {
@@ -50,13 +51,15 @@ class Escenario {
 		void vaciarEntidades();
 		void loop();
 		bool tileOcupadoForEntity(TileCoordinate tile,Entity* entity);
+		void moveEntityToPos(MobileModel* mobileModel,SDL_Point destino);
+		int getDistancia(Entity* from, Entity* to);
 
 		SDL_Point getSize();
 		Entity* crearEntidad(EntidadConfig config);
 		Entity* crearEntidad(const string& tipo, SDL_Point posicion);
 		list<Entity*> getListaEntidades(); // Se usa para agregar las vistas de las entidades
 		list<Entity*> getListaRecursos(); // Se usa para agregar las vistas de las entidades
-		bool eliminarRecursoConID(int id);
+		bool eliminarEntidadConID(int id);
 		bool existeRecursoConID(int id);
 		Entity* entidadConId(int id);
 		Entity* getEntidadEnPosicion(SDL_Point point); //recibe una posicion logica
@@ -76,6 +79,9 @@ class Escenario {
 
 		list<Team> getTeams();
 		list<MobileModel*> getMobileModels();
+
+
+		list<Entity*> entidadesInteractuando;
 };
 
 #endif

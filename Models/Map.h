@@ -28,13 +28,16 @@ class Map {
 		void setAll(int,int,int,int);
 		void setTileDimensions(int,int);
 
+		//Recibe dos posiciones logicas, la transforma a tiles y te da la distancia en tiles
+		int getDistancia(SDL_Point from,SDL_Point to);
+
 		// Devuelve una posicion de tile al azar o -1, -1 si no hay
 		SDL_Point getEmptyTile();
 		SDL_Point posicionRelativaRect(SDL_Rect,SDL_Point);
 
 		bool construirEntidad(Entity*,SDL_Point);
 		bool puedoConstruir(Entity*,SDL_Point);
-		Entity* sacarEntidad(Entity*);
+		void sacarEntidad(Entity*);
 
 		SDL_Point getTileForPosition(SDL_Point point);
 		SDL_Point getPositionForTile(SDL_Point point,bool centered = false);
