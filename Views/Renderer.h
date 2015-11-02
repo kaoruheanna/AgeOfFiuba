@@ -76,10 +76,11 @@ public:
 	FogOfWar* getFog();
 	void setProtagonista(User *protagonista);
 	void setMessagesInMenu(std::string firstMessage, std::string secondMessage);
-	void setSelectedTilesCoordinates(bool selected,std::pair<SDL_Point,SDL_Point> tiles);
+	void setSelectedTilesCoordinates(bool selected,std::pair<SDL_Point,SDL_Point> tiles,Entity* entidad);
 	void setCartel(string message);
 	void hideCartel();
 	void clickEvent(int x, int y, bool leftClick, RendererInteractionDelegate *delegate);
+	Entity* selectedEntity;
 
 private:
 	bool successfullInit;
@@ -122,6 +123,8 @@ private:
 	bool isPixelInEscenario(int x, int y);
 	bool isPixelInMenu(int x, int y);
 	bool isPixelInRect(int x, int y, SDL_Rect rect);
+	bool sonTilesIguales(int tileX, int tileY, int selectedTileX, int selectedTileY);
+	void setearColor(Drawable* drawable);
 };
 
 #endif /* RENDERER_H_ */

@@ -17,6 +17,7 @@
 #include "../Models/Entity.h"
 #include "../Models/Resource.h"
 #include "../Models/Warrior.h"
+#include "../Models/Worker.h"
 #include "../Configuration/TipoConfig.h"
 
 using namespace std;

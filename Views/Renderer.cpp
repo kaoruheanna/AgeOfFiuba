@@ -367,6 +367,30 @@ SDL_Point Renderer::proyectedPoint(SDL_Point mapPoint, SDL_Point plano){
 	return {x,y};
 }
 
+void Renderer::setearColor(Drawable* drawable){
+	switch (this->selectedEntity->getTeam()){
+		case RED:
+			SDL_SetTextureColorMod( drawable->getTexture(), 255,0,0 );
+			break;
+		case BLUE:
+			SDL_SetTextureColorMod( drawable->getTexture(), 0,0,255 );
+			break;
+		case GREEN:
+			SDL_SetTextureColorMod( drawable->getTexture(), 0,255,0 );
+			break;
+		case YELLOW:
+			SDL_SetTextureColorMod( drawable->getTexture(), 255,255,0 );
+			break;
+		default:
+			SDL_SetTextureColorMod( drawable->getTexture(), 200,200,200 );
+			break;
+	}
+}
+
+bool Renderer::sonTilesIguales(int tileX, int tileY, int selectedTileX, int selectedTileY){
+	return ((selectedTileX == tileX)&&(selectedTileY == tileY));
+}
+
 // draw Drawable
 void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable,bool admiteNublado) {
 	SDL_Point mapRect = { mapPositionX, mapPositionY };
@@ -408,8 +432,17 @@ void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable,bool 
 		SDL_SetTextureColorMod( drawable->getTexture(), FOG_VISITED,FOG_VISITED,FOG_VISITED );
 	}
 
+	if (this->selectedEntity && this->selectedEntity->getClass() == MOBILE_MODEL && currentTileState != NUBLADO  ){
+		int tileX = currentTile.x;
+		int tileY = currentTile.y;
+		int selectedTileX = this->selectedEntity->getPosicion().x / TILE_HEIGHT_PIXELS;
+		int selectedTileY = this->selectedEntity->getPosicion().y / TILE_HEIGHT_PIXELS;
+		if (this->sonTilesIguales(tileX,tileY,selectedTileX,selectedTileY))
+			this->setearColor(drawable);
+	}
+
 	//si es un tile lo dibuja ahora
-	if (this->hasSelectedTiles){
+	if (this->hasSelectedTiles && this->selectedEntity->getClass() != MOBILE_MODEL){
 		int minX = this->selectedTilesCoordinates.first.x;
 		int maxX = this->selectedTilesCoordinates.second.x;
 		int minY = this->selectedTilesCoordinates.first.y;
@@ -417,8 +450,8 @@ void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable,bool 
 		bool inRangeX = ((currentTile.x >= minX) && (currentTile.x < maxX));
 		bool inRangeY = ((currentTile.y >= minY) && (currentTile.y < maxY));
 		if (inRangeX && inRangeY){
-			SDL_SetTextureColorMod( drawable->getTexture(), 80,255,255 );
-		}
+			this->setearColor(drawable);
+			}
 	}
 	SDL_RenderCopy(sdlRenderer, drawable->getTexture(), drawable->getClipRect(), &renderQuad);
 }
@@ -584,9 +617,10 @@ void Renderer::setMessagesInMenu(std::string firstMessage, std::string secondMes
 	this->screenMenu->setMessages(firstMessage,secondMessage);
 }
 
-void Renderer::setSelectedTilesCoordinates(bool selected,std::pair<SDL_Point,SDL_Point> tiles){
+void Renderer::setSelectedTilesCoordinates(bool selected,std::pair<SDL_Point,SDL_Point> tiles, Entity* entidad){
 	this->hasSelectedTiles = selected;
 	this->selectedTilesCoordinates = tiles;
+	this->selectedEntity = entidad;
 }
 
 void Renderer::setCartel(string message){
