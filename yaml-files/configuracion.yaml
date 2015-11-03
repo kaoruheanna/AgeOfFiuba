@@ -152,7 +152,7 @@ escenario:
    
    entidades:
 
-   - [x: 1, y: 7, tipo: casa, equipo: RED]
+   - [x: 1, y: 7, tipo: casa]
    - [x: 20, y: 10, tipo: archeryRange, equipo: RED]
    - [x: 1, y: 1, tipo: soldado, equipo: RED]
    - [x: 18, y: 9, tipo: aldeano, equipo: RED]
