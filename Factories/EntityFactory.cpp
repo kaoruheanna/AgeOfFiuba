@@ -102,10 +102,6 @@ Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion, bool
 	}
 
 	if (returnEntity) {
-		Log().Get(TAG) << "Propiedades tipo unidad " << this->tipos[tipo].getNombre() <<
-				" alcance: " << this->tipos[tipo].getPropiedadesTipoUnidad().alcance <<
-				" vida Inicial: " << this->tipos[tipo].getPropiedadesTipoUnidad().vidaInicial <<
-				" poder de ataque " << this->tipos[tipo].getPropiedadesTipoUnidad().poderAtaque;
 		returnEntity->setPropiedadesTipoUnidad(this->tipos[tipo].getPropiedadesTipoUnidad());
 		return returnEntity;
 	}
