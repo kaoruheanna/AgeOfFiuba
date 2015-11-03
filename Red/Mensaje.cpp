@@ -114,6 +114,22 @@ char* Mensaje::toString() {
 			break;
 		case DESAPARECE_RECURSO:
 			type = "DESAPARECE_RECURSO";
+			break;
+		case PING:
+			type = "PING";
+			break;
+		case ERROR_MAXIMOS_EQUIPOS:
+			type = "ERROR_MAXIMOS_EQUIPOS";
+			break;
+		case CAMBIO_USUARIO:
+			type = "CAMBIO_USUARIO";
+			break;
+		case CONSTRUIR:
+			type = "CONSTRUIR";
+			break;
+		case COMENZO_PARTIDA:
+			type = "COMENZO_PARTIDA";
+			break;
 	}
 	char* name = "NULL";
 	if(this->sender != NULL){

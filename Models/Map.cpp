@@ -82,7 +82,6 @@ bool Map::puedoConstruir(Entity* entidad, SDL_Point tile,list<TileCoordinate> *t
 	return (!hayEntities && !hayMobileModels);
 }
 
-
 bool Map::tilesOcupadosPorMobileModels(SDL_Point tileInicio,SDL_Point tileFin,list<TileCoordinate> *tilesOccupied){
 	if (tilesOccupied == NULL){
 		return false;

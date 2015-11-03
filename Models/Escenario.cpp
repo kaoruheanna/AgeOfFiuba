@@ -430,3 +430,24 @@ void Escenario::agregarEntidad(const string& tipo, SDL_Point posicion,const stri
 	Entity* entity = this->factory->crearEntidad(tipo,tile,equipo);
 	this->construirEntidad(entity, entity->getPosicion());
 }
+
+bool Escenario::posicionValida(SDL_Point posicion){
+	TileCoordinate tile = {this->mundo->getTileForPosition(posicion).x,this->mundo->getTileForPosition(posicion).y};
+	return this->mundo->tileSet->posicionValida(tile);
+}
+
+bool Escenario::posicionVacia(SDL_Point posicion){
+	if (this->getEntidadEnPosicion(posicion)==NULL){
+		TileCoordinate tile = {this->mundo->getTileForPosition(posicion).x,this->mundo->getTileForPosition(posicion).y};
+		return this->mundo->tileSet->posicionOcupada(tile);
+	}
+	return false;
+}
+
+bool Escenario::posicionValidaParaCaminar(SDL_Point posicion){
+	if (this->posicionValida(posicion)){
+		return true;
+		return this->posicionVacia(posicion); //TODO
+	}
+	return false;
+}
