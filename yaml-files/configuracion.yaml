@@ -50,7 +50,8 @@ tipos:
    pixel_ref_y: 31
    creables:
    - aldeano
-   
+   vida_inicial: 10000
+
  - nombre: archeryRange
    categoria: building
    imagen: img/archeryRange.png
@@ -91,6 +92,9 @@ tipos:
    alto_frame: 50
    ancho_frame: 51
    mini_map_pixel_ref_type: 1
+   alcance: 1
+   vida_inicial: 250
+   poder_ataque: 3
    
  - nombre: aldeano
    categoria: worker
@@ -126,6 +130,9 @@ tipos:
    alto_frame: 94
    ancho_frame: 89
    mini_map_pixel_ref_type: 1
+   alcance: 3
+   vida_inicial: 500
+   poder_ataque: 2
 
  - nombre: tierra
    imagen: img/tierra.png

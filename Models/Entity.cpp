@@ -29,9 +29,7 @@ void Entity::Init(int id, string nombre, SDL_Point posicion, int ancho_base, int
 	this->ancho_base = ancho_base;
 	this->alto_base = alto_base;
 	this->id = id;
-	this->alcance = 1;
-	this->initialLife = 100;
-	this->life = this->initialLife;
+	this->life = 100;
 	this->activeInteractionEntity = NULL;
 }
 
@@ -179,6 +177,7 @@ void Entity::update(Entity* entity) {
 	this->ancho_base = entity->ancho_base;
 	this->alto_base = entity->alto_base;
 	this->life = entity->life;
+	this->propiedadesTipoUnidad = entity->propiedadesTipoUnidad;
 }
 
 EntityType Entity::getClass() {
@@ -211,7 +210,25 @@ bool Entity::canReach(Entity* entity) {
 	return (distancia <= this->getAlcance());
 }
 
-int Entity::getAlcance() {
-	return 1;
+void Entity::setPropiedadesTipoUnidad(PropiedadesTipoUnidad propiedades) {
+	this->propiedadesTipoUnidad = propiedades;
+	this->life = this->propiedadesTipoUnidad.vidaInicial;
 }
+
+PropiedadesTipoUnidad Entity::getPropiedadesTipoUnidad() {
+	return this->propiedadesTipoUnidad;
+}
+
+int Entity::getAlcance() {
+	return this->propiedadesTipoUnidad.alcance;
+}
+
+int Entity::getPoderAtaque() {
+	return this->propiedadesTipoUnidad.poderAtaque;
+}
+
+int Entity::getLife() {
+	return this->life;
+}
+
 

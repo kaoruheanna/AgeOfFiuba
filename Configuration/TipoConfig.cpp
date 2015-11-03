@@ -26,6 +26,10 @@ TipoConfig::TipoConfig() {
 	this->anchoFrame = 1;
 	this->altoFrame = 1;
 	this->minimapPixelRefType = MinimapPixelRefTypeDefault;
+	this->propiedadesTipoUnidad.alcance = 1;
+	this->propiedadesTipoUnidad.poderAtaque = 1;
+	this->propiedadesTipoUnidad.vidaInicial = 100;
+
 	this->categoria = "building";
 	this->creables.clear();
 }
@@ -41,6 +45,9 @@ TipoConfig::TipoConfig(YAML::Node nodo): TipoConfig(){
 	this->anchoFrame = TipoConfig::getIntAttribute(nodo, "ancho_frame", this->anchoFrame);
 	this->altoFrame = TipoConfig::getIntAttribute(nodo, "alto_frame", this->altoFrame);
 	this->minimapPixelRefType = TipoConfig::getIntAttribute(nodo, "mini_map_pixel_ref_type", this->minimapPixelRefType);
+	this->propiedadesTipoUnidad.alcance = TipoConfig::getIntAttribute(nodo, "alcance", this->propiedadesTipoUnidad.alcance);
+	this->propiedadesTipoUnidad.poderAtaque = TipoConfig::getIntAttribute(nodo, "poder_ataque", this->propiedadesTipoUnidad.poderAtaque);
+	this->propiedadesTipoUnidad.vidaInicial = TipoConfig::getIntAttribute(nodo, "vida_inicial", this->propiedadesTipoUnidad.vidaInicial);
 
 	this->imagen = TipoConfig::getStringAttribute(nodo, "imagen", this->imagen);
 	this->imagenDeshabilitado = TipoConfig::getStringAttribute(nodo, "imagenDeshabilitado", this->imagenDeshabilitado);
@@ -97,6 +104,8 @@ int TipoConfig::getIntAttribute(YAML::Node nodo, string attributeName, int defau
 	}
 	return defaultValue;
 }
+
+
 string TipoConfig::getStringAttribute(YAML::Node nodo, string attributeName, string defaultValue){
 	if(!nodo[attributeName] || nodo[attributeName].IsNull() || !nodo[attributeName].IsDefined()){
 //		Log().Get(TAG,logWARNING) << attributeName << " no esta definido para este tipo. Usando valor default: " << defaultValue;
@@ -178,6 +187,10 @@ int TipoConfig::getAnchoFrame() {
 }
 int TipoConfig::getMinimapPixelRefType() {
 	return this->minimapPixelRefType;
+}
+
+PropiedadesTipoUnidad TipoConfig::getPropiedadesTipoUnidad() {
+	return this->propiedadesTipoUnidad;
 }
 
 string TipoConfig::getCategoria() {

@@ -87,17 +87,27 @@ Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion, bool
 	SDL_Point pos = this->getPositionForTile(tipo,posicion,(this->tipos[tipo].getCategoria() == "warrior"));
 	SDL_Point size = this->getSize(tipo);
 
+	Entity* returnEntity = NULL;
 	if (this->tipos[tipo].getCategoria() == "warrior") {
-		return new Warrior(id, tipo, pos, size.x,size.y);
+		returnEntity = new Warrior(id, tipo, pos, size.x,size.y);
 	}
 	if (this->tipos[tipo].getCategoria() == "worker") {
-		return new Worker(id, tipo, pos, size.x,size.y);
+		returnEntity = new Worker(id, tipo, pos, size.x,size.y);
 	}
 	if (this->tipos[tipo].getCategoria() == "resource") {
-		return new Resource(id, tipo, pos, size.x, size.y);
+		returnEntity = new Resource(id, tipo, pos, size.x, size.y);
 	}
 	if (this->tipos[tipo].getCategoria() == "building") {
-		return new Building(id, tipo, pos, size.x,size.y);
+		returnEntity = new Building(id, tipo, pos, size.x,size.y);
+	}
+
+	if (returnEntity) {
+		Log().Get(TAG) << "Propiedades tipo unidad " << this->tipos[tipo].getNombre() <<
+				" alcance: " << this->tipos[tipo].getPropiedadesTipoUnidad().alcance <<
+				" vida Inicial: " << this->tipos[tipo].getPropiedadesTipoUnidad().vidaInicial <<
+				" poder de ataque " << this->tipos[tipo].getPropiedadesTipoUnidad().poderAtaque;
+		returnEntity->setPropiedadesTipoUnidad(this->tipos[tipo].getPropiedadesTipoUnidad());
+		return returnEntity;
 	}
 
 	return new Entity(id,tipo, pos, size.x, size.y);
