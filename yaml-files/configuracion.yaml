@@ -209,6 +209,7 @@ escenario:
    - [x: 11, y: 1, tipo: arbol]
    - [x: 11, y: 0, tipo: arbol]
    - [x: 5, y: 5, tipo: arbol]
+   - [x: 18, y: 18, tipo: casa]
    
    protagonista:
    - tipo: soldado
