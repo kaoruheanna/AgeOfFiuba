@@ -560,11 +560,12 @@ void ClientGameController::rightClickEnEscenario(int x, int y) {
 	SDL_Point point = this->renderer->windowToMapPoint({x,y});
 	Entity *entidad = this->escenario->getEntidadEnPosicion(point);
 
-	Entity* selectedEntity = this->selectedEntities.front();
-	if(entidad && (selectedEntity->getId() != entidad->getId())) {
-		//Interactuar la seleccionada con la nueva entidad
-		//TODO interactuar con todas las unidades.
-		this->mensajero->interactuar(selectedEntity->getId(),entidad->getId());
+	if(entidad) {
+		for (Entity* selectedEntity: this->selectedEntities){
+			if (selectedEntity->getId() != entidad->getId()) {
+				this->mensajero->interactuar(selectedEntity->getId(),entidad->getId());
+			}
+		}
 		return;
 	}
 	// Mover el personaje seleccionado a la nueva posicion
