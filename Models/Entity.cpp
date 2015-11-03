@@ -12,32 +12,27 @@ using namespace std;
 const string TAG ="Entity";
 
 Entity::Entity(){
-	this->nombre = "";
-	this->posicion = {0,0};
-	this->ancho_base = 1;
-	this->alto_base = 1;
-	this->id = 0;
-	this->life = 100;
-	this->activeInteractionEntity = NULL;
+	this->Init(0,"",{0,0},1,1);
 }
 
 Entity::Entity(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base){
+	this->Init(id,nombre,posicion,ancho_base,alto_base);
+}
+
+Entity::Entity(int id,string nombre, int ancho_base, int alto_base){
+	this->Init(id,nombre,{-1,-1},ancho_base,alto_base);
+}
+
+void Entity::Init(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base) {
 	this->nombre = nombre;
 	this->posicion = posicion;
 	this->ancho_base = ancho_base;
 	this->alto_base = alto_base;
 	this->id = id;
-	this->life = 100;
+	this->alcance = 1;
+	this->initialLife = 100;
+	this->life = this->initialLife;
 	this->activeInteractionEntity = NULL;
-}
-
-Entity::Entity(int id,string nombre, int ancho_base, int alto_base){
-	this->id = id;
-	this->nombre = nombre;
-	this->posicion = {-1,-1}; // posicion invalida hace referencia a que no tiene posicion en el mapa.
-	this->ancho_base = ancho_base;
-	this->alto_base = alto_base;
-
 }
 
 Entity::~Entity(){

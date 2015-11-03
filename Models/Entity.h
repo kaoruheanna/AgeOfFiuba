@@ -47,6 +47,7 @@ private:
 	//int id;
 	int ancho_base; //x
 	int alto_base; //y
+	void Init(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base);
 
 protected:
 	string nombre;
@@ -55,7 +56,9 @@ protected:
 	Team team = TEAM_NEUTRAL;
 	EntityState state = STATE_NORMAL;
 	Entity* activeInteractionEntity;
+	int initialLife;
 	int life;
+	int alcance;
 
 	// Serializable methods
 	char* deserializeString(void* blockData);
