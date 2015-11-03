@@ -46,6 +46,7 @@ struct PropiedadesTipoUnidad{
 	int alcance;
 	int vidaInicial;
 	int poderAtaque;
+	int escudo;
 };
 
 class Entity : public Serializable{
@@ -69,6 +70,7 @@ protected:
 	char* deserializeString(void* blockData);
 	void serializeString(char* string, void* buffer);
 	int serializeStringSize(char* string);
+	int vidaDescontada(Entity* entity);
 
 public:
 	list<string> creables;
@@ -103,6 +105,7 @@ public:
 	virtual int getAlcance();
 	virtual int getPoderAtaque();
 	virtual int getLife();
+	virtual int getEscudo();
 
 	bool canReach(Entity* entity);
 

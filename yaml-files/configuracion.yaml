@@ -51,6 +51,7 @@ tipos:
    creables:
    - aldeano
    vida_inicial: 10000
+   escudo: 1
 
  - nombre: archeryRange
    categoria: building

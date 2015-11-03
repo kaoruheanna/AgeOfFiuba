@@ -33,7 +33,7 @@ void Warrior::doInteract() {
 }
 
 void Warrior::receiveInteraction(Warrior* entity) {
-	this->life = this->life - entity->getPoderAtaque();
+	this->life = this->life - this->vidaDescontada(entity);
 	if((this->life % 100) == 0) {
 		Log().Get(TAG) << "Warrior receive interaction from Warrior vida: " << this->life;
 	}
