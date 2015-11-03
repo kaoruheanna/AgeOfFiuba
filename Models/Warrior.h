@@ -21,7 +21,7 @@ public:
 
 	// Interact
 	virtual void doInteract();
-	virtual void receiveInteraction(Building* entity);
+	virtual void receiveInteraction(Warrior* entity);
 
 	// Serializable methods
 	virtual int getTotalBlockCount();

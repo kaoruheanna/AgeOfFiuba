@@ -142,7 +142,6 @@ void MobileModel::update(MobileModel* other) {
 	this->posicion = other->getPosicion();
 }
 
-
 void MobileModel::addDestination(int destinationX, int destionationY){
 	this->path.push({destinationX,destinationY});
 }

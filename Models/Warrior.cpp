@@ -18,20 +18,21 @@ Warrior::Warrior() {}
 Warrior::~Warrior() {}
 
 void Warrior::doInteract() {
-	if( !activeInteractionEntity) {
+	if (!activeInteractionEntity ||
+		!this->canReach(activeInteractionEntity) ||
+		this->isMoving() ||
+		this->getTeam() == activeInteractionEntity->getTeam() ||
+		!activeInteractionEntity->estaViva()) {
 		return;
 	}
 
-	if (!this->canReach(activeInteractionEntity) || this->isMoving()) {
-		return;
-	}
 	this->state = STATE_INTERACTING;
-
 	activeInteractionEntity->receiveInteraction(this);
 }
 
-void Warrior::receiveInteraction(Building* entity) {
-	Log().Get(TAG) << "Warrior receive interaction from building -> Do nothing";
+void Warrior::receiveInteraction(Warrior* entity) {
+	this->life = this->life - entity->getPoderAtaque();
+	Log().Get(TAG) << "Warrior receive interaction from Warrior vida: " << this->life;
 }
 
 int Warrior::getPoderAtaque() {

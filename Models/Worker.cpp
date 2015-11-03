@@ -6,15 +6,15 @@
  */
 
 #include "Worker.h"
+#include "../Utils/Log.h"
+const string  TAG = "Worker";
 
-Worker::Worker() {
-	// TODO Auto-generated constructor stub
+Worker::Worker(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base)
+: MobileModel(id,nombre, posicion, ancho_base, alto_base){}
 
-}
+Worker::Worker() {}
 
-Worker::~Worker() {
-	// TODO Auto-generated destructor stub
-}
+Worker::~Worker() {}
 
 void Worker::interact(Entity* entity) {
 	entity->receiveInteraction(this);
@@ -22,4 +22,9 @@ void Worker::interact(Entity* entity) {
 
 int Worker::getPoderCosecha() {
 	return 1;
+}
+
+void Worker::receiveInteraction(Warrior* entity) {
+	this->life = this->life - entity->getPoderAtaque();
+	Log().Get(TAG) << "Worker receive interaction from Warrior vida: " << this->life;
 }
