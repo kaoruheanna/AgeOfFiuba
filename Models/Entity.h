@@ -87,6 +87,10 @@ public:
 	void stopInteracting();
 	void interact(Entity* entity);
 
+	//Metodos de interaccion
+	virtual int getAlcance();
+	bool canReach(Entity* entity);
+
 	virtual void doInteract() {};
 	virtual void receiveInteraction(Entity* entity) {};
 	virtual void receiveInteraction(Building* entity) {};

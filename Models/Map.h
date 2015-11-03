@@ -51,7 +51,7 @@ class Map {
 		SDL_Point getCenteredPositionForTile(SDL_Point point);
 
 		//Obtiene el tile mas cercano a to desde from
-		SDL_Point getPuntoMasCercano( Entity* from, Entity* to);
+		SDL_Point getPuntoMasCercanoADistancia( Entity* from, Entity* to, int distancia);
 
 		queue <SDL_Point> obtenerCaminoIgnoringTiles(SDL_Point origen, SDL_Point destino,list<TileCoordinate> tilesOccupied);
 

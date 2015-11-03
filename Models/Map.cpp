@@ -157,7 +157,7 @@ int Map::getDistanciaForTiles(SDL_Point tileOrigen,SDL_Point tileDestino) {
 	int xDiff = abs(tileOrigen.x - tileDestino.x);
 	int yDiff = abs(tileOrigen.y - tileDestino.y);
 	int ajusteDiagonal = ((xDiff>0) && (yDiff>0)) ? 1 : 0;
-	return xDiff+yDiff-ajusteDiagonal;
+	return max(xDiff,yDiff);
 }
 
 //Recive posiciones logicas y devuelve tiles de distancia entre ellos
@@ -201,13 +201,13 @@ list<SDL_Point> Map::tilesADistancia(Entity* entity,int distancia) {
 	return list;
 }
 
-SDL_Point Map::getPuntoMasCercano(Entity* fromEntity,Entity* toEntity) {
+SDL_Point Map::getPuntoMasCercanoADistancia(Entity* fromEntity,Entity* toEntity, int distancia) {
 
 	SDL_Point from = fromEntity->getPosicion();
 	int offset = (TILE_SIZE/2);
 	SDL_Point tileOrigen = this->getTileForPosition({from.x-offset,from.y-offset});
 
-	list<SDL_Point> tilesADistanciaPedida = this->tilesADistancia(toEntity,1);
+	list<SDL_Point> tilesADistanciaPedida = this->tilesADistancia(toEntity,distancia);
 	SDL_Point mejorTile = {-1,-1};
 	int mejorDistancia = INT32_MAX;
 	for(auto tile : tilesADistanciaPedida) {

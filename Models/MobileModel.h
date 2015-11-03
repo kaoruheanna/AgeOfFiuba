@@ -42,7 +42,6 @@ public:
 	bool esJugador();
 	string getNombreAMostrar();
 
-	bool canReach(Entity* entity);
 	void olvidarCamino();
 	virtual EntityType getClass();
 

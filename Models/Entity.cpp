@@ -5,6 +5,7 @@
 #include <SDL2/SDL.h>
 #include "../GlobalConstants.h"
 #include "../Utils/Log.h"
+#include "../Utils/EscenarioSingleton.h"
 
 using namespace std;
 
@@ -208,3 +209,15 @@ void Entity::stopInteracting() {
 void Entity::interact(Entity* entity){
 	activeInteractionEntity = entity;
 }
+
+bool Entity::canReach(Entity* entity) {
+	Escenario* escenario = EscenarioSingleton::get();
+	int distancia = escenario->getDistancia(this,entity);
+	Log().Get(TAG) << "Distancia " << distancia << " alcance " << this->getAlcance();
+	return (distancia <= this->getAlcance());
+}
+
+int Entity::getAlcance() {
+	return 1;
+}
+

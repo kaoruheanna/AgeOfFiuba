@@ -174,7 +174,6 @@ void ServerGameController::moverEntidad(MobileModel* newModel, string username) 
 		return;
 	}
 	oldModel->stopInteracting();
-
 	SDL_Point destino = {newModel->getDestinationX(),newModel->getDestinationY()};
 	this->escenario->moveEntityToPos(oldModel,destino);
 }
@@ -193,19 +192,9 @@ void ServerGameController::interactuar(int selectedEntityId, int targetEntityId)
 
 	Log().Get(TAG) << "Agrego a Interactuar en el server " << selectedEntity->getNombre() << " " << targetEntity->getNombre();
 
-	// TODO Moverse hasta el lugar intermadio
-	//SDL_Point destino = {this->posicion.x,this->posicion.y};
-	//escenario->moveEntityToPos(entity,destino);
-
 	if(selectedEntity->getClass()==MOBILE_MODEL) {
-		SDL_Point point = this->escenario->mundo->getPuntoMasCercano(selectedEntity,targetEntity);
+		SDL_Point point = this->escenario->mundo->getPuntoMasCercanoADistancia(selectedEntity,targetEntity,selectedEntity->getAlcance());
 		SDL_Point destino = this->escenario->mundo->getCenteredPositionForTile(point);
-
-		Log().Get(TAG) << "Pos Inicial: " << selectedEntity->getPosicion().x << "," << selectedEntity->getPosicion().y;
-		Log().Get(TAG) << "Pos Final: " << targetEntity->getPosicion().x << "," << targetEntity->getPosicion().y;
-		Log().Get(TAG) << "destino tile: " << point.x << "," << point.y;
-		Log().Get(TAG) << "destino point: " << destino.x << "," << destino.y;
-
 		this->escenario->moveEntityToPos((MobileModel*)selectedEntity,destino);
 	}
 
