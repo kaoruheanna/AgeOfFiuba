@@ -193,18 +193,18 @@ bool Entity::admiteNublado() {
 	return this->getClass()!=MOBILE_MODEL;
 }
 
+
+
+EntityState Entity::getState() {
+	return this->state;
+}
+
+
 void Entity::stopInteracting() {
 	activeInteractionEntity = NULL;
+	this->state = STATE_NORMAL;
 }
 
 void Entity::interact(Entity* entity){
 	activeInteractionEntity = entity;
 }
-
-// Should interact defatuls
-bool Entity::shouldInteractWith(Entity* entity){
-	return entity->shouldReceiveInteraction(this);
-}
-bool Entity::shouldReceiveInteraction(Entity* entity) {return false;}
-bool Entity::shouldReceiveInteraction(Building* entity){return false;}
-bool Entity::shouldReceiveInteraction(Warrior* entity){return false;}

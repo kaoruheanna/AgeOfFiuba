@@ -163,7 +163,6 @@ void ServerGameController::actualizarProtagonista(){
 }
 
 void ServerGameController::moverEntidad(MobileModel* newModel, string username) {
-	newModel->stopInteracting();
 	this->escenario->entidadesInteractuando.remove(newModel);
 	// TODO volver a hacer sincronico
 	MobileModel* oldModel = this->getMobileModelForUser(newModel->getId(), username);
@@ -171,6 +170,8 @@ void ServerGameController::moverEntidad(MobileModel* newModel, string username) 
 		// TODO mandar error de que no le pertenece la entidad
 		return;
 	}
+	oldModel->stopInteracting();
+
 	SDL_Point destino = {newModel->getDestinationX(),newModel->getDestinationY()};
 	this->escenario->moveEntityToPos(oldModel,destino);
 }
@@ -187,11 +188,26 @@ void ServerGameController::interactuar(int selectedEntityId, int targetEntityId)
 		return;
 	}
 
-	//if(selectedEntity->shouldInteractWith(targetEntity)) {
-		Log().Get(TAG) << "Agrego a Interactuar en el server " << selectedEntity->getNombre() << " " << targetEntity->getNombre();
-		selectedEntity->interact(targetEntity);
-		this->escenario->entidadesInteractuando.push_back(selectedEntity);
-	//}
+	Log().Get(TAG) << "Agrego a Interactuar en el server " << selectedEntity->getNombre() << " " << targetEntity->getNombre();
+
+	// TODO Moverse hasta el lugar intermadio
+	//SDL_Point destino = {this->posicion.x,this->posicion.y};
+	//escenario->moveEntityToPos(entity,destino);
+
+	if(selectedEntity->getClass()==MOBILE_MODEL) {
+		SDL_Point point = this->escenario->mundo->getPuntoMasCercano(selectedEntity,targetEntity);
+		SDL_Point destino = this->escenario->mundo->getCenteredPositionForTile(point);
+
+		Log().Get(TAG) << "Pos Inicial: " << selectedEntity->getPosicion().x << "," << selectedEntity->getPosicion().y;
+		Log().Get(TAG) << "Pos Final: " << targetEntity->getPosicion().x << "," << targetEntity->getPosicion().y;
+		Log().Get(TAG) << "destino tile: " << point.x << "," << point.y;
+		Log().Get(TAG) << "destino point: " << destino.x << "," << destino.y;
+
+		this->escenario->moveEntityToPos((MobileModel*)selectedEntity,destino);
+	}
+
+	selectedEntity->interact(targetEntity);
+	this->escenario->entidadesInteractuando.push_back(selectedEntity);
 
 }
 
@@ -306,6 +322,7 @@ int ServerGameController::userLogin(char* username) {
 	list<Team> teams = this->escenario->getTeams();
 	if(teams.size() <= this->usuarios.size()){
 		// Error de logueo => No hay mas equipos disponibles
+		Log().Get(TAG) << "Cantidad de equipos " << teams.size() << " usuarios" << this->usuarios.size();
 		return -2;
 	}
 	user = new User(string(username));

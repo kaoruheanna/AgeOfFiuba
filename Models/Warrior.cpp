@@ -18,6 +18,15 @@ Warrior::Warrior() {}
 Warrior::~Warrior() {}
 
 void Warrior::doInteract() {
+	if( !activeInteractionEntity) {
+		return;
+	}
+
+	if (!this->canReach(activeInteractionEntity) || this->isMoving()) {
+		return;
+	}
+	this->state = STATE_INTERACTING;
+
 	activeInteractionEntity->receiveInteraction(this);
 }
 
@@ -45,12 +54,3 @@ void Warrior::getBlockFromIndex(int currentIndex, void* buffer) {
 void Warrior::deserialize(int totalBlockCount, int currentBlock, void* blockData) {
 	MobileModel::deserialize(totalBlockCount,currentBlock,blockData);
 }
-
-// Should interact
-bool Warrior::shouldInteractWith(Entity* entity){
-	return entity->shouldReceiveInteraction(this);
-}
-
-bool Warrior::shouldReceiveInteraction(Entity* entity){return false;}
-bool Warrior::shouldReceiveInteraction(Building* entity){return true;}
-bool Warrior::shouldReceiveInteraction(Warrior* entity){return true;}

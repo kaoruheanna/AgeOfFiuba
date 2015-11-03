@@ -19,16 +19,9 @@ public:
 	Warrior();
 	virtual ~Warrior();
 
-	// should interact
-	virtual bool shouldInteractWith(Entity* entity);
-	virtual bool shouldReceiveInteraction(Entity* entity);
-	virtual bool shouldReceiveInteraction(Building* entity);
-	virtual bool shouldReceiveInteraction(Warrior* entity);
-
 	// Interact
 	virtual void doInteract();
 	virtual void receiveInteraction(Building* entity);
-
 
 	// Serializable methods
 	virtual int getTotalBlockCount();

@@ -259,7 +259,7 @@ void Escenario::moveEntityToPos(MobileModel* mobileModel,SDL_Point destino) {
 }
 
 int Escenario::getDistancia(Entity* from, Entity* to) {
-	return this->mundo->getDistancia(from->getPosicion(),to->getPosicion());
+	return this->mundo->getDistancia(from,to);
 }
 
 Entity* Escenario::crearEntidad(EntidadConfig config) {

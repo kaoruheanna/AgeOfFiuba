@@ -21,6 +21,7 @@ using namespace std;
 
 const std::string TAG = "MobileModel";
 
+
 MobileModel::MobileModel() : Entity(0,"", {0, 0}, 1, 1){
 	this->posicion.x = 0;
 	this->posicion.y = 0;
@@ -43,12 +44,13 @@ MobileModel::~MobileModel() {
 bool MobileModel::canReach(Entity* entity) {
 	Escenario* escenario = EscenarioSingleton::get();
 	int distancia = escenario->getDistancia(this,entity);
-	return distancia <= 1;
+	Log().Get(TAG) << "Distancia " << distancia;
+	return (distancia <= 1);
 }
 
 void MobileModel::olvidarCamino(){
 	this->clearPath();
-	this->moving = false;
+	this->setMoving(false);
 	this->setDestination(this->getX(), this->getY());
 }
 
@@ -88,7 +90,7 @@ int MobileModel::getSpeed() {
 }
 
 bool MobileModel::updatePosition() {
-	bool wasMoving = this -> moving;
+	bool wasMoving = this->moving;
 	double speed = (double)this->getSpeed();
 
 	double deltaX = (double)(this->destinationX - this->posicion.x);
@@ -97,7 +99,7 @@ bool MobileModel::updatePosition() {
 	// si ya estoy en el destino, me fijo si tengo que seguir caminando.
 	if ((deltaX == 0) && (deltaY == 0)){
 		if (this->path.empty()){
-			this->moving = false;
+			this->setMoving(false);
 			return wasMoving != this->moving;
 		}else{//si la cola de camino no esta vacia tengo que seguir caminando
 			SDL_Point destination = this->getNextDestination();
@@ -108,7 +110,7 @@ bool MobileModel::updatePosition() {
 		}
 	}
 
-	this->moving = true;
+	this->setMoving(true);
 	double hypotenuse = sqrt (pow(deltaX,2) + pow(deltaY,2.0));
 	// si estoy mas cerca que la velocidad, llegue al destino
 	if (hypotenuse < speed){
@@ -125,13 +127,18 @@ bool MobileModel::updatePosition() {
 	return true;
 }
 
+void MobileModel::setMoving(bool moving) {
+	this->moving = moving;
+	this->state = moving ? STATE_MOVING : STATE_NORMAL;
+}
+
 bool MobileModel::isMoving() {
 	return this->moving;
 }
 
 void MobileModel::update(MobileModel* other) {
 	this->setTeam(other->getTeam());
-	this->moving = other->isMoving();
+	this->setMoving(other->isMoving());
 	this->posicion = other->getPosicion();
 }
 

@@ -31,15 +31,6 @@ void Building::receiveInteraction(Warrior* entity) {
 		return;
 	}
 
-	//Escenario* escenario = EscenarioSingleton::get();
-
-	// TODO Moverse hasta el lugar intermadio
-	//SDL_Point destino = {this->posicion.x,this->posicion.y};
-	//escenario->moveEntityToPos(entity,destino);
-
-	if (!entity->canReach(this)) {
-		return;
-	}
 	this->life = this->life - entity->getPoderAtaque();
 	Log().Get(TAG) << "Building receive interaction from Warrior vida: " << this->life;
 }
