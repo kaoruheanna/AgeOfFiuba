@@ -213,7 +213,6 @@ void Entity::interact(Entity* entity){
 bool Entity::canReach(Entity* entity) {
 	Escenario* escenario = EscenarioSingleton::get();
 	int distancia = escenario->getDistancia(this,entity);
-	Log().Get(TAG) << "Distancia " << distancia << " alcance " << this->getAlcance();
 	return (distancia <= this->getAlcance());
 }
 

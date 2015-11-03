@@ -10,7 +10,9 @@
 const string  TAG = "Worker";
 
 Worker::Worker(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base)
-: MobileModel(id,nombre, posicion, ancho_base, alto_base){}
+: MobileModel(id,nombre, posicion, ancho_base, alto_base){
+	this->life = 250;
+}
 
 Worker::Worker() {}
 
@@ -26,5 +28,7 @@ int Worker::getPoderCosecha() {
 
 void Worker::receiveInteraction(Warrior* entity) {
 	this->life = this->life - entity->getPoderAtaque();
-	Log().Get(TAG) << "Worker receive interaction from Warrior vida: " << this->life;
+	if((this->life % 100) == 0) {
+		Log().Get(TAG) << "Worker receive interaction from Warrior vida: " << this->life;
+	}
 }

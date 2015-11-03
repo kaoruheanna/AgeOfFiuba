@@ -11,7 +11,9 @@
 const string TAG = "Warrior";
 
 Warrior::Warrior(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base)
-: MobileModel(id,nombre, posicion, ancho_base, alto_base){}
+: MobileModel(id,nombre, posicion, ancho_base, alto_base){
+	this->life = 1000;
+}
 
 Warrior::Warrior() {}
 
@@ -32,7 +34,9 @@ void Warrior::doInteract() {
 
 void Warrior::receiveInteraction(Warrior* entity) {
 	this->life = this->life - entity->getPoderAtaque();
-	Log().Get(TAG) << "Warrior receive interaction from Warrior vida: " << this->life;
+	if((this->life % 100) == 0) {
+		Log().Get(TAG) << "Warrior receive interaction from Warrior vida: " << this->life;
+	}
 }
 
 int Warrior::getPoderAtaque() {
