@@ -79,19 +79,26 @@ bool Map::puedoConstruir(Entity* entidad, SDL_Point tile){
 	return !(this -> tileSet->sectorEstaBloqueado(tile,fin));
 }
 
+
 bool Map::construirEntidad(Entity* entidad, SDL_Point posicion){
-	SDL_Point tilePos = this->getTileForPosition(posicion);
-	if (this->puedoConstruir(entidad,tilePos)){
-		for (int i = 0; i < entidad->getAnchoBase(); i++){
-			for (int j = 0; j < entidad->getAnchoBase(); j++){
-				SDL_Point tile = {i+tilePos.x,j+tilePos.y};
-				this -> tileSet -> setTileInconstruible(tile);
-			}
-		}
-		return true;
+	if (entidad->getClass() == MOBILE_MODEL){
+		// el tileset no guarda los tiles ocupados por los mobile models
+		return false;
 	}
-	return false;
+	SDL_Point tilePos = this->getTileForPosition(posicion);
+	if (!this->puedoConstruir(entidad,tilePos)){
+		return false;
+	}
+
+	for (int i = 0; i < entidad->getAnchoBase(); i++){
+		for (int j = 0; j < entidad->getAnchoBase(); j++){
+			SDL_Point tile = {i+tilePos.x,j+tilePos.y};
+			this -> tileSet -> setTileInconstruible(tile);
+		}
+	}
+	return true;
 }
+
 
 void Map::sacarEntidad(Entity* entidad) {
 	SDL_Point tilePos = this->getTileForPosition(entidad->getPosicion());

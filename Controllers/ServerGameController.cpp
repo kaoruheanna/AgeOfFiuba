@@ -51,7 +51,10 @@ void agregarEntidades(Mensajero* mensajero,list<Entity*> entities) {
 	list<Entity*>::iterator entidad;
 	for (entidad = entities.begin(); entidad != entities.end(); ++entidad){
 		Entity* entidadReal = (*entidad);
-		mensajero->actualizarEntidad(entidadReal);
+		//no mando los mobile models porque se mandan aparte
+		if (entidadReal->getClass() != MOBILE_MODEL){
+			mensajero->actualizarEntidad(entidadReal);
+		}
 	}
 }
 

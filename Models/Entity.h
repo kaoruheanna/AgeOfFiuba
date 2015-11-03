@@ -11,7 +11,7 @@
 #include <string>
 #include <SDL2/SDL.h>
 #include "../Red/Serializable.h"
-#include <list>;
+#include <list>
 
 class Warrior;
 class Building;
