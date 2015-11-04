@@ -568,8 +568,8 @@ void Renderer::setFog(int ancho,int alto){
 	this->fog = new FogOfWar(ancho,alto);
 }
 
-void Renderer::fogUpdate(list<Entity*> entidades){
-	this->fog->update(entidades);
+void Renderer::fogUpdate(list<Entity*> entidades, Team equipo){
+	this->fog->update(entidades, equipo);
 }
 
 FogOfWar* Renderer::getFog(){

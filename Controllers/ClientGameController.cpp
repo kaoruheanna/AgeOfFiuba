@@ -281,6 +281,9 @@ bool ClientGameController::play() {
 		protagonista = this->escenario->getUserModel(this->username);
 	}
 
+	//linea de prueba para tener equipo
+	protagonista->setTeam(RED);
+
 	this->escenario->setProtagonista(protagonista);
 
 	this->renderer = new Renderer(this->config->pantalla.getAncho(),this->config->pantalla.getAlto(), this->escenario->tiposConfigList);
@@ -301,6 +304,8 @@ bool ClientGameController::play() {
 
 	bool shouldRestart = false;
 
+	Team currentTeam = this->escenario->getProtagonista()->getTeam();
+
 	//While application is running
 	while( !this->shouldQuit && !shouldRestart && !this->serverError ) {
 		if(this->updated) {
@@ -313,7 +318,7 @@ bool ClientGameController::play() {
 
 		//positionCharacter =(this->escenario->getProtagonista())->getPosicion();
 		//positionCharacter = this->escenario->mundo->getTileForPosition(positionCharacter);
-		this->renderer->fogUpdate(this->escenario->getListaEntidades());
+		this->renderer->fogUpdate(this->escenario->getListaEntidades(),currentTeam);
 
 		this->renderer->drawViews();
 		this->sleep();

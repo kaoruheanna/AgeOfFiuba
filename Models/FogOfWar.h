@@ -23,7 +23,7 @@ class FogOfWar {
 public:
 	FogOfWar(int ancho, int alto);
 	void initialice();
-	void update(list<Entity*> entidades);
+	void update(list<Entity*> entidades, Team equipo);
 	EstadoDeVisibilidad getEstado (int posicionX, int posicionY);
 	void close();
 	~FogOfWar();
