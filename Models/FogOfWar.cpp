@@ -30,9 +30,24 @@ void FogOfWar::initialice(){
 }
 
 //pasar posicion en TILE!!!!
-void FogOfWar::update(int posicionX, int posicionY){
+void FogOfWar::update(list<Entity*> entidades){
 	this->setNublados();
-	this->setInSight(posicionX,posicionY);
+
+	int posicionX = 0;
+	int posicionY = 0;
+
+	list<Entity*>::iterator ptrEntidadActual;
+	Entity* entidadActual = NULL;
+	for (ptrEntidadActual = entidades.begin(); ptrEntidadActual != entidades.end(); ++ptrEntidadActual){
+		entidadActual = (*ptrEntidadActual);
+		if(entidadActual->esJugador() || (entidadActual->getTeam() != NEUTRAL)){
+			posicionX = entidadActual->getPosicion().x / TILE_SIZE;
+			posicionY = entidadActual->getPosicion().y / TILE_SIZE;
+			this->setInSight(posicionX,posicionY);
+		}
+
+	}
+	//this->setInSight(posicionX,posicionY);
 }
 
 void FogOfWar::setInSight(int posicionX, int posicionY){

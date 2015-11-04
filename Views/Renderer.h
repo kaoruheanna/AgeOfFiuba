@@ -71,7 +71,7 @@ public:
 	void drawInMiniMap(int mapPositionX, int mapPositionY, Drawable* drawable, bool admiteNublado);
 	SDL_Point escenarioSize();
 	void setFog(int ancho, int alto);
-	void fogUpdate(int posicionX, int posicionY);
+	void fogUpdate(list<Entity*> entidades);
 	FogOfWar* getFog();
 	void setProtagonista(MobileModel *protagonista);
 	void setMessagesInMenu(std::string firstMessage, std::string secondMessage);

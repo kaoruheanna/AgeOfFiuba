@@ -311,9 +311,9 @@ bool ClientGameController::play() {
 		this->updateWindow();
 		shouldRestart = this->pollEvents();
 
-		positionCharacter =(this->escenario->getProtagonista())->getPosicion();
-		positionCharacter = this->escenario->mundo->getTileForPosition(positionCharacter);
-		this->renderer->fogUpdate(positionCharacter.x,positionCharacter.y);
+		//positionCharacter =(this->escenario->getProtagonista())->getPosicion();
+		//positionCharacter = this->escenario->mundo->getTileForPosition(positionCharacter);
+		this->renderer->fogUpdate(this->escenario->getListaEntidades());
 
 		this->renderer->drawViews();
 		this->sleep();
