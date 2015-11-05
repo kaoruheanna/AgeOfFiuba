@@ -41,9 +41,15 @@ void FogOfWar::update(list<Entity*> entidades, Team equipo){
 	for (ptrEntidadActual = entidades.begin(); ptrEntidadActual != entidades.end(); ++ptrEntidadActual){
 		entidadActual = (*ptrEntidadActual);
 		if( entidadActual->getTeam() == equipo ){
+			int alto = entidadActual->getAltoBase();
+			int ancho = entidadActual->getAnchoBase();
 			posicionX = entidadActual->getPosicion().x / TILE_SIZE;
 			posicionY = entidadActual->getPosicion().y / TILE_SIZE;
-			this->setInSight(posicionX,posicionY);
+			for (int x = 0; x < ancho; ++x){
+				for (int y = 0; y < alto; ++y)
+					this->setInSight(posicionX+x,posicionY+y);
+			}
+			//this->setInSight(posicionX,posicionY);
 		}
 
 	}
