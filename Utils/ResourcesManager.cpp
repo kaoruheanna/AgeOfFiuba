@@ -7,6 +7,7 @@
 
 #include "../Models/Escenario.h"
 #include "../Utils/Log.h"
+#include "../GlobalConstants.h"
 
 const int LOOPS_DIFF = 200;
 const string TAG = "ResourcesManager";
@@ -44,12 +45,13 @@ Resource* ResourcesManager::getNewResource() {
 
 list<Entity*> ResourcesManager::InsertResourcesForNewLoopOnMap() {
 	list<Entity*> entities;
-
-	if(loopsToNext >= LOOPS_DIFF) {
-		entities.push_back(getNewResource());
-		loopsToNext = 0;
+	if(GENERATE_RESOURCES){
+		if(loopsToNext >= LOOPS_DIFF) {
+			entities.push_back(getNewResource());
+			loopsToNext = 0;
+		}
+		loopsToNext++;
 	}
-	loopsToNext++;
 	return entities;
 }
 

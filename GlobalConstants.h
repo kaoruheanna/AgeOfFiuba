@@ -19,6 +19,9 @@ const int TOP_BAR_HEIGHT = 30;
 const int CARTEL_WIDTH = 300;
 const int CARTEL_HEIGHT = 100;
 
+// Configuracion para que aparezcan nuevos resources
+const bool GENERATE_RESOURCES = false;
+
 //TILES
 const std::string TILE_DEFAULT_NAME = "tileDefault";
 const std::string TILE_DEFAULT_PATH = "img/grass1n.png";
