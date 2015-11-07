@@ -35,7 +35,7 @@ const int TILE_HEIGHT_PIXELS = 64;
 const int TILE_SIZE = 64;
 
 const std::string CONFIG_DEFAULT = "yaml-files/configuracion.yaml";
-const std::string CONFIG_CUSTOM = "yaml-files/_configuracionMapa.yaml";
+const std::string CONFIG_CUSTOM = "yaml-files/configuracion.yaml";
 const std::string CONFIG_CLIENT = "yaml-files/configuracion_cliente.yaml";
 
 const int  FOG_VISIBLE = 255;

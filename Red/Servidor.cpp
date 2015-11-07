@@ -91,13 +91,10 @@ void* atenderCliente(void* arg) {
 	} else {
 		char* username = (char*) malloc(strlen(mensaje->getSender()) + 1);
 		strcpy(username, mensaje->getSender());
-		if(!info->servidor->modelos->userExists(username) ||
-				!info->servidor->modelos->userActive(username)){
-			if(!info->servidor->modelos->userExists(username)){
-				info->servidor->modelos->addUser(username);
-			}
-			info->servidor->modelos->setUserActive(username);
+		int errorLogueo = info->servidor->modelos->userLogin(username);
+		if(!errorLogueo){
 			delete mensaje;
+			info->servidor->modelos->setUserActive(username);
 			// Si se pudo loguear empieza el flow con el controller
 			MensajeroRed* mensajero = new MensajeroRed(info->socket);
 			mensajero->setMensajero(info->servidor->modelos);
@@ -111,6 +108,7 @@ void* atenderCliente(void* arg) {
 			delete mensajero;
 		} else {
 			delete mensaje;
+			// TODO diferenciar maximos equipos de nombre tomado
 			mensaje = new Mensaje(ERROR_NOMBRE_TOMADO, "server");
 			resultado = enviarSerializable(info->socket, mensaje);
 			printf("Servidor - Responde al mensaje con resultado: %i\n", resultado);

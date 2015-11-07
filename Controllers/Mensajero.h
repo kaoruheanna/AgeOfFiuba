@@ -21,7 +21,7 @@ public:
 	// Todos
 	virtual void ping(){};
 	// Metodos Servidor -> Cliente
-	virtual void errorDeLogueo(){};
+	virtual void errorDeLogueo(){}; // TODO agregar la razon del logueo (nombre tomado o maximos equipos)
 	virtual void configEscenario(const string path){};
 	virtual void apareceRecurso(Resource* recurso){};
 	virtual void desapareceRecurso(Resource* recurso){};

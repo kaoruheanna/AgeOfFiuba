@@ -85,7 +85,7 @@ int main( int argc, char* args[] )
 	configuration = new GameConfiguration(CONFIG_CUSTOM);
 	serverGameController = new ServerGameController(configuration);
 	serverGameController->init();
-	serverGameController->addUser("solo-play");
+	serverGameController->userLogin("solo-play");
 	pthread_t thread;
 	pthread_create(&thread, NULL, startServer, (void*)NULL);
 

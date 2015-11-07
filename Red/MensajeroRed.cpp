@@ -43,6 +43,9 @@ void MensajeroRed::esperaMensaje() {
 			case ERROR_NOMBRE_TOMADO:
 				resultado = -1;
 				break;
+			case ERROR_MAXIMOS_EQUIPOS:
+				resultado = -1;
+				break;
 			case ESCENARIO:
 				configuracion = new Archivo(CONFIG_CLIENT.c_str());
 				resultado = recibirSerializable(this->socket, configuracion);
@@ -87,6 +90,7 @@ void MensajeroRed::esperaMensaje() {
 		if(resultado > 0){
 			resultado = recibirSerializable(this->socket, recibido);
 		} else {
+			// TODO diferenciar el tipo real del error (para mostrar mensaje acorde)
 			this->escucha->errorDeLogueo();
 		}
 	}

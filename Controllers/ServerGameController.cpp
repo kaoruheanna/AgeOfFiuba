@@ -202,15 +202,89 @@ void ServerGameController::addUser(char* username) {
 }
 
 void ServerGameController::setUserActive(char* username) {
-	MobileModel* user = this->escenario->getUserModel(username);
+	User* user = this->getUserByName(username);
 	if(user != NULL){
 		user->setActive(true);
+	}
+	// TODO logica de mas para mantener un "protagonista" por equipo
+	MobileModel* userModel = this->escenario->getUserModel(username);
+	if(userModel != NULL){
+		userModel->setActive(true);
 	}
 }
 
 void ServerGameController::setUserInactive(char* username) {
-	MobileModel* user = this->escenario->getUserModel(username);
+	User* user = this->getUserByName(username);
 	if(user != NULL){
 		user->setActive(false);
 	}
+	// TODO logica de mas para mantener un "protagonista" por equipo
+	MobileModel* userModel = this->escenario->getUserModel(username);
+	if(userModel != NULL){
+		userModel->setActive(false);
+	}
+}
+
+bool ServerGameController::teamAvailable() {
+	return (this->escenario->getTeams().size() > this->usuarios.size());
+}
+
+User* ServerGameController::getUserByName(string username) {
+	User* found = NULL;
+	list<User*>::iterator userIt = this->usuarios.begin();
+	++userIt;
+	while(found == NULL && (userIt != this->usuarios.end())){
+		if((*userIt)->getName().compare(username) == 0){
+			found = (*userIt);
+		}
+		++userIt;
+	}
+	return found;
+}
+
+int ServerGameController::userLogin(char* username) {
+	User* user = this->getUserByName(username);
+	if(user != NULL){
+		if(user->isActive()){
+			// Error de logueo => Nombre tomado
+			return -1;
+		} else {
+			// Ya se habia logueado antes
+			printf("Servidor - Logueo previo");
+			return 0;
+		}
+	}
+	// Crear nuevo usuario
+	list<Team> teams = this->escenario->getTeams();
+	if(teams.size() <= this->usuarios.size()){
+		// Error de logueo => No hay mas equipos disponibles
+		return -2;
+	}
+	user = new User(string(username));
+	// Obtener Team en el indice usuarios.size()
+	list<Team>::iterator teamIt = teams.begin();
+	int falta = this->usuarios.size();
+	while(falta != 0){
+		++teamIt;
+		falta--;
+	}
+	user->setTeam(*teamIt);
+	this->usuarios.push_back(user);
+	// TODO logica de mas para mantener un "protagonista" por equipo
+	list<Entity*> entidades = this->escenario->getListaEntidades();
+	list<Entity*>::iterator entidadIt = entidades.begin();
+	for(; entidadIt != entidades.end(); ++entidadIt){
+		Entity* entidad = (*entidadIt);
+		if(entidad->getClass() == MOBILE_MODEL){
+			MobileModel* personaje = (MobileModel*)entidad;
+			if(personaje->getTeam() == user->getTeam()){
+				printf("Servidor - Mismo protagonista\n");
+				personaje->setUsername(user->getName());
+				this->escenario->usuarios.insert(pair<string, MobileModel*>(username, personaje));
+			}
+		}
+	}
+	printf("Servidor - Nuevo Logueo con equipo: %i\n", user->getTeam());
+	this->actualizarProtagonista();
+	return 0;
 }

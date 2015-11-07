@@ -168,6 +168,7 @@ int MobileModel::getValueForResource(string resourceName) {
 }
 
 void MobileModel::update(MobileModel* other) {
+	this->setTeam(other->getTeam());
 	this->userActive = other->isActive();
 	this->moving = other->isMoving();
 	this->posicion = other->getPosicion();

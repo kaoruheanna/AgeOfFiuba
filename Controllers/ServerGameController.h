@@ -14,6 +14,7 @@
 #include "../Configuration/GameConfiguration.h"
 #include "MensajeroServidor.h"
 #include "Mensajero.h"
+#include "../Models/User.h"
 
 class Mensajero;
 
@@ -34,12 +35,13 @@ public:
 	Escenario* escenario;
 	virtual void addMensajero(Mensajero *mensajero);
 	void removeMensajero(Mensajero *mesajero);
-	bool userExists(char* username);
-	bool userActive(char* username);
-	void addUser(char* username);
 	void init();
+
+	int userLogin(char* username);
 	void setUserActive(char* username);
 	void setUserInactive(char* username);
+
+	void addUser(char* username); // No usar => Solo para el play
 
 	//EscenarioDelegate
 	virtual void actualizaPersonaje(MobileModel* entity);
@@ -48,11 +50,20 @@ public:
 private:
 	GameConfiguration *config;
 	list<Mensajero*> mensajeros;
+	// TODO cuando termine de implementar borrar usuarios de escenario
+	list<User*> usuarios;
+
 	void loopEscenario();
 	void obtenerEventos();
 	void enviarEventos();
 	void actualizarProtagonista();
 	void sleep();
+
+	User* getUserByName(string name);
+	bool userExists(char* username);
+	bool userActive(char* username);
+
+	bool teamAvailable();
 
 	//Para actualizar
 	list<Mensajero*> mensajerosAgregados;

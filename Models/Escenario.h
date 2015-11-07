@@ -30,6 +30,7 @@ class Escenario {
 	private:
 		string name;
 		list<Entity*> entidades;
+		list<Team> teams;
 		MobileModel* protagonista;
 		ResourcesManager* resourcesManager;
 
@@ -78,7 +79,9 @@ class Escenario {
 
 		void addUser(char* userName);
 		void addUser(char* userName, SDL_Point position);
+		void addUser(char* userName, int entityId);
 		MobileModel* getUserModel(string username);
+		list<Team> getTeams();
 };
 
 #endif

@@ -76,18 +76,16 @@ void ClientGameController::agregarPersonaje(MobileModel* personaje) {
 void ClientGameController::actualizarEntidades(list<Entity*> entidades) {
 	this->escenarioView->getEntitiesView()->clear();
 	this->miniEscenarioView->getEntitiesMiniView()->clear();
-	// Agrego todos los personajes
-	map<string, MobileModel*>::iterator found;
-	for(found = this->escenario->usuarios.begin(); found != this->escenario->usuarios.end(); ++found){
-		this->agregarPersonaje(found->second);
-	}
-	// Agrego el resto de las entidades
-	string nombre = this->escenario->getProtagonista()->getNombre();
+	// Agrego todas las entidades
 	list<Entity*>::iterator entidad;
 	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
 		Entity* entidadReal = (*entidad);
-		if (nombre.compare(entidadReal->getNombre()) != 0) {
-			this->agregarEntidad(entidadReal);
+		switch(entidadReal->getClass()){
+			case MOBILE_MODEL:
+				this->agregarPersonaje((MobileModel*)entidadReal);
+				break;
+			default:
+				this->agregarEntidad(entidadReal);
 		}
 	}
 	// Refrescar las vistas
@@ -281,9 +279,6 @@ bool ClientGameController::play() {
 		protagonista = this->escenario->getUserModel(this->username);
 	}
 
-	//linea de prueba para tener equipo
-	protagonista->setTeam(RED);
-
 	this->escenario->setProtagonista(protagonista);
 
 	this->renderer = new Renderer(this->config->pantalla.getAncho(),this->config->pantalla.getAlto(), this->escenario->tiposConfigList);
@@ -349,7 +344,7 @@ void ClientGameController::actualizaPersonaje(MobileModel* entity) {
 
 	MobileModel* protagonista = this->escenario->getUserModel(entity->getUsername());
 	if(protagonista == NULL){
-		this->escenario->addUser((char*)entity->getUsername().c_str(), entity->getPosicion());
+		this->escenario->addUser((char*) entity->getUsername().c_str(), entity->getId());
 		protagonista = this->escenario->getUserModel(entity->getUsername());
 		posicionInicialProtagonista = protagonista->getPosicion();
 	}
