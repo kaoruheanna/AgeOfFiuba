@@ -103,6 +103,7 @@ escenario:
    - [x: 1, y: 7, tipo: casa, equipo: RED]
    - [x: 1, y: 1, tipo: soldado, equipo: RED]
    - [x: 1, y: 2, tipo: soldado, equipo: BLUE]
+   - [x: 3, y: 3, tipo: soldado, equipo: RED]
    - [x: 4, y: 2, tipo: piedra]
    - [x: 5, y: 2, tipo: piedra]
    - [x: 6, y: 2, tipo: piedra]

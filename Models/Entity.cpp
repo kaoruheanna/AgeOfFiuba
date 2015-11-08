@@ -41,6 +41,10 @@ string Entity::getNombre() {
 	return this->nombre;
 }
 
+void Entity::setId(int id) {
+	this->id = id;
+}
+
 int Entity::getId() {
 	return this->id;
 }

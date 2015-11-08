@@ -36,7 +36,7 @@ public:
 
 	// Metodos Cliente -> Servidor
 	virtual void loguearse(char* nombre){};
-	virtual void moverProtagonista(MobileModel* entity){};
+	virtual void moverEntidad(MobileModel* entity, string username){};
 	virtual void interactuar(int selectedEntityId, int targetEntityId){};
 };
 #endif /* CONTROLLERS_MENSAJERO_H_ */

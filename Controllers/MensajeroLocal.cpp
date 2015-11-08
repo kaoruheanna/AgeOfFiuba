@@ -29,8 +29,9 @@ void MensajeroLocal::addClient(MensajeroCliente* client) {
 	this->server->addMensajero(this);
 }
 
-void MensajeroLocal::moverProtagonista(MobileModel* model) {
-	this->server->moverProtagonista(model);
+
+void MensajeroLocal::moverEntidad(MobileModel* entity, string username){
+	this->server->moverEntidad(entity, username);
 }
 
 void MensajeroLocal::interactuar(int selectedEntityId, int targetEntityId) {

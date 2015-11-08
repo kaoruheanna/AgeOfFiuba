@@ -342,13 +342,24 @@ void ClientGameController::actualizaPersonaje(MobileModel* entity) {
 	if (!this->inicializado())
 		return;
 
-	MobileModel* protagonista = this->escenario->getUserModel(entity->getUsername());
-	if(protagonista == NULL){
-		this->escenario->addUser((char*) entity->getUsername().c_str(), entity->getId());
-		protagonista = this->escenario->getUserModel(entity->getUsername());
-		posicionInicialProtagonista = protagonista->getPosicion();
+	Entity* model = this->escenario->entidadConId(entity->getId());
+	if(model == NULL){
+		this->escenario->agregarEntidad(entity);
+		// TODO cambiar como detecta este numero
+		posicionInicialProtagonista = entity->getPosicion();
+		return;
 	}
+	if(model->getClass() != MOBILE_MODEL){
+		// El modelo no se mueve y.y
+		return;
+	}
+	MobileModel* protagonista = (MobileModel*)model;
 	protagonista->update(entity);
+	// TODO sacar el protagonista
+	bool esProtagonista = (entity->getUsername().compare(username) == 0);
+	if(esProtagonista && (this->escenario->getUserModel(username) == NULL)){
+		this->escenario->addUser((char*) username.c_str(), entity->getId());
+	}
 }
 
 void ClientGameController::apareceRecurso(Resource* recurso) {
@@ -390,9 +401,8 @@ bool ClientGameController::inicializado() {
 }
 
 Entity* ClientGameController::getSelectedEntity() {
-	// TODO Por ahora es siempre el protagonista pero hay q cambiar esto
-	// return this->selectedEntity;
-	return this->escenario->getProtagonista();
+	// TODO Para que se usa este valor? En ningun lado lo usa
+	return this->selectedEntity;
 }
 
 /*
@@ -404,33 +414,36 @@ void ClientGameController::leftClickEnEscenario(int x,int y){
 	this->selectedEntity = entidad;
 
 	std::pair<SDL_Point,SDL_Point> tiles;
-	if (entidad && (entidad != this->escenario->getProtagonista())){
+	if(this->selectedEntity != NULL){
 		this->setMessageForSelectedEntity(entidad);
 		tiles = this->escenario->getTilesCoordinatesForEntity(entidad);
 		this->renderer->setSelectedTilesCoordinates(true,tiles);
-		return;
+	} else {
+		this->renderer->setMessagesInMenu("Selecciona algo!!", "");
+		this->renderer->setSelectedTilesCoordinates(false,tiles);
 	}
-
-	this->setMessageForSelectedEntity(this->escenario->getProtagonista());
-	this->renderer->setSelectedTilesCoordinates(false,tiles);
 }
 
 void ClientGameController::rightClickEnEscenario(int x, int y) {
+	if(this->selectedEntity == NULL){
+		// No se le puede dar ordenes a la nada
+		return;
+	}
 	SDL_Point point = this->renderer->windowToMapPoint({x,y});
 	Entity *entidad = this->escenario->getEntidadEnPosicion(point);
 
-	if(entidad && (this->selectedEntity!=entidad)) {
+	if(entidad && (this->selectedEntity->getId() != entidad->getId())) {
 		//Interactuar la seleccionada con la nueva entidad
-		this->mensajero->interactuar(this->getSelectedEntity()->getId(),entidad->getId());
+		this->mensajero->interactuar(this->selectedEntity->getId(),entidad->getId());
 		return;
 	}
 	// Mover el personaje seleccionado a la nueva posicion
-	// TODO Eliminar harcodeo de protagonista
 	point = this->renderer->proyectedPoint(point, this->escenario->getSize());
+
 	MobileModel* auxModel = new MobileModel();
-	auxModel->setUsername(username);
+	auxModel->setId(this->selectedEntity->getId());
 	auxModel->setDestination(point.x, point.y);
-	this->mensajero->moverProtagonista(auxModel);
+	this->mensajero->moverEntidad(auxModel, username);
 	delete auxModel;
 }
 

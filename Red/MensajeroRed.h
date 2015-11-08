@@ -26,7 +26,7 @@ public:
 	virtual void actualizaPersonaje(MobileModel* entity);
 	// Metodos Cliente -> Servidor
 	virtual void loguearse(char* nombre);
-	virtual void moverProtagonista(MobileModel* model);
+	virtual void moverEntidad(MobileModel* entity, string username);
 	// Metodos para checkear estado de la conexion
 	bool connectionAlive;
 	int getSocket();

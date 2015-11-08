@@ -49,7 +49,7 @@ class Escenario {
 		bool construirEntidad(Entity*,SDL_Point);
 		void vaciarEntidades();
 		void loop();
-		bool tileOcupadoForUsername(TileCoordinate tile,string username);
+		bool tileOcupadoForEntity(TileCoordinate tile,Entity* entity);
 
 		SDL_Point getSize();
 		Entity* crearEntidad(EntidadConfig config);
@@ -75,13 +75,14 @@ class Escenario {
 
 		// Manejo de varios personajes
 		map<string, MobileModel*> usuarios;
-		map<string, TileCoordinate> tilesWithUsers;
+		map<int, TileCoordinate> tilesWithIds;
 
 		void addUser(char* userName);
 		void addUser(char* userName, SDL_Point position);
 		void addUser(char* userName, int entityId);
 		MobileModel* getUserModel(string username);
 		list<Team> getTeams();
+		list<MobileModel*> getMobileModels();
 };
 
 #endif

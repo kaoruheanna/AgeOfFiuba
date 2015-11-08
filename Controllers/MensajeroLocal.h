@@ -20,7 +20,7 @@ public:
 	virtual void addClient(MensajeroCliente* client);
 
 	//Metodos Cliente->Servidor
-	virtual void moverProtagonista(MobileModel* model);
+	virtual void moverEntidad(MobileModel* entity, string username);
 	virtual void interactuar(int selectedEntityId, int targetEntityId);
 
 	//Metodos Servidor->Cliente

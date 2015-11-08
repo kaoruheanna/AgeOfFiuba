@@ -116,29 +116,30 @@ GameConfiguration * ServerGameController::getConfig() {
 }
 
 void ServerGameController::actualizarProtagonista(){
+	list<MobileModel*> mobileModels = this->escenario->getMobileModels();
 	list<Mensajero*>::iterator mensajero;
 	for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
 		Mensajero* mensajeroReal = (*mensajero);
-		map<string, MobileModel*>::iterator usuario;
-		for (usuario = this->escenario->usuarios.begin(); usuario != this->escenario->usuarios.end(); ++usuario){
-			mensajeroReal->actualizaPersonaje(usuario->second);
+		list<MobileModel*>::iterator mobileModel;
+		for (mobileModel = mobileModels.begin(); mobileModel != mobileModels.end(); ++mobileModel){
+			mensajeroReal->actualizaPersonaje(*mobileModel);
 		}
 	}
 }
 
-void ServerGameController::moverProtagonista(MobileModel* model) {
+void ServerGameController::moverEntidad(MobileModel* newModel, string username) {
 	// TODO volver a hacer sincronico
-	MobileModel* protagonista = this->escenario->getUserModel(model->getUsername());
-	if(protagonista == NULL){
-		Log().Get(TAG, logERROR) << "El personaje: " << model->getUsername() << " no existe";
+	MobileModel* oldModel = this->getMobileModelForUser(newModel->getId(), username);
+	if(oldModel == NULL){
+		// TODO mandar error de que no le pertenece la entidad
 		return;
 	}
 
-	SDL_Point origen = protagonista->getPosicion();
-	SDL_Point destino = {model->getDestinationX(),model->getDestinationY()};
-	queue <SDL_Point> camino = this->escenario->getCaminoForMobileModel(origen,destino,protagonista);
-	protagonista->setPath(camino);
-	Log().Get(TAG, logDEBUG) << "El personaje: " << model->getUsername() << " se mueve al: " << model->getDestinationX() << " , " << model->getDestinationY();
+	SDL_Point origen = oldModel->getPosicion();
+	SDL_Point destino = {newModel->getDestinationX(),newModel->getDestinationY()};
+	queue <SDL_Point> camino = this->escenario->getCaminoForMobileModel(origen,destino,oldModel);
+	oldModel->setPath(camino);
+	Log().Get(TAG, logDEBUG) << "El personaje: " << oldModel->getUsername() << " se mueve al: " << oldModel->getDestinationX() << " , " << oldModel->getDestinationY() << " camino: " << camino.size();
 }
 
 void ServerGameController::interactuar(int selectedEntityId, int targetEntityId) {
@@ -232,7 +233,6 @@ bool ServerGameController::teamAvailable() {
 User* ServerGameController::getUserByName(string username) {
 	User* found = NULL;
 	list<User*>::iterator userIt = this->usuarios.begin();
-	++userIt;
 	while(found == NULL && (userIt != this->usuarios.end())){
 		if((*userIt)->getName().compare(username) == 0){
 			found = (*userIt);
@@ -240,6 +240,37 @@ User* ServerGameController::getUserByName(string username) {
 		++userIt;
 	}
 	return found;
+}
+
+Entity* ServerGameController::getEntityForUser(int entityId, string username) {
+	User* user = this->getUserByName(username);
+	if(user == NULL){
+		// El usuario no existe => no tiene entidades
+		return NULL;
+	}
+	Entity* entity = this->escenario->entidadConId(entityId);
+	if(entity == NULL){
+		// La entidad no existe
+		return NULL;
+	}
+	if(entity->getTeam() != user->getTeam()){
+		// La entidad no le pertenece al usuario => no puede darle ordenes
+		return NULL;
+	}
+	return entity;
+}
+
+MobileModel* ServerGameController::getMobileModelForUser(int entityId, string username) {
+	Entity* entity = this->getEntityForUser(entityId, username);
+	if(entity == NULL){
+		// La entidad no existe / no le pertenece al usuario
+		return NULL;
+	}
+	if(entity->getClass() != MOBILE_MODEL){
+		// La entidad no es un mobile model
+		return NULL;
+	}
+	return (MobileModel*) entity;
 }
 
 int ServerGameController::userLogin(char* username) {
@@ -250,7 +281,6 @@ int ServerGameController::userLogin(char* username) {
 			return -1;
 		} else {
 			// Ya se habia logueado antes
-			printf("Servidor - Logueo previo");
 			return 0;
 		}
 	}
@@ -278,7 +308,6 @@ int ServerGameController::userLogin(char* username) {
 		if(entidad->getClass() == MOBILE_MODEL){
 			MobileModel* personaje = (MobileModel*)entidad;
 			if(personaje->getTeam() == user->getTeam()){
-				printf("Servidor - Mismo protagonista\n");
 				personaje->setUsername(user->getName());
 				this->escenario->usuarios.insert(pair<string, MobileModel*>(username, personaje));
 			}

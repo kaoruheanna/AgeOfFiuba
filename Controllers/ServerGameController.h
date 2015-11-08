@@ -29,7 +29,7 @@ public:
 
 	void play();
 
-	virtual void moverProtagonista(MobileModel* entity);
+	virtual void moverEntidad(MobileModel* entity, string username);
 	virtual void interactuar(int selectedEntityId, int targetEntityId);
 
 	Escenario* escenario;
@@ -62,6 +62,8 @@ private:
 	User* getUserByName(string name);
 	bool userExists(char* username);
 	bool userActive(char* username);
+	Entity* getEntityForUser(int entityId, string username);
+	MobileModel* getMobileModelForUser(int entityId, string username);
 
 	bool teamAvailable();
 

@@ -64,7 +64,7 @@ void MensajeroRed::esperaMensaje() {
 				modelo = new MobileModel();
 				resultado = recibirSerializable(this->socket, modelo);
 				//printf("MensajeroRed - Recibi personaje con resultado: %i y sender: %s\n", resultado, recibido->getSender());
-				this->escucha->moverProtagonista(modelo);
+				this->escucha->moverEntidad(modelo, string(recibido->getSender()));
 				delete modelo;
 				break;
 			case APARECE_RECURSO:
@@ -164,8 +164,8 @@ void MensajeroRed::loguearse(char* nombre) {
 	delete mensaje;
 }
 
-void MensajeroRed::moverProtagonista(MobileModel* entity) {
-	Mensaje* mensaje = new Mensaje(MOVER_PERSONAJE, this->sender);
+void MensajeroRed::moverEntidad(MobileModel* entity, string username) {
+	Mensaje* mensaje = new Mensaje(MOVER_PERSONAJE, username.c_str());
 	int resultado = enviarSerializable(this->socket, mensaje);
 	//printf("Cliente - moverProtagonista con resultado: %i\n", resultado);
 	delete mensaje;

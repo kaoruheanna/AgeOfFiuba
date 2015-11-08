@@ -49,6 +49,7 @@ protected:
 	int serializeStringSize(char* string);
 
 public:
+	void setId(int id);
 	int getId();
 	SDL_Point getPosicion();
 	int getAnchoBase();
