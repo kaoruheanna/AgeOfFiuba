@@ -24,8 +24,6 @@ MobileModel::MobileModel() : Entity(0,"", {0, 0}, 1, 1){
 	this->destinationX = 0;
 	this->destinationY = 0;
 	this->moving = false;
-	this->username = "";
-	this->userActive = false;
 }
 
 MobileModel::MobileModel(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base)
@@ -33,37 +31,16 @@ MobileModel::MobileModel(int id, string nombre, SDL_Point posicion, int ancho_ba
 	this->destinationX = posicion.x;
 	this->destinationY = posicion.y;
 	this->moving = false;
-	this->username = "";
-	this->userActive = false;
 }
 
 MobileModel::~MobileModel() {
 	// TODO Auto-generated destructor stub
 }
 
-bool MobileModel::isActive() {
-	return this->userActive;
-}
-
-void MobileModel::setActive(bool active) {
-	this->userActive = active;
-	if(!active){ // Hacer que se deje de mover al desactivarse
-		this->olvidarCamino();
-	}
-}
-
 void MobileModel::olvidarCamino(){
 	this->clearPath();
 	this->moving = false;
 	this->setDestination(this->getX(), this->getY());
-}
-
-string MobileModel::getUsername() {
-	return this->username;
-}
-
-void MobileModel::setUsername(string username) {
-	this->username = string(username);
 }
 
 int MobileModel::getX() {
@@ -143,38 +120,10 @@ bool MobileModel::isMoving() {
 	return this->moving;
 }
 
-void MobileModel::addResourceToCollect(string resourceName) {
-	this->resourcesCounter[resourceName] = 0;
-}
-
-void MobileModel::didCollectResource(string resourceName) {
-	int value = this->resourcesCounter[resourceName];
-	value++;
-	this->resourcesCounter[resourceName] = value;
-	Log().Get(TAG, logDEBUG) << "resource "<< resourceName <<": "<<this->resourcesCounter[resourceName];
-}
-
-list<string> MobileModel::getResourcesNames() {
-	list<string> names;
-	for(std::map<string,int>::iterator iter = this->resourcesCounter.begin(); iter != this->resourcesCounter.end(); ++iter) 	{
-		string name = iter->first;
-		names.push_back(name);
-	}
-	return names;
-}
-
-int MobileModel::getValueForResource(string resourceName) {
-	return this->resourcesCounter[resourceName];
-}
-
 void MobileModel::update(MobileModel* other) {
 	this->setTeam(other->getTeam());
-	this->userActive = other->isActive();
 	this->moving = other->isMoving();
 	this->posicion = other->getPosicion();
-	for(auto resourceName : this->getResourcesNames()) {
-		this->resourcesCounter[resourceName] = other->getValueForResource(resourceName);
-	}
 }
 
 
@@ -222,7 +171,7 @@ bool MobileModel::esJugador() {
 }
 
 string MobileModel::getNombreAMostrar(){
-	return this->username;
+	return "";
 }
 
 EntityType MobileModel::getClass() {
@@ -230,24 +179,16 @@ EntityType MobileModel::getClass() {
 }
 
 // Metodos de serializacion
-//TODO desharcodear los recursos o harcodearlos en todos lados igual
 int MobileModel::getTotalBlockCount() {
-	return 8 + Entity::getTotalBlockCount();
+	return 3 + Entity::getTotalBlockCount();
 }
 
 int MobileModel::getBlockSizeFromIndex(int currentIndex) {
 	int realIndex =  currentIndex - Entity::getTotalBlockCount();
 	if (	(realIndex == 0) ||
-			(realIndex == 1) ||
-			(realIndex == 4) ||
-			(realIndex == 5) ||
-			(realIndex == 6)) {
+			(realIndex == 1)) {
 		return sizeof(int);
 	} else if (realIndex == 2) {
-		return sizeof(bool);
-	} else if(realIndex == 3){
-		return this->serializeStringSize((char*) this->username.c_str());
-	} else if(realIndex == 7){
 		return sizeof(bool);
 	}
 	return Entity::getBlockSizeFromIndex(currentIndex);
@@ -263,16 +204,6 @@ void MobileModel::getBlockFromIndex(int currentIndex, void* buffer) {
 		memcpy(buffer, &this->destinationY, sizeof(int));
 	} else if (realIndex == 2) {
 		memcpy(buffer, &this->moving, sizeof(bool));
-	} else if (realIndex == 3) {
-		this->serializeString((char*) this->username.c_str(), buffer);
-	} else if(realIndex == 4){
-		memcpy(buffer, &this->resourcesCounter["comida"], sizeof(int));
-	} else if (realIndex == 5){
-		memcpy(buffer, &this->resourcesCounter["madera"], sizeof(int));
-	} else if(realIndex == 6){
-		memcpy(buffer, &this->resourcesCounter["piedra"], sizeof(int));
-	} else if(realIndex == 7){
-		memcpy(buffer, &this->userActive, sizeof(bool));
 	}
 }
 
@@ -286,18 +217,6 @@ void MobileModel::deserialize(int totalBlockCount, int currentBlock, void* block
 		memcpy(&this->destinationY, blockData, sizeof(int));
 	} else if(realBlock == 2){
 		memcpy(&this->moving, blockData, sizeof(bool));
-	} else if (realBlock == 3) {
-		char* username = this->deserializeString(blockData);
-		this->username = string(username);
-		free(username);
-	}  else if(realBlock == 4){
-		memcpy(&this->resourcesCounter["comida"], blockData, sizeof(int));
-	} else if(realBlock == 5) {
-		memcpy(&this->resourcesCounter["madera"], blockData, sizeof(int));
-	} else if(realBlock == 6) {
-		memcpy(&this->resourcesCounter["piedra"], blockData, sizeof(int));
-	} else if(realBlock == 7){
-		memcpy(&this->userActive, blockData, sizeof(bool));
 	}
 }
 

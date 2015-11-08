@@ -32,10 +32,6 @@ public:
 	int getDestinationY();
 	bool updatePosition();
 	bool isMoving();
-	void addResourceToCollect(string resourceName);
-	void didCollectResource(string resourceName);
-	list<string> getResourcesNames();
-	int getValueForResource(string resourceName);
 	void update(MobileModel* other);
 	void addDestination(int destinationX, int destionationY);
 	SDL_Point getNextDestination();
@@ -44,11 +40,7 @@ public:
 	void clearPath();
 	bool esJugador();
 	string getNombreAMostrar();
-	string getUsername();
-	void setUsername(string username);
 
-	bool isActive();
-	void setActive(bool active);
 	void olvidarCamino();
 	virtual EntityType getClass();
 
@@ -63,9 +55,6 @@ private:
 	int destinationX;
 	int destinationY;
 	bool moving;
-	string username;
-	bool userActive;
-	std::map<string,int> resourcesCounter;
 
 	int getSpeed();
 

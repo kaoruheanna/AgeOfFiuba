@@ -33,6 +33,7 @@ void MensajeroRed::esperaMensaje() {
 	Archivo* configuracion = NULL;
 	MobileModel* modelo = NULL;
 	Resource* resource = NULL;
+	User* user = NULL;
 	int resultado = recibirSerializable(this->socket, recibido);
 	printf("MensajeroRed - Recibi resultado: %i con mensaje: %s\n", resultado, recibido->toString());
 	while(resultado > 0){
@@ -81,6 +82,11 @@ void MensajeroRed::esperaMensaje() {
 				this->escucha->desapareceRecurso(resource);
 				delete resource;
 				break;
+			case CAMBIO_USUARIO:
+				user = new User();
+				resultado = recibirSerializable(this->socket, user);
+				this->escucha->cambioUsuario(user);
+				delete user;
 			case PING:
 				break;
 			default: // No se pudo entender el mensaje
@@ -171,4 +177,14 @@ void MensajeroRed::moverEntidad(MobileModel* entity, string username) {
 	delete mensaje;
 	resultado = enviarSerializable(this->socket, entity);
 	//printf("Cliente - personaje con resultado: %i\n", resultado);
+}
+
+void MensajeroRed::cambioUsuario(User* user) {
+	Mensaje* mensaje = new Mensaje(CAMBIO_USUARIO, this->sender);
+	int resultado = enviarSerializable(this->socket, mensaje);
+	//printf("Cliente - moverProtagonista con resultado: %i\n", resultado);
+	delete mensaje;
+	resultado = enviarSerializable(this->socket, user);
+	//printf("Cliente - personaje con resultado: %i\n", resultado);
+
 }

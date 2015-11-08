@@ -23,6 +23,7 @@
 static const string TAG = "ClientGameController";
 
 ClientGameController::ClientGameController(Mensajero *mensajero) {
+	this->usuario = NULL;
 	this->mensajero = mensajero;
 	this->config = NULL;
 
@@ -56,11 +57,6 @@ void ClientGameController::agregarEntidad(Entity* entidad) {
 }
 
 void ClientGameController::agregarPersonaje(MobileModel* personaje) {
-	bool esProtagonista = (personaje->getUsername().compare(this->username) == 0);
-	if(esProtagonista){
-		this->renderer->setProtagonista(this->escenario->getProtagonista());
-	}
-
 	// Agrego vista del personaje
 	MobileView *personajeView = new MobileView(personaje->getNombre());
 	personajeView->setModel(personaje);
@@ -273,20 +269,18 @@ bool ClientGameController::play() {
 		this->sleep();
 	}
 
-	MobileModel* protagonista = this->escenario->getUserModel(this->username);
-	while(protagonista == NULL){
+	while(usuario == NULL){
 		this->sleep();
-		protagonista = this->escenario->getUserModel(this->username);
 	}
 
-	this->escenario->setProtagonista(protagonista);
-
 	this->renderer = new Renderer(this->config->pantalla.getAncho(),this->config->pantalla.getAlto(), this->escenario->tiposConfigList);
-		if (!this->renderer->canDraw()){
-			Log().Get(TAG,logERROR) << "Failed to initialize Renderer!";
-			this->close();
-			return false;
-		}
+	this->renderer->setProtagonista(usuario);
+
+	if (!this->renderer->canDraw()){
+		Log().Get(TAG,logERROR) << "Failed to initialize Renderer!";
+		this->close();
+		return false;
+	}
 
 
 
@@ -299,7 +293,7 @@ bool ClientGameController::play() {
 
 	bool shouldRestart = false;
 
-	Team currentTeam = this->escenario->getProtagonista()->getTeam();
+	Team currentTeam = this->usuario->getTeam();
 
 	//While application is running
 	while( !this->shouldQuit && !shouldRestart && !this->serverError ) {
@@ -355,10 +349,21 @@ void ClientGameController::actualizaPersonaje(MobileModel* entity) {
 	}
 	MobileModel* protagonista = (MobileModel*)model;
 	protagonista->update(entity);
-	// TODO sacar el protagonista
-	bool esProtagonista = (entity->getUsername().compare(username) == 0);
-	if(esProtagonista && (this->escenario->getUserModel(username) == NULL)){
-		this->escenario->addUser((char*) username.c_str(), entity->getId());
+}
+
+
+void ClientGameController::cambioUsuario(User* user) {
+	// Si el usuario es el de este cliente actualizar su data
+	printf("usuario: %s current: %s\n", user->getName().c_str(), username.c_str());
+	if(user->getName().compare(username) == 0){
+		if(this->usuario == NULL){
+			// Si no tiene usuario crearlo
+			User* usuario = new User(username);
+			usuario->update(user);
+			this->usuario = usuario;
+		} else {
+			this->usuario->update(user);
+		}
 	}
 }
 
@@ -398,11 +403,6 @@ void ClientGameController::errorDeLogueo() {
 
 bool ClientGameController::inicializado() {
 	return escenario && escenario->inicializacionCorrecta;
-}
-
-Entity* ClientGameController::getSelectedEntity() {
-	// TODO Para que se usa este valor? En ningun lado lo usa
-	return this->selectedEntity;
 }
 
 /*
@@ -468,11 +468,6 @@ void ClientGameController::setMessageForSelectedEntity(Entity* entity){
 	}
 	if (!(entity->esJugador())){
 		this->renderer->setMessagesInMenu("Entidad - "+ equipo,entity->getNombreAMostrar());
-		return;
-	}
-
-	if (entity == this->escenario->getProtagonista()){
-		this->renderer->setMessagesInMenu("Protagonista - "+ equipo,entity->getNombreAMostrar());
 		return;
 	}
 

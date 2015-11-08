@@ -40,7 +40,7 @@ void TopBar::render(Renderer* renderer) {
 	}
 }
 
-void TopBar::setProtagonista(MobileModel *protagonista) {
+void TopBar::setProtagonista(User *protagonista) {
 	this->protagonista = protagonista;
 
 	if (!this->resourcesCounters.empty()){

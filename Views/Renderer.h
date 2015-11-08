@@ -22,6 +22,7 @@
 #include "../Configuration/TipoConfig.h"
 #include "Menu/ScreenMenu.h"
 #include "../Models/FogOfWar.h"
+#include "../Models/User.h"
 using namespace std;
 
 class View;
@@ -73,7 +74,7 @@ public:
 	void setFog(int ancho, int alto);
 	void fogUpdate(list<Entity*> entidades, Team equipo);
 	FogOfWar* getFog();
-	void setProtagonista(MobileModel *protagonista);
+	void setProtagonista(User *protagonista);
 	void setMessagesInMenu(std::string firstMessage, std::string secondMessage);
 	void setSelectedTilesCoordinates(bool selected,std::pair<SDL_Point,SDL_Point> tiles);
 	void setCartel(string message);

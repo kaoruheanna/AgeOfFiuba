@@ -98,19 +98,6 @@ bool Escenario::construirEntidad(Entity* entidad,SDL_Point posicion){
 	return false;
 }
 
-MobileModel* Escenario::getProtagonista() {
-	return this->protagonista;
-}
-
-void Escenario::setProtagonista(MobileModel* protagonista) {
-	this->protagonista = protagonista;
-	for (int i = 0; i < RESOURCES_QTY; i++){
-		const char* resourceName = this->resourcesManager->ResourceTypes()[i];
-		string str(resourceName);
-		this->protagonista->addResourceToCollect(str);
-	}
-}
-
 list<Entity*> Escenario::getListaEntidades(){
 	return this->entidades;
 }
@@ -288,64 +275,6 @@ queue<SDL_Point> Escenario::getCaminoForMobileModel(SDL_Point origen, SDL_Point 
 }
 
 // Para manejar varios protagonistas
-void Escenario::addUser(char* username) {
-	SDL_Point posicion = this->mundo->getEmptyTile();
-	MobileModel* userModel = factory->crearProtagonista(
-		escenarioConfig.getProtagonista().getTipo(),
-		posicion
-	);
-	userModel->setUsername(username);
-	if(!this->agregarEntidad(userModel)){
-		Log().Get("Escenario", logDEBUG) << "1) Protagonista no se pudo agregar al escenario";
-	} else {
-		Log().Get("Escenario", logDEBUG) << "1) Agregado "<<username<<" a la posicion "<<posicion.x<<" "<<posicion.y;
-	}
-	this->usuarios.insert(pair<string, MobileModel*>(username, userModel));
-}
-
-void Escenario::addUser(char* username, SDL_Point position) {
-	MobileModel* userModel = factory->crearProtagonista(
-			escenarioConfig.getProtagonista().getTipo(),
-			{ 0, 0 }
-		);
-	userModel->setUsername(username);
-	userModel->setX(position.x);
-	userModel->setY(position.y);
-	if(!this->agregarEntidad(userModel)){
-		Log().Get("Escenario", logDEBUG) << "2) Protagonista no se pudo agregar al escenario";
-	} else {
-		Log().Get("Escenario", logDEBUG) << "2) Agregado "<<username<<" a la posicion "<<position.x<<" "<<position.y;
-	}
-	this->usuarios.insert(pair<string, MobileModel*>(username, userModel));
-}
-
-void Escenario::addUser(char* userName, int entityId) {
-	MobileModel* found = NULL;
-	list<Entity*>::iterator it = this->entidades.begin();
-	while(it != this->entidades.end() && found == NULL){
-		Entity* entity = *it;
-		if(entity->getId() == entityId && entity->getClass() == MOBILE_MODEL){
-			found = (MobileModel*) entity;
-		}
-		++it;
-	}
-	if(found == NULL){
-		Log().Get("Escenario", logERROR) << "No se encontro la entidad " << entityId;
-	} else {
-		found->setUsername(userName);
-		this->usuarios.insert(pair<string, MobileModel*>(userName, found));
-	}
-}
-
-MobileModel* Escenario::getUserModel(string username) {
-	MobileModel* userModel = NULL;
-	map<string, MobileModel*>::iterator found = this->usuarios.find(username);
-	if(found != this->usuarios.end()){
-		userModel = found->second;
-	}
-	return userModel;
-}
-
 list<Team> Escenario::getTeams() {
 	return this->teams;
 }

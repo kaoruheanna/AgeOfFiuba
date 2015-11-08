@@ -56,8 +56,6 @@ class Escenario {
 		Entity* crearEntidad(const string& tipo, SDL_Point posicion);
 		list<Entity*> getListaEntidades(); // Se usa para agregar las vistas de las entidades
 		list<Entity*> getListaRecursos(); // Se usa para agregar las vistas de las entidades
-		MobileModel* getProtagonista();
-		void setProtagonista(MobileModel* protagonista);
 		bool eliminarRecursoConID(int id);
 		bool existeRecursoConID(int id);
 		Entity* entidadConId(int id);
@@ -74,13 +72,8 @@ class Escenario {
 		~Escenario();
 
 		// Manejo de varios personajes
-		map<string, MobileModel*> usuarios;
 		map<int, TileCoordinate> tilesWithIds;
 
-		void addUser(char* userName);
-		void addUser(char* userName, SDL_Point position);
-		void addUser(char* userName, int entityId);
-		MobileModel* getUserModel(string username);
 		list<Team> getTeams();
 		list<MobileModel*> getMobileModels();
 };

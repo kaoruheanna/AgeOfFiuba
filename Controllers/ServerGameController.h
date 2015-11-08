@@ -50,23 +50,18 @@ public:
 private:
 	GameConfiguration *config;
 	list<Mensajero*> mensajeros;
-	// TODO cuando termine de implementar borrar usuarios de escenario
 	list<User*> usuarios;
 
 	void loopEscenario();
 	void obtenerEventos();
 	void enviarEventos();
 	void actualizarProtagonista();
+	void mandarUsuarios();
 	void sleep();
 
 	User* getUserByName(string name);
-	bool userExists(char* username);
-	bool userActive(char* username);
 	Entity* getEntityForUser(int entityId, string username);
 	MobileModel* getMobileModelForUser(int entityId, string username);
-
-	bool teamAvailable();
-
 	//Para actualizar
 	list<Mensajero*> mensajerosAgregados;
 

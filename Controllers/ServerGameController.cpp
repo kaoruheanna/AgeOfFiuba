@@ -139,7 +139,7 @@ void ServerGameController::moverEntidad(MobileModel* newModel, string username) 
 	SDL_Point destino = {newModel->getDestinationX(),newModel->getDestinationY()};
 	queue <SDL_Point> camino = this->escenario->getCaminoForMobileModel(origen,destino,oldModel);
 	oldModel->setPath(camino);
-	Log().Get(TAG, logDEBUG) << "El personaje: " << oldModel->getUsername() << " se mueve al: " << oldModel->getDestinationX() << " , " << oldModel->getDestinationY() << " camino: " << camino.size();
+	Log().Get(TAG, logDEBUG) << "El personaje: " << oldModel->getId() << " de " << username << " se mueve al: " << oldModel->getDestinationX() << " , " << oldModel->getDestinationY() << " camino: " << camino.size();
 }
 
 void ServerGameController::interactuar(int selectedEntityId, int targetEntityId) {
@@ -162,6 +162,11 @@ void ServerGameController::addMensajero(Mensajero* mensajero) {
 	this->mensajerosAgregados.push_back(mensajero);
 	if(escenario->inicializacionCorrecta) {
 		mensajero->configEscenario(this->config->getPath());
+		printf("Mandar usuarios");
+		list<User*>::iterator usuario;
+		for (usuario = usuarios.begin(); usuario != usuarios.end(); ++usuario){
+			mensajero->cambioUsuario(*usuario);
+		}
 	}
 }
 
@@ -187,30 +192,10 @@ void ServerGameController::desapareceEntidad(Entity* recurso) {
 
 // TODO Implementar el manejo de usuarios
 
-bool ServerGameController::userExists(char* username) {
-	return (this->escenario->getUserModel(username) != NULL);
-}
-
-bool ServerGameController::userActive(char* username) {
-	if(!this->userExists(username)){
-		return false;
-	}
-	return this->escenario->getUserModel(username)->isActive();
-}
-
-void ServerGameController::addUser(char* username) {
-	this->escenario->addUser(username);
-}
-
 void ServerGameController::setUserActive(char* username) {
 	User* user = this->getUserByName(username);
 	if(user != NULL){
 		user->setActive(true);
-	}
-	// TODO logica de mas para mantener un "protagonista" por equipo
-	MobileModel* userModel = this->escenario->getUserModel(username);
-	if(userModel != NULL){
-		userModel->setActive(true);
 	}
 }
 
@@ -219,15 +204,6 @@ void ServerGameController::setUserInactive(char* username) {
 	if(user != NULL){
 		user->setActive(false);
 	}
-	// TODO logica de mas para mantener un "protagonista" por equipo
-	MobileModel* userModel = this->escenario->getUserModel(username);
-	if(userModel != NULL){
-		userModel->setActive(false);
-	}
-}
-
-bool ServerGameController::teamAvailable() {
-	return (this->escenario->getTeams().size() > this->usuarios.size());
 }
 
 User* ServerGameController::getUserByName(string username) {
@@ -300,20 +276,17 @@ int ServerGameController::userLogin(char* username) {
 	}
 	user->setTeam(*teamIt);
 	this->usuarios.push_back(user);
-	// TODO logica de mas para mantener un "protagonista" por equipo
-	list<Entity*> entidades = this->escenario->getListaEntidades();
-	list<Entity*>::iterator entidadIt = entidades.begin();
-	for(; entidadIt != entidades.end(); ++entidadIt){
-		Entity* entidad = (*entidadIt);
-		if(entidad->getClass() == MOBILE_MODEL){
-			MobileModel* personaje = (MobileModel*)entidad;
-			if(personaje->getTeam() == user->getTeam()){
-				personaje->setUsername(user->getName());
-				this->escenario->usuarios.insert(pair<string, MobileModel*>(username, personaje));
-			}
+	return 0;
+}
+
+void ServerGameController::mandarUsuarios() {
+	list<MobileModel*> mobileModels = this->escenario->getMobileModels();
+	list<Mensajero*>::iterator mensajero;
+	for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
+		Mensajero* mensajeroReal = (*mensajero);
+		list<User*>::iterator usuario;
+		for (usuario = usuarios.begin(); usuario != usuarios.end(); ++usuario){
+			mensajeroReal->cambioUsuario(*usuario);
 		}
 	}
-	printf("Servidor - Nuevo Logueo con equipo: %i\n", user->getTeam());
-	this->actualizarProtagonista();
-	return 0;
 }

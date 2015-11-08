@@ -12,6 +12,7 @@
 #include "../Models/MobileModel.h"
 #include "../Models/Escenario.h"
 #include "../Configuration/GameConfiguration.h"
+#include "../Models/User.h"
 
 class MensajeroCliente {
 public:
@@ -26,6 +27,7 @@ public:
 	virtual void apareceRecurso(Resource* recurso){};
 	virtual void desapareceRecurso(Resource* recurso){};
 	virtual void actualizaPersonaje(MobileModel* entity){};
+	virtual void cambioUsuario(User* user){};
 };
 
 class Mensajero : public MensajeroCliente {

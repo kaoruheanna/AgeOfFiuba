@@ -34,6 +34,7 @@ public:
 	string username;
 
 private:
+	User* usuario;
 	Mensajero* mensajero;
 	Entity* selectedEntity;
 
@@ -60,8 +61,6 @@ private:
 	bool inicializado();
 	void setMessageForSelectedEntity(Entity* entity);
 
-	Entity* getSelectedEntity();
-
 	// Metodos y variables para que no se vaya el scroll del mapa
 	SDL_Point intialPointWindowWrapper;
 	SDL_Point finalPointWindowWrapper;
@@ -83,6 +82,7 @@ private:
 	virtual void apareceRecurso(Resource* recurso);
 	virtual void desapareceRecurso(Resource* recurso);
 	virtual void actualizaPersonaje(MobileModel* entity);
+	virtual void cambioUsuario(User* user);
 
 };
 
