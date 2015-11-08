@@ -54,6 +54,7 @@ tipos:
    categoria: building
    imagen: img/whatermill.png
    miniImagen: img/tile_orange.png
+   imagenBoton: img/boton-molino.png
    ancho_base: 1
    alto_base : 1
    pixel_ref_x: 80
@@ -67,6 +68,7 @@ tipos:
    imagen: img/soldadoAge.png
    imagenDeshabilitado: img/soldadoAge.png
    miniImagen: img/tile_red.png
+   imagenBoton: img/boton-aldeano.png
    ancho_base: 1
    alto_base : 1
    pixel_ref_x: 25
