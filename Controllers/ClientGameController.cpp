@@ -417,10 +417,10 @@ void ClientGameController::leftClickEnEscenario(int x,int y){
 	if(this->selectedEntity != NULL){
 		this->setMessageForSelectedEntity(entidad);
 		tiles = this->escenario->getTilesCoordinatesForEntity(entidad);
-		this->renderer->setSelectedTilesCoordinates(true,tiles);
+		this->renderer->setSelectedTilesCoordinates(true,tiles,entidad);
 	} else {
 		this->renderer->setMessagesInMenu("Selecciona algo!!", "");
-		this->renderer->setSelectedTilesCoordinates(false,tiles);
+		this->renderer->setSelectedTilesCoordinates(false,tiles,NULL);
 	}
 }
 
