@@ -428,20 +428,21 @@ void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable,bool 
 
 	if (currentTileState == VISIBLE){
 		SDL_SetTextureColorMod( drawable->getTexture(), FOG_VISIBLE,FOG_VISIBLE,FOG_VISIBLE );
-		if (this->selectedEntity){
-			int tileX = currentTile.x;
-			int tileY = currentTile.y;
-			int selectedTileX = this->selectedEntity->getPosicion().x / TILE_HEIGHT_PIXELS;
-			int selectedTileY = this->selectedEntity->getPosicion().y / TILE_HEIGHT_PIXELS;
-			if (this->sonTilesIguales(tileX,tileY,selectedTileX,selectedTileY))
-				this->setearColor(drawable);
-		}
 	} else if (currentTileState == NUBLADO) {
 		SDL_SetTextureColorMod( drawable->getTexture(), FOG_VISITED,FOG_VISITED,FOG_VISITED );
 	}
 
+	if (this->selectedEntity && this->selectedEntity->getClass() == MOBILE_MODEL && currentTileState != NUBLADO  ){
+		int tileX = currentTile.x;
+		int tileY = currentTile.y;
+		int selectedTileX = this->selectedEntity->getPosicion().x / TILE_HEIGHT_PIXELS;
+		int selectedTileY = this->selectedEntity->getPosicion().y / TILE_HEIGHT_PIXELS;
+		if (this->sonTilesIguales(tileX,tileY,selectedTileX,selectedTileY))
+			this->setearColor(drawable);
+	}
+
 	//si es un tile lo dibuja ahora
-	if (this->hasSelectedTiles){
+	if (this->hasSelectedTiles && this->selectedEntity->getClass() != MOBILE_MODEL){
 		int minX = this->selectedTilesCoordinates.first.x;
 		int maxX = this->selectedTilesCoordinates.second.x;
 		int minY = this->selectedTilesCoordinates.first.y;

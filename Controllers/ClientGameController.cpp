@@ -411,6 +411,9 @@ bool ClientGameController::inicializado() {
 void ClientGameController::leftClickEnEscenario(int x,int y){
 	SDL_Point point = this->renderer->windowToMapPoint({x,y});
 	Entity *entidad = this->escenario->getEntidadEnPosicion(point);
+	if (this->selectedEntity == entidad)
+		return;
+
 	this->selectedEntity = entidad;
 
 	std::pair<SDL_Point,SDL_Point> tiles;
