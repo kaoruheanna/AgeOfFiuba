@@ -123,6 +123,8 @@ private:
 	bool isPixelInEscenario(int x, int y);
 	bool isPixelInMenu(int x, int y);
 	bool isPixelInRect(int x, int y, SDL_Rect rect);
+	bool sonTilesIguales(int tileX, int tileY, int selectedTileX, int selectedTileY);
+	void setearColor(Drawable* drawable);
 };
 
 #endif /* RENDERER_H_ */

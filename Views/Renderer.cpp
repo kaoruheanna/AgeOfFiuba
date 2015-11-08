@@ -367,6 +367,30 @@ SDL_Point Renderer::proyectedPoint(SDL_Point mapPoint, SDL_Point plano){
 	return {x,y};
 }
 
+void Renderer::setearColor(Drawable* drawable){
+	switch (this->selectedEntity->getTeam()){
+		case RED:
+			SDL_SetTextureColorMod( drawable->getTexture(), 255,0,0 );
+			break;
+		case BLUE:
+			SDL_SetTextureColorMod( drawable->getTexture(), 0,0,255 );
+			break;
+		case GREEN:
+			SDL_SetTextureColorMod( drawable->getTexture(), 0,255,0 );
+			break;
+		case YELLOW:
+			SDL_SetTextureColorMod( drawable->getTexture(), 255,255,0 );
+			break;
+		default:
+			SDL_SetTextureColorMod( drawable->getTexture(), 200,200,200 );
+			break;
+	}
+}
+
+bool Renderer::sonTilesIguales(int tileX, int tileY, int selectedTileX, int selectedTileY){
+	return ((selectedTileX == tileX)&&(selectedTileY == tileY));
+}
+
 // draw Drawable
 void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable,bool admiteNublado) {
 	SDL_Point mapRect = { mapPositionX, mapPositionY };
@@ -404,36 +428,18 @@ void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable,bool 
 
 	if (currentTileState == VISIBLE){
 		SDL_SetTextureColorMod( drawable->getTexture(), FOG_VISIBLE,FOG_VISIBLE,FOG_VISIBLE );
+		if (this->selectedEntity){
+			int tileX = currentTile.x;
+			int tileY = currentTile.y;
+			int selectedTileX = this->selectedEntity->getPosicion().x / TILE_HEIGHT_PIXELS;
+			int selectedTileY = this->selectedEntity->getPosicion().y / TILE_HEIGHT_PIXELS;
+			if (this->sonTilesIguales(tileX,tileY,selectedTileX,selectedTileY))
+				this->setearColor(drawable);
+		}
 	} else if (currentTileState == NUBLADO) {
 		SDL_SetTextureColorMod( drawable->getTexture(), FOG_VISITED,FOG_VISITED,FOG_VISITED );
 	}
 
-	if (this->selectedEntity){
-		int tileX = currentTile.x;
-		int tileY = currentTile.y;
-		int selectedTileX = this->selectedEntity->getPosicion().x / TILE_HEIGHT_PIXELS;
-		int selectedTileY = this->selectedEntity->getPosicion().y / TILE_HEIGHT_PIXELS;
-		if ((selectedTileX == tileX)&&(selectedTileY == tileY)){
-			switch (this->selectedEntity->getTeam()){
-				case RED:
-					SDL_SetTextureColorMod( drawable->getTexture(), 255,0,0 );
-					break;
-				case BLUE:
-					SDL_SetTextureColorMod( drawable->getTexture(), 0,0,255 );
-					break;
-				case GREEN:
-					SDL_SetTextureColorMod( drawable->getTexture(), 0,255,0 );
-					break;
-				case YELLOW:
-					SDL_SetTextureColorMod( drawable->getTexture(), 255,255,0 );
-					break;
-				default:
-					SDL_SetTextureColorMod( drawable->getTexture(), 200,200,200 );
-					break;
-			}
-	}
-
-	}
 	//si es un tile lo dibuja ahora
 	if (this->hasSelectedTiles){
 		int minX = this->selectedTilesCoordinates.first.x;
@@ -443,26 +449,9 @@ void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable,bool 
 		bool inRangeX = ((currentTile.x >= minX) && (currentTile.x < maxX));
 		bool inRangeY = ((currentTile.y >= minY) && (currentTile.y < maxY));
 		if (inRangeX && inRangeY){
-			switch (this->selectedEntity->getTeam()){
-				case RED:
-					SDL_SetTextureColorMod( drawable->getTexture(), 255,0,0 );
-					break;
-				case BLUE:
-					SDL_SetTextureColorMod( drawable->getTexture(), 0,0,255 );
-					break;
-				case GREEN:
-					SDL_SetTextureColorMod( drawable->getTexture(), 0,255,0 );
-					break;
-				case YELLOW:
-					SDL_SetTextureColorMod( drawable->getTexture(), 255,255,0 );
-					break;
-				default:
-					SDL_SetTextureColorMod( drawable->getTexture(), 200,200,200 );
-					break;
+			this->setearColor(drawable);
 			}
-		}
 	}
-
 	SDL_RenderCopy(sdlRenderer, drawable->getTexture(), drawable->getClipRect(), &renderQuad);
 }
 
