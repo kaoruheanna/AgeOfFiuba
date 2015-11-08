@@ -34,6 +34,7 @@ tipos:
    categoria: building
    imagen: img/casa2x2.png
    miniImagen: img/tile_orange.png
+   imagenBoton: img/boton-casa.png
    ancho_base: 2
    alto_base : 2
    pixel_ref_x: 153
@@ -43,6 +44,7 @@ tipos:
    categoria: building
    imagen: img/archeryRange.png
    miniImagen: img/tile_orange.png
+   imagenBoton: img/boton-arqueria.png
    ancho_base: 2
    alto_base : 2
    pixel_ref_x: 159

@@ -32,4 +32,3 @@ void MiniMapView::render(Renderer* renderer ){
 		}
 	}
 }
-//}

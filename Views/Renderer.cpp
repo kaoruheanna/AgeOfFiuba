@@ -132,6 +132,15 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 				  Log().Get(TAG,logWARNING) << "Tipo N°" << i << " no se pudo cargar la imagen.";
 			  }
 		  }
+
+		  // boton
+		  if (tipo.getImagenBoton() != ""){
+			  Drawable *nodoDrawable = new Drawable(0,0);
+			  bool textureLoaded = nodoDrawable->loadTextureFromFile(tipo.getImagenBoton(), this->sdlRenderer);
+			  if(textureLoaded){
+				this->drawablesByInstanceName.insert(std::pair<std::string,Drawable*>("boton-"+tipo.getNombre(), nodoDrawable));
+			  }
+		  }
 	  }
 	  i++;
 	}
@@ -431,6 +440,17 @@ void Renderer::draw(SDL_Rect rect, SDL_Color color){
 
 void Renderer::drawTextureInRect(SDL_Texture *texture,SDL_Rect rect){
 	SDL_RenderCopy(this->sdlRenderer, texture, NULL, &rect);
+}
+
+void Renderer::drawActionButtonWithNameInRect(string name, SDL_Rect rect){
+	std::map<std::string,Drawable *>::iterator found = this->drawablesByInstanceName.find(name);
+	Drawable* drawable = NULL;
+	if(found != this->drawablesByInstanceName.end()){
+		drawable = found->second;
+	} else {
+		drawable = this->missingImageDrawable;
+	}
+	SDL_RenderCopy(this->sdlRenderer, drawable->getTexture(), NULL, &rect);
 }
 
 bool Renderer::isInsideWindow(SDL_Rect* rect){

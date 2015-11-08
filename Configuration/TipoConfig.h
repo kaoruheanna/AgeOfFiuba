@@ -25,6 +25,7 @@ public:
 	string getNombre();
 	string getImagen();
 	string getMiniImagen();
+	string getImagenBoton();
 	string getImagenDeshabilitado();
 	int getAnchoBase();
 	int getAltoBase();
@@ -42,6 +43,7 @@ private:
 	string imagen;
 	string imagenDeshabilitado;
 	string miniImagen;
+	string imagenBoton;
 	int anchoBase;
 	int altoBase;
 	int pixelRefX;

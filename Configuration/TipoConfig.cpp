@@ -19,6 +19,7 @@ TipoConfig::TipoConfig() {
 	this->imagen = "";
 	this->imagenDeshabilitado = "";
 	this->miniImagen = "";
+	this->imagenBoton = "";
 	this->nombre = "";
 	this->pixelRefX = (TILE_WIDTH_PIXELS/2);
 	this->pixelRefY = 0;
@@ -43,6 +44,7 @@ TipoConfig::TipoConfig(YAML::Node nodo): TipoConfig(){
 	this->imagen = TipoConfig::getStringAttribute(nodo, "imagen", this->imagen);
 	this->imagenDeshabilitado = TipoConfig::getStringAttribute(nodo, "imagenDeshabilitado", this->imagenDeshabilitado);
 	this->miniImagen = TipoConfig::getStringAttribute(nodo, "miniImagen", this->miniImagen);
+	this->imagenBoton = TipoConfig::getStringAttribute(nodo, "imagenBoton", this->imagenBoton);
 	this->nombre = TipoConfig::getStringAttribute(nodo, "nombre", this->nombre);
 	this->categoria = TipoConfig::getStringAttribute(nodo, "categoria", this->categoria);
 	if(this->nombre == ""){
@@ -128,6 +130,9 @@ string TipoConfig::getImagenDeshabilitado() {
 }
 string TipoConfig::getMiniImagen() {
 	return this->miniImagen;
+}
+string TipoConfig::getImagenBoton() {
+	return this->imagenBoton;
 }
 int TipoConfig::getAnchoBase() {
 	return this->anchoBase;
