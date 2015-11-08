@@ -95,10 +95,12 @@ Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion) {
 	if (this->tipos[tipo].getCategoria() == "warrior") {
 		return new MobileModel(id, tipo, pos, size.x,size.y);
 	}
+	if (this->tipos[tipo].getCategoria() == "worker") {
+		return new MobileModel(id, tipo, pos, size.x,size.y);
+	}
 	if (this->tipos[tipo].getCategoria() == "resource") {
 		return new Resource(id, tipo, pos, size.x, size.y);
 	}
-
 	if (this->tipos[tipo].getCategoria() == "building") {
 		return new Building(id, tipo, pos, size.x,size.y);
 	}

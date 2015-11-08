@@ -417,7 +417,9 @@ void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable,bool 
 		bool inRangeX = ((currentTile.x >= minX) && (currentTile.x < maxX));
 		bool inRangeY = ((currentTile.y >= minY) && (currentTile.y < maxY));
 		if (inRangeX && inRangeY){
-			SDL_SetTextureColorMod( drawable->getTexture(), 80,255,255 );
+			//SDL_SetTextureColorMod( drawable->getTexture(), 80,255,255 );
+			//cambio el color del tile
+			SDL_SetTextureColorMod( drawable->getTexture(), 255,0,0);
 		}
 	}
 	SDL_RenderCopy(sdlRenderer, drawable->getTexture(), drawable->getClipRect(), &renderQuad);
