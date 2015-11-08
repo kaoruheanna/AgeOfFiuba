@@ -24,15 +24,15 @@ const bool GENERATE_RESOURCES = false;
 
 //TILES
 const std::string TILE_DEFAULT_NAME = "tileDefault";
-const std::string TILE_DEFAULT_PATH = "img/grass1n.png";
+const std::string TILE_DEFAULT_PATH = "img/grass1_32.png";
 const std::string MINI_TILE_DEFAULT_NAME = "miniTileDefault";
 const std::string MINI_TILE_DEFAULT_PATH = "img/tile_green.png";
 const std::string MISSING_IMAGE_PATH = "img/missingImage.png";
 const std::string MINI_MISSING_IMAGE_PATH = "img/tile_purple.png";
 
-const int TILE_WIDTH_PIXELS = 128;
-const int TILE_HEIGHT_PIXELS = 64;
-const int TILE_SIZE = 64;
+const int TILE_WIDTH_PIXELS = 64;
+const int TILE_HEIGHT_PIXELS = 32;
+const int TILE_SIZE = 32;
 
 const std::string CONFIG_DEFAULT = "yaml-files/configuracion.yaml";
 const std::string CONFIG_CUSTOM = "yaml-files/configuracion.yaml";
