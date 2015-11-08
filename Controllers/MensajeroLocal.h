@@ -20,6 +20,7 @@ public:
 	virtual void addClient(MensajeroCliente* client);
 
 	//Metodos Cliente->Servidor
+	virtual void loguearse(char* nombre);
 	virtual void moverEntidad(MobileModel* entity, string username);
 	virtual void interactuar(int selectedEntityId, int targetEntityId);
 
@@ -28,6 +29,7 @@ public:
 	virtual void apareceRecurso(Resource* recurso);
 	virtual void desapareceRecurso(Resource* recurso);
 	virtual void actualizaPersonaje(MobileModel* entity);
+	virtual void cambioUsuario(User* user);
 private:
 	ServerGameController* server;
 	MensajeroCliente* cliente;

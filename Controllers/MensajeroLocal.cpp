@@ -49,3 +49,13 @@ void MensajeroLocal::desapareceRecurso(Resource* recurso){
 void MensajeroLocal::actualizaPersonaje(MobileModel* entity){
 	this->cliente->actualizaPersonaje(entity);
 }
+
+void MensajeroLocal::cambioUsuario(User* user) {
+	this->cliente->cambioUsuario(user);
+}
+
+// Metodos Cliente -> Servidor
+void MensajeroLocal::loguearse(char* nombre) {
+	this->server->loguearse(nombre);
+}
+
