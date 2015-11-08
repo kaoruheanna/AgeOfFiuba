@@ -96,6 +96,7 @@ int main( int argc, char* args[] )
 		Mensajero* mensajero = new MensajeroLocal(serverGameController);
 		ClientGameController *clientGameController = new ClientGameController(mensajero);
 		clientGameController->username = "solo-play";
+		mensajero->loguearse("solo-play");
 		shouldRestart = clientGameController->play();
 
 		delete clientGameController;
