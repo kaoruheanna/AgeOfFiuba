@@ -14,21 +14,30 @@ tipos:
 
  - nombre: piedra
    categoria: resource
-   imagen: img/Mossy_Stone_Brick.png
+   imagen: img/piedra.png
    miniImagen: img/tile_blue.png
    ancho_base: 1
    alto_base : 1
-   pixel_ref_x: 25
-   pixel_ref_y: 25
+   pixel_ref_x: 43
+   pixel_ref_y: 9
    
  - nombre: comida
    categoria: resource
-   imagen: img/comida.png
+   imagen: img/arbusto.png
    miniImagen: img/tile_blue.png
    ancho_base: 1
    alto_base : 1
-   pixel_ref_x: 0
-   pixel_ref_y: 0
+   pixel_ref_x: 42
+   pixel_ref_y: 16
+   
+ - nombre: oro
+   categoria: resource
+   imagen: img/oro.png
+   miniImagen: img/tile_blue.png
+   ancho_base: 1
+   alto_base : 1
+   pixel_ref_x: 40
+   pixel_ref_y: 8
 
  - nombre: casa
    categoria: building
@@ -43,8 +52,8 @@ tipos:
    categoria: building
    imagen: img/archeryRange.png
    miniImagen: img/tile_orange.png
-   ancho_base: 2
-   alto_base : 2
+   ancho_base: 6
+   alto_base : 4
    pixel_ref_x: 159
    pixel_ref_y: 77
 
@@ -74,6 +83,36 @@ tipos:
    alto_frame: 50
    ancho_frame: 51
    mini_map_pixel_ref_type: 1
+   
+ - nombre: aldeano
+   categoria: worker
+   imagen: img/aldeana_caminando.png
+   imagenDeshabilitado: img/soldadoAge.png
+   miniImagen: img/tile_red.png
+   ancho_base: 1
+   alto_base : 1
+   pixel_ref_x: 14
+   pixel_ref_y: 32
+   fps: 35
+   delay: 0
+   alto_frame: 40
+   ancho_frame: 24
+   mini_map_pixel_ref_type: 1
+   
+ - nombre: caballo
+   categoria: warrior
+   imagen: img/caballo.png
+   imagenDeshabilitado: img/soldadoAge.png
+   miniImagen: img/tile_red.png
+   ancho_base: 1
+   alto_base : 1
+   pixel_ref_x: 48
+   pixel_ref_y: 75
+   fps: 35
+   delay: 0
+   alto_frame: 91
+   ancho_frame: 87
+   mini_map_pixel_ref_type: 1
 
  - nombre: tierra
    imagen: img/tierra.png
@@ -95,18 +134,21 @@ tipos:
 
 escenario:
  - nombre: orleans
-   size_x: 20
-   size_y: 20
+   size_x: 40
+   size_y: 40
    
    entidades:
 
    - [x: 1, y: 7, tipo: casa, equipo: RED]
+   - [x: 20, y: 10, tipo: archeryRange, equipo: RED]
    - [x: 1, y: 1, tipo: soldado, equipo: RED]
+   - [x: 18, y: 9, tipo: aldeano, equipo: RED]
+   - [x: 14, y: 9, tipo: caballo, equipo: RED]
    - [x: 1, y: 2, tipo: soldado, equipo: BLUE]
    - [x: 3, y: 3, tipo: soldado, equipo: RED]
-   - [x: 4, y: 2, tipo: piedra]
-   - [x: 5, y: 2, tipo: piedra]
-   - [x: 6, y: 2, tipo: piedra]
+   - [x: 5, y: 10, tipo: piedra]
+   - [x: 5, y: 12, tipo: oro]
+   - [x: 5, y: 14, tipo: comida]
    - [x: 7, y: 2, tipo: arbol]
    - [x: 7, y: 3, tipo: arbol]
    - [x: 7, y: 4, tipo: arbol]
