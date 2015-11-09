@@ -129,15 +129,14 @@ bool Escenario::existeRecursoConID(int id) {
 }
 
 //Devuelve true si lo pudo borrar
-bool Escenario::eliminarRecursoConID(int id) {
+bool Escenario::eliminarEntidadConID(int id) {
 	list<Entity*>::iterator entidad;
 	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
-		if((*entidad)->getClass() == RESOURCE){
-			Resource* entidadReal = (Resource*)(*entidad);
-			if (entidadReal->getId() == id) {
-					entidades.erase(entidad);
-					return true;
-			}
+		Entity* entidadReal = (*entidad);
+		if (entidadReal->getId() == id) {
+				this->mundo->sacarEntidad(entidadReal);
+				entidades.erase(entidad);
+				return true;
 		}
 	}
 	return false;
@@ -216,15 +215,25 @@ void Escenario::loop() {
 		this->tilesWithIds[protagonista->getId()] = TileCoordinate(currentTile.x,currentTile.y);
 	}
 
-
-	if(actualizarPersonajes){
-		this->delegate->actualizaPersonaje(protagonista);
-	}
-
+	/*
 	list<Entity*> entidadesAInsertar = resourcesManager->InsertResourcesForNewLoopOnMap();
 	if (entidadesAInsertar.size() > 0) {
 		this->delegate->apareceEntidad(entidadesAInsertar.back());
 		this->entidades.splice(this->entidades.end(), entidadesAInsertar);
+	}*/
+
+	//Interacciones
+	for(auto entidad : this->entidadesInteractuando) {
+		entidad->doInteract();
+		this->delegate->actualizaEntidad(entidad);
+	}
+
+	//Eliminar los que mueren
+	for(auto entidad : this->entidades) {
+		if (!entidad->estaViva()) {
+			this->delegate->desapareceEntidad(entidad);
+			this->mundo->sacarEntidad(entidad);
+		}
 	}
 }
 
@@ -241,6 +250,16 @@ bool Escenario::tileOcupadoForEntity(TileCoordinate tile,Entity* entity){
 	return false;
 }
 
+void Escenario::moveEntityToPos(MobileModel* mobileModel,SDL_Point destino) {
+	SDL_Point origen = mobileModel->getPosicion();
+	queue <SDL_Point> camino = this->getCaminoForMobileModel(origen,destino,mobileModel);
+	mobileModel->setPath(camino);
+	Log().Get(TAG, logDEBUG) << "El personaje: " << mobileModel->getId() << "se mueve al: " << mobileModel->getDestinationX() << " , " << mobileModel->getDestinationY() << " camino: " << camino.size();
+}
+
+int Escenario::getDistancia(Entity* from, Entity* to) {
+	return this->mundo->getDistancia(from->getPosicion(),to->getPosicion());
+}
 
 Entity* Escenario::crearEntidad(EntidadConfig config) {
 	SDL_Point posicion = {config.getX(), config.getY()};

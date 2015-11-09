@@ -6,6 +6,9 @@
  */
 
 #include "EntityView.h"
+#include "../Utils/Log.h"
+
+const string TAG = "EntityView";
 
 EntityView::EntityView(std::string type): View(type) {
 	this->model = NULL;

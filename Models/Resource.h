@@ -8,6 +8,7 @@
 #ifndef MODELS_RESOURCE_H_
 #define MODELS_RESOURCE_H_
 #include "Entity.h"
+#include "Worker.h"
 
 using namespace std;
 
@@ -21,6 +22,7 @@ public:
 
 	virtual void interact(Entity* entity);
 	virtual void receiveInteraction(Warrior* entity);
+	virtual void receiveInteraction(Worker *worker);
 	void cosechar();
 
 	// Serializable methods

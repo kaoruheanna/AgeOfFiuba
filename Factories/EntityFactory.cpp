@@ -16,6 +16,8 @@ EntityFactory::EntityFactory(Map *mundo,list<TipoConfig> tiposConfigList) {
 	list<TipoConfig>::iterator tipo;
 	for (tipo = tiposConfigList.begin(); tipo != tiposConfigList.end(); ++tipo) {
 		tipos[(*tipo).getNombre()] = *tipo;
+
+
 	}
 	getId(true);
 }
@@ -61,13 +63,6 @@ SDL_Point EntityFactory::getSize(const string& tipo) {
 	return size;
 }
 
-MobileModel* EntityFactory::crearProtagonista(const string& tipo, SDL_Point posicion) {
-	SDL_Point pos = this->getPositionForTile(tipo,posicion,(this->tipos[tipo].getCategoria() == "warrior"));
-	SDL_Point size = this->getSize(tipo);
-
-	return new MobileModel(0, tipo, pos, size.x,size.y);
-}
-
 int getId(bool reset) {
 	static int id;
 
@@ -93,7 +88,7 @@ Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion) {
 	SDL_Point size = this->getSize(tipo);
 
 	if (this->tipos[tipo].getCategoria() == "warrior") {
-		return new MobileModel(id, tipo, pos, size.x,size.y);
+		return new Warrior(id, tipo, pos, size.x,size.y);
 	}
 	if (this->tipos[tipo].getCategoria() == "worker") {
 		return new MobileModel(id, tipo, pos, size.x,size.y);

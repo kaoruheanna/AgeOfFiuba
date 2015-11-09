@@ -98,6 +98,10 @@ tipos:
    alto_frame: 40
    ancho_frame: 24
    mini_map_pixel_ref_type: 1
+   creables:
+   - molino
+   - casa
+   - archeryRange
    
  - nombre: caballo
    categoria: warrior

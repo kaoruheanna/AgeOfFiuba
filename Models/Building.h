@@ -8,9 +8,8 @@
 #ifndef MODELS_BUILDING_H_
 #define MODELS_BUILDING_H_
 
-
 #include "Entity.h"
-class Warrior;
+#include "Warrior.h"
 
 class Building: public Entity {
 public:
