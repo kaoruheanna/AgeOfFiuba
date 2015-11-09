@@ -16,6 +16,8 @@ EntityFactory::EntityFactory(Map *mundo,list<TipoConfig> tiposConfigList) {
 	list<TipoConfig>::iterator tipo;
 	for (tipo = tiposConfigList.begin(); tipo != tiposConfigList.end(); ++tipo) {
 		tipos[(*tipo).getNombre()] = *tipo;
+
+
 	}
 	getId(true);
 }
