@@ -270,9 +270,10 @@ queue<SDL_Point> Escenario::getCaminoForMobileModel(SDL_Point origen, SDL_Point 
 			tilesOccupied.push_back(tile);
 		}
 	}
-
 	return this->mundo->obtenerCaminoIgnoringTiles(origen,destino,tilesOccupied);
 }
+
+
 
 // Para manejar varios protagonistas
 list<Team> Escenario::getTeams() {

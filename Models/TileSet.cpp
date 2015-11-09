@@ -193,7 +193,6 @@ pointMap TileSet::calcularCaminoMinimoIgnoringTiles(TileCoordinate origen, TileC
 		}
 	}
 	if (destino_real != destino_a){
-		cout<<"recorro todo"<<endl;
 		destino_a = origen;
 		return this->calcularCaminoMinimoIgnoringTiles(origen,destino_a,destino_real,tilesOccupied);
 	}
