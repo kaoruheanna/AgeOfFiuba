@@ -10,12 +10,24 @@ using namespace std;
 
 const string TAG ="Entity";
 
+Entity::Entity(){
+	this->nombre = "";
+	this->posicion = {0,0};
+	this->ancho_base = 1;
+	this->alto_base = 1;
+	this->id = 0;
+	this->life = 100;
+	this->activeInteractionEntity = NULL;
+}
+
 Entity::Entity(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base){
 	this->nombre = nombre;
 	this->posicion = posicion;
 	this->ancho_base = ancho_base;
 	this->alto_base = alto_base;
 	this->id = id;
+	this->life = 100;
+	this->activeInteractionEntity = NULL;
 }
 
 Entity::Entity(int id,string nombre, int ancho_base, int alto_base){
@@ -81,6 +93,10 @@ Team Entity::getTeam() {
 	return this->team;
 }
 
+bool Entity::estaViva() {
+	return this->life >= 0;
+}
+
 //Serializar
 // Metodos de serializacion
 int Entity::getTotalBlockCount() {
@@ -140,6 +156,14 @@ int Entity::serializeStringSize(char* string) {
 	return strlen(string) + 1;
 }
 
+void Entity::update(Entity* entity) {
+	this->nombre = entity->nombre;
+	this->posicion = entity->posicion;
+	this->ancho_base = entity->ancho_base;
+	this->alto_base = entity->alto_base;
+	this->life = entity->life;
+}
+
 EntityType Entity::getClass() {
 	return ENTITY;
 }
@@ -147,3 +171,19 @@ EntityType Entity::getClass() {
 bool Entity::admiteNublado() {
 	return this->getClass()!=MOBILE_MODEL;
 }
+
+void Entity::stopInteracting() {
+	activeInteractionEntity = NULL;
+}
+
+void Entity::interact(Entity* entity){
+	activeInteractionEntity = entity;
+}
+
+// Should interact defatuls
+bool Entity::shouldInteractWith(Entity* entity){
+	return entity->shouldReceiveInteraction(this);
+}
+bool Entity::shouldReceiveInteraction(Entity* entity) {return false;}
+bool Entity::shouldReceiveInteraction(Building* entity){return false;}
+bool Entity::shouldReceiveInteraction(Warrior* entity){return false;}

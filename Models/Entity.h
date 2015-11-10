@@ -15,6 +15,8 @@
 
 class Warrior;
 class Building;
+class Resource;
+class Worker;
 
 using namespace std;
 
@@ -43,6 +45,8 @@ protected:
 	SDL_Point posicion;  // posicion en el mapa (coordenadas logicas)
 	int id;
 	Team team = NEUTRAL;
+	Entity* activeInteractionEntity;
+	int life;
 
 	// Serializable methods
 	char* deserializeString(void* blockData);
@@ -65,11 +69,22 @@ public:
 	void setTeam(Team team);
 	Team getTeam();
 
+	bool estaViva();
+	void update(Entity* entity);
 	//Double Dispatch Intract en forma de visitor
-	virtual void interact(Entity* entity) {};
+	void stopInteracting();
+	void interact(Entity* entity);
+
+	virtual bool shouldInteractWith(Entity* entity);
+	virtual bool shouldReceiveInteraction(Entity* entity);
+	virtual bool shouldReceiveInteraction(Building* entity);
+	virtual bool shouldReceiveInteraction(Warrior* entity);
+
+	virtual void doInteract() {};
 	virtual void receiveInteraction(Entity* entity) {};
 	virtual void receiveInteraction(Building* entity) {};
 	virtual void receiveInteraction(Warrior* entity) {};
+	virtual void receiveInteraction(Worker *entity) {};
 
 	string toString();
 	// Serializable methods
@@ -78,6 +93,7 @@ public:
 	virtual void getBlockFromIndex(int currentIndex, void* buffer);
 	virtual void deserialize(int totalBlockCount, int currentBlock, void* blockData);
 
+	Entity();
 	Entity(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base);
 	Entity(int id,string,int,int);
 	~Entity();

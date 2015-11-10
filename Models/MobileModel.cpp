@@ -14,6 +14,9 @@
 #include "../Utils/Log.h"
 #include "../GlobalConstants.h"
 #include "../Red/Serializable.h"
+#include "../Utils/EscenarioSingleton.h"
+#include "Escenario.h"
+
 using namespace std;
 
 const std::string TAG = "MobileModel";
@@ -35,6 +38,12 @@ MobileModel::MobileModel(int id, string nombre, SDL_Point posicion, int ancho_ba
 
 MobileModel::~MobileModel() {
 	// TODO Auto-generated destructor stub
+}
+
+bool MobileModel::canReach(Entity* entity) {
+	Escenario* escenario = EscenarioSingleton::get();
+	int distancia = escenario->getDistancia(this,entity);
+	return distancia <= 1;
 }
 
 void MobileModel::olvidarCamino(){

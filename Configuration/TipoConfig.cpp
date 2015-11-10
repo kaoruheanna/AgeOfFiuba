@@ -27,6 +27,7 @@ TipoConfig::TipoConfig() {
 	this->altoFrame = 1;
 	this->minimapPixelRefType = MinimapPixelRefTypeDefault;
 	this->categoria = "building";
+	this->creables.clear();
 }
 
 TipoConfig::TipoConfig(YAML::Node nodo): TipoConfig(){
@@ -59,6 +60,22 @@ TipoConfig::TipoConfig(YAML::Node nodo): TipoConfig(){
 	if(this->imagenDeshabilitado == ""){
 		this->imagenDeshabilitado = this->imagen;
 	}
+	this->creables = this->parsearCreables(nodo);
+}
+
+list<string> TipoConfig::parsearCreables(YAML::Node nodo){
+	list<string> listaDeCreables;
+	YAML::Node nodoCreables;
+	listaDeCreables.clear();
+	if (nodo["creables"] && nodo["creables"].IsDefined() && nodo["creables"].IsSequence() && !nodo["creables"].IsNull()){
+		nodoCreables = nodo["creables"];
+		for (std::size_t i=0;i < nodoCreables.size();i++){
+			//NO realiza verificacion alguna sobre la cadena de caracteres, toma lo que haya
+			string creable = nodoCreables[i].as<string>();
+			listaDeCreables.push_back(creable);
+		}
+	}
+	return listaDeCreables;
 }
 
 int TipoConfig::getIntAttribute(YAML::Node nodo, string attributeName, int defaultValue) {
@@ -165,4 +182,8 @@ int TipoConfig::getMinimapPixelRefType() {
 
 string TipoConfig::getCategoria() {
 	return this->categoria;
+}
+
+list<string> TipoConfig::getCreables(){
+	return this->creables;
 }

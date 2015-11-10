@@ -14,6 +14,10 @@ class Worker: public MobileModel {
 public:
 	Worker();
 	virtual ~Worker();
+
+	virtual void interact(Entity* entity);
+
+	virtual int getPoderCosecha();
 };
 
 #endif /* MODELS_WORKER_H_ */

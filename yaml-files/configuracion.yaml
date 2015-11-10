@@ -102,10 +102,14 @@ tipos:
    alto_frame: 40
    ancho_frame: 24
    mini_map_pixel_ref_type: 1
+   creables:
+   - molino
+   - casa
+   - archeryRange
    
  - nombre: caballo
    categoria: warrior
-   imagen: img/caballo.png
+   imagen: img/caballo_caminando.png
    imagenDeshabilitado: img/soldadoAge.png
    miniImagen: img/tile_red.png
    ancho_base: 1
@@ -114,8 +118,8 @@ tipos:
    pixel_ref_y: 75
    fps: 35
    delay: 0
-   alto_frame: 91
-   ancho_frame: 87
+   alto_frame: 94
+   ancho_frame: 89
    mini_map_pixel_ref_type: 1
 
  - nombre: tierra

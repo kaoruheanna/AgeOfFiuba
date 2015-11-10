@@ -8,6 +8,7 @@
 #include "ServerGameController.h"
 #include "../Utils/Log.h"
 #include "../GlobalConstants.h"
+#include "../Utils/EscenarioSingleton.h"
 
 static const string TAG = "ServerGameController";
 
@@ -37,10 +38,19 @@ void aparecenRecursos(Mensajero* mensajero,list<Entity*> recursos) {
 	}
 }
 
+void actualizarEntidades(Mensajero* mensajero,list<Entity*> entities) {
+	list<Entity*>::iterator entidad;
+	for (entidad = entities.begin(); entidad != entities.end(); ++entidad){
+		Entity* entidadReal = (*entidad);
+		mensajero->actualizarEntidad(entidadReal);
+	}
+}
+
 void ServerGameController::init() {
 	// Crear modelos a partir de la configuracion
-	this->escenario = new Escenario(this->config->getEscenario(),
-			this->config->getTipos());
+	// Creo el escenario y se lo paso al EscenarioSingleton
+	this->escenario = EscenarioSingleton::get(new Escenario(this->config->getEscenario(),
+			this->config->getTipos()));
 	if (!this->escenario->inicializacionCorrecta) {
 		delete this->escenario;
 		delete this->config;
@@ -75,12 +85,13 @@ void ServerGameController::obtenerEventos() {
 void ServerGameController::enviarEventos() {
 	this->actualizarProtagonista();
 
+
 	list<Mensajero*>::iterator mensajero;
 	for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
 		Mensajero* mensajeroReal = (*mensajero);
-		aparecenRecursos(mensajeroReal,this->recursosAgregados);
+		actualizarEntidades(mensajeroReal,this->entidadesActualizadas);
 	}
-	this->recursosAgregados.clear();
+	this->entidadesActualizadas.clear();
 
 	list<Entity*>::iterator entidadEliminada;
 	for (entidadEliminada = recursosEliminados.begin(); entidadEliminada != recursosEliminados.end(); ++entidadEliminada){
@@ -96,7 +107,7 @@ void ServerGameController::enviarEventos() {
 
 	for(auto nuevoMensajero : this->mensajerosAgregados) {
 		this->mensajeros.push_back(nuevoMensajero);
-		aparecenRecursos(nuevoMensajero,this->escenario->getListaRecursos());
+		aparecenRecursos(nuevoMensajero,this->escenario->getListaEntidades());
 	}
 	this->mensajerosAgregados.clear();
 }
@@ -128,18 +139,16 @@ void ServerGameController::actualizarProtagonista(){
 }
 
 void ServerGameController::moverEntidad(MobileModel* newModel, string username) {
+	newModel->stopInteracting();
+	this->escenario->entidadesInteractuando.remove(newModel);
 	// TODO volver a hacer sincronico
 	MobileModel* oldModel = this->getMobileModelForUser(newModel->getId(), username);
 	if(oldModel == NULL){
 		// TODO mandar error de que no le pertenece la entidad
 		return;
 	}
-
-	SDL_Point origen = oldModel->getPosicion();
 	SDL_Point destino = {newModel->getDestinationX(),newModel->getDestinationY()};
-	queue <SDL_Point> camino = this->escenario->getCaminoForMobileModel(origen,destino,oldModel);
-	oldModel->setPath(camino);
-	Log().Get(TAG, logDEBUG) << "El personaje: " << oldModel->getId() << " de " << username << " se mueve al: " << oldModel->getDestinationX() << " , " << oldModel->getDestinationY() << " camino: " << camino.size();
+	this->escenario->moveEntityToPos(oldModel,destino);
 }
 
 void ServerGameController::interactuar(int selectedEntityId, int targetEntityId) {
@@ -154,8 +163,12 @@ void ServerGameController::interactuar(int selectedEntityId, int targetEntityId)
 		return;
 	}
 
-	Log().Get(TAG) << "Interactuar en el server " << selectedEntity->getNombre() << " " << targetEntity->getNombre();
-	selectedEntity->interact(targetEntity);
+	//if(selectedEntity->shouldInteractWith(targetEntity)) {
+		Log().Get(TAG) << "Agrego a Interactuar en el server " << selectedEntity->getNombre() << " " << targetEntity->getNombre();
+		selectedEntity->interact(targetEntity);
+		this->escenario->entidadesInteractuando.push_back(selectedEntity);
+	//}
+
 }
 
 void ServerGameController::addMensajero(Mensajero* mensajero) {
@@ -184,6 +197,10 @@ void ServerGameController::actualizaPersonaje(MobileModel* entity){
 
 void ServerGameController::apareceEntidad(Entity* recurso) {
 	this->recursosAgregados.push_back(recurso);
+}
+
+void ServerGameController::actualizaEntidad(Entity* recurso) {
+	this->entidadesActualizadas.push_back(recurso);
 }
 
 void ServerGameController::desapareceEntidad(Entity* recurso) {

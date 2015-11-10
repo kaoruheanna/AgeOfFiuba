@@ -27,6 +27,11 @@ void Resource::receiveInteraction(Warrior* entity) {
 	Log().Get(TAG) << "Resource receive interaction from Warrior -> Do nothing";
 }
 
+void Resource::receiveInteraction(Worker *entity) {
+	Log().Get(TAG) << "Resource receive interaction from Worker -> Collect";
+	this->life = this->life - entity->getPoderCosecha();
+}
+
 // Serializar
 
 int Resource::getTotalBlockCount() {

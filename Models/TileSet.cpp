@@ -7,8 +7,11 @@
 
 #include "TileSet.h"
 #include "Entity.h";
+#include "../Utils/Log.h"
 
 using namespace std;
+
+const string TAG = "TileSet";
 
 TileSet::TileSet(int ancho, int alto) {
 	this -> ancho = ancho;
@@ -193,7 +196,6 @@ pointMap TileSet::calcularCaminoMinimoIgnoringTiles(TileCoordinate origen, TileC
 		}
 	}
 	if (destino_real != destino_a){
-		cout<<"recorro todo"<<endl;
 		destino_a = origen;
 		return this->calcularCaminoMinimoIgnoringTiles(origen,destino_a,destino_real,tilesOccupied);
 	}
@@ -205,6 +207,7 @@ deque<SDL_Point> TileSet::obtenerCaminoIgnoringTiles(TileCoordinate tileOrigen, 
 	deque<SDL_Point> caminoVacio;
 	if (this->posicionOcupada(tileDestino)){
 		// Si esta ocupada, no hago nada
+		Log().Get(TAG) << "Si esta ocupada, no hago nada";
 		return caminoVacio;
 	}
 

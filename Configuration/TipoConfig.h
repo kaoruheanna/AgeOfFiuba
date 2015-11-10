@@ -37,6 +37,7 @@ public:
 	int getAnchoFrame();
 	int getMinimapPixelRefType();
 	string getCategoria();
+	list<string> getCreables();
 
 private:
 	string nombre;
@@ -54,9 +55,11 @@ private:
 	int anchoFrame;
 	int minimapPixelRefType;
 	string categoria;
+	list<string> creables;
 
 	static int getIntAttribute(YAML::Node nodo, string attributeName, int defaultValue);
 	static string getStringAttribute(YAML::Node nodo, string attributeName, string defaultValue);
 	static float getFloatAttribute(YAML::Node nodo, string attributeName, float defaultValue);
+	list<string> parsearCreables(YAML::Node nodo);
 };
 #endif /* CONFIGURATION_TIPOCONFIG_H_ */

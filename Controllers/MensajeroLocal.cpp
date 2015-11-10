@@ -46,6 +46,10 @@ void MensajeroLocal::desapareceRecurso(Resource* recurso){
 	this->cliente->desapareceRecurso(new Resource(*recurso));
 }
 
+void MensajeroLocal::actualizarEntidad(Entity* entity) {
+	this->cliente->actualizarEntidad(new Entity(*entity));
+}
+
 void MensajeroLocal::actualizaPersonaje(MobileModel* entity){
 	this->cliente->actualizaPersonaje(entity);
 }
