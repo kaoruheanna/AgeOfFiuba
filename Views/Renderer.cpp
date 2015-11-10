@@ -324,7 +324,7 @@ void Renderer::drawCartelIfShould(){
 
 void Renderer::drawMenu(){
 	SDL_RenderSetViewport(this->sdlRenderer, &this->menuRect);
-	this->screenMenu->render(this);
+	this->screenMenu->render(this,this->selectedEntity);
 }
 
 void Renderer::drawMiniEscenario(){

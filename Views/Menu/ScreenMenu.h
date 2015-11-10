@@ -15,13 +15,14 @@ class RendererInteractionDelegate;
 class StatusMenu;
 class View;
 class ActionsMenu;
+class Entity;
 
 class ScreenMenu {
 
 public:
 	ScreenMenu(int width, int height);
 	virtual ~ScreenMenu();
-	void render(Renderer* renderer);
+	void render(Renderer* renderer,Entity *selectedEntity);
 	void setMessages(std::string firstMessage, std::string secondMessage);
 	void clickEvent(int x, int y, RendererInteractionDelegate *delegate);
 

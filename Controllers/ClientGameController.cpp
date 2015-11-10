@@ -417,11 +417,20 @@ void ClientGameController::leftClickEnEscenario(int x,int y){
 	if(this->selectedEntity != NULL){
 		this->setMessageForSelectedEntity(entidad);
 		tiles = this->escenario->getTilesCoordinatesForEntity(entidad);
+		entidad->creables = this->getCreablesListForEntityName(entidad->getNombre());
 		this->renderer->setSelectedTilesCoordinates(true,tiles,entidad);
 	} else {
 		this->renderer->setMessagesInMenu("Selecciona algo!!", "");
 		this->renderer->setSelectedTilesCoordinates(false,tiles,NULL);
 	}
+}
+
+list<string> ClientGameController::getCreablesListForEntityName(string name){
+	list<string> list;
+	list.push_back("casa");
+	list.push_back("archeryRange");
+	list.push_back("molino");
+	return list;
 }
 
 void ClientGameController::rightClickEnEscenario(int x, int y) {

@@ -60,6 +60,7 @@ private:
 	void initMap();
 	bool inicializado();
 	void setMessageForSelectedEntity(Entity* entity);
+	list<string> getCreablesListForEntityName(string name);
 
 	// Metodos y variables para que no se vaya el scroll del mapa
 	SDL_Point intialPointWindowWrapper;

@@ -41,13 +41,13 @@ ScreenMenu::~ScreenMenu() {
 	delete this->actionsMenu;
 }
 
-void ScreenMenu::render(Renderer* renderer) {
+void ScreenMenu::render(Renderer* renderer,Entity *selectedEntity) {
 	SDL_Rect rect = {0,0,this->width,this->height};
 	SDL_Color color = {0xA0, 0x52, 0x2D, 0xFF};
 	renderer->draw(rect,color);
 
 	this->statusMenu->render(renderer);
-	this->actionsMenu->render(renderer);
+	this->actionsMenu->render(renderer,selectedEntity);
 }
 
 void ScreenMenu::setMessages(std::string firstMessage, std::string secondMessage) {

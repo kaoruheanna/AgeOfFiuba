@@ -8,6 +8,9 @@
 #ifndef BUTTON_H_
 #define BUTTON_H_
 
+#include <string>
+using namespace std;
+
 class Renderer;
 class RendererInteractionDelegate;
 
@@ -17,14 +20,16 @@ public:
 	virtual ~Button();
 	void render(Renderer* renderer);
 	void pressed(RendererInteractionDelegate *delegate);
+	void setEntityName(string name);
 
 	int x;
 	int y;
 	int width;
 	int height;
 
-private:
 
+private:
+	string entityName;
 };
 
 #endif /* BUTTON_H_ */

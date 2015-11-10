@@ -13,6 +13,7 @@ Button::Button(int x, int y, int width, int height) {
 	this->y = y;
 	this->width = width;
 	this->height = height;
+	this->entityName = "";
 }
 
 Button::~Button() {
@@ -20,12 +21,16 @@ Button::~Button() {
 }
 
 void Button::render(Renderer *renderer){
-	SDL_Rect rect = {this->x,this->y,this->width,this->height};
-//	SDL_Color color = {0x99, 0xFF, 0x00, 0xFF};
-//	renderer->draw(rect,color);
-	renderer->drawActionButtonWithNameInRect("boton-casa",rect);
+	if (this->entityName != ""){
+		SDL_Rect rect = {this->x,this->y,this->width,this->height};
+		renderer->drawActionButtonWithNameInRect("boton-"+this->entityName,rect);
+	}
 }
 
 void Button::pressed(RendererInteractionDelegate *delegate){
-	delegate->createEntityButtonPressed("aeropuerto");
+	delegate->createEntityButtonPressed(this->entityName);
+}
+
+void Button::setEntityName(string name) {
+	this->entityName = name;
 }

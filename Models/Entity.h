@@ -11,6 +11,7 @@
 #include <string>
 #include <SDL2/SDL.h>
 #include "../Red/Serializable.h"
+#include <list>;
 
 class Warrior;
 class Building;
@@ -49,6 +50,7 @@ protected:
 	int serializeStringSize(char* string);
 
 public:
+	list<string> creables;
 	void setId(int id);
 	int getId();
 	SDL_Point getPosicion();
