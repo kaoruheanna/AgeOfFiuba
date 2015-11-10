@@ -451,11 +451,18 @@ void ClientGameController::leftClickEnEscenario(int x,int y){
 }
 
 list<string> ClientGameController::getCreablesListForEntityName(string name){
-	list<string> list;
-	list.push_back("casa");
-	list.push_back("archeryRange");
-	list.push_back("molino");
-	return list;
+	list<string> creables;
+	creables.clear();
+	list<TipoConfig> typesList = this->config->getTipos();
+	list<TipoConfig>::iterator elementoDeTipoActual;
+	TipoConfig aux;
+	for (elementoDeTipoActual = typesList.begin(); elementoDeTipoActual != typesList.end(); ++elementoDeTipoActual){
+		aux = *elementoDeTipoActual;
+		if (aux.getNombre() == name){
+			creables = aux.getCreables();
+		}
+	}
+	return creables;
 }
 
 void ClientGameController::rightClickEnEscenario(int x, int y) {
