@@ -518,4 +518,10 @@ void ClientGameController::setMessageForSelectedEntity(Entity* entity){
 
 void ClientGameController::createEntityButtonPressed(string entityName) {
 	Log().Get(TAG) << "Create entity button pressed: " << entityName;
+
+	if (this->escenario->factory->esBuilding(entityName)){
+		Log().Get(TAG) << "Es un building";
+	} else {
+		Log().Get(TAG) << "Es otra cosa";
+	}
 }

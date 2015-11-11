@@ -122,3 +122,11 @@ Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion, cons
 Resource* EntityFactory::crearRecurso(const string& tipo, SDL_Point posicion) {
 	return (Resource*)this->crearEntidad(tipo,posicion);
 }
+
+bool EntityFactory::esBuilding(const string& tipo) {
+	if (tipo == ""){
+		return false;
+	}
+
+	return (this->tipos[tipo].getCategoria() == "building");
+}

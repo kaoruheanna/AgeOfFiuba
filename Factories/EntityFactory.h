@@ -29,6 +29,7 @@ public:
 	Entity* crearEntidad(const string& tipo, SDL_Point posicion);
 	Entity* crearEntidad(const string& tipo, SDL_Point posicion, const string& equipo);
 	Resource* crearRecurso(const string& tipo, SDL_Point posicion);
+	bool esBuilding(const string& tipo);
 private:
 	Map *mundo;
 	map<string, TipoConfig> tipos;

@@ -42,5 +42,6 @@ const int  FOG_VISIBLE = 255;
 const int  FOG_VISITED = 128;
 
 typedef std::pair <int,int> TileCoordinate;
+typedef std::pair <int,int> LogicPosition;
 
 #endif /* GLOBALCONSTANTS_H_ */
