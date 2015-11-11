@@ -21,6 +21,8 @@ and may not be redistributed without written permission.*/
 #include "Controllers/MensajeroLocal.h"
 #include "Controllers/ServerGameController.h"
 
+#include "Utils/ServerConectionView.h"
+
 #include <signal.h>
 
 GameConfiguration *configuration;
@@ -38,7 +40,8 @@ int main( int argc, char* args[] )
 		char* type = args[1];
 		bool isServer = (strcmp(type, "-s") == 0);
 		bool isClient = (strcmp(type, "-c") == 0);
-		if(isClient || isServer){
+		bool isLoginClient = (strcmp(type, "-l") == 0);
+		if(isClient || isServer || isLoginClient){
 			char *port = NULL;
 			char *ip = NULL;
 			for(int index = 2; index < argc; index++){
@@ -61,8 +64,12 @@ int main( int argc, char* args[] )
 				}
 				Cliente* cliente = new Cliente();
 				printf("Empieza el cliente con puerto: %i e ip: %s\n", portNumber, ip);
-				cliente->empezar(ip, portNumber);
+				cliente->empezar(ip, portNumber, "test-user");
 				printf("Termino el cliente\n");
+				delete cliente;
+			} else if(isLoginClient){
+				Cliente* cliente = new Cliente();
+				cliente->mostrarLogin();
 				delete cliente;
 			} else {
 				Servidor* servidor = new Servidor();

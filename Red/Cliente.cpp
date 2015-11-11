@@ -26,12 +26,14 @@ using namespace std;
 
 
 Cliente::Cliente() {
-	// TODO Auto-generated constructor stub
-
+	this->loginView = new ServerConectionView();
 }
 
 Cliente::~Cliente() {
-	// TODO Auto-generated destructor stub
+	if(this->loginView != NULL){
+		delete this->loginView;
+		this->loginView = NULL;
+	}
 }
 
 struct InfoLoguearse {
@@ -43,10 +45,11 @@ struct InfoLoguearse {
 void* loguearse(void* args);
 void* pingear(void* args);
 
-void Cliente::empezar(char* ip, int port) {
+void Cliente::empezar(char* ip, int port, string userName) {
 	int sd = socket(AF_INET, SOCK_STREAM, 0);
 	if(sd < 0){
 		printf("Cliente - Fallo el socket con error %i\n", sd);
+		this->loginView->onServerError("Hubo un error obteniendo el socket. Intente mas tarde.");
 		return;
 	}
 	sockaddr_in addr;
@@ -57,6 +60,7 @@ void Cliente::empezar(char* ip, int port) {
 	ptr_srv = gethostbyname(ip);
 	if(ptr_srv == NULL){
 		printf("Cliente - Fallo el host name\n");
+		this->loginView->onServerError("El servidor elegido no existe. Elija otro.");
 		return; // ERR: -2
 	}
 
@@ -67,10 +71,11 @@ void Cliente::empezar(char* ip, int port) {
 	if(connect(sd, (struct sockaddr *)&addr, sizeof(addr)) == -1){
 		printf("Cliente - Fallo la conexion\n");
 		close(sd);
+		this->loginView->onServerError("El servidor no esta conectado. Intente mas tarde.");
 		return ; // ERR: -1
 	}
 	printf("Cliente - Empezo la conexion\n");
-	// Loop de conexion
+	/*// Loop de conexion
 	bool endLoop = false;
 	string userName;
 	do{
@@ -81,7 +86,7 @@ void Cliente::empezar(char* ip, int port) {
 		}
 		getline(cin, userName);
 		endLoop = (userName.length() == 0);
-	} while(endLoop);
+	} while(endLoop);*/
 	// Crea controller y client e intenta conectarse al server por nombre
 	MensajeroRed* mensajero = new MensajeroRed(sd);
 	ClientGameController *clientGameController = new ClientGameController(mensajero);
@@ -127,4 +132,14 @@ void* pingear(void* args) {
 	printf("Cliente - Cerrando conexion...\n");
 	shutdown(info->mensajero->getSocket(), 2); // No conexion => Cerrar el socket
 	return NULL;
+}
+
+// Login view methods
+void Cliente::mostrarLogin() {
+	this->loginView->showForm();
+	this->empezar(
+		(char*) this->loginView->getIp().c_str(),
+		this->loginView->getPort(),
+		this->loginView->getUsername()
+	);
 }
