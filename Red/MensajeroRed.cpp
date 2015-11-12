@@ -95,6 +95,13 @@ void MensajeroRed::esperaMensaje() {
 				resultado = recibirSerializable(this->socket, user);
 				this->escucha->cambioUsuario(user);
 				delete user;
+				break;
+			case CONSTRUIR:
+				entity = new Entity();
+				resultado = recibirSerializable(this->socket, entity);
+				this->escucha->construir(entity);
+				delete entity;
+				break;
 			case PING:
 				break;
 			default: // No se pudo entender el mensaje
@@ -204,5 +211,15 @@ void MensajeroRed::cambioUsuario(User* user) {
 	delete mensaje;
 	resultado = enviarSerializable(this->socket, user);
 	//printf("Cliente - personaje con resultado: %i\n", resultado);
+
+}
+
+void MensajeroRed::construir(Entity* entity) {
+//	Mensaje* mensaje = new Mensaje(CONSTRUIR, this->sender);
+//	int resultado = enviarSerializable(this->socket, mensaje);
+//	//printf("Cliente - moverProtagonista con resultado: %i\n", resultado);
+//	delete mensaje;
+//	resultado = enviarSerializable(this->socket, entity);
+//	//printf("Cliente - personaje con resultado: %i\n", resultado);
 
 }

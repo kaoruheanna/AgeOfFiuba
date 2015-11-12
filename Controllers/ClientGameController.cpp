@@ -39,6 +39,7 @@ ClientGameController::ClientGameController(Mensajero *mensajero) {
 	this->updated = false;
 	this->serverError = false;
 	this->selectedEntity = NULL;
+	this->pendingEntity = NULL;
 }
 
 ClientGameController::~ClientGameController() {}
@@ -238,12 +239,31 @@ bool ClientGameController::pollEvents(){
 			pressedR = true;
 		}
 
+		if(this->pendingEntity != NULL){
+			int x, y;
+			SDL_GetMouseState(&x, &y);
+			SDL_Point posicion = this->renderer->windowToMapPoint({x,y});
+			this->pendingEntity->setPosicion(posicion);
+			Log().Get(TAG) << "seteo la posicion a construir: "<<posicion.x<<","<<posicion.y;
+			// se puede construir => mensaje al server
+		}
+
 		if (e.type == SDL_MOUSEBUTTONDOWN && !this->serverError){
 			//Get mouse position
 			int x, y;
 			SDL_GetMouseState(&x, &y);
 			bool leftClick = (e.button.button == SDL_BUTTON_LEFT);
-			this->renderer->clickEvent(x,y,leftClick,this);
+			if(this->pendingEntity != NULL){
+				// bla
+				if(leftClick){
+					this->mensajero->construir(this->pendingEntity);
+				} else {
+					Log().Get(TAG) << "Cancelo la construccion";
+				}
+				this->pendingEntity = NULL;
+			} else {
+				this->renderer->clickEvent(x,y,leftClick,this);
+			}
 		}
 	}
 	return pressedR;
@@ -260,6 +280,12 @@ void ClientGameController::close() {
 
 	delete this->miniEscenarioView;
 	this->miniEscenarioView = NULL;
+
+	delete this->selectedEntity;
+	this->selectedEntity = NULL;
+
+	delete this->pendingEntity;
+	this->pendingEntity = NULL;
 }
 
 bool ClientGameController::play() {
@@ -392,11 +418,12 @@ void ClientGameController::actualizarEntidad(Entity* entity) {
 
 	Entity* newEntity = this->escenario->entidadConId(entity->getId());
 
-	if( newEntity->getClass() == MOBILE_MODEL) {
-		return;
-	}
 
 	if(newEntity) {
+		if( newEntity->getClass() == MOBILE_MODEL) {
+			return;
+		}
+
 		newEntity->update(entity);
 		if (!newEntity->estaViva()) {
 			this->escenario->eliminarEntidadConID(newEntity->getId());
@@ -518,8 +545,13 @@ void ClientGameController::setMessageForSelectedEntity(Entity* entity){
 
 void ClientGameController::createEntityButtonPressed(string entityName) {
 	Log().Get(TAG) << "Create entity button pressed: " << entityName;
+	if (this->pendingEntity){
+		delete this->pendingEntity;
+		this->pendingEntity = NULL;
+	}
 
 	if (this->escenario->factory->esBuilding(entityName)){
+		this->pendingEntity = this->escenario->factory->crearEntidadParaConstruir(entityName,this->selectedEntity->getPosicion(),"RED");
 		Log().Get(TAG) << "Es un building";
 	} else {
 		Log().Get(TAG) << "Es otra cosa";

@@ -26,8 +26,9 @@ class EntityFactory {
 public:
 	EntityFactory(Map *mundo, list<TipoConfig> tiposConfigList);
 	virtual ~EntityFactory();
-	Entity* crearEntidad(const string& tipo, SDL_Point posicion);
-	Entity* crearEntidad(const string& tipo, SDL_Point posicion, const string& equipo);
+	Entity* crearEntidad(const string& tipo, SDL_Point posicion, bool aumentarID = true);
+	Entity* crearEntidad(const string& tipo, SDL_Point posicion, const string& equipo, bool aumentarID = true);
+	Entity* crearEntidadParaConstruir(const string& tipo, SDL_Point posicion, const string& equipo);
 	Resource* crearRecurso(const string& tipo, SDL_Point posicion);
 	bool esBuilding(const string& tipo);
 private:

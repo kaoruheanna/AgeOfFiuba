@@ -85,6 +85,7 @@ string Escenario::toString(){
 }
 
 bool Escenario::agregarEntidad(Entity* entidad){
+	this->entidadesAgregadas.push_back(entidad);
 	this->entidades.push_back(entidad);
 	return true;
 }
@@ -309,4 +310,10 @@ list<MobileModel*> Escenario::getMobileModels() {
 		}
 	}
 	return mobileModels;
+}
+
+void Escenario::agregarEntidad(const string& tipo, SDL_Point posicion,const string& equipo) {
+	SDL_Point tile = this->mundo->getTileForPosition(posicion);
+	Entity* entity = this->factory->crearEntidad(tipo,tile,equipo);
+	this->construirEntidad(entity, entity->getPosicion());
 }

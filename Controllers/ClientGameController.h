@@ -37,6 +37,7 @@ private:
 	User* usuario;
 	Mensajero* mensajero;
 	Entity* selectedEntity;
+	Entity* pendingEntity;
 
 	bool shouldQuit;
 	bool serverError;

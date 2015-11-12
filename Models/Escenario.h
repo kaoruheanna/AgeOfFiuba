@@ -45,9 +45,12 @@ class Escenario {
 		bool updated;
 
 		EscenarioDelagate* delegate;
+		list<Entity*> entidadesAgregadas;
 
 		bool agregarEntidad(Entity*);
 		bool construirEntidad(Entity*,SDL_Point);
+		void agregarEntidad(const string& tipo, SDL_Point posicion,const string& equipo);
+
 		void vaciarEntidades();
 		void loop();
 		bool tileOcupadoForEntity(TileCoordinate tile,Entity* entity);

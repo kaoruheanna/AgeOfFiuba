@@ -78,8 +78,8 @@ int getId(bool reset) {
 	return id;
 }
 
-Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion) {
-	int id = getId(false);
+Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion, bool aumentarID) {
+	int id = (aumentarID) ? getId(false) : 0;
 	if (tipo == "") {
 		Log().Get("Escenario", logWARNING) << "La entidad tiene que tener un tipo. Descartando entidad.";
 		return NULL;
@@ -103,8 +103,8 @@ Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion) {
 	return new Entity(id,tipo, pos, size.x, size.y);
 }
 
-Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion, const string& equipo) {
-	Entity* entidad = this->crearEntidad(tipo, posicion);
+Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion, const string& equipo, bool aumentarID) {
+	Entity* entidad = this->crearEntidad(tipo, posicion,aumentarID);
 	if(equipo.compare("RED") == 0){
 		entidad->setTeam(RED);
 	} else if(equipo.compare("BLUE") == 0){
@@ -117,6 +117,10 @@ Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion, cons
 		entidad->setTeam(NEUTRAL);
 	}
 	return entidad;
+}
+
+Entity* EntityFactory::crearEntidadParaConstruir(const string& tipo, SDL_Point posicion, const string& equipo) {
+	return this->crearEntidad(tipo,posicion,equipo,false);
 }
 
 Resource* EntityFactory::crearRecurso(const string& tipo, SDL_Point posicion) {
