@@ -33,6 +33,7 @@ public:
 	virtual void actualizaPersonaje(MobileModel* entity);
 	virtual void cambioUsuario(User* user);
 //	virtual void errorConstruir();
+	virtual void comenzoPartida();
 
 private:
 	ServerGameController* server;

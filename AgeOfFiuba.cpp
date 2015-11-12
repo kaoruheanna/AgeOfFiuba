@@ -21,6 +21,8 @@ and may not be redistributed without written permission.*/
 #include "Controllers/MensajeroLocal.h"
 #include "Controllers/ServerGameController.h"
 
+#include "Utils/ServerConectionView.h"
+
 #include <signal.h>
 
 GameConfiguration *configuration;
@@ -38,6 +40,7 @@ int main( int argc, char* args[] )
 		char* type = args[1];
 		bool isServer = (strcmp(type, "-s") == 0);
 		bool isClient = (strcmp(type, "-c") == 0);
+		bool isLoginClient = (strcmp(type, "-l") == 0);
 		if(isClient || isServer){
 			char *port = NULL;
 			char *ip = NULL;
@@ -61,7 +64,7 @@ int main( int argc, char* args[] )
 				}
 				Cliente* cliente = new Cliente();
 				printf("Empieza el cliente con puerto: %i e ip: %s\n", portNumber, ip);
-				cliente->empezar(ip, portNumber);
+				cliente->empezar(ip, portNumber, "test-user");
 				printf("Termino el cliente\n");
 				delete cliente;
 			} else {
@@ -71,6 +74,10 @@ int main( int argc, char* args[] )
 				printf("Termino el server\n");
 				delete servidor;
 			}
+		} else if(isLoginClient){
+			Cliente* cliente = new Cliente();
+			cliente->mostrarLogin();
+			delete cliente;
 		} else {
 			printf("Command %s is invalid. Try with -s or -c \n", type);
 			return -1;
@@ -98,6 +105,7 @@ int main( int argc, char* args[] )
 		clientGameController->username = "solo-play";
 		mensajero->loguearse("solo-play");
 		mensajero->addClient(clientGameController);
+		serverGameController->comenzoPartida = true;
 		shouldRestart = clientGameController->play();
 
 		delete clientGameController;

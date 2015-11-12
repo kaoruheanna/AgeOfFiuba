@@ -29,6 +29,7 @@ public:
 //	virtual void errorConstruir();
 //	virtual void siSePuedeConstruir(Entity* entity);
 //	virtual void noSePuedeConstruir(Entity* entity);
+	virtual void comenzoPartida();
 	// Metodos Cliente -> Servidor
 	virtual void loguearse(char* nombre);
 	virtual void moverEntidad(MobileModel* entity, string username);

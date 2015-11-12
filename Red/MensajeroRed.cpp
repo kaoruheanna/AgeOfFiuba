@@ -102,6 +102,10 @@ void MensajeroRed::esperaMensaje() {
 				this->escucha->construir(entity);
 				delete entity;
 				break;
+			case COMENZO_PARTIDA:
+				printf("Cliente - comenzo partida con resultado: %i\n", resultado);
+				this->escucha->comenzoPartida();
+				break;
 			case PING:
 				break;
 			default: // No se pudo entender el mensaje
@@ -221,5 +225,11 @@ void MensajeroRed::construir(Entity* entity) {
 //	delete mensaje;
 //	resultado = enviarSerializable(this->socket, entity);
 //	//printf("Cliente - personaje con resultado: %i\n", resultado);
+}
 
+void MensajeroRed::comenzoPartida() {
+	Mensaje* mensaje = new Mensaje(COMENZO_PARTIDA, this->sender);
+	int resultado = enviarSerializable(this->socket, mensaje);
+	printf("Server - comenzo partida con resultado: %i\n", resultado);
+	delete mensaje;
 }

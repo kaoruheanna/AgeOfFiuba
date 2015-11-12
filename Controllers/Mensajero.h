@@ -32,6 +32,7 @@ public:
 //	virtual void siSePuedeConstruir(Entity* entity){};
 //	virtual void noSePuedeConstruir(Entity* entity){};
 //	virtual void errorConstruir(){};
+	virtual void comenzoPartida(){};
 };
 
 class Mensajero : public MensajeroCliente {

@@ -8,14 +8,16 @@
 #ifndef RED_CLIENTE_H_
 #define RED_CLIENTE_H_
 
-class Cliente {
+#include "../Utils/ServerConectionView.h"
+
+class Cliente{
 public:
 	Cliente();
 	virtual ~Cliente();
-	void empezar(char* serverIp, int serverPort);
+	void empezar(char* serverIp, int serverPort, string username);
+	void mostrarLogin();
 private:
-	void mandarTexto();
-	void cerrarConeccion();
+	ServerConectionView* loginView;
 };
 
 #endif /* RED_CLIENTE_H_ */
