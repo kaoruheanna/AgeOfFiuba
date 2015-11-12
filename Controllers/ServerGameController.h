@@ -41,6 +41,7 @@ public:
 	void setUserActive(char* username);
 	void setUserInactive(char* username);
 
+	bool comenzoPartida; // No usar => Solo para el play
 	void addUser(char* username); // No usar => Solo para el play
 
 	//EscenarioDelegate
@@ -63,8 +64,7 @@ private:
 	User* getUserByName(string name);
 	Entity* getEntityForUser(int entityId, string username);
 	MobileModel* getMobileModelForUser(int entityId, string username);
-	// TODO cambiar el nombre de la var o algo
-	bool comenzoPartida;
+
 	void enviarComienzo();
 	//Para actualizar
 	list<Mensajero*> mensajerosAgregados;

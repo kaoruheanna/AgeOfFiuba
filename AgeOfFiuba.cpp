@@ -105,6 +105,7 @@ int main( int argc, char* args[] )
 		clientGameController->username = "solo-play";
 		mensajero->loguearse("solo-play");
 		mensajero->addClient(clientGameController);
+		serverGameController->comenzoPartida = true;
 		shouldRestart = clientGameController->play();
 
 		delete clientGameController;
