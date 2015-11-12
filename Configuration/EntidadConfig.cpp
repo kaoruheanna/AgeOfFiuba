@@ -7,6 +7,7 @@
 
 #include "EntidadConfig.h"
 #include "../Utils/Log.h"
+#include "../GlobalConstants.h"
 
 const std::string TAG = "EntidadConfig";
 
@@ -14,7 +15,7 @@ EntidadConfig::EntidadConfig(){
 	this->x = 0;
 	this->y = 0;
 	this->tipo = "";
-	this->equipo = "NEUTRAL";
+	this->equipo = NOMBRE_EQUIPO_NEUTRAL;
 }
 
 EntidadConfig::EntidadConfig(YAML::Node nodo): EntidadConfig(){

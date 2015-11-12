@@ -105,16 +105,20 @@ Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion, bool
 
 Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion, const string& equipo, bool aumentarID) {
 	Entity* entidad = this->crearEntidad(tipo, posicion,aumentarID);
-	if(equipo.compare("RED") == 0){
-		entidad->setTeam(RED);
-	} else if(equipo.compare("BLUE") == 0){
-		entidad->setTeam(BLUE);
-	} else if(equipo.compare("GREEN") == 0){
-		entidad->setTeam(GREEN);
-	} else if(equipo.compare("YELLOW") == 0){
-		entidad->setTeam(YELLOW);
+	if(equipo.compare(NOMBRE_EQUIPO_RED) == 0){
+		entidad->setTeam(TEAM_RED);
+
+	} else if(equipo.compare(NOMBRE_EQUIPO_BLUE) == 0){
+		entidad->setTeam(TEAM_BLUE);
+
+	} else if(equipo.compare(NOMBRE_EQUIPO_GREEN) == 0){
+		entidad->setTeam(TEAM_GREEN);
+
+	} else if(equipo.compare(NOMBRE_EQUIPO_YELLOW) == 0){
+		entidad->setTeam(TEAM_YELLOW);
+
 	} else {
-		entidad->setTeam(NEUTRAL);
+		entidad->setTeam(TEAM_NEUTRAL);
 	}
 	return entidad;
 }

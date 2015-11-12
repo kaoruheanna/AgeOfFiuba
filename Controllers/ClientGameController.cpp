@@ -529,20 +529,20 @@ void ClientGameController::rightClickEnEscenario(int x, int y) {
 void ClientGameController::setMessageForSelectedEntity(Entity* entity){
 	string equipo = "";
 	switch(entity->getTeam()){
-		case RED:
-			equipo = "RED";
+		case TEAM_RED:
+			equipo = NOMBRE_EQUIPO_RED;
 			break;
-		case BLUE:
-			equipo = "BLUE";
+		case TEAM_BLUE:
+			equipo = NOMBRE_EQUIPO_BLUE;
 			break;
-		case GREEN:
-			equipo = "GREEN";
+		case TEAM_GREEN:
+			equipo = NOMBRE_EQUIPO_GREEN;
 			break;
-		case YELLOW:
-			equipo = "YELLOW";
+		case TEAM_YELLOW:
+			equipo = NOMBRE_EQUIPO_YELLOW;
 			break;
 		default:
-			equipo = "NEUTRAL";
+			equipo = NOMBRE_EQUIPO_NEUTRAL;
 
 	}
 	if (!(entity->esJugador())){
@@ -562,7 +562,7 @@ void ClientGameController::createEntityButtonPressed(string entityName) {
 	}
 
 	if (this->escenario->factory->esBuilding(entityName)){
-		this->pendingEntity = this->escenario->factory->crearEntidadParaConstruir(entityName,this->selectedEntity->getPosicion(),"RED");
+		this->pendingEntity = this->escenario->factory->crearEntidadParaConstruir(entityName,this->selectedEntity->getPosicion(),this->selectedEntity->getTeamString());
 		Log().Get(TAG) << "Es un building";
 	} else {
 		Log().Get(TAG) << "Es otra cosa";

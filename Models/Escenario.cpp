@@ -51,7 +51,7 @@ void Escenario::init() {
 					Log().Get("Escenario", logWARNING) << "La entidad N° "
 							<< indice << " del escenario " << this->name
 							<< " no fue agregada al mapa. La misma no puede estar en la misma posicion que otra entidad.";
-				} else if(entidad->getTeam() != NEUTRAL){
+				} else if(entidad->getTeam() != TEAM_NEUTRAL){
 					list<Team>::iterator found = find(this->teams.begin(), this->teams.end(), entidad->getTeam());
 					if(found == this->teams.end()){
 						// Agregar equipo si no estaba ya en la lista

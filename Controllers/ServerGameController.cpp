@@ -334,5 +334,5 @@ void ServerGameController::mandarUsuarios() {
 }
 
 void ServerGameController::construir(Entity* entity){
-	this->escenario->agregarEntidad(entity->getNombre(),entity->getPosicion(),"RED");
+	this->escenario->agregarEntidad(entity->getNombre(),entity->getPosicion(),entity->getTeamString());
 }

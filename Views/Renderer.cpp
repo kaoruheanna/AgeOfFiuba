@@ -378,16 +378,16 @@ SDL_Point Renderer::proyectedPoint(SDL_Point mapPoint, SDL_Point plano){
 
 void Renderer::setearColor(Drawable* drawable){
 	switch (this->selectedEntity->getTeam()){
-		case RED:
+		case TEAM_RED:
 			SDL_SetTextureColorMod( drawable->getTexture(), 255,0,0 );
 			break;
-		case BLUE:
+		case TEAM_BLUE:
 			SDL_SetTextureColorMod( drawable->getTexture(), 0,0,255 );
 			break;
-		case GREEN:
+		case TEAM_GREEN:
 			SDL_SetTextureColorMod( drawable->getTexture(), 0,255,0 );
 			break;
-		case YELLOW:
+		case TEAM_YELLOW:
 			SDL_SetTextureColorMod( drawable->getTexture(), 255,255,0 );
 			break;
 		default:
