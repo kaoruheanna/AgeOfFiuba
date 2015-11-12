@@ -125,6 +125,7 @@ void* pingearCliente(void* args) {
 	MensajeroRed* mensajero = (MensajeroRed*) args;
 	do{
 		mensajero->connectionAlive = false;
+		mensajero->ping();
 //		printf("Server - Checkeando conexion...\n");
 		sleep(1);
 	} while(mensajero->connectionAlive);

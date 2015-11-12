@@ -22,7 +22,8 @@ enum MensajeType {
 	DESAPARECE_RECURSO, /* Servidor => Cliente: Indica que se consumio un recurso */
 	PING, /* Para probar si el servidor / cliente esta conectado */
 	ERROR_MAXIMOS_EQUIPOS, /* Servidor => Cliente: No se puede loguear porque todos los equipos estan tomados */
-	CAMBIO_USUARIO /* Servidor => Cliente: Indica cuando un valor de un usuario cambio o cuando aparece un nuevo usuario */
+	CAMBIO_USUARIO, /* Servidor => Cliente: Indica cuando un valor de un usuario cambio o cuando aparece un nuevo usuario */
+	COMENZO_PARTIDA /* Servidor => Cliente: Indica cuando la partida se puede empezar a jugar */
 };
 
 class Mensaje: public Serializable {

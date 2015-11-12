@@ -16,6 +16,7 @@ ServerGameController::ServerGameController(GameConfiguration *config) :  config(
 	escenario = NULL;
 	debeActualizarPersonaje = false;
 	moverPersonajeAlPunto = NULL;
+	comenzoPartida = false;
 }
 
 ServerGameController::~ServerGameController() {}
@@ -72,9 +73,23 @@ void ServerGameController::play() {
 	if (!this->inicializado()) {
 		init();
 	}
+	while( !comenzoPartida ){
+		this->sleep();
+	}
+	this->enviarEventos();
+	this->enviarComienzo();
 	while( true ) {
 		this->loopEscenario();
 		this->sleep();
+	}
+}
+
+void ServerGameController::enviarComienzo() {
+	printf("Enviado comienzo a jugadores: %i\n", mensajeros.size());
+	list<Mensajero*>::iterator mensajero;
+	for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
+		Mensajero* mensajeroReal = (*mensajero);
+		mensajeroReal->comenzoPartida();
 	}
 }
 
@@ -107,7 +122,7 @@ void ServerGameController::enviarEventos() {
 
 	for(auto nuevoMensajero : this->mensajerosAgregados) {
 		this->mensajeros.push_back(nuevoMensajero);
-		aparecenRecursos(nuevoMensajero,this->escenario->getListaEntidades());
+		//aparecenRecursos(nuevoMensajero,this->escenario->getListaEntidades());
 	}
 	this->mensajerosAgregados.clear();
 }
@@ -181,6 +196,7 @@ void ServerGameController::addMensajero(Mensajero* mensajero) {
 			mensajero->cambioUsuario(*usuario);
 		}
 	}
+	comenzoPartida = this->escenario->getTeams().size() == this->usuarios.size();
 }
 
 void ServerGameController::removeMensajero(Mensajero *mensajero) {

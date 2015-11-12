@@ -46,6 +46,7 @@ private:
 	Escenario* escenario;
 	GameConfiguration* config;
 	bool updated;
+	bool empezoPartida;
 
 	bool pollEvents();
 	void updateWindow();
@@ -85,6 +86,7 @@ private:
 	virtual void actualizarEntidad(Entity* entity);
 	virtual void actualizaPersonaje(MobileModel* entity);
 	virtual void cambioUsuario(User* user);
+	virtual void comenzoPartida();
 
 };
 

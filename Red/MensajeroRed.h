@@ -26,6 +26,7 @@ public:
 	virtual void desapareceRecurso(Resource* recurso);
 	virtual void actualizaPersonaje(MobileModel* entity);
 	virtual void cambioUsuario(User* user);
+	virtual void comenzoPartida();
 	// Metodos Cliente -> Servidor
 	virtual void loguearse(char* nombre);
 	virtual void moverEntidad(MobileModel* entity, string username);

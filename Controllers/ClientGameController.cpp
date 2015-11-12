@@ -39,9 +39,18 @@ ClientGameController::ClientGameController(Mensajero *mensajero) {
 	this->updated = false;
 	this->serverError = false;
 	this->selectedEntity = NULL;
+
+	this->empezoPartida = false;
 }
 
 ClientGameController::~ClientGameController() {}
+
+void ClientGameController::comenzoPartida() {
+	this->empezoPartida = true;
+	if(this->renderer != NULL){
+		this->renderer->hideCartel();
+	}
+}
 
 void ClientGameController::agregarEntidad(Entity* entidad) {
 	EntityView* entityView = new EntityView(entidad->getNombre());
@@ -282,6 +291,9 @@ bool ClientGameController::play() {
 		return false;
 	}
 
+	if(!this->empezoPartida){
+		this->renderer->setCartel("Esperando usuarios...");
+	}
 
 
 	this->initMap();

@@ -23,6 +23,10 @@ void MensajeroLocal::configEscenario(const string path) {
 	this->cliente->configEscenario(path);
 }
 
+void MensajeroLocal::comenzoPartida() {
+	this->cliente->comenzoPartida();
+}
+
 
 void MensajeroLocal::addClient(MensajeroCliente* client) {
 	this->cliente = client;

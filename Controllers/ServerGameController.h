@@ -63,6 +63,9 @@ private:
 	User* getUserByName(string name);
 	Entity* getEntityForUser(int entityId, string username);
 	MobileModel* getMobileModelForUser(int entityId, string username);
+	// TODO cambiar el nombre de la var o algo
+	bool comenzoPartida;
+	void enviarComienzo();
 	//Para actualizar
 	list<Mensajero*> mensajerosAgregados;
 

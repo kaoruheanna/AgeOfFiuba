@@ -29,6 +29,7 @@ public:
 	virtual void actualizarEntidad(Entity* entity){};
 	virtual void actualizaPersonaje(MobileModel* entity){};
 	virtual void cambioUsuario(User* user){};
+	virtual void comenzoPartida(){};
 };
 
 class Mensajero : public MensajeroCliente {

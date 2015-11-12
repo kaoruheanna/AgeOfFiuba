@@ -41,7 +41,7 @@ int main( int argc, char* args[] )
 		bool isServer = (strcmp(type, "-s") == 0);
 		bool isClient = (strcmp(type, "-c") == 0);
 		bool isLoginClient = (strcmp(type, "-l") == 0);
-		if(isClient || isServer || isLoginClient){
+		if(isClient || isServer){
 			char *port = NULL;
 			char *ip = NULL;
 			for(int index = 2; index < argc; index++){
@@ -67,10 +67,6 @@ int main( int argc, char* args[] )
 				cliente->empezar(ip, portNumber, "test-user");
 				printf("Termino el cliente\n");
 				delete cliente;
-			} else if(isLoginClient){
-				Cliente* cliente = new Cliente();
-				cliente->mostrarLogin();
-				delete cliente;
 			} else {
 				Servidor* servidor = new Servidor();
 				printf("Empieza el server con puerto: %i\n", portNumber);
@@ -78,6 +74,10 @@ int main( int argc, char* args[] )
 				printf("Termino el server\n");
 				delete servidor;
 			}
+		} else if(isLoginClient){
+			Cliente* cliente = new Cliente();
+			cliente->mostrarLogin();
+			delete cliente;
 		} else {
 			printf("Command %s is invalid. Try with -s or -c \n", type);
 			return -1;
