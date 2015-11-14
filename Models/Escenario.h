@@ -68,6 +68,7 @@ class Escenario {
 		Entity* getEntidadEnPosicion(SDL_Point point); //recibe una posicion logica
 		std::pair<SDL_Point,SDL_Point> getTilesCoordinatesForEntity(Entity *entity); //devuelve un par con el min y maxTile
 		queue<SDL_Point> getCaminoForMobileModel(SDL_Point origen, SDL_Point destino,MobileModel *mobileModel);
+		list<TileCoordinate> getVecinosLibresForEntity(Entity *entity);
 
 		bool inicializacionCorrecta;
 

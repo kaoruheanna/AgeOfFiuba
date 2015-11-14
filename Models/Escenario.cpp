@@ -91,12 +91,20 @@ bool Escenario::agregarEntidad(Entity* entidad){
 }
 
 bool Escenario::construirEntidad(Entity* entidad,SDL_Point posicion){
-	if (this->mundo->construirEntidad(entidad,posicion)){
-		entidad->setPosicion(posicion);
-		this->agregarEntidad(entidad);
-		return true;
+	SDL_Point tilePos = this->mundo->getTileForPosition(posicion);
+	if (!this->mundo->puedoConstruir(entidad,tilePos)){
+		// no puedo construir porque esta ocupado alguno de los tiles
+		return false;
 	}
-	return false;
+
+	entidad->setPosicion(posicion);
+	this->agregarEntidad(entidad);
+
+	if (entidad->getClass() != MOBILE_MODEL){
+		//si no es un mobile model setea los tiles como ocupados
+		this->mundo->construirEntidad(entidad,posicion);
+	}
+	return true;
 }
 
 list<Entity*> Escenario::getListaEntidades(){
@@ -109,7 +117,7 @@ Entity* Escenario::entidadConId(int id) {
 	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
 		Entity* entidadReal = *entidad;
 		if (entidadReal->getId() == id) {
-				return entidadReal;
+			return entidadReal;
 		}
 	}
 	return NULL;
@@ -252,6 +260,7 @@ bool Escenario::tileOcupadoForEntity(TileCoordinate tile,Entity* entity){
 }
 
 void Escenario::moveEntityToPos(MobileModel* mobileModel,SDL_Point destino) {
+	Log().Get(TAG, logDEBUG) << "Trato de mover la entidad:"<<mobileModel->getNombre()<<"con el id:"<<mobileModel->getId();
 	SDL_Point origen = mobileModel->getPosicion();
 	queue <SDL_Point> camino = this->getCaminoForMobileModel(origen,destino,mobileModel);
 	mobileModel->setPath(camino);
@@ -293,7 +302,16 @@ queue<SDL_Point> Escenario::getCaminoForMobileModel(SDL_Point origen, SDL_Point 
 	return this->mundo->obtenerCaminoIgnoringTiles(origen,destino,tilesOccupied);
 }
 
+list<TileCoordinate> Escenario::getVecinosLibresForEntity(Entity *entity) {
+	std::pair<SDL_Point,SDL_Point> tilesEntity = this->getTilesCoordinatesForEntity(entity);
+	//TODO buscar vecino libre
+	SDL_Point lastTile = tilesEntity.second;
 
+	TileCoordinate libre = TileCoordinate(lastTile.x + 1, lastTile.y);
+	list<TileCoordinate> list;
+	list.push_back(libre);
+	return list;
+}
 
 // Para manejar varios protagonistas
 list<Team> Escenario::getTeams() {

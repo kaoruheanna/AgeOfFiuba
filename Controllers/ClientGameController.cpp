@@ -377,7 +377,8 @@ void ClientGameController::actualizaPersonaje(MobileModel* entity) {
 	if(model == NULL){
 		this->escenario->agregarEntidad(entity);
 		// TODO cambiar como detecta este numero
-		posicionInicialProtagonista = entity->getPosicion();
+//		posicionInicialProtagonista = entity->getPosicion();
+		this->updated = true;
 		return;
 	}
 	if(model->getClass() != MOBILE_MODEL){
@@ -424,11 +425,11 @@ void ClientGameController::desapareceRecurso(Resource* recurso){
 }
 
 void ClientGameController::actualizarEntidad(Entity* entity) {
-	if (!this->inicializado())
-			return;
+	if (!this->inicializado()) {
+		return;
+	}
 
 	Entity* newEntity = this->escenario->entidadConId(entity->getId());
-
 
 	if(newEntity) {
 		if( newEntity->getClass() == MOBILE_MODEL) {
@@ -563,8 +564,22 @@ void ClientGameController::createEntityButtonPressed(string entityName) {
 
 	if (this->escenario->factory->esBuilding(entityName)){
 		this->pendingEntity = this->escenario->factory->crearEntidadParaConstruir(entityName,this->selectedEntity->getPosicion(),this->selectedEntity->getTeamString());
-		Log().Get(TAG) << "Es un building";
-	} else {
-		Log().Get(TAG) << "Es otra cosa";
+		return;
 	}
+
+	list<TileCoordinate> tiles = this->escenario->getVecinosLibresForEntity(this->selectedEntity);
+	if (tiles.size() == 0){
+		Log().Get(TAG) << "No hay espacio para crear la entidad";
+		return;
+	}
+//	TileCoordinate tile = tiles.front();
+//	TileCoordinate tile = TileCoordinate(0,6);
+	SDL_Point tilePoint = this->escenario->mundo->getTileForPosition(this->selectedEntity->getPosicion());
+	tilePoint.x = 21;
+	tilePoint.y = 20;
+//	TileCoordinate tile = TileCoordinate(tilePoint.x - 1, tilePoint.y - 1);
+//	SDL_Point logicPosition = this->escenario->mundo->getPositionForTile({tile.first,tile.second},true);
+	Entity *tempEntity = this->escenario->factory->crearEntidadParaConstruir(entityName,tilePoint,this->selectedEntity->getTeamString());
+	this->mensajero->construir(tempEntity);
+	delete tempEntity;
 }
