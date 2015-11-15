@@ -327,7 +327,6 @@ void Renderer::drawCartelIfShould(){
 
 void Renderer::drawMenu(){
 	SDL_RenderSetViewport(this->sdlRenderer, &this->menuRect);
-	//TODO ver como hacer para dibujar la base del menu sin una selected entity
 	this->screenMenu->renderMenu(this);
 	this->screenMenu->renderMenuForEntity(this,this->selectedEntities);
 }
@@ -652,6 +651,7 @@ void Renderer::setSelectedTilesCoordinates(bool selected,std::list<pair<SDL_Poin
 	this->hasSelectedTiles = selected;
 	this->selectedTilesCoordinates = tiles.front();
 	this->selectedEntity = entidad.front();
+	this->selectedEntities.swap(entidad);
 }
 
 void Renderer::setCartel(string message){

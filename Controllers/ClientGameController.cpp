@@ -582,7 +582,6 @@ void ClientGameController::leftMouseUp(int x, int y, int w, int h){
 		this->renderer->setMessagesInMenu("Selecciona algo!!", "");
 		this->renderer->setSelectedTilesCoordinates(false,tiles,listaDeEntidadesSeleccionadas);
 	}
-
 }
 
 void ClientGameController::setSelectedEntities(list<Entity*> listaDeEntidades){
