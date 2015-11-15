@@ -35,6 +35,8 @@ Renderer::Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos) {
 	this->fog = NULL;
 	this->hasSelectedTiles = false;
 	this->cartel = NULL;
+	this->selectionArea = {0,0,0,0};
+	this->selectedEntity = NULL;
 
 	bool didInitSDL = this->initSDL();
 	bool didLoadMedia = this->loadMedia(tipos);
@@ -267,6 +269,7 @@ void Renderer::drawViews() {
 
 	this->drawTopBar();
 	this->drawEscenario();
+	this->drawSelectionRect();
 	this->drawMenu();
 	this->drawMiniEscenario();
 
@@ -704,6 +707,17 @@ void Renderer::clickEvent(int x, int y, bool leftClick, RendererInteractionDeleg
 
 }
 
+void Renderer::dragLeftClickEvent(int xi, int yi, int xf, int yf){
+	this->selectionArea.x = xi;
+	this->selectionArea.y = yi;
+	this->selectionArea.w = xf-xi;
+	this->selectionArea.h = yf-yi;
+}
+
+void Renderer::leftMouseUpEvent(){
+	this->selectionArea = {0,0,0,0};
+}
+
 bool Renderer::isPixelInEscenario(int x, int y){
 	return this->isPixelInRect(x,y,this->escenarioRect);
 }
@@ -726,4 +740,9 @@ bool Renderer::isPixelInRect(int x, int y, SDL_Rect rect){
 		return false;
 	}
 	return true;
+}
+
+void Renderer::drawSelectionRect(){
+	SDL_SetRenderDrawColor( this->sdlRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+	SDL_RenderDrawRect( this->sdlRenderer, &this->selectionArea);
 }

@@ -38,9 +38,12 @@ ClientGameController::ClientGameController(Mensajero *mensajero) {
 
 	this->updated = false;
 	this->serverError = false;
-	this->selectedEntity = NULL;
+	//this->selectedEntity = NULL;
 
 	this->empezoPartida = false;
+	this->mouseDown = false;
+	this->posInicialMouse = {0,0};
+
 }
 
 ClientGameController::~ClientGameController() {}
@@ -251,8 +254,28 @@ bool ClientGameController::pollEvents(){
 			//Get mouse position
 			int x, y;
 			SDL_GetMouseState(&x, &y);
+			this->posInicialMouse = {x,y};
 			bool leftClick = (e.button.button == SDL_BUTTON_LEFT);
+			if (leftClick){this->mouseDown = true;};
 			this->renderer->clickEvent(x,y,leftClick,this);
+
+		}
+		if (e.type == SDL_MOUSEBUTTONUP && !this->serverError){
+			if(e.button.button == SDL_BUTTON_LEFT){
+				int x,y;
+				SDL_GetMouseState(&x,&y);
+				//select entities
+				this->renderer->leftMouseUpEvent();
+				this->mouseDown = false;
+			}
+		}
+		if( e.type == SDL_MOUSEMOTION && !this->serverError){
+			if (this->mouseDown){
+				int x,y;
+				SDL_GetMouseState(&x,&y);
+				cout<<"dragging: "<<x<<","<<y<<endl;
+				this->renderer->dragLeftClickEvent(this->posInicialMouse.x,this->posInicialMouse.y-32,x,y-32);
+			}
 		}
 	}
 	return pressedR;
@@ -445,11 +468,14 @@ bool ClientGameController::inicializado() {
 void ClientGameController::leftClickEnEscenario(int x,int y){
 	SDL_Point point = this->renderer->windowToMapPoint({x,y});
 	Entity *entidad = this->escenario->getEntidadEnPosicion(point);
-	if (this->selectedEntity == entidad)
+	/*if (this->selectedEntity == entidad)
 		return;
 
-	this->selectedEntity = entidad;
-
+	this->selectedEntity = entidad;*/
+	list<Entity*> newEntities;
+	newEntities.push_front(entidad);
+	this->selectedEntities.swap(newEntities);
+/*
 	std::pair<SDL_Point,SDL_Point> tiles;
 	if(this->selectedEntity != NULL){
 		this->setMessageForSelectedEntity(entidad);
@@ -459,7 +485,7 @@ void ClientGameController::leftClickEnEscenario(int x,int y){
 	} else {
 		this->renderer->setMessagesInMenu("Selecciona algo!!", "");
 		this->renderer->setSelectedTilesCoordinates(false,tiles,NULL);
-	}
+	}*/
 }
 
 list<string> ClientGameController::getCreablesListForEntityName(string name){
@@ -478,23 +504,24 @@ list<string> ClientGameController::getCreablesListForEntityName(string name){
 }
 
 void ClientGameController::rightClickEnEscenario(int x, int y) {
-	if(this->selectedEntity == NULL){
+	if(this->selectedEntities.empty()){
 		// No se le puede dar ordenes a la nada
 		return;
 	}
 	SDL_Point point = this->renderer->windowToMapPoint({x,y});
 	Entity *entidad = this->escenario->getEntidadEnPosicion(point);
 
-	if(entidad && (this->selectedEntity->getId() != entidad->getId())) {
+	Entity* selectedEntity = this->selectedEntities.front();
+	if(entidad && (selectedEntity->getId() != entidad->getId())) {
 		//Interactuar la seleccionada con la nueva entidad
-		this->mensajero->interactuar(this->selectedEntity->getId(),entidad->getId());
+		this->mensajero->interactuar(selectedEntity->getId(),entidad->getId());
 		return;
 	}
 	// Mover el personaje seleccionado a la nueva posicion
 	point = this->renderer->proyectedPoint(point, this->escenario->getSize());
 
 	MobileModel* auxModel = new MobileModel();
-	auxModel->setId(this->selectedEntity->getId());
+	auxModel->setId(selectedEntity->getId());
 	auxModel->setDestination(point.x, point.y);
 	this->mensajero->moverEntidad(auxModel, username);
 	delete auxModel;

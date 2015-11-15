@@ -36,7 +36,8 @@ public:
 private:
 	User* usuario;
 	Mensajero* mensajero;
-	Entity* selectedEntity;
+	//Entity* selectedEntity;
+	list<Entity*> selectedEntities;
 
 	bool shouldQuit;
 	bool serverError;
@@ -47,6 +48,8 @@ private:
 	GameConfiguration* config;
 	bool updated;
 	bool empezoPartida;
+	bool mouseDown;
+	SDL_Point posInicialMouse;
 
 	bool pollEvents();
 	void updateWindow();

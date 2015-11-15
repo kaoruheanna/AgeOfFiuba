@@ -38,6 +38,7 @@ public:
 	virtual ~RendererInteractionDelegate(){};
 	virtual void leftClickEnEscenario(int x, int y){};
 	virtual void rightClickEnEscenario(int x, int y){};
+	//virtual void dragLeftClickEnEscenario(int xi, int yi, int xf, int yf){};
 	virtual void createEntityButtonPressed(string entityName){};
 };
 
@@ -81,7 +82,10 @@ public:
 	void setCartel(string message);
 	void hideCartel();
 	void clickEvent(int x, int y, bool leftClick, RendererInteractionDelegate *delegate);
+	void dragLeftClickEvent(int xi, int yi, int xf, int yf);
+	void leftMouseUpEvent();
 	Entity* selectedEntity;
+	list <Entity*> selectedEntities;
 
 private:
 	bool successfullInit;
@@ -104,6 +108,7 @@ private:
 	SDL_Rect escenarioRect;
 	SDL_Rect menuRect;
 	SDL_Rect minimapRect;
+	SDL_Rect selectionArea;
 	int screenWidth;
 	int screenHeight;
 
@@ -117,6 +122,7 @@ private:
 	void drawEscenario();
 	void drawCartelIfShould();
 	void drawMiniEscenario();
+	void drawSelectionRect();
 	int menuOriginY();
 	void setDrawableForView(View* view);
 	void setDrawableForMiniView(MiniView* view);
