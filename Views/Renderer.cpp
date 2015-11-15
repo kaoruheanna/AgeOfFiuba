@@ -640,10 +640,10 @@ void Renderer::setMessagesInMenu(std::string firstMessage, std::string secondMes
 	this->screenMenu->setMessages(firstMessage,secondMessage);
 }
 
-void Renderer::setSelectedTilesCoordinates(bool selected,std::pair<SDL_Point,SDL_Point> tiles, Entity* entidad){
+void Renderer::setSelectedTilesCoordinates(bool selected,std::list<pair<SDL_Point,SDL_Point>> tiles, list<Entity*> entidad){
 	this->hasSelectedTiles = selected;
-	this->selectedTilesCoordinates = tiles;
-	this->selectedEntity = entidad;
+	this->selectedTilesCoordinates = tiles.front();
+	this->selectedEntity = entidad.front();
 }
 
 void Renderer::setCartel(string message){
@@ -714,8 +714,11 @@ void Renderer::dragLeftClickEvent(int xi, int yi, int xf, int yf){
 	this->selectionArea.h = yf-yi;
 }
 
-void Renderer::leftMouseUpEvent(){
+void Renderer::leftMouseUpEvent(RendererInteractionDelegate *delegate){
+	delegate->leftMouseUp(this->selectionArea.x, this->selectionArea.y,
+			this->selectionArea.w, this->selectionArea.h);
 	this->selectionArea = {0,0,0,0};
+
 }
 
 bool Renderer::isPixelInEscenario(int x, int y){
@@ -743,6 +746,6 @@ bool Renderer::isPixelInRect(int x, int y, SDL_Rect rect){
 }
 
 void Renderer::drawSelectionRect(){
-	SDL_SetRenderDrawColor( this->sdlRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+	SDL_SetRenderDrawColor( this->sdlRenderer, 0xFF, 0xFF, 0xFF, 0x00 );
 	SDL_RenderDrawRect( this->sdlRenderer, &this->selectionArea);
 }

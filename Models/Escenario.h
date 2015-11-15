@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 #include <map>
+#include <algorithm>
 #include <SDL2/SDL.h>
 
 #include "Entity.h"
@@ -64,8 +65,9 @@ class Escenario {
 		Entity* entidadConId(int id);
 		Entity* getEntidadEnPosicion(SDL_Point point); //recibe una posicion logica
 		std::pair<SDL_Point,SDL_Point> getTilesCoordinatesForEntity(Entity *entity); //devuelve un par con el min y maxTile
+		std::list<pair<SDL_Point,SDL_Point>> getTilesCoordinatesForEntities(list<Entity*> entities);
 		queue<SDL_Point> getCaminoForMobileModel(SDL_Point origen, SDL_Point destino,MobileModel *mobileModel);
-		list<Entity*> getEntidadesEnRectanguloForJugador();// devuelve todas las entidades dentro del area del rectangulo que pertenecen a un jugador.
+		list<Entity*> getEntidadesEnAreaForJugador(SDL_Point posInicial, SDL_Point posFinal, Team team);// devuelve todas las entidades dentro del area del rectangulo que pertenecen a un jugador.
 
 
 		bool inicializacionCorrecta;

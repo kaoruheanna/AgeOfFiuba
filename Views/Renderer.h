@@ -38,7 +38,7 @@ public:
 	virtual ~RendererInteractionDelegate(){};
 	virtual void leftClickEnEscenario(int x, int y){};
 	virtual void rightClickEnEscenario(int x, int y){};
-	//virtual void dragLeftClickEnEscenario(int xi, int yi, int xf, int yf){};
+	virtual void leftMouseUp(int x, int y, int w, int h){};
 	virtual void createEntityButtonPressed(string entityName){};
 };
 
@@ -78,12 +78,12 @@ public:
 	FogOfWar* getFog();
 	void setProtagonista(User *protagonista);
 	void setMessagesInMenu(std::string firstMessage, std::string secondMessage);
-	void setSelectedTilesCoordinates(bool selected,std::pair<SDL_Point,SDL_Point> tiles,Entity* entidad);
+	void setSelectedTilesCoordinates(bool selected,std::list<pair<SDL_Point,SDL_Point>> tiles, list<Entity*> entidad);
 	void setCartel(string message);
 	void hideCartel();
 	void clickEvent(int x, int y, bool leftClick, RendererInteractionDelegate *delegate);
 	void dragLeftClickEvent(int xi, int yi, int xf, int yf);
-	void leftMouseUpEvent();
+	void leftMouseUpEvent(RendererInteractionDelegate *delegate);
 	Entity* selectedEntity;
 	list <Entity*> selectedEntities;
 

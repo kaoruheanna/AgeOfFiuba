@@ -186,6 +186,17 @@ std::pair<SDL_Point,SDL_Point> Escenario::getTilesCoordinatesForEntity(Entity *e
 	return std::make_pair(minTile,maxTile);
 }
 
+std::list<pair<SDL_Point,SDL_Point>> Escenario::getTilesCoordinatesForEntities(list<Entity*> entities){
+	list<pair<SDL_Point,SDL_Point>> listaDeTiles;
+	if (entities.empty()){
+		return listaDeTiles;
+	}
+	for (Entity* entity: entities){
+		listaDeTiles.push_back(this->getTilesCoordinatesForEntity(entity));
+	}
+	return listaDeTiles;
+}
+
 //Actualiza todos los modelos en un nuevo loop
 void Escenario::loop() {
 
@@ -309,4 +320,27 @@ list<MobileModel*> Escenario::getMobileModels() {
 		}
 	}
 	return mobileModels;
+}
+
+
+list<Entity*> Escenario::getEntidadesEnAreaForJugador(SDL_Point posInicial, SDL_Point posFinal, Team team){
+	list<Entity*> listaDeEntidadesMobiles;
+	list<Entity*> listaDeEdificios;
+	for (int x = min(posInicial.x,posFinal.x);x < max(posInicial.x,posFinal.x); x+=64){
+		for (int y = min(posInicial.y,posFinal.y);y < max(posInicial.y,posFinal.y); y+=32){
+			Entity* entidad = this->getEntidadEnPosicion({x,y});
+			if (entidad){
+				if (entidad->getTeam() == team){
+					if (entidad->getClass()==ENTITY){
+						listaDeEdificios.push_back(entidad);
+						return listaDeEdificios;//al primero que encuentro salgo, no puedo tener mas de un edificio seleccionado.
+					}
+					else{
+						listaDeEntidadesMobiles.push_back(entidad);
+					}
+				}
+			}
+		}
+	}
+	return listaDeEntidadesMobiles;
 }

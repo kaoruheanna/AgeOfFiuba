@@ -29,6 +29,7 @@ public:
 	//RendererInteractionDelegate
 	virtual void leftClickEnEscenario(int x, int y);
 	virtual void rightClickEnEscenario(int x, int y);
+	virtual void leftMouseUp(int x, int y, int w, int h);
 	virtual void createEntityButtonPressed(string entityName);
 
 	string username;
@@ -64,7 +65,9 @@ private:
 	void initMap();
 	bool inicializado();
 	void setMessageForSelectedEntity(Entity* entity);
+	void setMessageForSelectedEntities(list<Entity*> entities);
 	list<string> getCreablesListForEntityName(string name);
+	void setSelectedEntities(list<Entity*> listaDeEntidades);
 
 	// Metodos y variables para que no se vaya el scroll del mapa
 	SDL_Point intialPointWindowWrapper;
