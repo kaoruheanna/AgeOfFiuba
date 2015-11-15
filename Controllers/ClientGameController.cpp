@@ -369,26 +369,30 @@ void ClientGameController::sleep(){
 	SDL_Delay(DELAY_MILISEC);
 }
 
+// el server le avisa que se actualizaron personajes
 void ClientGameController::actualizaPersonaje(MobileModel* entity) {
 	if (!this->inicializado())
 		return;
 
 	Entity* model = this->escenario->entidadConId(entity->getId());
 	if(model == NULL){
+		// no existia, tiene q crearse
 		this->escenario->agregarEntidad(entity);
+		this->escenario->actualizarTileOcupadaPorPersonaje(entity);
 		// TODO cambiar como detecta este numero
 //		posicionInicialProtagonista = entity->getPosicion();
 		this->updated = true;
 		return;
 	}
+
 	if(model->getClass() != MOBILE_MODEL){
 		// El modelo no se mueve y.y
 		return;
 	}
 	MobileModel* protagonista = (MobileModel*)model;
 	protagonista->update(entity);
+	this->escenario->actualizarTileOcupadaPorPersonaje(protagonista);
 }
-
 
 void ClientGameController::cambioUsuario(User* user) {
 	// Si el usuario es el de este cliente actualizar su data

@@ -70,6 +70,7 @@ class Escenario {
 		std::pair<SDL_Point,SDL_Point> getTilesCoordinatesForEntity(Entity *entity); //devuelve un par con el min y maxTile
 		queue<SDL_Point> getCaminoForMobileModel(SDL_Point origen, SDL_Point destino,MobileModel *mobileModel);
 		list<TileCoordinate> getVecinosLibresForEntity(Entity *entity);
+		void actualizarTileOcupadaPorPersonaje(MobileModel *model);
 
 		bool inicializacionCorrecta;
 

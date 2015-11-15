@@ -205,36 +205,29 @@ void Escenario::loop() {
 
 	updated = false;
 	bool actualizarPersonajes = false;
-	MobileModel* protagonista = NULL;
+	MobileModel* model = NULL;
 	list<MobileModel*> mobileModels = this->getMobileModels();
 	list<MobileModel*>::iterator found;
 	for(found = mobileModels.begin(); found != mobileModels.end(); ++found){
-		protagonista = *found;
-		SDL_Point oldPosition = protagonista->getPosicion();
+		model = *found;
+		SDL_Point oldPosition = model->getPosicion();
 
-		if(protagonista->updatePosition()) {
-			SDL_Point aux = this->mundo->getTileForPosition(protagonista->getPosicion());
+		if(model->updatePosition()) {
+			SDL_Point aux = this->mundo->getTileForPosition(model->getPosicion());
 			TileCoordinate newTile = TileCoordinate(aux.x, aux.y);
 
 			// Si se cruza con otro usuario, lo freno y borro el camino
-			if (this->tileOcupadoForEntity(newTile,protagonista)){
-				protagonista->setPosicion(oldPosition);
-				protagonista->olvidarCamino();
+			if (this->tileOcupadoForEntity(newTile,model)){
+				model->setPosicion(oldPosition);
+				model->olvidarCamino();
 			} else {
 				actualizarPersonajes = true;
 			}
 		}
 
-		SDL_Point currentTile = this->mundo->getTileForPosition(protagonista->getPosicion());
-		this->tilesWithIds[protagonista->getId()] = TileCoordinate(currentTile.x,currentTile.y);
+		// aca solo se actualiza del lado del server
+		this->actualizarTileOcupadaPorPersonaje(model);
 	}
-
-	/*
-	list<Entity*> entidadesAInsertar = resourcesManager->InsertResourcesForNewLoopOnMap();
-	if (entidadesAInsertar.size() > 0) {
-		this->delegate->apareceEntidad(entidadesAInsertar.back());
-		this->entidades.splice(this->entidades.end(), entidadesAInsertar);
-	}*/
 
 	//Interacciones
 	for(auto entidad : this->entidadesInteractuando) {
@@ -249,6 +242,11 @@ void Escenario::loop() {
 			this->mundo->sacarEntidad(entidad);
 		}
 	}
+}
+
+void Escenario::actualizarTileOcupadaPorPersonaje(MobileModel *model){
+	SDL_Point currentTile = this->mundo->getTileForPosition(model->getPosicion());
+	this->tilesWithIds[model->getId()] = TileCoordinate(currentTile.x,currentTile.y);
 }
 
 bool Escenario::tileOcupadoForEntity(TileCoordinate tile,Entity* entity){
