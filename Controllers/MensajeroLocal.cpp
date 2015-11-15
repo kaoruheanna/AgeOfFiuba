@@ -67,3 +67,7 @@ void MensajeroLocal::loguearse(char* nombre) {
 	this->server->loguearse(nombre);
 }
 
+void MensajeroLocal::construir(Entity *entity) {
+	this->server->construir(new Entity(*entity));
+}
+

@@ -29,6 +29,9 @@ public:
 	virtual void actualizarEntidad(Entity* entity){};
 	virtual void actualizaPersonaje(MobileModel* entity){};
 	virtual void cambioUsuario(User* user){};
+//	virtual void siSePuedeConstruir(Entity* entity){};
+//	virtual void noSePuedeConstruir(Entity* entity){};
+//	virtual void errorConstruir(){};
 	virtual void comenzoPartida(){};
 };
 
@@ -42,5 +45,8 @@ public:
 	virtual void loguearse(char* nombre){};
 	virtual void moverEntidad(MobileModel* entity, string username){};
 	virtual void interactuar(int selectedEntityId, int targetEntityId){};
+
+	virtual void construir(Entity* entity){};
+//	virtual void sePuedeConstruir(Entity* entity){};
 };
 #endif /* CONTROLLERS_MENSAJERO_H_ */

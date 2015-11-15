@@ -23,6 +23,7 @@ public:
 	virtual void loguearse(char* nombre);
 	virtual void moverEntidad(MobileModel* entity, string username);
 	virtual void interactuar(int selectedEntityId, int targetEntityId);
+	virtual void construir(Entity* entity);
 
 	//Metodos Servidor->Cliente
 	virtual void configEscenario(const string path);
@@ -31,7 +32,9 @@ public:
 	virtual void actualizarEntidad(Entity* entity);
 	virtual void actualizaPersonaje(MobileModel* entity);
 	virtual void cambioUsuario(User* user);
+//	virtual void errorConstruir();
 	virtual void comenzoPartida();
+
 private:
 	ServerGameController* server;
 	MensajeroCliente* cliente;

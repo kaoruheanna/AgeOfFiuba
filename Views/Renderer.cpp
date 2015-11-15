@@ -36,7 +36,7 @@ Renderer::Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos) {
 	this->hasSelectedTiles = false;
 	this->cartel = NULL;
 	this->selectionArea = {0,0,0,0};
-	this->selectedEntity = NULL;
+	//this->selectedEntity = NULL;
 
 	bool didInitSDL = this->initSDL();
 	bool didLoadMedia = this->loadMedia(tipos);
@@ -327,7 +327,9 @@ void Renderer::drawCartelIfShould(){
 
 void Renderer::drawMenu(){
 	SDL_RenderSetViewport(this->sdlRenderer, &this->menuRect);
-	this->screenMenu->render(this,this->selectedEntity);
+	//TODO ver como hacer para dibujar la base del menu sin una selected entity
+	this->screenMenu->renderMenu(this);
+	this->screenMenu->renderMenuForEntity(this,this->selectedEntities);
 }
 
 void Renderer::drawMiniEscenario(){
@@ -380,17 +382,18 @@ SDL_Point Renderer::proyectedPoint(SDL_Point mapPoint, SDL_Point plano){
 }
 
 void Renderer::setearColor(Drawable* drawable){
-	switch (this->selectedEntity->getTeam()){
-		case RED:
+	//TODO si selectedEntities esta vacio?
+	switch (this->selectedEntities.front()->getTeam()){
+		case TEAM_RED:
 			SDL_SetTextureColorMod( drawable->getTexture(), 255,0,0 );
 			break;
-		case BLUE:
+		case TEAM_BLUE:
 			SDL_SetTextureColorMod( drawable->getTexture(), 0,0,255 );
 			break;
-		case GREEN:
+		case TEAM_GREEN:
 			SDL_SetTextureColorMod( drawable->getTexture(), 0,255,0 );
 			break;
-		case YELLOW:
+		case TEAM_YELLOW:
 			SDL_SetTextureColorMod( drawable->getTexture(), 255,255,0 );
 			break;
 		default:
@@ -443,28 +446,32 @@ void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable,bool 
 	} else if (currentTileState == NUBLADO) {
 		SDL_SetTextureColorMod( drawable->getTexture(), FOG_VISITED,FOG_VISITED,FOG_VISITED );
 	}
-
-	if (this->selectedEntity && this->selectedEntity->getClass() == MOBILE_MODEL && currentTileState != NUBLADO  ){
-		int tileX = currentTile.x;
-		int tileY = currentTile.y;
-		int selectedTileX = this->selectedEntity->getPosicion().x / TILE_HEIGHT_PIXELS;
-		int selectedTileY = this->selectedEntity->getPosicion().y / TILE_HEIGHT_PIXELS;
-		if (this->sonTilesIguales(tileX,tileY,selectedTileX,selectedTileY))
-			this->setearColor(drawable);
-	}
-
-	//si es un tile lo dibuja ahora
-	if (this->hasSelectedTiles && this->selectedEntity->getClass() != MOBILE_MODEL){
-		int minX = this->selectedTilesCoordinates.first.x;
-		int maxX = this->selectedTilesCoordinates.second.x;
-		int minY = this->selectedTilesCoordinates.first.y;
-		int maxY = this->selectedTilesCoordinates.second.y;
-		bool inRangeX = ((currentTile.x >= minX) && (currentTile.x < maxX));
-		bool inRangeY = ((currentTile.y >= minY) && (currentTile.y < maxY));
-		if (inRangeX && inRangeY){
-			this->setearColor(drawable);
+	if (!this->selectedEntities.empty()){
+		for (Entity* entity: this->selectedEntities){
+			if (entity->getClass() == MOBILE_MODEL && currentTileState != NUBLADO  ){
+				int tileX = currentTile.x;
+				int	tileY = currentTile.y;
+				int selectedTileX = entity->getPosicion().x / TILE_HEIGHT_PIXELS;
+				int selectedTileY = entity->getPosicion().y / TILE_HEIGHT_PIXELS;
+				if (this->sonTilesIguales(tileX,tileY,selectedTileX,selectedTileY)){
+					this->setearColor(drawable);
+				}
 			}
+			//si es un tile lo dibuja ahora
+			if (this->hasSelectedTiles && entity->getClass() != MOBILE_MODEL){
+				int minX = this->selectedTilesCoordinates.first.x;
+				int maxX = this->selectedTilesCoordinates.second.x;
+				int minY = this->selectedTilesCoordinates.first.y;
+				int maxY = this->selectedTilesCoordinates.second.y;
+				bool inRangeX = ((currentTile.x >= minX) && (currentTile.x < maxX));
+				bool inRangeY = ((currentTile.y >= minY) && (currentTile.y < maxY));
+				if (inRangeX && inRangeY){
+					this->setearColor(drawable);
+				}
+			}
+		}
 	}
+
 	SDL_RenderCopy(sdlRenderer, drawable->getTexture(), drawable->getClipRect(), &renderQuad);
 }
 
@@ -641,6 +648,7 @@ void Renderer::setMessagesInMenu(std::string firstMessage, std::string secondMes
 }
 
 void Renderer::setSelectedTilesCoordinates(bool selected,std::list<pair<SDL_Point,SDL_Point>> tiles, list<Entity*> entidad){
+	//TODO hay que arreglar esto para que funcione para todas las unidades seleccionadas.
 	this->hasSelectedTiles = selected;
 	this->selectedTilesCoordinates = tiles.front();
 	this->selectedEntity = entidad.front();

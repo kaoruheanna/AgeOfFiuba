@@ -27,11 +27,11 @@ enum EntityType {
 };
 
 enum Team {
-	NEUTRAL,
-	RED,
-	BLUE,
-	GREEN,
-	YELLOW
+	TEAM_NEUTRAL,
+	TEAM_RED,
+	TEAM_BLUE,
+	TEAM_GREEN,
+	TEAM_YELLOW
 };
 
 class Entity : public Serializable{
@@ -44,7 +44,7 @@ protected:
 	string nombre;
 	SDL_Point posicion;  // posicion en el mapa (coordenadas logicas)
 	int id;
-	Team team = NEUTRAL;
+	Team team = TEAM_NEUTRAL;
 	Entity* activeInteractionEntity;
 	int life;
 
@@ -68,6 +68,7 @@ public:
 
 	void setTeam(Team team);
 	Team getTeam();
+	string getTeamString();
 
 	bool estaViva();
 	void update(Entity* entity);

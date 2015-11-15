@@ -48,6 +48,8 @@ tipos:
    alto_base : 4
    pixel_ref_x: 153
    pixel_ref_y: 31
+   creables:
+   - soldado
    
  - nombre: archeryRange
    categoria: building

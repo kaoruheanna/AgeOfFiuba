@@ -43,7 +43,6 @@ class Map {
 		SDL_Point getPositionForTile(SDL_Point point,bool centered = false);
 		SDL_Point getCenteredPositionForTile(SDL_Point point);
 
-//		queue<SDL_Point> obtenerCamino(SDL_Point origen, SDL_Point destino);
 		queue <SDL_Point> obtenerCaminoIgnoringTiles(SDL_Point origen, SDL_Point destino,list<TileCoordinate> tilesOccupied);
 
 		Map(int alto, int ancho, int tile_ancho, int tile_alto);

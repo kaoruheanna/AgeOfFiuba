@@ -96,6 +96,12 @@ void MensajeroRed::esperaMensaje() {
 				this->escucha->cambioUsuario(user);
 				delete user;
 				break;
+			case CONSTRUIR:
+				entity = new Entity();
+				resultado = recibirSerializable(this->socket, entity);
+				this->escucha->construir(entity);
+				delete entity;
+				break;
 			case COMENZO_PARTIDA:
 				printf("Cliente - comenzo partida con resultado: %i\n", resultado);
 				this->escucha->comenzoPartida();
@@ -210,6 +216,15 @@ void MensajeroRed::cambioUsuario(User* user) {
 	resultado = enviarSerializable(this->socket, user);
 	//printf("Cliente - personaje con resultado: %i\n", resultado);
 
+}
+
+void MensajeroRed::construir(Entity* entity) {
+//	Mensaje* mensaje = new Mensaje(CONSTRUIR, this->sender);
+//	int resultado = enviarSerializable(this->socket, mensaje);
+//	//printf("Cliente - moverProtagonista con resultado: %i\n", resultado);
+//	delete mensaje;
+//	resultado = enviarSerializable(this->socket, entity);
+//	//printf("Cliente - personaje con resultado: %i\n", resultado);
 }
 
 void MensajeroRed::comenzoPartida() {

@@ -78,8 +78,8 @@ int getId(bool reset) {
 	return id;
 }
 
-Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion) {
-	int id = getId(false);
+Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion, bool aumentarID) {
+	int id = (aumentarID) ? getId(false) : 0;
 	if (tipo == "") {
 		Log().Get("Escenario", logWARNING) << "La entidad tiene que tener un tipo. Descartando entidad.";
 		return NULL;
@@ -103,22 +103,38 @@ Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion) {
 	return new Entity(id,tipo, pos, size.x, size.y);
 }
 
-Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion, const string& equipo) {
-	Entity* entidad = this->crearEntidad(tipo, posicion);
-	if(equipo.compare("RED") == 0){
-		entidad->setTeam(RED);
-	} else if(equipo.compare("BLUE") == 0){
-		entidad->setTeam(BLUE);
-	} else if(equipo.compare("GREEN") == 0){
-		entidad->setTeam(GREEN);
-	} else if(equipo.compare("YELLOW") == 0){
-		entidad->setTeam(YELLOW);
+Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion, const string& equipo, bool aumentarID) {
+	Entity* entidad = this->crearEntidad(tipo, posicion,aumentarID);
+	if(equipo.compare(NOMBRE_EQUIPO_RED) == 0){
+		entidad->setTeam(TEAM_RED);
+
+	} else if(equipo.compare(NOMBRE_EQUIPO_BLUE) == 0){
+		entidad->setTeam(TEAM_BLUE);
+
+	} else if(equipo.compare(NOMBRE_EQUIPO_GREEN) == 0){
+		entidad->setTeam(TEAM_GREEN);
+
+	} else if(equipo.compare(NOMBRE_EQUIPO_YELLOW) == 0){
+		entidad->setTeam(TEAM_YELLOW);
+
 	} else {
-		entidad->setTeam(NEUTRAL);
+		entidad->setTeam(TEAM_NEUTRAL);
 	}
 	return entidad;
 }
 
+Entity* EntityFactory::crearEntidadParaConstruir(const string& tipo, SDL_Point posicion, const string& equipo) {
+	return this->crearEntidad(tipo,posicion,equipo,false);
+}
+
 Resource* EntityFactory::crearRecurso(const string& tipo, SDL_Point posicion) {
 	return (Resource*)this->crearEntidad(tipo,posicion);
+}
+
+bool EntityFactory::esBuilding(const string& tipo) {
+	if (tipo == ""){
+		return false;
+	}
+
+	return (this->tipos[tipo].getCategoria() == "building");
 }

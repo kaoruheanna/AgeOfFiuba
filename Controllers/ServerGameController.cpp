@@ -47,6 +47,17 @@ void actualizarEntidades(Mensajero* mensajero,list<Entity*> entities) {
 	}
 }
 
+void agregarEntidades(Mensajero* mensajero,list<Entity*> entities) {
+	list<Entity*>::iterator entidad;
+	for (entidad = entities.begin(); entidad != entities.end(); ++entidad){
+		Entity* entidadReal = (*entidad);
+		//no mando los mobile models porque se mandan aparte
+		if (entidadReal->getClass() != MOBILE_MODEL){
+			mensajero->actualizarEntidad(entidadReal);
+		}
+	}
+}
+
 void ServerGameController::init() {
 	// Crear modelos a partir de la configuracion
 	// Creo el escenario y se lo paso al EscenarioSingleton
@@ -100,13 +111,14 @@ void ServerGameController::obtenerEventos() {
 void ServerGameController::enviarEventos() {
 	this->actualizarProtagonista();
 
-
 	list<Mensajero*>::iterator mensajero;
 	for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
 		Mensajero* mensajeroReal = (*mensajero);
 		actualizarEntidades(mensajeroReal,this->entidadesActualizadas);
+		agregarEntidades(mensajeroReal,this->escenario->entidadesAgregadas);
 	}
 	this->entidadesActualizadas.clear();
+	this->escenario->entidadesAgregadas.clear();
 
 	list<Entity*>::iterator entidadEliminada;
 	for (entidadEliminada = recursosEliminados.begin(); entidadEliminada != recursosEliminados.end(); ++entidadEliminada){
@@ -322,4 +334,8 @@ void ServerGameController::mandarUsuarios() {
 			mensajeroReal->cambioUsuario(*usuario);
 		}
 	}
+}
+
+void ServerGameController::construir(Entity* entity){
+	this->escenario->agregarEntidad(entity->getNombre(),entity->getPosicion(),entity->getTeamString());
 }

@@ -85,7 +85,11 @@ public:
 	void dragLeftClickEvent(int xi, int yi, int xf, int yf);
 	void leftMouseUpEvent(RendererInteractionDelegate *delegate);
 	Entity* selectedEntity;
+
 	list <Entity*> selectedEntities;
+
+	bool isPixelInEscenario(int x, int y);
+	bool isPixelInMenu(int x, int y);
 
 private:
 	bool successfullInit;
@@ -127,8 +131,6 @@ private:
 	void setDrawableForView(View* view);
 	void setDrawableForMiniView(MiniView* view);
 	void initRects();
-	bool isPixelInEscenario(int x, int y);
-	bool isPixelInMenu(int x, int y);
 	bool isPixelInRect(int x, int y, SDL_Rect rect);
 	bool sonTilesIguales(int tileX, int tileY, int selectedTileX, int selectedTileY);
 	void setearColor(Drawable* drawable);

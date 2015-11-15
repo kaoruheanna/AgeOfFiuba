@@ -49,6 +49,7 @@ public:
 	virtual void actualizaPersonaje(MobileModel* entity);
 	virtual void apareceEntidad(Entity* entidad);
 	virtual void desapareceEntidad(Entity* entidad);
+	virtual void construir(Entity* entity);
 private:
 	GameConfiguration *config;
 	list<Mensajero*> mensajeros;

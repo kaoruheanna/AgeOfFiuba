@@ -12,7 +12,9 @@
 const string  TAG = "Building";
 
 Building::Building(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base)
-: Entity(id,nombre, posicion, ancho_base, alto_base){}
+: Entity(id,nombre, posicion, ancho_base, alto_base){
+	this->life = 1000;
+}
 
 Building::Building() : Entity(0,"", {0, 0}, 1, 1) {
 	this->life = 1000;

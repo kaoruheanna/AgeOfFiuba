@@ -9,6 +9,7 @@
 #define SCREENMENU_H_
 
 #include <string>
+#include <list>
 
 class Renderer;
 class RendererInteractionDelegate;
@@ -22,7 +23,9 @@ class ScreenMenu {
 public:
 	ScreenMenu(int width, int height);
 	virtual ~ScreenMenu();
-	void render(Renderer* renderer,Entity *selectedEntity);
+	//void render(Renderer* renderer,Entity *selectedEntity);
+	void renderMenu(Renderer* renderer);
+	void renderMenuForEntity(Renderer* renderer,std::list<Entity *>selectedEntity);
 	void setMessages(std::string firstMessage, std::string secondMessage);
 	void clickEvent(int x, int y, RendererInteractionDelegate *delegate);
 

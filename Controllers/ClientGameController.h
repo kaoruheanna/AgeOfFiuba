@@ -37,8 +37,10 @@ public:
 private:
 	User* usuario;
 	Mensajero* mensajero;
-	//Entity* selectedEntity;
+
 	list<Entity*> selectedEntities;
+	//Entity* selectedEntity;
+	Entity* pendingEntity;
 
 	bool shouldQuit;
 	bool serverError;

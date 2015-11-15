@@ -80,7 +80,7 @@ int User::getValueForResource(string resourceName) {
 // Serializable methods
 User::User() {
 	this->active = false;
-	this->team = NEUTRAL;
+	this->team = TEAM_NEUTRAL;
 	this->name = "";
 
 	this->comida = 0;

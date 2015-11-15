@@ -23,6 +23,7 @@ enum MensajeType {
 	PING, /* Para probar si el servidor / cliente esta conectado */
 	ERROR_MAXIMOS_EQUIPOS, /* Servidor => Cliente: No se puede loguear porque todos los equipos estan tomados */
 	CAMBIO_USUARIO, /* Servidor => Cliente: Indica cuando un valor de un usuario cambio o cuando aparece un nuevo usuario */
+	CONSTRUIR, /* Cliente => Servidor: Construir un edificio */
 	COMENZO_PARTIDA /* Servidor => Cliente: Indica cuando la partida se puede empezar a jugar */
 };
 

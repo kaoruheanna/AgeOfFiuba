@@ -7,6 +7,7 @@
 
 #include "EscenarioConfig.h"
 #include "../Utils/Log.h"
+#include "../GlobalConstants.h"
 
 const std::string TAG = "EscenarioConfig";
 
@@ -90,7 +91,7 @@ bool EscenarioConfig::validarINT(std::string atributo){
 }
 
 void EscenarioConfig::parsearProtagonista(){
-	EntidadConfig personajeParseado = EntidadConfig(0,0,"soldado", "NEUTRAL");
+	EntidadConfig personajeParseado = EntidadConfig(0,0,"soldado", NOMBRE_EQUIPO_NEUTRAL);
 	YAML::Node nodoProtagonista = this->nodoEscenario[0]["protagonista"];
 	if (nodoProtagonista.IsSequence() && nodoProtagonista.size() == 1 && !nodoProtagonista[0].IsNull()){
 		try{

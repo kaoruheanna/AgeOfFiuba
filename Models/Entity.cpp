@@ -93,6 +93,27 @@ Team Entity::getTeam() {
 	return this->team;
 }
 
+string Entity::getTeamString(){
+	string teamString = "";
+	switch (this->team){
+		case TEAM_RED:
+			teamString = NOMBRE_EQUIPO_RED;
+			break;
+		case TEAM_BLUE:
+			teamString = NOMBRE_EQUIPO_BLUE;
+			break;
+		case TEAM_GREEN:
+			teamString = NOMBRE_EQUIPO_GREEN;
+			break;
+		case TEAM_YELLOW:
+			teamString = NOMBRE_EQUIPO_YELLOW;
+			break;
+		default:
+			teamString = NOMBRE_EQUIPO_NEUTRAL;
+	}
+	return teamString;
+}
+
 bool Entity::estaViva() {
 	return this->life >= 0;
 }

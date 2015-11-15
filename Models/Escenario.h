@@ -46,9 +46,12 @@ class Escenario {
 		bool updated;
 
 		EscenarioDelagate* delegate;
+		list<Entity*> entidadesAgregadas;
 
 		bool agregarEntidad(Entity*);
 		bool construirEntidad(Entity*,SDL_Point);
+		void agregarEntidad(const string& tipo, SDL_Point posicion,const string& equipo);
+
 		void vaciarEntidades();
 		void loop();
 		bool tileOcupadoForEntity(TileCoordinate tile,Entity* entity);
@@ -67,8 +70,9 @@ class Escenario {
 		std::pair<SDL_Point,SDL_Point> getTilesCoordinatesForEntity(Entity *entity); //devuelve un par con el min y maxTile
 		std::list<pair<SDL_Point,SDL_Point>> getTilesCoordinatesForEntities(list<Entity*> entities);
 		queue<SDL_Point> getCaminoForMobileModel(SDL_Point origen, SDL_Point destino,MobileModel *mobileModel);
-		list<Entity*> getEntidadesEnAreaForJugador(SDL_Point posInicial, SDL_Point posFinal, Team team);// devuelve todas las entidades dentro del area del rectangulo que pertenecen a un jugador.
 
+		list<Entity*> getEntidadesEnAreaForJugador(SDL_Point posInicial, SDL_Point posFinal, Team team);// devuelve todas las entidades dentro del area del rectangulo que pertenecen a un jugador.
+		list<TileCoordinate> getVecinosLibresForEntity(Entity *entity);
 
 		bool inicializacionCorrecta;
 

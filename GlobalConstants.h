@@ -38,9 +38,17 @@ const std::string CONFIG_DEFAULT = "yaml-files/configuracion.yaml";
 const std::string CONFIG_CUSTOM = "yaml-files/configuracion.yaml";
 const std::string CONFIG_CLIENT = "yaml-files/configuracion_cliente.yaml";
 
+//equipos
+const std::string NOMBRE_EQUIPO_NEUTRAL = "NEUTRAL";
+const std::string NOMBRE_EQUIPO_RED = "RED";
+const std::string NOMBRE_EQUIPO_BLUE = "BLUE";
+const std::string NOMBRE_EQUIPO_GREEN = "GREEN";
+const std::string NOMBRE_EQUIPO_YELLOW = "YELLOW";
+
 const int  FOG_VISIBLE = 255;
 const int  FOG_VISITED = 128;
 
 typedef std::pair <int,int> TileCoordinate;
+typedef std::pair <int,int> LogicPosition;
 
 #endif /* GLOBALCONSTANTS_H_ */
