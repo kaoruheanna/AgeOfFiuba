@@ -349,9 +349,8 @@ list<Entity*> Escenario::getEntidadesEnAreaForJugador(SDL_Point posInicial, SDL_
 			Entity* entidad = this->getEntidadEnPosicion({x,y});
 			if (entidad){
 				if (entidad->getTeam() == team){
-					if (entidad->getClass()==ENTITY){
+					if (entidad->getClass()==ENTITY && listaDeEdificios.empty()){
 						listaDeEdificios.push_back(entidad);
-						return listaDeEdificios;//al primero que encuentro salgo, no puedo tener mas de un edificio seleccionado.
 					}
 					else{
 						listaDeEntidadesMobiles.push_back(entidad);
@@ -360,6 +359,11 @@ list<Entity*> Escenario::getEntidadesEnAreaForJugador(SDL_Point posInicial, SDL_
 			}
 		}
 	}
+	if (listaDeEntidadesMobiles.empty()){
+		listaDeEntidadesMobiles.clear();
+		return listaDeEdificios;
+	}
+	listaDeEdificios.clear();
 	return listaDeEntidadesMobiles;
 }
 

@@ -716,10 +716,12 @@ void Renderer::clickEvent(int x, int y, bool leftClick, RendererInteractionDeleg
 }
 
 void Renderer::dragLeftClickEvent(int xi, int yi, int xf, int yf){
-	this->selectionArea.x = xi;
-	this->selectionArea.y = yi;
-	this->selectionArea.w = xf-xi;
-	this->selectionArea.h = yf-yi;
+	if (this->isPixelInEscenario(xi,yi)){
+		this->selectionArea.x = xi;
+		this->selectionArea.y = yi;
+		this->selectionArea.w = xf-xi;
+		this->selectionArea.h = yf-yi;
+	}
 }
 
 void Renderer::leftMouseUpEvent(RendererInteractionDelegate *delegate){

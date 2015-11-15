@@ -496,12 +496,12 @@ bool ClientGameController::inicializado() {
  * RendererInteractionDelegate
  */
 void ClientGameController::leftClickEnEscenario(int x,int y){
+	/*
 	//TODO este metodo hay que llamarlo cuando se hace click y no se mueve el mapa.
-	/*SDL_Point point = this->renderer->windowToMapPoint({x,y});
+	SDL_Point point = this->renderer->windowToMapPoint({x,y});
 	Entity *entidad = this->escenario->getEntidadEnPosicion(point);
 	if (this->selectedEntity == entidad)
-		return;
-
+		return
 	this->selectedEntity = entidad;
 	list<Entity*> newEntities;
 	newEntities.push_front(entidad);
@@ -566,9 +566,6 @@ void ClientGameController::leftMouseUp(int x, int y, int w, int h){
 	listaDeEntidadesSeleccionadas = this->escenario->getEntidadesEnAreaForJugador(mapPointInicial, mapPointFinal,this->usuario->getTeam());
 	this->setSelectedEntities(listaDeEntidadesSeleccionadas);
 	cout<<"Entidades Seleccionadas"<<endl;
-	for (Entity* entity: this->selectedEntities){
-		cout<<entity->getNombre()<<endl;
-	}
 	list <pair<SDL_Point,SDL_Point>> tiles = this->escenario->getTilesCoordinatesForEntities(this->selectedEntities);
 	if (!this->selectedEntities.empty()){
 		this->setMessageForSelectedEntities(listaDeEntidadesSeleccionadas);
@@ -647,13 +644,13 @@ void ClientGameController::createEntityButtonPressed(string entityName) {
 		Log().Get(TAG) << "No hay espacio para crear la entidad";
 		return;
 	}
-//	TileCoordinate tile = tiles.front();
-//	TileCoordinate tile = TileCoordinate(0,6);
+	//TileCoordinate tile = tiles.front();
+	//TileCoordinate tile = TileCoordinate(0,6);
 	SDL_Point tilePoint = this->escenario->mundo->getTileForPosition(this->selectedEntities.front()->getPosicion());
 	tilePoint.x = 21;
 	tilePoint.y = 20;
-//	TileCoordinate tile = TileCoordinate(tilePoint.x - 1, tilePoint.y - 1);
-//	SDL_Point logicPosition = this->escenario->mundo->getPositionForTile({tile.first,tile.second},true);
+	//TileCoordinate tile = TileCoordinate(tilePoint.x - 1, tilePoint.y - 1);
+	//SDL_Point logicPosition = this->escenario->mundo->getPositionForTile({tile.first,tile.second},true);
 	Entity *tempEntity = this->escenario->factory->crearEntidadParaConstruir(entityName,tilePoint,this->selectedEntities.front()->getTeamString());
 	this->mensajero->construir(tempEntity);
 	delete tempEntity;
