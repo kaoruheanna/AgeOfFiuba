@@ -70,6 +70,7 @@ private:
 	void setMessageForSelectedEntities(list<Entity*> entities);
 	list<string> getCreablesListForEntityName(string name);
 	void setSelectedEntities(list<Entity*> listaDeEntidades);
+	void setCreablesForEntities(list<Entity*> listaDeEntidades);
 
 	// Metodos y variables para que no se vaya el scroll del mapa
 	SDL_Point intialPointWindowWrapper;

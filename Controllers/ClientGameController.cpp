@@ -316,8 +316,6 @@ void ClientGameController::close() {
 	delete this->miniEscenarioView;
 	this->miniEscenarioView = NULL;
 
-	//delete this->selectedEntity;
-	//this->selectedEntity = NULL;
 	this->selectedEntities.clear(); //TODO ver si clear borra las entidades.
 
 	delete this->pendingEntity;
@@ -576,6 +574,7 @@ void ClientGameController::leftMouseUp(int x, int y, int w, int h){
 		this->setMessageForSelectedEntities(listaDeEntidadesSeleccionadas);
 		tiles = this->escenario->getTilesCoordinatesForEntities(listaDeEntidadesSeleccionadas);
 		//TODO ver como devolver los creables para un conjunto de unidades.
+		this->setCreablesForEntities(this->selectedEntities);
 		//entidad->creables = this->getCreablesListForEntityName(entidad->getNombre());
 		this->renderer->setSelectedTilesCoordinates(true,tiles,listaDeEntidadesSeleccionadas);
 	}else{
@@ -586,6 +585,12 @@ void ClientGameController::leftMouseUp(int x, int y, int w, int h){
 
 void ClientGameController::setSelectedEntities(list<Entity*> listaDeEntidades){
 	this->selectedEntities.swap(listaDeEntidades);
+}
+
+void ClientGameController::setCreablesForEntities(list<Entity*> listaDeEntidades){
+	for (Entity* entidad: listaDeEntidades){
+		entidad->creables = this->getCreablesListForEntityName(entidad->getNombre());
+	}
 }
 
 void ClientGameController::setMessageForSelectedEntity(Entity* entity){

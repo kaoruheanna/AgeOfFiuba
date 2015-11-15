@@ -53,7 +53,6 @@ void ScreenMenu::renderMenu(Renderer* renderer) {
 
 void ScreenMenu::renderMenuForEntity(Renderer* renderer,std::list<Entity *> selectedEntity){
 	if (!selectedEntity.empty()){
-		cout<<selectedEntity.front()->getNombre()<<endl;
 		this->actionsMenu->render(renderer,selectedEntity.front());
 	}
 }
