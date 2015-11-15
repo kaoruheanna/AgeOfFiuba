@@ -158,10 +158,6 @@ std::list<TileCoordinate> Map::getVecinosLibresForTile(TileCoordinate tile,list<
 
 	list<TileCoordinate>::iterator it;
 	Log().Get(TAG) << "tiles ocupados por mobile models:";
-	for (it = tilesOccupied.begin();it != tilesOccupied.end();it++){
-		TileCoordinate tile = *it;
-		Log().Get(TAG) << "-"<<tile.first<<","<<tile.second;
-	}
 
 	for (it = vecinos.begin();it != vecinos.end(); it++){
 		TileCoordinate tile = *it;

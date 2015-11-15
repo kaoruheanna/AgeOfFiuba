@@ -322,18 +322,19 @@ list<TileCoordinate> Escenario::getVecinosLibresForEntity(Entity *entity) {
 	std::pair<SDL_Point,SDL_Point> tilesEntity = this->getTilesCoordinatesForEntity(entity);
 
 	//TODO buscar vecino libre
-	SDL_Point lastTile = tilesEntity.second;
-	TileCoordinate tile = TileCoordinate(lastTile.x,lastTile.y);
-	tilesLibres = this->mundo->getVecinosLibresForTile(tile,tilesConMobileModels);
+	int minTileX = tilesEntity.first.x;
+	int maxTileX = tilesEntity.second.x;
+	int minTileY = tilesEntity.first.y;
+	int maxTileY = tilesEntity.second.y;
 
-	for (list<TileCoordinate>::iterator it = tilesLibres.begin();it != tilesLibres.end(); it++){
-		TileCoordinate aux = *it;
-		Log().Get(TAG) << "tile libre: "<<aux.first<<","<<aux.second;
+	for (int i = minTileX;i <= maxTileX;i++){
+		for (int j = minTileY; j <= maxTileY; j++){
+			TileCoordinate tile = TileCoordinate(i,j);
+			list<TileCoordinate> auxList = this->mundo->getVecinosLibresForTile(tile,tilesConMobileModels);
+			tilesLibres.merge(auxList);
+		}
 	}
-
-//	TileCoordinate libre = TileCoordinate(lastTile.x + 1, lastTile.y);
-//	list<TileCoordinate> list;
-//	list.push_back(libre);
+	//puede tener tiles repetidos, pero creo que no hay problema
 	return tilesLibres;
 }
 
