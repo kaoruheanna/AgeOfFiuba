@@ -189,9 +189,14 @@ Entity* Escenario::getEntidadEnPosicion(SDL_Point point) {
 
 std::pair<SDL_Point,SDL_Point> Escenario::getTilesCoordinatesForEntity(Entity *entity){
 	SDL_Point minTile = this->mundo->getTileForPosition(entity->getPosicion());
-	int maxTileX = (minTile.x + entity->getAnchoBase());
-	int maxTileY = (minTile.y + entity->getAltoBase());
+	int maxTileX = (minTile.x + entity->getAnchoBase() - 1);
+	int maxTileY = (minTile.y + entity->getAltoBase() - 1);
 	SDL_Point maxTile = {maxTileX,maxTileY};
+
+//	Log().Get(TAG) << entity->getNombre()<<":";
+//	Log().Get(TAG)<<"("<<minTile.x<<","<<minTile.y<<")";
+//	Log().Get(TAG)<<"("<<maxTile.x<<","<<maxTile.y<<")";
+
 	return std::make_pair(minTile,maxTile);
 }
 
@@ -312,14 +317,26 @@ list<TileCoordinate> Escenario::tilesOcupadasPorMobileModels(Entity *entityToIgn
 }
 
 list<TileCoordinate> Escenario::getVecinosLibresForEntity(Entity *entity) {
+	list<TileCoordinate> tilesLibres;
+	list<TileCoordinate> tilesConMobileModels = this->tilesOcupadasPorMobileModels(NULL);
+	//TODO en el cliente no los esta guardando
+
 	std::pair<SDL_Point,SDL_Point> tilesEntity = this->getTilesCoordinatesForEntity(entity);
+
 	//TODO buscar vecino libre
 	SDL_Point lastTile = tilesEntity.second;
+	TileCoordinate tile = TileCoordinate(lastTile.x,lastTile.y);
+	tilesLibres = this->mundo->getVecinosLibresForTile(tile,tilesConMobileModels);
 
-	TileCoordinate libre = TileCoordinate(lastTile.x + 1, lastTile.y);
-	list<TileCoordinate> list;
-	list.push_back(libre);
-	return list;
+	for (list<TileCoordinate>::iterator it = tilesLibres.begin();it != tilesLibres.end(); it++){
+		TileCoordinate aux = *it;
+		Log().Get(TAG) << "tile libre: "<<aux.first<<","<<aux.second;
+	}
+
+//	TileCoordinate libre = TileCoordinate(lastTile.x + 1, lastTile.y);
+//	list<TileCoordinate> list;
+//	list.push_back(libre);
+	return tilesLibres;
 }
 
 // Para manejar varios protagonistas

@@ -1,6 +1,9 @@
 #include "Map.h"
 #include "Entity.h"
 #include "../GlobalConstants.h"
+#include "../Utils/Log.h"
+
+const string TAG = "Map";
 
 Map::Map(int alto, int ancho, int tile_ancho, int tile_alto){
 	//el ancho y alto del tile se puede determinar con las dimensiones del tile default.
@@ -9,8 +12,6 @@ Map::Map(int alto, int ancho, int tile_ancho, int tile_alto){
 	this -> tile_alto = tile_alto;
 	this -> tile_ancho = tile_ancho;
 	this -> tileSet = new TileSet(ancho,alto);
-	
-
 }
 
 Map::~Map(){
@@ -89,9 +90,11 @@ bool Map::construirEntidad(Entity* entidad, SDL_Point posicion){
 		return false;
 	}
 
+	Log().Get(TAG) << "COnstruyo "<<entidad->getNombre();
 	for (int i = 0; i < entidad->getAnchoBase(); i++){
-		for (int j = 0; j < entidad->getAnchoBase(); j++){
+		for (int j = 0; j < entidad->getAltoBase(); j++){
 			SDL_Point tile = {i+tilePos.x,j+tilePos.y};
+			Log().Get(TAG) << "ocupa:"<<tile.x<<","<<tile.y;
 			this -> tileSet -> setTileInconstruible(tile);
 		}
 	}
@@ -147,6 +150,28 @@ queue <SDL_Point> Map::obtenerCaminoIgnoringTiles(SDL_Point origen, SDL_Point de
 		camino2.push(punto);
 	}
 	return camino2;
+}
+
+std::list<TileCoordinate> Map::getVecinosLibresForTile(TileCoordinate tile,list<TileCoordinate> tilesOccupied) {
+	list<TileCoordinate> libres;
+	list<TileCoordinate> vecinos = this->tileSet->vecinosTotales(tile);
+
+	list<TileCoordinate>::iterator it;
+	Log().Get(TAG) << "tiles ocupados por mobile models:";
+	for (it = tilesOccupied.begin();it != tilesOccupied.end();it++){
+		TileCoordinate tile = *it;
+		Log().Get(TAG) << "-"<<tile.first<<","<<tile.second;
+	}
+
+	for (it = vecinos.begin();it != vecinos.end(); it++){
+		TileCoordinate tile = *it;
+		Log().Get(TAG) << "tile:"<<tile.first<<","<<tile.second;
+		if (this->tileSet->posicionValida(tile) && this->tileSet->esTileTransitable(tile,tilesOccupied)){
+			libres.push_back(tile);
+		}
+	}
+
+	return libres;
 }
 
 int Map::getDistancia(SDL_Point from,SDL_Point to) {

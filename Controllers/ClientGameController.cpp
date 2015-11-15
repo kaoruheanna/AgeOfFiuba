@@ -441,7 +441,8 @@ void ClientGameController::actualizarEntidad(Entity* entity) {
 			this->escenario->eliminarEntidadConID(newEntity->getId());
 		}
 	} else {
-		this->escenario->agregarEntidad(entity);
+		SDL_Point posicion = entity->getPosicion();
+		this->escenario->construirEntidad(entity,posicion);
 	}
 
 	this->updated = true;
@@ -572,13 +573,10 @@ void ClientGameController::createEntityButtonPressed(string entityName) {
 		Log().Get(TAG) << "No hay espacio para crear la entidad";
 		return;
 	}
-//	TileCoordinate tile = tiles.front();
-//	TileCoordinate tile = TileCoordinate(0,6);
-	SDL_Point tilePoint = this->escenario->mundo->getTileForPosition(this->selectedEntity->getPosicion());
-	tilePoint.x -= 1;
-	tilePoint.y -= 1;
-//	TileCoordinate tile = TileCoordinate(tilePoint.x - 1, tilePoint.y - 1);
-//	SDL_Point logicPosition = this->escenario->mundo->getPositionForTile({tile.first,tile.second},true);
+
+	TileCoordinate tile = tiles.front();
+	SDL_Point tilePoint = {tile.first,tile.second};
+
 	Entity *tempEntity = this->escenario->factory->crearEntidadParaConstruir(entityName,tilePoint,this->selectedEntity->getTeamString());
 	this->mensajero->construir(tempEntity);
 	delete tempEntity;

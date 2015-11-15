@@ -456,11 +456,11 @@ void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable,bool 
 		int maxX = this->selectedTilesCoordinates.second.x;
 		int minY = this->selectedTilesCoordinates.first.y;
 		int maxY = this->selectedTilesCoordinates.second.y;
-		bool inRangeX = ((currentTile.x >= minX) && (currentTile.x < maxX));
-		bool inRangeY = ((currentTile.y >= minY) && (currentTile.y < maxY));
+		bool inRangeX = ((currentTile.x >= minX) && (currentTile.x <= maxX));
+		bool inRangeY = ((currentTile.y >= minY) && (currentTile.y <= maxY));
 		if (inRangeX && inRangeY){
 			this->setearColor(drawable);
-			}
+		}
 	}
 	SDL_RenderCopy(sdlRenderer, drawable->getTexture(), drawable->getClipRect(), &renderQuad);
 }
