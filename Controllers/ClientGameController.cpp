@@ -575,8 +575,8 @@ void ClientGameController::createEntityButtonPressed(string entityName) {
 //	TileCoordinate tile = tiles.front();
 //	TileCoordinate tile = TileCoordinate(0,6);
 	SDL_Point tilePoint = this->escenario->mundo->getTileForPosition(this->selectedEntity->getPosicion());
-	tilePoint.x = 21;
-	tilePoint.y = 20;
+	tilePoint.x -= 1;
+	tilePoint.y -= 1;
 //	TileCoordinate tile = TileCoordinate(tilePoint.x - 1, tilePoint.y - 1);
 //	SDL_Point logicPosition = this->escenario->mundo->getPositionForTile({tile.first,tile.second},true);
 	Entity *tempEntity = this->escenario->factory->crearEntidadParaConstruir(entityName,tilePoint,this->selectedEntity->getTeamString());

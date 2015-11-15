@@ -290,16 +290,25 @@ SDL_Point Escenario::getSize(){
 }
 
 queue<SDL_Point> Escenario::getCaminoForMobileModel(SDL_Point origen, SDL_Point destino,MobileModel *mobileModel){
+	list<TileCoordinate> tilesOccupied = this->tilesOcupadasPorMobileModels(mobileModel);
+	return this->mundo->obtenerCaminoIgnoringTiles(origen,destino,tilesOccupied);
+}
+
+/*
+ * recibe como parametro entidad a ignorar (si tiene)
+ * devuelve una lista de tileCoordinate, ocupadas por mobile models
+ */
+list<TileCoordinate> Escenario::tilesOcupadasPorMobileModels(Entity *entityToIgnore){
 	list<TileCoordinate> tilesOccupied;
 
 	map<int,TileCoordinate>::iterator it;
 	for (it = this->tilesWithIds.begin(); it != this->tilesWithIds.end(); it++){
-		if (it->first != mobileModel->getId()){
+		if (!entityToIgnore || (it->first != entityToIgnore->getId())){
 			TileCoordinate tile = it->second;
 			tilesOccupied.push_back(tile);
 		}
 	}
-	return this->mundo->obtenerCaminoIgnoringTiles(origen,destino,tilesOccupied);
+	return tilesOccupied;
 }
 
 list<TileCoordinate> Escenario::getVecinosLibresForEntity(Entity *entity) {

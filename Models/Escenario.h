@@ -37,6 +37,7 @@ class Escenario {
 
 		bool cosecharEnPosicion(SDL_Point point, MobileModel* protagonista);
 		void init();
+		list<TileCoordinate> tilesOcupadasPorMobileModels(Entity *entityToIgnore);
 
 	public:
 		Map* mundo;
