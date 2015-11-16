@@ -262,16 +262,16 @@ bool ClientGameController::pollEvents(){
 			SDL_GetMouseState(&x, &y);
 			bool leftClick = (e.button.button == SDL_BUTTON_LEFT);
 			if(this->pendingEntity != NULL){
-				// bla
-				if(leftClick){
+				if(leftClick && this->renderer->isPixelInEscenario(x,y)){
+					//construyo
 					this->mensajero->construir(this->pendingEntity);
-				} else {
-					Log().Get(TAG) << "Cancelo la construccion";
+					this->pendingEntity = NULL;
+					return pressedR;
 				}
+				Log().Get(TAG) << "Cancelo la construccion";
 				this->pendingEntity = NULL;
-			} else {
-				this->renderer->clickEvent(x,y,leftClick,this);
 			}
+			this->renderer->clickEvent(x,y,leftClick,this);
 		}
 	}
 	return pressedR;
