@@ -364,13 +364,19 @@ list<Entity*> Escenario::getEntidadesEnAreaForJugador(SDL_Point posInicial, SDL_
 			printf("posicion: %i, %i \n", this->mundo->getTileForPosition({x,y}).x,this->mundo->getTileForPosition({x,y}).y);
 			Entity* entidad = this->getEntidadEnPosicion({x,y}); //este metodo esta mal TODO
 			if (entidad){
-				/*printf("posicion: %i, %i -> ", this->mundo->getTileForPosition({x,y}).x,this->mundo->getTileForPosition({x,y}).y);
-				cout<<entidad->getNombre()<<endl;*/
 				if (entidad->getTeam() == team){
 					if (entidad->getClass()==ENTITY && listaDeEdificios.empty()){
 						listaDeEdificios.push_back(entidad);
 					}
 					else{
+						bool puedo = true;
+						for (Entity* e: listaDeEntidadesMobiles){
+							if (e->getId() == entidad->getId()){
+								puedo = false;
+								break;
+							}
+						}
+						if (puedo)
 						listaDeEntidadesMobiles.push_back(entidad);
 					}
 				}

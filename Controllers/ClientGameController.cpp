@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <string>
 #include <iostream>
+#include <cmath>
 #include "../Views/MobileView.h"
 #include "../Views/EntityView.h"
 #include "../Views/MapView.h"
@@ -305,24 +306,6 @@ bool ClientGameController::pollEvents(){
 	return pressedR;
 }
 
-void ClientGameController::close() {
-	if (this->renderer){
-		this->renderer->close();
-		delete this->renderer;
-	}
-
-	delete this->escenarioView;
-	this->escenarioView = NULL;
-
-	delete this->miniEscenarioView;
-	this->miniEscenarioView = NULL;
-
-	this->selectedEntities.clear(); //TODO ver si clear borra las entidades.
-
-	delete this->pendingEntity;
-	this->pendingEntity = NULL;
-}
-
 bool ClientGameController::play() {
 	this->mensajero->addClient(this);
 
@@ -386,6 +369,24 @@ bool ClientGameController::play() {
 
 	this->close();
 	return shouldRestart;
+}
+
+void ClientGameController::close() {
+	if (this->renderer){
+		this->renderer->close();
+		delete this->renderer;
+	}
+
+	delete this->escenarioView;
+	this->escenarioView = NULL;
+
+	delete this->miniEscenarioView;
+	this->miniEscenarioView = NULL;
+
+	this->selectedEntities.clear(); //TODO ver si clear borra las entidades.
+
+	delete this->pendingEntity;
+	this->pendingEntity = NULL;
 }
 
 bool ClientGameController::isAlive() {
@@ -548,17 +549,107 @@ void ClientGameController::rightClickEnEscenario(int x, int y) {
 	Entity* selectedEntity = this->selectedEntities.front();
 	if(entidad && (selectedEntity->getId() != entidad->getId())) {
 		//Interactuar la seleccionada con la nueva entidad
+		//TODO interactuar con todas las unidades.
 		this->mensajero->interactuar(selectedEntity->getId(),entidad->getId());
 		return;
 	}
 	// Mover el personaje seleccionado a la nueva posicion
 	point = this->renderer->proyectedPoint(point, this->escenario->getSize());
 
+
+	//TODO mover unidades
+	this->moverMuchasUnidades(point);
+
+
+}
+
+void ClientGameController::moverMuchasUnidades(SDL_Point destino){
+	queue<SDL_Point> tiles = this->obtenerTilesParaMoverse(destino);
+	for (Entity* entidad: this->selectedEntities){
+		std::cout<<entidad->getNombre()<<"\n";
+		this->moverUnaUnidad(entidad, tiles.front());
+		tiles.pop();
+	}
+}
+
+void ClientGameController::moverUnaUnidad(Entity* entidad, SDL_Point destino){
+	printf("destino: %i, %i \n", destino.x, destino.y);
 	MobileModel* auxModel = new MobileModel();
-	auxModel->setId(selectedEntity->getId());
-	auxModel->setDestination(point.x, point.y);
+	auxModel->setId(entidad->getId());
+	auxModel->setDestination(destino.x, destino.y);
 	this->mensajero->moverEntidad(auxModel, username);
 	delete auxModel;
+}
+
+float getAnguloForDireccion(SDL_Point direccion){
+	float angulo;
+	if (direccion.x == 0){
+		angulo = 90;
+	}else{
+		angulo = (atan(direccion.y/direccion.x)*180)/M_PI;
+	}
+	if (direccion.x < 0){
+		angulo += 180;
+	}else if(direccion.y < 0){
+		angulo += 360;
+	}
+	return angulo;
+}
+
+SDL_Point obtenerDireccionPerpendicularParaAngulo(float angulo){
+	SDL_Point dirFormacion = {0,0};
+	if ((angulo >= 0 and angulo <= 22.5) or (angulo > 337.5)){
+		dirFormacion = {0,TILE_HEIGHT_PIXELS};
+	}else if (angulo > 22.5 and  angulo <= 67.5){
+		dirFormacion = {-TILE_WIDTH_PIXELS,TILE_HEIGHT_PIXELS};
+	}else if (angulo > 67.5 and angulo <= 112.5){
+		dirFormacion = {-1,0};
+	}else if (angulo > 112.5 and angulo <= 157.5){
+		dirFormacion = {-TILE_WIDTH_PIXELS,-TILE_WIDTH_PIXELS};
+	}else if (angulo > 157.5 and angulo <= 202.5){
+		dirFormacion = {0,-TILE_HEIGHT_PIXELS};
+	}else if (angulo > 202.5 and angulo <= 247.5){
+		dirFormacion = {TILE_WIDTH_PIXELS,-TILE_HEIGHT_PIXELS};
+	}else if (angulo > 247.5 and angulo <= 292.5){
+		dirFormacion = {TILE_WIDTH_PIXELS,0};
+	}else if (angulo > 292.5 and angulo <= 337.5){
+		dirFormacion = {TILE_WIDTH_PIXELS,TILE_HEIGHT_PIXELS};
+	}
+	return dirFormacion;
+}
+
+queue<SDL_Point> ClientGameController::obtenerTilesParaMoverse(SDL_Point destino){
+	queue<SDL_Point> listaDeTiles;
+	SDL_Point posMedia = this->getPosicionPromedioForSelectedEntities();
+	int cantidadDeTiles = this->selectedEntities.size();
+	int tamFila = 5;
+	SDL_Point direccion = {destino.x - posMedia.x, destino.y - posMedia.y};
+	float angulo = getAnguloForDireccion(direccion);
+	printf("angulo: %f \n", angulo);
+	SDL_Point dirFormacion = obtenerDireccionPerpendicularParaAngulo(angulo);
+	printf("direccion: %i, %i \n", dirFormacion.x, dirFormacion.y);
+	int filas = cantidadDeTiles/tamFila;
+	int i = 0;
+	while (i < cantidadDeTiles){//TODO mejorar para no tener mas de una fila
+		SDL_Point tile = {destino.x + dirFormacion.x*i, destino.y + dirFormacion.y*i};
+		listaDeTiles.push(tile);
+		i+=1;
+	}
+
+	return listaDeTiles;
+}
+
+
+
+SDL_Point ClientGameController::getPosicionPromedioForSelectedEntities(){
+	SDL_Point sumaDePosiciones = {0,0};
+	for (Entity* entidad: this->selectedEntities){
+		sumaDePosiciones.x += entidad->getPosicion().x;
+		sumaDePosiciones.y += entidad->getPosicion().y;
+	}
+	sumaDePosiciones.x /= this->selectedEntities.size();
+	sumaDePosiciones.y /= this->selectedEntities.size();
+	return sumaDePosiciones;
 }
 
 void ClientGameController::leftMouseUp(int x, int y, int w, int h){

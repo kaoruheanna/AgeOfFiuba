@@ -70,6 +70,10 @@ private:
 	list<string> getCreablesListForEntityName(string name);
 	void setSelectedEntities(list<Entity*> listaDeEntidades);
 	void setCreablesForEntities(list<Entity*> listaDeEntidades);
+	void moverMuchasUnidades(SDL_Point destino);
+	void moverUnaUnidad(Entity* entidad, SDL_Point destino);
+	queue <SDL_Point> obtenerTilesParaMoverse(SDL_Point destino);
+	SDL_Point getPosicionPromedioForSelectedEntities();
 
 	// Metodos y variables para que no se vaya el scroll del mapa
 	SDL_Point intialPointWindowWrapper;
