@@ -133,7 +133,8 @@ queue <SDL_Point> Map::obtenerCaminoIgnoringTiles(SDL_Point origen, SDL_Point de
 	SDL_Point punto;
 
 	//transformo las coordenadas a tiles.
-	int offset = (TILE_SIZE/2);
+//	int offset = (TILE_SIZE/2);
+	int offset = 0;
 	SDL_Point tileOrigen = this->getTileForPosition({origen.x-offset,origen.y-offset});
 	SDL_Point tileDestino = this->getTileForPosition({destino.x-offset,destino.y-offset});
 
@@ -156,11 +157,8 @@ std::list<TileCoordinate> Map::getVecinosLibresForTile(TileCoordinate tile,list<
 	list<TileCoordinate> vecinos = this->tileSet->vecinosTotales(tile);
 
 	list<TileCoordinate>::iterator it;
-	Log().Get(TAG) << "tiles ocupados por mobile models:";
-
 	for (it = vecinos.begin();it != vecinos.end(); it++){
 		TileCoordinate tile = *it;
-		Log().Get(TAG) << "tile:"<<tile.first<<","<<tile.second;
 		if (this->tileSet->posicionValida(tile) && this->tileSet->esTileTransitable(tile,tilesOccupied)){
 			libres.push_back(tile);
 		}
