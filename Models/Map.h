@@ -35,8 +35,14 @@ class Map {
 		SDL_Point getEmptyTile();
 		SDL_Point posicionRelativaRect(SDL_Rect,SDL_Point);
 
-		bool construirEntidad(Entity*,SDL_Point);
-		bool puedoConstruir(Entity*,SDL_Point);
+		//recibe la entidad, el tile de inicio, y los tiles ocupados por los mobile models
+		bool construirEntidad(Entity*,SDL_Point,list<TileCoordinate> tilesOccupied);
+
+		//recibe la entidad, el tile de inicio, y los tiles ocupados por los mobile models
+		bool puedoConstruir(Entity* entity,SDL_Point,list<TileCoordinate> tilesOccupied);
+
+		// recibe el tileInicio, tileFin y la lista de los tiles ocupados por mobile models
+		bool tilesOcupadosPorMobileModels(SDL_Point tileInicio,SDL_Point tileFin,list<TileCoordinate> tilesOccupied);
 		void sacarEntidad(Entity*);
 
 		SDL_Point getTileForPosition(SDL_Point point);

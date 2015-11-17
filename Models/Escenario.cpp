@@ -91,8 +91,10 @@ bool Escenario::agregarEntidad(Entity* entidad){
 }
 
 bool Escenario::construirEntidad(Entity* entidad,SDL_Point posicion){
+	list<TileCoordinate> tilesOccupied = this->tilesOcupadasPorMobileModels(NULL);
+
 	SDL_Point tilePos = this->mundo->getTileForPosition(posicion);
-	if (!this->mundo->puedoConstruir(entidad,tilePos)){
+	if (!this->mundo->puedoConstruir(entidad,tilePos,tilesOccupied)){
 		// no puedo construir porque esta ocupado alguno de los tiles
 		return false;
 	}
@@ -102,7 +104,7 @@ bool Escenario::construirEntidad(Entity* entidad,SDL_Point posicion){
 
 	if (entidad->getClass() != MOBILE_MODEL){
 		//si no es un mobile model setea los tiles como ocupados
-		this->mundo->construirEntidad(entidad,posicion);
+		this->mundo->construirEntidad(entidad,posicion,tilesOccupied);
 	}
 	return true;
 }

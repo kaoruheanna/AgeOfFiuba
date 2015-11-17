@@ -64,7 +64,7 @@ SDL_Point Map::posicionRelativaRect(SDL_Rect rect, SDL_Point punto_m){
 	return punto_v;
 }
 
-bool Map::puedoConstruir(Entity* entidad, SDL_Point tile){
+bool Map::puedoConstruir(Entity* entidad, SDL_Point tile,list<TileCoordinate> tilesOccupied){
 	int size_x = entidad->getAnchoBase();
 	int size_y = entidad->getAltoBase();
 
@@ -76,17 +76,36 @@ bool Map::puedoConstruir(Entity* entidad, SDL_Point tile){
 	}
 	//verificar que en todos los tiles que va a ocupar la entidad se pueda construir
 	SDL_Point fin = {size_x+tile.x-1, size_y+tile.y-1};
-	return !(this -> tileSet->sectorEstaBloqueado(tile,fin));
+	//no tiene en cuenta los mobileModels
+	bool hayEntities = this->tileSet->sectorEstaBloqueado(tile,fin);
+	bool hayMobileModels = this->tilesOcupadosPorMobileModels(tile,fin,tilesOccupied);
+	return (!hayEntities && !hayMobileModels);
 }
 
 
-bool Map::construirEntidad(Entity* entidad, SDL_Point posicion){
+bool Map::tilesOcupadosPorMobileModels(SDL_Point tileInicio,SDL_Point tileFin,list<TileCoordinate> tilesOccupied){
+	list<TileCoordinate>::iterator it;
+	for (it = tilesOccupied.begin();it != tilesOccupied.end();it++){
+		TileCoordinate tileOcupado = *it;
+		int x = tileOcupado.first; //del mobile model
+		int y = tileOcupado.second; //del mobile model
+		bool ocupadoEnX = ((x >= tileInicio.x) && (x <= tileFin.x));
+		bool ocupadoEnY = ((y >= tileInicio.y) && (y <= tileFin.y));
+		if (ocupadoEnX && ocupadoEnY){
+			Log().Get(TAG) << "Tile Ocupado por mobile model";
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Map::construirEntidad(Entity* entidad, SDL_Point posicion,list<TileCoordinate> tilesOccupied){
 	if (entidad->getClass() == MOBILE_MODEL){
 		// el tileset no guarda los tiles ocupados por los mobile models
 		return false;
 	}
 	SDL_Point tilePos = this->getTileForPosition(posicion);
-	if (!this->puedoConstruir(entidad,tilePos)){
+	if (!this->puedoConstruir(entidad,tilePos,tilesOccupied)){
 		return false;
 	}
 
