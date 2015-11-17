@@ -19,6 +19,7 @@
 #include "../Views/EscenarioView.h"
 #include "../Views/Menu/MiniEscenarioView.h"
 #include "../Views/Menu/MiniMapView.h"
+
 #include "Mensajero.h"
 
 static const string TAG = "ClientGameController";
@@ -268,6 +269,7 @@ bool ClientGameController::pollEvents(){
 			//Get mouse position
 			int x, y;
 			SDL_GetMouseState(&x, &y);
+			printf("mouse: %i, %i \n", x,y);
 			this->posInicialMouse = {x,y};
 			bool leftClick = (e.button.button == SDL_BUTTON_LEFT);
 			if (leftClick){this->mouseDown = true;};
@@ -573,7 +575,6 @@ void ClientGameController::moverMuchasUnidades(SDL_Point destino){
 }
 
 void ClientGameController::moverUnaUnidad(Entity* entidad, SDL_Point destino){
-	printf("destino: %i, %i \n", destino.x, destino.y);
 	MobileModel* auxModel = new MobileModel();
 	auxModel->setId(entidad->getId());
 	auxModel->setDestination(destino.x, destino.y);
@@ -599,40 +600,45 @@ float getAnguloForDireccion(SDL_Point direccion){
 SDL_Point obtenerDireccionPerpendicularParaAngulo(float angulo){
 	SDL_Point dirFormacion = {0,0};
 	if ((angulo >= 0 and angulo <= 22.5) or (angulo > 337.5)){
-		dirFormacion = {0,TILE_HEIGHT_PIXELS};
+		dirFormacion = {0,TILE_SIZE};
 	}else if (angulo > 22.5 and  angulo <= 67.5){
-		dirFormacion = {-TILE_WIDTH_PIXELS,TILE_HEIGHT_PIXELS};
+		dirFormacion = {-TILE_SIZE,TILE_SIZE};
 	}else if (angulo > 67.5 and angulo <= 112.5){
-		dirFormacion = {-1,0};
+		dirFormacion = {-TILE_SIZE,0};
 	}else if (angulo > 112.5 and angulo <= 157.5){
-		dirFormacion = {-TILE_WIDTH_PIXELS,-TILE_WIDTH_PIXELS};
+		dirFormacion = {-TILE_SIZE,-TILE_SIZE};
 	}else if (angulo > 157.5 and angulo <= 202.5){
-		dirFormacion = {0,-TILE_HEIGHT_PIXELS};
+		dirFormacion = {0,-TILE_SIZE};
 	}else if (angulo > 202.5 and angulo <= 247.5){
-		dirFormacion = {TILE_WIDTH_PIXELS,-TILE_HEIGHT_PIXELS};
+		dirFormacion = {TILE_SIZE,-TILE_SIZE};
 	}else if (angulo > 247.5 and angulo <= 292.5){
-		dirFormacion = {TILE_WIDTH_PIXELS,0};
+		dirFormacion = {TILE_SIZE,0};
 	}else if (angulo > 292.5 and angulo <= 337.5){
-		dirFormacion = {TILE_WIDTH_PIXELS,TILE_HEIGHT_PIXELS};
+		dirFormacion = {TILE_SIZE,TILE_SIZE};
 	}
 	return dirFormacion;
 }
 
 queue<SDL_Point> ClientGameController::obtenerTilesParaMoverse(SDL_Point destino){
 	queue<SDL_Point> listaDeTiles;
+	int x = destino.x - (destino.x%TILE_WIDTH_PIXELS) + (TILE_WIDTH_PIXELS/2);
+	int y = destino.y - (destino.y%TILE_HEIGHT_PIXELS) + (TILE_HEIGHT_PIXELS/2);
+	SDL_Point destinoCentrado = {x,y};
+
 	SDL_Point posMedia = this->getPosicionPromedioForSelectedEntities();
 	int cantidadDeTiles = this->selectedEntities.size();
 	int tamFila = 5;
-	SDL_Point direccion = {destino.x - posMedia.x, destino.y - posMedia.y};
+	SDL_Point direccion = {destinoCentrado.x - posMedia.x, destinoCentrado.y - posMedia.y};
 	float angulo = getAnguloForDireccion(direccion);
-	printf("angulo: %f \n", angulo);
 	SDL_Point dirFormacion = obtenerDireccionPerpendicularParaAngulo(angulo);
-	printf("direccion: %i, %i \n", dirFormacion.x, dirFormacion.y);
+	printf("angulo: %f, direccion: %i, %i \n",angulo, dirFormacion.x, dirFormacion.y);
 	int filas = cantidadDeTiles/tamFila;
 	int i = 0;
+	//dirFormacion = {TILE_WIDTH_PIXELS/2,0};
 	while (i < cantidadDeTiles){//TODO mejorar para no tener mas de una fila
-		SDL_Point tile = {destino.x + dirFormacion.x*i, destino.y + dirFormacion.y*i};
+		SDL_Point tile = {destinoCentrado.x + (dirFormacion.x*i), destinoCentrado.y + (dirFormacion.y*i)};
 		listaDeTiles.push(tile);
+		printf("tile: %i, %i \n", tile.x, tile.y);
 		i+=1;
 	}
 
@@ -656,7 +662,7 @@ void ClientGameController::leftMouseUp(int x, int y, int w, int h){
 	list<Entity*> listaDeEntidadesSeleccionadas;
 	SDL_Point mapPointInicial = this->renderer->windowToMapPoint({x,y});
 	SDL_Point mapPointFinal = this->renderer->windowToMapPoint({x+w,y+h});
-	//me esta devolviendo las entidades duplicadas.
+	//TODO getEntidadesEnAreaForJugador no anda 100% bien.
 	listaDeEntidadesSeleccionadas = this->escenario->getEntidadesEnAreaForJugador(mapPointInicial, mapPointFinal,this->usuario->getTeam());
 	this->setSelectedEntities(listaDeEntidadesSeleccionadas);
 	list <pair<SDL_Point,SDL_Point>> tiles = this->escenario->getTilesCoordinatesForEntities(this->selectedEntities);

@@ -36,7 +36,6 @@ Renderer::Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos) {
 	this->hasSelectedTiles = false;
 	this->cartel = NULL;
 	this->selectionArea = {0,0,0,0};
-	//this->selectedEntity = NULL;
 
 	bool didInitSDL = this->initSDL();
 	bool didLoadMedia = this->loadMedia(tipos);
@@ -649,8 +648,7 @@ void Renderer::setMessagesInMenu(std::string firstMessage, std::string secondMes
 void Renderer::setSelectedTilesCoordinates(bool selected,std::list<pair<SDL_Point,SDL_Point>> tiles, list<Entity*> entidad){
 	//TODO hay que arreglar esto para que funcione para todas las unidades seleccionadas.
 	this->hasSelectedTiles = selected;
-	this->selectedTilesCoordinates = tiles.front();
-	this->selectedEntity = entidad.front();
+	this->selectedTilesCoordinates = tiles.front();// TODO hay que cambiar esto.
 	this->selectedEntities.swap(entidad);
 }
 
@@ -701,7 +699,7 @@ void Renderer::clickEvent(int x, int y, bool leftClick, RendererInteractionDeleg
 		if (leftClick){
 			delegate->leftClickEnEscenario(x,y);
 		} else {
-			delegate->rightClickEnEscenario(x,y);
+			delegate->rightClickEnEscenario(x,y-32); //TODO hay que ver si esta bien el click.
 		}
 		return;
 	}

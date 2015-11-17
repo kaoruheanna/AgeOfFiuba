@@ -16,9 +16,11 @@ class Map {
 		//matriz de tiles
 		int tile_ancho;
 		int tile_alto;
-		TileSet* tileSet;
+
 
 	public:
+		TileSet* tileSet;
+
 		int getHeight();
 		int getWidth();
 		int getTileHeight();
