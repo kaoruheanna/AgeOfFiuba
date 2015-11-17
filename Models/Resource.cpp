@@ -19,6 +19,8 @@ Resource::Resource( const Resource& other ) : Entity(other) {
 
 Resource::~Resource() {}
 
+
+
 void Resource::interact(Entity* entity) {
 	entity->receiveInteraction(this);
 }
@@ -29,6 +31,7 @@ void Resource::receiveInteraction(Warrior* entity) {
 
 void Resource::receiveInteraction(Worker *entity) {
 	Log().Get(TAG) << "Resource receive interaction from Worker -> Collect";
+	Log().Get(TAG) << "Resource life" << this->life;
 	this->life = this->life - entity->getPoderCosecha();
 }
 

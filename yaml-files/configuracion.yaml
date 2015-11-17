@@ -129,7 +129,7 @@ tipos:
    miniImagen: img/tile_yellow.png
  
  - nombre: arbol
-   categoria: recurso
+   categoria: resource
    imagen: img/tree1.png
    miniImagen: img/tile_yellow.png
    ancho_base: 1
