@@ -336,11 +336,16 @@ void Renderer::drawFutureBuildingIfShould(){
 	SDL_Rect renderQuad = drawable->getRectToDraw(windowPoint.x, windowPoint.y);
 	SDL_Rect clipRect = {0,0,renderQuad.w,renderQuad.h};;
 
+	SDL_Texture *texture = drawable->getTexture();
+	SDL_SetTextureAlphaMod(texture,100);
+	SDL_SetTextureColorMod(texture,255,0,0 );
+
 	if(!(this->isInsideWindow(&renderQuad))){
 		//como no esta dentro de la ventana, no lo dibuja
 		return;
 	}
-	SDL_RenderCopy(this->sdlRenderer, drawable->getTexture(), &clipRect, &renderQuad);
+	SDL_RenderCopy(this->sdlRenderer,texture , &clipRect, &renderQuad);
+	SDL_SetTextureAlphaMod(texture,255);
 }
 
 void Renderer::drawMenu(){
