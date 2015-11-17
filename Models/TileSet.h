@@ -65,17 +65,17 @@ public:
 	bool setTileInconstruible(SDL_Point);
 	bool sectorEstaBloqueado(SDL_Point, SDL_Point);
 
-	std::list<TileCoordinate> vecinosLibres(TileCoordinate baldosa,list<TileCoordinate> tilesOccupied);
+	std::list<TileCoordinate> vecinosLibres(TileCoordinate baldosa,list<TileCoordinate> *tilesOccupied);
 	std::list<TileCoordinate> vecinosTotales(TileCoordinate baldosa); //devuelve todas las posiciones adyacentes
 	int distancia(TileCoordinate a, TileCoordinate b); // heuristica a usar en A* (distancia euclideana)
 	int heuristica(TileCoordinate a, TileCoordinate b);
 	int valorArista(TileCoordinate a, TileCoordinate b);
-	bool esVecinoLibre(TileCoordinate a, TileCoordinate b,list<TileCoordinate> tilesOccupied);
+	bool esVecinoLibre(TileCoordinate a, TileCoordinate b,list<TileCoordinate> *tilesOccupied);
 	bool posicionValida(TileCoordinate posicion);
 	bool posicionOcupada(TileCoordinate posicion);
-	bool esTileTransitable(TileCoordinate tile, list<TileCoordinate> tilesOccupied);
-	deque<SDL_Point> obtenerCaminoIgnoringTiles(TileCoordinate tileOrigen, TileCoordinate tileDestino,list<TileCoordinate> tilesOccupied);
-	pointMap calcularCaminoMinimoIgnoringTiles(TileCoordinate origen, TileCoordinate destino,TileCoordinate &destino_real, list<TileCoordinate> tilesOccupied);
+	bool esTileTransitable(TileCoordinate tile, list<TileCoordinate> *tilesOccupied);
+	deque<SDL_Point> obtenerCaminoIgnoringTiles(TileCoordinate tileOrigen, TileCoordinate tileDestino,list<TileCoordinate> *tilesOccupied);
+	pointMap calcularCaminoMinimoIgnoringTiles(TileCoordinate origen, TileCoordinate destino,TileCoordinate &destino_real, list<TileCoordinate> *tilesOccupied);
 
 	virtual ~TileSet();
 };

@@ -151,7 +151,7 @@ SDL_Point Map::getCenteredPositionForTile(SDL_Point point) {
 	return {point.x * TILE_SIZE + (TILE_SIZE/2), point.y * TILE_SIZE + (TILE_SIZE/2)};
 }
 
-queue <SDL_Point> Map::obtenerCaminoIgnoringTiles(SDL_Point origen, SDL_Point destino,list<TileCoordinate> tilesOccupied){
+queue <SDL_Point> Map::obtenerCaminoIgnoringTiles(SDL_Point origen, SDL_Point destino,list<TileCoordinate> *tilesOccupied){
 	queue<SDL_Point> camino2;
 	SDL_Point punto;
 
@@ -175,7 +175,7 @@ queue <SDL_Point> Map::obtenerCaminoIgnoringTiles(SDL_Point origen, SDL_Point de
 	return camino2;
 }
 
-std::list<TileCoordinate> Map::getVecinosLibresForTile(TileCoordinate tile,list<TileCoordinate> tilesOccupied) {
+std::list<TileCoordinate> Map::getVecinosLibresForTile(TileCoordinate tile,list<TileCoordinate> *tilesOccupied) {
 	list<TileCoordinate> libres;
 	list<TileCoordinate> vecinos = this->tileSet->vecinosTotales(tile);
 

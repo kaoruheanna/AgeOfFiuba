@@ -296,7 +296,7 @@ SDL_Point Escenario::getSize(){
 
 queue<SDL_Point> Escenario::getCaminoForMobileModel(SDL_Point origen, SDL_Point destino,MobileModel *mobileModel){
 	list<TileCoordinate> tilesOccupied = this->tilesOcupadasPorMobileModels(mobileModel);
-	return this->mundo->obtenerCaminoIgnoringTiles(origen,destino,tilesOccupied);
+	return this->mundo->obtenerCaminoIgnoringTiles(origen,destino,&tilesOccupied);
 }
 
 /*
@@ -332,7 +332,7 @@ list<TileCoordinate> Escenario::getVecinosLibresForEntity(Entity *entity) {
 	for (int i = minTileX;i <= maxTileX;i++){
 		for (int j = minTileY; j <= maxTileY; j++){
 			TileCoordinate tile = TileCoordinate(i,j);
-			list<TileCoordinate> auxList = this->mundo->getVecinosLibresForTile(tile,tilesConMobileModels);
+			list<TileCoordinate> auxList = this->mundo->getVecinosLibresForTile(tile,&tilesConMobileModels);
 			tilesLibres.merge(auxList);
 		}
 	}
