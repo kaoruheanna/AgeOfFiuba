@@ -724,10 +724,18 @@ void Renderer::dragLeftClickEvent(int xi, int yi, int xf, int yf){
 	}
 }
 
-void Renderer::leftMouseUpEvent(RendererInteractionDelegate *delegate){
-	delegate->leftMouseUp(this->selectionArea.x, this->selectionArea.y,
-			this->selectionArea.w, this->selectionArea.h);
-	this->selectionArea = {0,0,0,0};
+void Renderer::leftMouseUpEvent(RendererInteractionDelegate *delegate, int x, int y){
+	if (this->selectionArea.x+this->selectionArea.y+
+			this->selectionArea.w+this->selectionArea.h != 0){
+		delegate->leftMouseUp(this->selectionArea.x, this->selectionArea.y,
+					this->selectionArea.w, this->selectionArea.h);
+		this->selectionArea = {0,0,0,0};
+	}
+	else{
+		if (this->isPixelInEscenario(x,y)){
+			delegate->leftClickEnEscenario(x,y);
+		}
+	}
 
 }
 

@@ -83,7 +83,7 @@ public:
 	void hideCartel();
 	void clickEvent(int x, int y, bool leftClick, RendererInteractionDelegate *delegate);
 	void dragLeftClickEvent(int xi, int yi, int xf, int yf);
-	void leftMouseUpEvent(RendererInteractionDelegate *delegate);
+	void leftMouseUpEvent(RendererInteractionDelegate *delegate, int x, int y);
 	Entity* selectedEntity;
 
 	list <Entity*> selectedEntities;

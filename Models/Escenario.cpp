@@ -344,10 +344,28 @@ list<MobileModel*> Escenario::getMobileModels() {
 list<Entity*> Escenario::getEntidadesEnAreaForJugador(SDL_Point posInicial, SDL_Point posFinal, Team team){
 	list<Entity*> listaDeEntidadesMobiles;
 	list<Entity*> listaDeEdificios;
-	for (int x = min(posInicial.x,posFinal.x);x < max(posInicial.x,posFinal.x); x+=64){
-		for (int y = min(posInicial.y,posFinal.y);y < max(posInicial.y,posFinal.y); y+=32){
-			Entity* entidad = this->getEntidadEnPosicion({x,y});
+	int delta = 4;
+	int inicioX = min(posInicial.x,posFinal.x) - delta;
+	int inicioY = min(posInicial.y,posFinal.y) - delta;
+	int finX = max(posInicial.x,posFinal.x) + delta;
+	int finY = max(posInicial.y,posFinal.y) + delta;
+	int saltoX = 64;
+	int saltoY = 32;
+	if ((min(posInicial.x,posFinal.x)-5)%TILE_WIDTH_PIXELS < TILE_WIDTH_PIXELS/2){
+		saltoX = 32;
+	}
+	if ((min(posInicial.y,posFinal.y)-5)%TILE_HEIGHT_PIXELS < TILE_HEIGHT_PIXELS/2){
+		saltoX = 16;
+	}
+	printf("inicio: %i, %i \n", this->mundo->getTileForPosition({inicioX, inicioY}).x,this->mundo->getTileForPosition({inicioX, inicioY}).y);
+	printf("fin: %i, %i \n", this->mundo->getTileForPosition({finX, finY}).x, this->mundo->getTileForPosition({finX, finY}).y);
+	for (int x = inicioX; x <= finX; x += saltoX){
+		for (int y = inicioY; y <= finY; y += saltoY){
+			printf("posicion: %i, %i \n", this->mundo->getTileForPosition({x,y}).x,this->mundo->getTileForPosition({x,y}).y);
+			Entity* entidad = this->getEntidadEnPosicion({x,y}); //este metodo esta mal TODO
 			if (entidad){
+				/*printf("posicion: %i, %i -> ", this->mundo->getTileForPosition({x,y}).x,this->mundo->getTileForPosition({x,y}).y);
+				cout<<entidad->getNombre()<<endl;*/
 				if (entidad->getTeam() == team){
 					if (entidad->getClass()==ENTITY && listaDeEdificios.empty()){
 						listaDeEdificios.push_back(entidad);
@@ -364,6 +382,7 @@ list<Entity*> Escenario::getEntidadesEnAreaForJugador(SDL_Point posInicial, SDL_
 		return listaDeEdificios;
 	}
 	listaDeEdificios.clear();
+	printf("size: %i \n", listaDeEntidadesMobiles.size());
 	return listaDeEntidadesMobiles;
 }
 

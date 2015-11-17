@@ -39,7 +39,6 @@ ClientGameController::ClientGameController(Mensajero *mensajero) {
 	this->updated = false;
 	this->serverError = false;
 
-	//this->selectedEntity = NULL;
 	this->pendingEntity = NULL;
 
 	this->empezoPartida = false;
@@ -48,7 +47,9 @@ ClientGameController::ClientGameController(Mensajero *mensajero) {
 
 }
 
-ClientGameController::~ClientGameController() {}
+ClientGameController::~ClientGameController() {
+	this->selectedEntities.clear();
+}
 
 void ClientGameController::comenzoPartida() {
 	this->empezoPartida = true;
@@ -276,7 +277,7 @@ bool ClientGameController::pollEvents(){
 			if(e.button.button == SDL_BUTTON_LEFT){
 				int x,y;
 				SDL_GetMouseState(&x,&y);
-				this->renderer->leftMouseUpEvent(this);
+				this->renderer->leftMouseUpEvent(this, this->posInicialMouse.x, this->posInicialMouse.y);
 				this->mouseDown = false;
 			}
 		}
@@ -496,27 +497,28 @@ bool ClientGameController::inicializado() {
  * RendererInteractionDelegate
  */
 void ClientGameController::leftClickEnEscenario(int x,int y){
-	/*
-	//TODO este metodo hay que llamarlo cuando se hace click y no se mueve el mapa.
-	SDL_Point point = this->renderer->windowToMapPoint({x,y});
-	Entity *entidad = this->escenario->getEntidadEnPosicion(point);
-	if (this->selectedEntity == entidad)
-		return
-	this->selectedEntity = entidad;
-	list<Entity*> newEntities;
-	newEntities.push_front(entidad);
-	this->selectedEntities.swap(newEntities);
-
+	SDL_Point tile = this->renderer->windowToMapPoint({x,y});
+	Entity* entidad = this->escenario->getEntidadEnPosicion(tile);
+	if (this->selectedEntities.size() == 1 and this->selectedEntities.front() == entidad){
+		return;
+	}
 	std::pair<SDL_Point,SDL_Point> tiles;
-	if(this->selectedEntity != NULL){
+	list<pair<SDL_Point,SDL_Point>> listaDeTile;
+	if (!entidad==NULL){
+		this->selectedEntities.clear();
+		this->selectedEntities.push_front(entidad);
 		this->setMessageForSelectedEntity(entidad);
 		tiles = this->escenario->getTilesCoordinatesForEntity(entidad);
+		listaDeTile.push_front(tiles);
 		entidad->creables = this->getCreablesListForEntityName(entidad->getNombre());
-		this->renderer->setSelectedTilesCoordinates(true,tiles,entidad);
-	} else {
+		this->renderer->setSelectedTilesCoordinates(true,listaDeTile,this->selectedEntities);
+
+	}else{
+		this->selectedEntities.clear();
 		this->renderer->setMessagesInMenu("Selecciona algo!!", "");
-		this->renderer->setSelectedTilesCoordinates(false,tiles,NULL);
-	}*/
+		list<Entity*> listaVacia;
+		this->renderer->setSelectedTilesCoordinates(false,listaDeTile,listaVacia);
+	}
 }
 
 list<string> ClientGameController::getCreablesListForEntityName(string name){
@@ -565,7 +567,6 @@ void ClientGameController::leftMouseUp(int x, int y, int w, int h){
 	//me esta devolviendo las entidades duplicadas.
 	listaDeEntidadesSeleccionadas = this->escenario->getEntidadesEnAreaForJugador(mapPointInicial, mapPointFinal,this->usuario->getTeam());
 	this->setSelectedEntities(listaDeEntidadesSeleccionadas);
-	cout<<"Entidades Seleccionadas"<<endl;
 	list <pair<SDL_Point,SDL_Point>> tiles = this->escenario->getTilesCoordinatesForEntities(this->selectedEntities);
 	if (!this->selectedEntities.empty()){
 		this->setMessageForSelectedEntities(listaDeEntidadesSeleccionadas);

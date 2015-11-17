@@ -39,7 +39,6 @@ private:
 	Mensajero* mensajero;
 
 	list<Entity*> selectedEntities;
-	//Entity* selectedEntity;
 	Entity* pendingEntity;
 
 	bool shouldQuit;
