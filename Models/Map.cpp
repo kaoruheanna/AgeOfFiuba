@@ -64,7 +64,7 @@ SDL_Point Map::posicionRelativaRect(SDL_Rect rect, SDL_Point punto_m){
 	return punto_v;
 }
 
-bool Map::puedoConstruir(Entity* entidad, SDL_Point tile,list<TileCoordinate> tilesOccupied){
+bool Map::puedoConstruir(Entity* entidad, SDL_Point tile,list<TileCoordinate> *tilesOccupied){
 	int size_x = entidad->getAnchoBase();
 	int size_y = entidad->getAltoBase();
 
@@ -83,9 +83,13 @@ bool Map::puedoConstruir(Entity* entidad, SDL_Point tile,list<TileCoordinate> ti
 }
 
 
-bool Map::tilesOcupadosPorMobileModels(SDL_Point tileInicio,SDL_Point tileFin,list<TileCoordinate> tilesOccupied){
+bool Map::tilesOcupadosPorMobileModels(SDL_Point tileInicio,SDL_Point tileFin,list<TileCoordinate> *tilesOccupied){
+	if (tilesOccupied == NULL){
+		return false;
+	}
+
 	list<TileCoordinate>::iterator it;
-	for (it = tilesOccupied.begin();it != tilesOccupied.end();it++){
+	for (it = tilesOccupied->begin();it != tilesOccupied->end();it++){
 		TileCoordinate tileOcupado = *it;
 		int x = tileOcupado.first; //del mobile model
 		int y = tileOcupado.second; //del mobile model
@@ -99,7 +103,7 @@ bool Map::tilesOcupadosPorMobileModels(SDL_Point tileInicio,SDL_Point tileFin,li
 	return false;
 }
 
-bool Map::construirEntidad(Entity* entidad, SDL_Point posicion,list<TileCoordinate> tilesOccupied){
+bool Map::construirEntidad(Entity* entidad, SDL_Point posicion,list<TileCoordinate> *tilesOccupied){
 	if (entidad->getClass() == MOBILE_MODEL){
 		// el tileset no guarda los tiles ocupados por los mobile models
 		return false;
