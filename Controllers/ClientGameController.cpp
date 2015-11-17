@@ -531,6 +531,7 @@ list<string> ClientGameController::getCreablesListForEntityName(string name){
 		aux = *elementoDeTipoActual;
 		if (aux.getNombre() == name){
 			creables = aux.getCreables();
+			return creables;
 		}
 	}
 	return creables;

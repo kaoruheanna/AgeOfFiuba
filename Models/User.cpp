@@ -9,6 +9,11 @@
 
 User::User(string name) : User() {
 	this->name = string(name);
+	this->resourceNames.clear();
+	this->resourceNames.push_back("comida");
+	this->resourceNames.push_back("madera");
+	this->resourceNames.push_back("piedra");
+	this->resourceNames.push_back("oro");
 }
 
 User::~User() { }
@@ -40,6 +45,7 @@ void User::update(User* newData) {
 	this->comida = newData->comida;
 	this->madera = newData->madera;
 	this->piedra = newData->piedra;
+	this->oro = newData->oro;
 }
 
 // Resources methods
@@ -55,15 +61,13 @@ void User::didCollectResource(string resourceName) {
 		this->madera++;
 	} else if(resourceName.compare("piedra") == 0){
 		this->piedra++;
+	}else if(resourceName.compare("oro") == 0){
+		this->oro++;
 	}
 }
 
 list<string> User::getResourcesNames() {
-	list<string> names;
-	names.push_back("comida");
-	names.push_back("madera");
-	names.push_back("piedra");
-	return names;
+	return this->resourceNames;
 }
 
 int User::getValueForResource(string resourceName) {
@@ -73,6 +77,9 @@ int User::getValueForResource(string resourceName) {
 		return this->madera;
 	} else if(resourceName.compare("piedra") == 0){
 		return this->piedra;
+	}
+	else if(resourceName.compare("oro") == 0){
+			return this->oro;
 	}
 	return 0;
 }
@@ -86,6 +93,7 @@ User::User() {
 	this->comida = 0;
 	this->madera = 0;
 	this->piedra = 0;
+	this->oro = 0;
 }
 
 //TODO desharcodear los recursos o harcodearlos en todos lados igual

@@ -19,6 +19,7 @@ public:
 
 	virtual void interact(Entity* entity);
 	virtual void receiveInteraction(Warrior* entity);
+	virtual void doInteract();
 
 	virtual int getPoderCosecha();
 };
