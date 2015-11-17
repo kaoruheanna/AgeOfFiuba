@@ -20,13 +20,13 @@ public:
 	virtual ~View();
 	virtual void render(Renderer* renderer);
 	void setDrawable(Drawable *drawable);
+	Drawable* getDrawable();
 	virtual void setDrawableDeshabilitado(Drawable *drawable);
 	void setOrigin(int x, int y);
+	virtual SDL_Point getOrigin();
 	std::string getType();
 
 protected:
-	virtual SDL_Point getOrigin();
-
 	SDL_Point origin;
 	Drawable *drawable;
 	AnimationStatus animationStatus;

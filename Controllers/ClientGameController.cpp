@@ -40,6 +40,7 @@ ClientGameController::ClientGameController(Mensajero *mensajero) {
 	this->serverError = false;
 	this->selectedEntity = NULL;
 	this->pendingEntity = NULL;
+	this->futureBuildingView = NULL;
 	this->empezoPartida = false;
 }
 
@@ -252,8 +253,13 @@ bool ClientGameController::pollEvents(){
 			SDL_GetMouseState(&x, &y);
 			SDL_Point posicion = this->renderer->windowToMapPoint({x,y});
 			this->pendingEntity->setPosicion(posicion);
-			Log().Get(TAG) << "seteo la posicion a construir: "<<posicion.x<<","<<posicion.y;
-			// se puede construir => mensaje al server
+
+			LogicPosition logicPosition = LogicPosition(posicion.x,posicion.y);
+			if (this->futureBuildingView){
+				this->futureBuildingView->setLogicPosition(logicPosition);
+			} else {
+				this->futureBuildingView = new FutureBuildingView(this->pendingEntity->getNombre(),FuturePositionTypeAllowed,logicPosition);
+			}
 		}
 
 		if (e.type == SDL_MOUSEBUTTONDOWN && !this->serverError){
@@ -265,11 +271,11 @@ bool ClientGameController::pollEvents(){
 				if(leftClick && this->renderer->isPixelInEscenario(x,y)){
 					//construyo
 					this->mensajero->construir(this->pendingEntity);
-					this->pendingEntity = NULL;
+					this->limpiarConstruccion();
 					return pressedR;
 				}
 				Log().Get(TAG) << "Cancelo la construccion";
-				this->pendingEntity = NULL;
+				this->limpiarConstruccion();
 			}
 			this->renderer->clickEvent(x,y,leftClick,this);
 		}
@@ -342,10 +348,8 @@ bool ClientGameController::play() {
 		this->updateWindow();
 		shouldRestart = this->pollEvents();
 
-		//positionCharacter =(this->escenario->getProtagonista())->getPosicion();
-		//positionCharacter = this->escenario->mundo->getTileForPosition(positionCharacter);
+		this->renderer->setFutureBuildingView(this->futureBuildingView);
 		this->renderer->fogUpdate(this->escenario->getListaEntidades(),currentTeam);
-
 		this->renderer->drawViews();
 		this->sleep();
 		this->mensajero->ping();
@@ -561,11 +565,7 @@ void ClientGameController::setMessageForSelectedEntity(Entity* entity){
 }
 
 void ClientGameController::createEntityButtonPressed(string entityName) {
-	Log().Get(TAG) << "Create entity button pressed: " << entityName;
-	if (this->pendingEntity){
-		delete this->pendingEntity;
-		this->pendingEntity = NULL;
-	}
+	this->limpiarConstruccion();
 
 	if (this->escenario->factory->esBuilding(entityName)){
 		this->pendingEntity = this->escenario->factory->crearEntidadParaConstruir(entityName,this->selectedEntity->getPosicion(),this->selectedEntity->getTeamString());
@@ -581,7 +581,30 @@ void ClientGameController::createEntityButtonPressed(string entityName) {
 	TileCoordinate tile = tiles.front();
 	SDL_Point tilePoint = {tile.first,tile.second};
 
+	std::pair<SDL_Point,SDL_Point> tilesEntity = this->escenario->getTilesCoordinatesForEntity(this->selectedEntity);
+	int minX = tilesEntity.first.x;
+	int minY = tilesEntity.first.y;
+	int maxX = tilesEntity.second.x;
+	int maxY = tilesEntity.second.y;
+	Log().Get(TAG) << "la entidad ocupa los tiles:("<<minX<<","<<minY<<") al ("<<maxX<<","<<maxY<<")";
+	Log().Get(TAG) << "y crea una unidad en ("<<tilePoint.x<<","<<tilePoint.y<<")";
+
+
 	Entity *tempEntity = this->escenario->factory->crearEntidadParaConstruir(entityName,tilePoint,this->selectedEntity->getTeamString());
 	this->mensajero->construir(tempEntity);
 	delete tempEntity;
+}
+
+//libera las cosas que usa para la construccion
+void ClientGameController::limpiarConstruccion(){
+	if (this->pendingEntity){
+		delete this->pendingEntity;
+		this->pendingEntity = NULL;
+	}
+
+	if (this->futureBuildingView){
+		this->futureBuildingView = NULL;
+		delete this->futureBuildingView;
+	}
+	this->renderer->setFutureBuildingView(NULL);
 }
