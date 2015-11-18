@@ -13,6 +13,9 @@
 #include "Mensaje.h"
 #include "Archivo.h"
 #include <stdio.h>
+#include "../Utils/Log.h"
+
+static const string TAG = "MensajeroRed";
 
 MensajeroRed::MensajeroRed(int socket) {
 	this->socket = socket;
@@ -95,8 +98,8 @@ void MensajeroRed::esperaMensaje() {
 			case ACTUALIZA_ENTIDAD:
 				entity = new Entity();
 				resultado = recibirSerializable(this->socket, entity);
-				//printf("MensajeroRed - Recibi  desaparece resource con resultado: %i\n", resultado);
-				this->escucha->actualizarEntidad(resource);
+				Log().Get(TAG) << "ACTUALIZA_ENTIDAD: "<<entity->getNombre();
+				this->escucha->actualizarEntidad(new Entity(*entity));
 				delete entity;
 				break;
 			case CAMBIO_USUARIO:
@@ -161,15 +164,16 @@ void MensajeroRed::configEscenario(const string path) {
 	delete archivo;
 }
 
-void MensajeroRed::actualizaEntity(Entity* entity) {
+void MensajeroRed::actualizarEntidad(Entity* entity) {
 	Mensaje* mensaje = new Mensaje(ACTUALIZA_ENTIDAD, this->sender);
-	//printf("Cliente - apareceRecurso para enviar\n");
+	Log().Get(TAG) << "Server->cliente: 1)envio entidad"<<entity->getNombre();
 	int resultado = enviarSerializable(this->socket, mensaje);
-	//printf("Cliente - apareceRecurso con resultado: %i\n", resultado);
+	Log().Get(TAG) << "Server->cliente: 2)envio entidad:"<<resultado;
 	delete mensaje;
 	resultado = enviarSerializable(this->socket, entity);
-	//printf("Cliente - apareceRecurso con resultado: %i\n", resultado);
+	Log().Get(TAG) << "Server->cliente: 3)envio entidad:"<<resultado;
 }
+
 
 void MensajeroRed::apareceRecurso(Resource* recurso) {
 	Mensaje* mensaje = new Mensaje(APARECE_RECURSO, this->sender);
@@ -239,12 +243,14 @@ void MensajeroRed::cambioUsuario(User* user) {
 }
 
 void MensajeroRed::construir(Entity* entity) {
-//	Mensaje* mensaje = new Mensaje(CONSTRUIR, this->sender);
-//	int resultado = enviarSerializable(this->socket, mensaje);
-//	//printf("Cliente - moverProtagonista con resultado: %i\n", resultado);
-//	delete mensaje;
-//	resultado = enviarSerializable(this->socket, entity);
-//	//printf("Cliente - personaje con resultado: %i\n", resultado);
+	Log().Get(TAG) << "construir: "<<entity->getNombre();
+	Mensaje* mensaje = new Mensaje(CONSTRUIR, this->sender);
+	int resultado = enviarSerializable(this->socket, mensaje);
+	Log().Get(TAG) << "Construir con resultado:"<<resultado;
+
+	delete mensaje;
+	resultado = enviarSerializable(this->socket, entity);
+	Log().Get(TAG) << "enviada entidad con resultado:"<<resultado;
 }
 
 void MensajeroRed::comenzoPartida() {
