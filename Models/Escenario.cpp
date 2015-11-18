@@ -90,21 +90,29 @@ bool Escenario::agregarEntidad(Entity* entidad){
 	return true;
 }
 
-bool Escenario::construirEntidad(Entity* entidad,SDL_Point posicion){
-	SDL_Point tilePos = this->mundo->getTileForPosition(posicion);
-	if (!this->mundo->puedoConstruir(entidad,tilePos)){
+bool Escenario::construirEntidad(Entity* entidad,SDL_Point origenLogico){
+	list<TileCoordinate> tilesOccupied = this->tilesOcupadasPorMobileModels(NULL);
+
+	SDL_Point tilePos = this->mundo->getTileForPosition(origenLogico);
+	if (!this->mundo->puedoConstruir(entidad,tilePos,&tilesOccupied)){
 		// no puedo construir porque esta ocupado alguno de los tiles
 		return false;
 	}
 
-	entidad->setPosicion(posicion);
+	entidad->setPosicion(origenLogico);
 	this->agregarEntidad(entidad);
 
 	if (entidad->getClass() != MOBILE_MODEL){
 		//si no es un mobile model setea los tiles como ocupados
-		this->mundo->construirEntidad(entidad,posicion);
+		this->mundo->construirEntidad(entidad,origenLogico,&tilesOccupied);
 	}
 	return true;
+}
+
+bool Escenario::puedeConstruirEntidad(Entity* entidad,SDL_Point origenLogico){
+	SDL_Point tilePos = this->mundo->getTileForPosition(origenLogico);
+	list<TileCoordinate> tilesOccupied = this->tilesOcupadasPorMobileModels(NULL);
+	return this->mundo->puedoConstruir(entidad,tilePos,&tilesOccupied);
 }
 
 list<Entity*> Escenario::getListaEntidades(){
@@ -189,9 +197,14 @@ Entity* Escenario::getEntidadEnPosicion(SDL_Point point) {
 
 std::pair<SDL_Point,SDL_Point> Escenario::getTilesCoordinatesForEntity(Entity *entity){
 	SDL_Point minTile = this->mundo->getTileForPosition(entity->getPosicion());
-	int maxTileX = (minTile.x + entity->getAnchoBase());
-	int maxTileY = (minTile.y + entity->getAltoBase());
+	int maxTileX = (minTile.x + entity->getAnchoBase() - 1);
+	int maxTileY = (minTile.y + entity->getAltoBase() - 1);
 	SDL_Point maxTile = {maxTileX,maxTileY};
+
+//	Log().Get(TAG) << entity->getNombre()<<":";
+//	Log().Get(TAG)<<"("<<minTile.x<<","<<minTile.y<<")";
+//	Log().Get(TAG)<<"("<<maxTile.x<<","<<maxTile.y<<")";
+
 	return std::make_pair(minTile,maxTile);
 }
 
@@ -211,36 +224,29 @@ void Escenario::loop() {
 
 	updated = false;
 	bool actualizarPersonajes = false;
-	MobileModel* protagonista = NULL;
+	MobileModel* model = NULL;
 	list<MobileModel*> mobileModels = this->getMobileModels();
 	list<MobileModel*>::iterator found;
 	for(found = mobileModels.begin(); found != mobileModels.end(); ++found){
-		protagonista = *found;
-		SDL_Point oldPosition = protagonista->getPosicion();
+		model = *found;
+		SDL_Point oldPosition = model->getPosicion();
 
-		if(protagonista->updatePosition()) {
-			SDL_Point aux = this->mundo->getTileForPosition(protagonista->getPosicion());
+		if(model->updatePosition()) {
+			SDL_Point aux = this->mundo->getTileForPosition(model->getPosicion());
 			TileCoordinate newTile = TileCoordinate(aux.x, aux.y);
 
 			// Si se cruza con otro usuario, lo freno y borro el camino
-			if (this->tileOcupadoForEntity(newTile,protagonista)){
-				protagonista->setPosicion(oldPosition);
-				protagonista->olvidarCamino();
+			if (this->tileOcupadoForEntity(newTile,model)){
+				model->setPosicion(oldPosition);
+				model->olvidarCamino();
 			} else {
 				actualizarPersonajes = true;
 			}
 		}
 
-		SDL_Point currentTile = this->mundo->getTileForPosition(protagonista->getPosicion());
-		this->tilesWithIds[protagonista->getId()] = TileCoordinate(currentTile.x,currentTile.y);
+		// aca solo se actualiza del lado del server
+		this->actualizarTileOcupadaPorPersonaje(model);
 	}
-
-	/*
-	list<Entity*> entidadesAInsertar = resourcesManager->InsertResourcesForNewLoopOnMap();
-	if (entidadesAInsertar.size() > 0) {
-		this->delegate->apareceEntidad(entidadesAInsertar.back());
-		this->entidades.splice(this->entidades.end(), entidadesAInsertar);
-	}*/
 
 	//Interacciones
 	for(auto entidad : this->entidadesInteractuando) {
@@ -255,6 +261,11 @@ void Escenario::loop() {
 			this->mundo->sacarEntidad(entidad);
 		}
 	}
+}
+
+void Escenario::actualizarTileOcupadaPorPersonaje(MobileModel *model){
+	SDL_Point currentTile = this->mundo->getTileForPosition(model->getPosicion());
+	this->tilesWithIds[model->getId()] = TileCoordinate(currentTile.x,currentTile.y);
 }
 
 bool Escenario::tileOcupadoForEntity(TileCoordinate tile,Entity* entity){
@@ -301,27 +312,49 @@ SDL_Point Escenario::getSize(){
 }
 
 queue<SDL_Point> Escenario::getCaminoForMobileModel(SDL_Point origen, SDL_Point destino,MobileModel *mobileModel){
+	list<TileCoordinate> tilesOccupied = this->tilesOcupadasPorMobileModels(mobileModel);
+	return this->mundo->obtenerCaminoIgnoringTiles(origen,destino,&tilesOccupied);
+}
+
+/*
+ * recibe como parametro entidad a ignorar (si tiene)
+ * devuelve una lista de tileCoordinate, ocupadas por mobile models
+ */
+list<TileCoordinate> Escenario::tilesOcupadasPorMobileModels(Entity *entityToIgnore){
 	list<TileCoordinate> tilesOccupied;
 
 	map<int,TileCoordinate>::iterator it;
 	for (it = this->tilesWithIds.begin(); it != this->tilesWithIds.end(); it++){
-		if (it->first != mobileModel->getId()){
+		if (!entityToIgnore || (it->first != entityToIgnore->getId())){
 			TileCoordinate tile = it->second;
 			tilesOccupied.push_back(tile);
 		}
 	}
-	return this->mundo->obtenerCaminoIgnoringTiles(origen,destino,tilesOccupied);
+	return tilesOccupied;
 }
 
 list<TileCoordinate> Escenario::getVecinosLibresForEntity(Entity *entity) {
-	std::pair<SDL_Point,SDL_Point> tilesEntity = this->getTilesCoordinatesForEntity(entity);
-	//TODO buscar vecino libre
-	SDL_Point lastTile = tilesEntity.second;
+	list<TileCoordinate> tilesLibres;
+	list<TileCoordinate> tilesConMobileModels = this->tilesOcupadasPorMobileModels(NULL);
+	//TODO en el cliente no los esta guardando
 
-	TileCoordinate libre = TileCoordinate(lastTile.x + 1, lastTile.y);
-	list<TileCoordinate> list;
-	list.push_back(libre);
-	return list;
+	std::pair<SDL_Point,SDL_Point> tilesEntity = this->getTilesCoordinatesForEntity(entity);
+
+	//TODO buscar vecino libre
+	int minTileX = tilesEntity.first.x;
+	int maxTileX = tilesEntity.second.x;
+	int minTileY = tilesEntity.first.y;
+	int maxTileY = tilesEntity.second.y;
+
+	for (int i = minTileX;i <= maxTileX;i++){
+		for (int j = minTileY; j <= maxTileY; j++){
+			TileCoordinate tile = TileCoordinate(i,j);
+			list<TileCoordinate> auxList = this->mundo->getVecinosLibresForTile(tile,&tilesConMobileModels);
+			tilesLibres.merge(auxList);
+		}
+	}
+	//puede tener tiles repetidos, pero creo que no hay problema
+	return tilesLibres;
 }
 
 // Para manejar varios protagonistas

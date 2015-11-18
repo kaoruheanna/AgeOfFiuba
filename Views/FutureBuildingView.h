@@ -8,23 +8,29 @@
 #ifndef FUTUREBUILDING_H_
 #define FUTUREBUILDING_H_
 
+#include "View.h"
 #include "../GlobalConstants.h"
 #include <string>
 using namespace std;
+
+class View;
 
 enum FuturePositionType {
 	FuturePositionTypeAllowed = 0,
 	FuturePositionTypeForbidden
 };
 
-class FutureBuilding {
+class FutureBuildingView: public View {
 public:
-	FutureBuilding(string entityName,FuturePositionType positionType, LogicPosition logicPosition);
-	virtual ~FutureBuilding();
+	FutureBuildingView(string type,FuturePositionType positionType, LogicPosition logicPosition);
+	virtual ~FutureBuildingView();
 
-	string entityName;
+	FuturePositionType getFuturePositionType();
+	void setPositionType(FuturePositionType positionType);
+	void setLogicPosition(LogicPosition position);
+
+private:
 	FuturePositionType positionType;
-	LogicPosition logicPosition;
 };
 
 #endif /* FUTUREBUILDING_H_ */

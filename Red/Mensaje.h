@@ -16,6 +16,7 @@ enum MensajeType {
 	ERROR_NOMBRE_TOMADO, /* Servidor => Cliente: El usuario existe y esta conectado */
 	ESCENARIO, /* Servidor => Cliente: Se logueo con el usuario y le esta mandando la info inicial */
 	MOVER_PERSONAJE, /* Cliente => Servidor: Mover su personaje a la posicion */
+	INTERACTUAR, /* Cliente => Servidor: Interactuar una entidad con otra */
 	APARECE_PERSONAJE, /* Servidor => Cliente: Indica la posicion y estado de un personaje */
 	APARECE_RECURSO, /* Servidor => Cliente: Indica que hay un recurso y en que posicion */
 	ACTUALIZA_ENTIDAD, /* Servidor => Cliente: Indica que hay una actualizacion en una entity */

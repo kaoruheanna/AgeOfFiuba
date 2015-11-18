@@ -13,6 +13,7 @@
 #include "../Models/Escenario.h"
 #include "../Configuration/GameConfiguration.h"
 #include "Mensajero.h"
+#include "../Views/FutureBuildingView.h"
 
 using namespace std;
 
@@ -37,9 +38,10 @@ public:
 private:
 	User* usuario;
 	Mensajero* mensajero;
-
+//	Entity* selectedEntity;
+	Entity* pendingEntity; //entidad a construir
+	FutureBuildingView* futureBuildingView;
 	list<Entity*> selectedEntities;
-	Entity* pendingEntity;
 
 	bool shouldQuit;
 	bool serverError;
@@ -89,6 +91,7 @@ private:
 	void agregarPersonaje(MobileModel* personaje);
 	void actualizarEntidades(list<Entity*> entidades);
 	void loopEscenario();
+	void limpiarConstruccion();
 
 	//Mensajero Cliente
 	virtual void errorDeLogueo();

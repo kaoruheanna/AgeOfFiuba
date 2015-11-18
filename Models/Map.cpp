@@ -2,6 +2,9 @@
 #include "Entity.h"
 #include "../GlobalConstants.h"
 #include <limits.h>
+#include "../Utils/Log.h"
+
+const string TAG = "Map";
 
 Map::Map(int alto, int ancho, int tile_ancho, int tile_alto){
 	//el ancho y alto del tile se puede determinar con las dimensiones del tile default.
@@ -10,8 +13,6 @@ Map::Map(int alto, int ancho, int tile_ancho, int tile_alto){
 	this -> tile_alto = tile_alto;
 	this -> tile_ancho = tile_ancho;
 	this -> tileSet = new TileSet(ancho,alto);
-	
-
 }
 
 Map::~Map(){
@@ -64,7 +65,7 @@ SDL_Point Map::posicionRelativaRect(SDL_Rect rect, SDL_Point punto_m){
 	return punto_v;
 }
 
-bool Map::puedoConstruir(Entity* entidad, SDL_Point tile){
+bool Map::puedoConstruir(Entity* entidad, SDL_Point tile,list<TileCoordinate> *tilesOccupied){
 	int size_x = entidad->getAnchoBase();
 	int size_y = entidad->getAltoBase();
 
@@ -76,21 +77,44 @@ bool Map::puedoConstruir(Entity* entidad, SDL_Point tile){
 	}
 	//verificar que en todos los tiles que va a ocupar la entidad se pueda construir
 	SDL_Point fin = {size_x+tile.x-1, size_y+tile.y-1};
-	return !(this -> tileSet->sectorEstaBloqueado(tile,fin));
+	bool hayEntities = this->tileSet->sectorEstaBloqueado(tile,fin);
+	bool hayMobileModels = this->tilesOcupadosPorMobileModels(tile,fin,tilesOccupied);
+	return (!hayEntities && !hayMobileModels);
 }
 
-bool Map::construirEntidad(Entity* entidad, SDL_Point posicion){
+bool Map::tilesOcupadosPorMobileModels(SDL_Point tileInicio,SDL_Point tileFin,list<TileCoordinate> *tilesOccupied){
+	if (tilesOccupied == NULL){
+		return false;
+	}
+
+	list<TileCoordinate>::iterator it;
+	for (it = tilesOccupied->begin();it != tilesOccupied->end();it++){
+		TileCoordinate tileOcupado = *it;
+		int x = tileOcupado.first; //del mobile model
+		int y = tileOcupado.second; //del mobile model
+		bool ocupadoEnX = ((x >= tileInicio.x) && (x <= tileFin.x));
+		bool ocupadoEnY = ((y >= tileInicio.y) && (y <= tileFin.y));
+		if (ocupadoEnX && ocupadoEnY){
+			Log().Get(TAG) << "Tile Ocupado por mobile model";
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Map::construirEntidad(Entity* entidad, SDL_Point posicion,list<TileCoordinate> *tilesOccupied){
 	if (entidad->getClass() == MOBILE_MODEL){
 		// el tileset no guarda los tiles ocupados por los mobile models
 		return false;
 	}
 	SDL_Point tilePos = this->getTileForPosition(posicion);
-	if (!this->puedoConstruir(entidad,tilePos)){
+	if (!this->puedoConstruir(entidad,tilePos,tilesOccupied)){
 		return false;
 	}
 
+	Log().Get(TAG) << "COnstruyo "<<entidad->getNombre();
 	for (int i = 0; i < entidad->getAnchoBase(); i++){
-		for (int j = 0; j < entidad->getAnchoBase(); j++){
+		for (int j = 0; j < entidad->getAltoBase(); j++){
 			SDL_Point tile = {i+tilePos.x,j+tilePos.y};
 			this -> tileSet -> setTileInconstruible(tile);
 		}
@@ -127,12 +151,13 @@ SDL_Point Map::getCenteredPositionForTile(SDL_Point point) {
 	return {point.x * TILE_SIZE + (TILE_SIZE/2), point.y * TILE_SIZE + (TILE_SIZE/2)};
 }
 
-queue <SDL_Point> Map::obtenerCaminoIgnoringTiles(SDL_Point origen, SDL_Point destino,list<TileCoordinate> tilesOccupied){
+queue <SDL_Point> Map::obtenerCaminoIgnoringTiles(SDL_Point origen, SDL_Point destino,list<TileCoordinate> *tilesOccupied){
 	queue<SDL_Point> camino2;
 	SDL_Point punto;
 
 	//transformo las coordenadas a tiles.
-	int offset = (TILE_SIZE/2);
+//	int offset = (TILE_SIZE/2);
+	int offset = 0;
 	SDL_Point tileOrigen = this->getTileForPosition({origen.x-offset,origen.y-offset});
 	SDL_Point tileDestino = this->getTileForPosition({destino.x-offset,destino.y-offset});
 
@@ -150,7 +175,22 @@ queue <SDL_Point> Map::obtenerCaminoIgnoringTiles(SDL_Point origen, SDL_Point de
 	return camino2;
 }
 
-//Recive Tiles y devuelve la distancia entre ellos
+std::list<TileCoordinate> Map::getVecinosLibresForTile(TileCoordinate tile,list<TileCoordinate> *tilesOccupied) {
+	list<TileCoordinate> libres;
+	list<TileCoordinate> vecinos = this->tileSet->vecinosTotales(tile);
+
+	list<TileCoordinate>::iterator it;
+	for (it = vecinos.begin();it != vecinos.end(); it++){
+		TileCoordinate tile = *it;
+		if (this->tileSet->posicionValida(tile) && this->tileSet->esTileTransitable(tile,tilesOccupied)){
+			libres.push_back(tile);
+		}
+	}
+
+	return libres;
+}
+
+//Recibe Tiles y devuelve la distancia entre ellos
 int Map::getDistanciaForTiles(SDL_Point tileOrigen,SDL_Point tileDestino) {
 
 	int xDiff = abs(tileOrigen.x - tileDestino.x);
@@ -159,7 +199,7 @@ int Map::getDistanciaForTiles(SDL_Point tileOrigen,SDL_Point tileDestino) {
 	return max(xDiff,yDiff);
 }
 
-//Recive posiciones logicas y devuelve tiles de distancia entre ellos
+//Recibe posiciones logicas y devuelve tiles de distancia entre ellos
 int Map::getDistancia(SDL_Point from,SDL_Point to) {
 	int offset = (TILE_SIZE/2);
 

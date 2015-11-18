@@ -47,3 +47,7 @@ void View::setOrigin(int x, int y) {
 std::string View::getType() {
 	return this->type;
 }
+
+Drawable* View::getDrawable(){
+	return this->drawable;
+}

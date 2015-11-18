@@ -44,19 +44,31 @@ class Map {
 		SDL_Point getEmptyTile();
 		SDL_Point posicionRelativaRect(SDL_Rect,SDL_Point);
 
-		bool construirEntidad(Entity*,SDL_Point);
+
+		/*bool construirEntidad(Entity*,SDL_Point);
 		bool puedoConstruir(Entity*,SDL_Point);
-		bool posicionVacia(SDL_Point);
+		bool posicionVacia(SDL_Point);*/
+
+		//recibe la entidad, el tile de inicio, y los tiles ocupados por los mobile models
+		bool construirEntidad(Entity*,SDL_Point,list<TileCoordinate> *tilesOccupied);
+
+		// recibe el tileInicio, tileFin y la lista de los tiles ocupados por mobile models
+		bool tilesOcupadosPorMobileModels(SDL_Point tileInicio,SDL_Point tileFin,list<TileCoordinate> *tilesOccupied);
+
+		//recibe la entidad, el tile de inicio, y los tiles ocupados por los mobile models
+		bool puedoConstruir(Entity* entity,SDL_Point,list<TileCoordinate> *tilesOccupied);
+
 		void sacarEntidad(Entity*);
 
 		SDL_Point getTileForPosition(SDL_Point point);
 		SDL_Point getPositionForTile(SDL_Point point,bool centered = false);
 		SDL_Point getCenteredPositionForTile(SDL_Point point);
 
+		queue <SDL_Point> obtenerCaminoIgnoringTiles(SDL_Point origen, SDL_Point destino,list<TileCoordinate> *tilesOccupied);
+		std::list<TileCoordinate> getVecinosLibresForTile(TileCoordinate tile,list<TileCoordinate> *tilesOccupied);
+
 		//Obtiene el tile mas cercano a to desde from
 		SDL_Point getPuntoMasCercanoADistancia( Entity* from, Entity* to, int distancia);
-
-		queue <SDL_Point> obtenerCaminoIgnoringTiles(SDL_Point origen, SDL_Point destino,list<TileCoordinate> tilesOccupied);
 
 		Map(int alto, int ancho, int tile_ancho, int tile_alto);
 		virtual ~Map();

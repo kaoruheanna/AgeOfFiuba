@@ -70,7 +70,7 @@ bool TileSet::sectorEstaBloqueado(SDL_Point origen, SDL_Point fin){
 }
 
 //Devuelve todas las posiciones adyacentes a la baldosa por las que se puede caminar
-std::list<TileCoordinate> TileSet::vecinosLibres(TileCoordinate baldosa,list<TileCoordinate> tilesOccupied){
+std::list<TileCoordinate> TileSet::vecinosLibres(TileCoordinate baldosa,list<TileCoordinate> *tilesOccupied){
 	list<TileCoordinate>vecinosLibres;
 	list<TileCoordinate>vecinos = this->vecinosTotales(baldosa);
 
@@ -126,13 +126,17 @@ bool TileSet::posicionOcupada(TileCoordinate posicion){
 	return this->matriz[posicion.first][posicion.second];
 }
 
-bool TileSet::esTileTransitable(TileCoordinate tile, list<TileCoordinate> tilesOccupied){
+bool TileSet::esTileTransitable(TileCoordinate tile, list<TileCoordinate> *tilesOccupied){
 	if (this->posicionOcupada(tile)){
 		return false;
 	}
 
+	if (tilesOccupied == NULL){
+		return true;
+	}
+
 	list<TileCoordinate>::iterator it;
-	for (it = tilesOccupied.begin(); it != tilesOccupied.end();it++){
+	for (it = tilesOccupied->begin(); it != tilesOccupied->end();it++){
 		TileCoordinate tileWithPlayer = *it;
 		if (tileWithPlayer == tile){
 			return false;
@@ -142,7 +146,7 @@ bool TileSet::esTileTransitable(TileCoordinate tile, list<TileCoordinate> tilesO
 	return true;
 }
 
-bool TileSet::esVecinoLibre(TileCoordinate a, TileCoordinate b,list<TileCoordinate> tilesOccupied){
+bool TileSet::esVecinoLibre(TileCoordinate a, TileCoordinate b,list<TileCoordinate> *tilesOccupied){
 	if (!this->posicionValida(a) || !this->posicionValida(b)){
 		return false; //si esta fuera del mapa return false
 	}
@@ -165,7 +169,7 @@ bool TileSet::esVecinoLibre(TileCoordinate a, TileCoordinate b,list<TileCoordina
 	return false;
 }
 
-pointMap TileSet::calcularCaminoMinimoIgnoringTiles(TileCoordinate origen, TileCoordinate destino,TileCoordinate &destino_real, list<TileCoordinate> tilesOccupied){
+pointMap TileSet::calcularCaminoMinimoIgnoringTiles(TileCoordinate origen, TileCoordinate destino,TileCoordinate &destino_real, list<TileCoordinate> *tilesOccupied){
 	PriorityQueue<TileCoordinate> frontera;
 	frontera.put(origen, 0);
 	pointMap desde_donde_vino;
@@ -203,7 +207,7 @@ pointMap TileSet::calcularCaminoMinimoIgnoringTiles(TileCoordinate origen, TileC
 	return desde_donde_vino; // si sale del while es porque no llego al destino, el camino es hasta el lugar mas cercano al destino.
 }
 
-deque<SDL_Point> TileSet::obtenerCaminoIgnoringTiles(TileCoordinate tileOrigen, TileCoordinate tileDestino,list<TileCoordinate> tilesOccupied){
+deque<SDL_Point> TileSet::obtenerCaminoIgnoringTiles(TileCoordinate tileOrigen, TileCoordinate tileDestino,list<TileCoordinate> *tilesOccupied){
 	deque<SDL_Point> caminoVacio;
 	if (this->posicionOcupada(tileDestino)){
 		// Si esta ocupada, no hago nada

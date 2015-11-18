@@ -16,6 +16,7 @@
 #include "Menu/MiniView.h"
 #include "TopBar/TopBar.h"
 #include "Cartel/Cartel.h"
+#include "FutureBuildingView.h"
 
 const std::string TAG = "Renderer";
 
@@ -35,6 +36,7 @@ Renderer::Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos) {
 	this->fog = NULL;
 	this->hasSelectedTiles = false;
 	this->cartel = NULL;
+	this->futureBuildingView = NULL;
 	this->selectionArea = {0,0,0,0};
 
 	bool didInitSDL = this->initSDL();
@@ -315,6 +317,7 @@ void Renderer::drawEscenario() {
 	}
 	this->drawablesToPaint.clear();
 
+	this->drawFutureBuildingIfShould();
 	this->drawCartelIfShould();
 }
 
@@ -322,6 +325,32 @@ void Renderer::drawCartelIfShould(){
 	if (this->cartel){
 		this->cartel->render(this);
 	}
+}
+
+void Renderer::drawFutureBuildingIfShould(){
+	if (!this->futureBuildingView){
+		return;
+	}
+
+	Drawable *drawable = this->futureBuildingView->getDrawable();
+	SDL_Point logicPosition = this->futureBuildingView->getOrigin();
+	SDL_Point windowPoint = this->mapToWindowPoint(logicPosition);
+	SDL_Rect renderQuad = drawable->getRectToDraw(windowPoint.x, windowPoint.y);
+	SDL_Rect clipRect = {0,0,renderQuad.w,renderQuad.h};;
+
+	SDL_Texture *texture = drawable->getTexture();
+	SDL_SetTextureAlphaMod(texture,100);
+
+	if (this->futureBuildingView->getFuturePositionType() == FuturePositionTypeForbidden){
+		SDL_SetTextureColorMod(texture,255,0,0 );
+	}
+
+	if(!(this->isInsideWindow(&renderQuad))){
+		//como no esta dentro de la ventana, no lo dibuja
+		return;
+	}
+	SDL_RenderCopy(this->sdlRenderer,texture , &clipRect, &renderQuad);
+	SDL_SetTextureAlphaMod(texture,255);
 }
 
 void Renderer::drawMenu(){
@@ -444,6 +473,7 @@ void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable,bool 
 	} else if (currentTileState == NUBLADO) {
 		SDL_SetTextureColorMod( drawable->getTexture(), FOG_VISITED,FOG_VISITED,FOG_VISITED );
 	}
+
 	if (!this->selectedEntities.empty()){
 		for (Entity* entity: this->selectedEntities){
 			if (entity->getClass() == MOBILE_MODEL && currentTileState != NUBLADO  ){
@@ -759,6 +789,13 @@ bool Renderer::isPixelInRect(int x, int y, SDL_Rect rect){
 		return false;
 	}
 	return true;
+}
+
+void Renderer::setFutureBuildingView(FutureBuildingView *futureBuildingView) {
+	this->futureBuildingView = futureBuildingView;
+	if (this->futureBuildingView){
+		this->setDrawableForView(this->futureBuildingView);
+	}
 }
 
 void Renderer::drawSelectionRect(){

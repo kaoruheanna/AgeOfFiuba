@@ -38,6 +38,7 @@ class Escenario {
 
 		bool cosecharEnPosicion(SDL_Point point, MobileModel* protagonista);
 		void init();
+		list<TileCoordinate> tilesOcupadasPorMobileModels(Entity *entityToIgnore);
 
 	public:
 		Map* mundo;
@@ -49,7 +50,8 @@ class Escenario {
 		list<Entity*> entidadesAgregadas;
 
 		bool agregarEntidad(Entity*);
-		bool construirEntidad(Entity*,SDL_Point);
+		bool construirEntidad(Entity* entidad,SDL_Point origenLogico);
+		bool puedeConstruirEntidad(Entity* entidad,SDL_Point origenLogico);
 		void agregarEntidad(const string& tipo, SDL_Point posicion,const string& equipo);
 
 		void vaciarEntidades();
@@ -76,6 +78,7 @@ class Escenario {
 
 		list<Entity*> getEntidadesEnAreaForJugador(SDL_Point posInicial, SDL_Point posFinal, Team team);// devuelve todas las entidades dentro del area del rectangulo que pertenecen a un jugador.
 		list<TileCoordinate> getVecinosLibresForEntity(Entity *entity);
+		void actualizarTileOcupadaPorPersonaje(MobileModel *model);
 
 		bool inicializacionCorrecta;
 

@@ -31,6 +31,7 @@ class MiniEscenarioView;
 class MiniView;
 class TopBar;
 class Cartel;
+class FutureBuildingView;
 
 class RendererInteractionDelegate {
 public:
@@ -52,6 +53,7 @@ class Renderer {
 public:
 	SDL_Point mainTilePosition;
 	SDL_Point miniMapMainTilePosition;
+
 	Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos);
 	virtual ~Renderer();
 	void close();
@@ -89,6 +91,7 @@ public:
 
 	bool isPixelInEscenario(int x, int y);
 	bool isPixelInMenu(int x, int y);
+	void setFutureBuildingView(FutureBuildingView *futureBuildingView);
 
 private:
 	bool successfullInit;
@@ -114,6 +117,7 @@ private:
 	SDL_Rect selectionArea;
 	int screenWidth;
 	int screenHeight;
+	FutureBuildingView *futureBuildingView; //la vista del edifico a construir para q el usuario decida donde
 
 	bool initSDL();
 	bool loadMedia(list<TipoConfig> tipos);
@@ -124,6 +128,7 @@ private:
 	void drawMenu();
 	void drawEscenario();
 	void drawCartelIfShould();
+	void drawFutureBuildingIfShould();
 	void drawMiniEscenario();
 	void drawSelectionRect();
 	int menuOriginY();

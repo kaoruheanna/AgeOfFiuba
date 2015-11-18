@@ -49,7 +49,7 @@ tipos:
    pixel_ref_x: 153
    pixel_ref_y: 31
    creables:
-   - soldado
+   - aldeano
    
  - nombre: archeryRange
    categoria: building
@@ -60,14 +60,16 @@ tipos:
    alto_base : 4
    pixel_ref_x: 159
    pixel_ref_y: 77
+   creables:
+   - soldado
 
  - nombre: molino
    categoria: building
    imagen: img/whatermill.png
    miniImagen: img/tile_orange.png
    imagenBoton: img/boton-molino.png
-   ancho_base: 1
-   alto_base : 1
+   ancho_base: 4
+   alto_base : 4
    pixel_ref_x: 80
    pixel_ref_y: 75
    fps: 10
@@ -79,7 +81,7 @@ tipos:
    imagen: img/soldadoAge.png
    imagenDeshabilitado: img/soldadoAge.png
    miniImagen: img/tile_red.png
-   imagenBoton: img/boton-aldeano.png
+   imagenBoton: img/boton-soldado.png
    ancho_base: 1
    alto_base : 1
    pixel_ref_x: 25
@@ -95,6 +97,7 @@ tipos:
    imagen: img/aldeana_caminando.png
    imagenDeshabilitado: img/soldadoAge.png
    miniImagen: img/tile_red.png
+   imagenBoton: img/boton-aldeano.png
    ancho_base: 1
    alto_base : 1
    pixel_ref_x: 14
@@ -149,7 +152,7 @@ escenario:
    
    entidades:
 
-   - [x: 1, y: 7, tipo: casa, equipo: RED]
+   - [x: 1, y: 7, tipo: casa]
    - [x: 20, y: 10, tipo: archeryRange, equipo: RED]
    - [x: 1, y: 1, tipo: soldado, equipo: RED]
    - [x: 18, y: 9, tipo: aldeano, equipo: RED]
