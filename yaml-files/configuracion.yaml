@@ -51,6 +51,7 @@ tipos:
    creables:
    - aldeano
    vida_inicial: 10000
+   escudo: 1
 
  - nombre: archeryRange
    categoria: building
@@ -79,18 +80,18 @@ tipos:
 
  - nombre: soldado
    categoria: warrior
-   imagen: img/soldadoAge.png
+   imagen: img/soldadoRomanoCaminando.png
    imagenDeshabilitado: img/soldadoAge.png
    miniImagen: img/tile_red.png
-   imagenBoton: img/boton-soldado.png
+   imagenBoton: img/boton-soldadoRomano.png
    ancho_base: 1
    alto_base : 1
-   pixel_ref_x: 25
-   pixel_ref_y: 35
+   pixel_ref_x: 20
+   pixel_ref_y: 38
    fps: 35
    delay: 0
-   alto_frame: 50
-   ancho_frame: 51
+   alto_frame: 45
+   ancho_frame: 38
    mini_map_pixel_ref_type: 1
    alcance: 1
    vida_inicial: 250
@@ -118,13 +119,51 @@ tipos:
    
  - nombre: caballo
    categoria: warrior
-   imagen: img/caballo_caminando.png
+   imagen: img/caballoCaminando.png
+   imagenDeshabilitado: img/soldadoAge.png
+   miniImagen: img/tile_red.png
+   imagenBoton: img/boton-caballo.png
+   ancho_base: 1
+   alto_base : 1
+   pixel_ref_x: 40
+   pixel_ref_y: 84
+   fps: 35
+   delay: 0
+   alto_frame: 121
+   ancho_frame: 93
+   mini_map_pixel_ref_type: 1
+   alcance: 3
+   vida_inicial: 500
+   poder_ataque: 2
+   
+ - nombre: ballestero
+   categoria: warrior
+   imagen: img/ballesteroCaminando.png
+   imagenDeshabilitado: img/soldadoAge.png
+   miniImagen: img/tile_red.png
+   imagenBoton: img/boton-ballestero.png
+   ancho_base: 1
+   alto_base : 1
+   pixel_ref_x: 22
+   pixel_ref_y: 38
+   fps: 35
+   delay: 0
+   alto_frame: 49
+   ancho_frame: 38
+   mini_map_pixel_ref_type: 1
+   alcance: 3
+   vida_inicial: 500
+   poder_ataque: 2
+   
+ - nombre: rey
+   categoria: warrior
+   imagen: img/cabExploradorCaminando.png
    imagenDeshabilitado: img/soldadoAge.png
    miniImagen: img/tile_red.png
    ancho_base: 1
    alto_base : 1
-   pixel_ref_x: 48
-   pixel_ref_y: 75
+   pixel_ref_x: 45
+   pixel_ref_y: 68
    fps: 35
    delay: 0
    alto_frame: 94
@@ -133,6 +172,25 @@ tipos:
    alcance: 3
    vida_inicial: 500
    poder_ataque: 2
+
+ - nombre: bombardero
+   categoria: warrior
+   imagen: img/bombarderoCamina.png
+   imagenDeshabilitado: img/soldadoAge.png
+   miniImagen: img/tile_red.png
+   imagenBoton: img/boton-bombardero.png
+   ancho_base: 1
+   alto_base : 1
+   pixel_ref_x: 38
+   pixel_ref_y: 40
+   fps: 35
+   delay: 0
+   alto_frame: 53
+   ancho_frame: 57
+   mini_map_pixel_ref_type: 1
+   alcance: 3
+   vida_inicial: 500
+   poder_ataque: 2   
 
  - nombre: tierra
    imagen: img/tierra.png
@@ -162,6 +220,9 @@ escenario:
    - [x: 1, y: 7, tipo: casa]
    - [x: 20, y: 10, tipo: archeryRange, equipo: RED]
    - [x: 1, y: 1, tipo: soldado, equipo: RED]
+   - [x: 10, y: 10, tipo: ballestero, equipo: RED]
+   - [x: 10, y: 12, tipo: rey, equipo: RED]
+   - [x: 10, y: 14, tipo: bombardero, equipo: RED]
    - [x: 18, y: 9, tipo: aldeano, equipo: RED]
    - [x: 14, y: 9, tipo: caballo, equipo: RED]
    - [x: 14, y: 10, tipo: caballo, equipo: RED]

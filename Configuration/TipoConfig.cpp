@@ -48,6 +48,7 @@ TipoConfig::TipoConfig(YAML::Node nodo): TipoConfig(){
 	this->propiedadesTipoUnidad.alcance = TipoConfig::getIntAttribute(nodo, "alcance", this->propiedadesTipoUnidad.alcance);
 	this->propiedadesTipoUnidad.poderAtaque = TipoConfig::getIntAttribute(nodo, "poder_ataque", this->propiedadesTipoUnidad.poderAtaque);
 	this->propiedadesTipoUnidad.vidaInicial = TipoConfig::getIntAttribute(nodo, "vida_inicial", this->propiedadesTipoUnidad.vidaInicial);
+	this->propiedadesTipoUnidad.escudo = TipoConfig::getIntAttribute(nodo, "escudo", this->propiedadesTipoUnidad.escudo);
 
 	this->imagen = TipoConfig::getStringAttribute(nodo, "imagen", this->imagen);
 	this->imagenDeshabilitado = TipoConfig::getStringAttribute(nodo, "imagenDeshabilitado", this->imagenDeshabilitado);

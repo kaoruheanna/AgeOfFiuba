@@ -246,4 +246,13 @@ int Entity::getLife() {
 	return this->life;
 }
 
+int Entity::getEscudo() {
+	return this->propiedadesTipoUnidad.escudo;
+}
 
+int Entity::vidaDescontada(Entity* entity) {
+	int escudo = this->getEscudo() ? (rand() % this->getEscudo()) : 0;
+	int ataque = entity->getPoderAtaque() ? (rand() % entity->getPoderAtaque()) : 0;
+	int vidaDescontada = ataque - escudo;
+	return (vidaDescontada > 0) ? vidaDescontada : 0;
+}
