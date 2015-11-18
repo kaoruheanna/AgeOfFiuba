@@ -16,6 +16,10 @@ FutureBuildingView::~FutureBuildingView() {
 	// TODO Auto-generated destructor stub
 }
 
+FuturePositionType FutureBuildingView::getFuturePositionType(){
+	return this->positionType;
+}
+
 void FutureBuildingView::setPositionType(FuturePositionType positionType) {
 	this->positionType = positionType;
 }

@@ -49,7 +49,8 @@ class Escenario {
 		list<Entity*> entidadesAgregadas;
 
 		bool agregarEntidad(Entity*);
-		bool construirEntidad(Entity*,SDL_Point);
+		bool construirEntidad(Entity* entidad,SDL_Point origenLogico);
+		bool puedeConstruirEntidad(Entity* entidad,SDL_Point origenLogico);
 		void agregarEntidad(const string& tipo, SDL_Point posicion,const string& equipo);
 
 		void vaciarEntidades();

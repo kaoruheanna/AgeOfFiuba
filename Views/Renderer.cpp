@@ -338,7 +338,10 @@ void Renderer::drawFutureBuildingIfShould(){
 
 	SDL_Texture *texture = drawable->getTexture();
 	SDL_SetTextureAlphaMod(texture,100);
-	SDL_SetTextureColorMod(texture,255,0,0 );
+
+	if (this->futureBuildingView->getFuturePositionType() == FuturePositionTypeForbidden){
+		SDL_SetTextureColorMod(texture,255,0,0 );
+	}
 
 	if(!(this->isInsideWindow(&renderQuad))){
 		//como no esta dentro de la ventana, no lo dibuja

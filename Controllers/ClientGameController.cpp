@@ -255,10 +255,15 @@ bool ClientGameController::pollEvents(){
 			this->pendingEntity->setPosicion(posicion);
 
 			LogicPosition logicPosition = LogicPosition(posicion.x,posicion.y);
+
+			bool puedoConstruir = this->escenario->puedeConstruirEntidad(this->pendingEntity,posicion);
+			FuturePositionType positionType = (puedoConstruir) ? FuturePositionTypeAllowed : FuturePositionTypeForbidden;
+
 			if (this->futureBuildingView){
 				this->futureBuildingView->setLogicPosition(logicPosition);
+				this->futureBuildingView->setPositionType(positionType);
 			} else {
-				this->futureBuildingView = new FutureBuildingView(this->pendingEntity->getNombre(),FuturePositionTypeAllowed,logicPosition);
+				this->futureBuildingView = new FutureBuildingView(this->pendingEntity->getNombre(),positionType,logicPosition);
 			}
 		}
 

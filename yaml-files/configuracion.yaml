@@ -68,8 +68,8 @@ tipos:
    imagen: img/whatermill.png
    miniImagen: img/tile_orange.png
    imagenBoton: img/boton-molino.png
-   ancho_base: 1
-   alto_base : 1
+   ancho_base: 4
+   alto_base : 4
    pixel_ref_x: 80
    pixel_ref_y: 75
    fps: 10

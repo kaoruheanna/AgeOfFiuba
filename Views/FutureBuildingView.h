@@ -25,6 +25,7 @@ public:
 	FutureBuildingView(string type,FuturePositionType positionType, LogicPosition logicPosition);
 	virtual ~FutureBuildingView();
 
+	FuturePositionType getFuturePositionType();
 	void setPositionType(FuturePositionType positionType);
 	void setLogicPosition(LogicPosition position);
 
