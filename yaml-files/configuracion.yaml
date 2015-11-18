@@ -174,7 +174,7 @@ tipos:
 
  - nombre: bombardero
    categoria: warrior
-   imagen: img/bombarderoCamina.png
+   imagen: img/bombarderoCaminando.png
    imagenDeshabilitado: img/soldadoAge.png
    miniImagen: img/tile_red.png
    imagenBoton: img/boton-bombardero.png
@@ -186,6 +186,25 @@ tipos:
    delay: 0
    alto_frame: 53
    ancho_frame: 57
+   mini_map_pixel_ref_type: 1
+   alcance: 3
+   vida_inicial: 500
+   poder_ataque: 2   
+   
+ - nombre: lancero
+   categoria: warrior
+   imagen: img/lanceroCaminando.png
+   imagenDeshabilitado: img/soldadoAge.png
+   miniImagen: img/tile_red.png
+   imagenBoton: img/boton-lancero.png
+   ancho_base: 1
+   alto_base : 1
+   pixel_ref_x: 44
+   pixel_ref_y: 58
+   fps: 35
+   delay: 0
+   alto_frame: 66
+   ancho_frame: 65
    mini_map_pixel_ref_type: 1
    alcance: 3
    vida_inicial: 500
@@ -222,6 +241,7 @@ escenario:
    - [x: 10, y: 10, tipo: ballestero, equipo: RED]
    - [x: 10, y: 12, tipo: rey, equipo: RED]
    - [x: 10, y: 14, tipo: bombardero, equipo: RED]
+   - [x: 10, y: 16, tipo: lancero, equipo: RED]
    - [x: 18, y: 9, tipo: aldeano, equipo: RED]
    - [x: 14, y: 9, tipo: caballo, equipo: RED]
    - [x: 14, y: 10, tipo: caballo, equipo: RED]
