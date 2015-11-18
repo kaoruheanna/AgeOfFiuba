@@ -28,8 +28,6 @@ public:
 	virtual int getBlockSizeFromIndex(int currentIndex);
 	virtual void getBlockFromIndex(int currentIndex, void* buffer);
 	virtual void deserialize(int totalBlockCount, int currentBlock, void* blockData);
-
-	virtual int getPoderAtaque();
 };
 
 #endif /* MODELS_WARRIOR_H_ */
