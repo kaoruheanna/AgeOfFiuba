@@ -39,10 +39,6 @@ void Warrior::receiveInteraction(Warrior* entity) {
 	}
 }
 
-int Warrior::getPoderAtaque() {
-	return 1;
-}
-
 // Metodos de serializacion
 int Warrior::getTotalBlockCount() {
 	return MobileModel::getTotalBlockCount();

@@ -416,8 +416,9 @@ void ClientGameController::actualizaPersonaje(MobileModel* entity) {
 	Entity* model = this->escenario->entidadConId(entity->getId());
 	if(model == NULL){
 		// no existia, tiene q crearse
-		this->escenario->agregarEntidad(entity);
-		this->escenario->actualizarTileOcupadaPorPersonaje(entity);
+		MobileModel* newModel = new MobileModel(*entity);
+		this->escenario->agregarEntidad(newModel);
+		this->escenario->actualizarTileOcupadaPorPersonaje(newModel);
 		// TODO cambiar como detecta este numero
 //		posicionInicialProtagonista = entity->getPosicion();
 		this->updated = true;
