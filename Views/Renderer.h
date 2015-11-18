@@ -39,6 +39,7 @@ public:
 	virtual ~RendererInteractionDelegate(){};
 	virtual void leftClickEnEscenario(int x, int y){};
 	virtual void rightClickEnEscenario(int x, int y){};
+	virtual void leftMouseUp(int x, int y, int w, int h){};
 	virtual void createEntityButtonPressed(string entityName){};
 };
 
@@ -79,11 +80,16 @@ public:
 	FogOfWar* getFog();
 	void setProtagonista(User *protagonista);
 	void setMessagesInMenu(std::string firstMessage, std::string secondMessage);
-	void setSelectedTilesCoordinates(bool selected,std::pair<SDL_Point,SDL_Point> tiles,Entity* entidad);
+	void setSelectedTilesCoordinates(bool selected,std::list<pair<SDL_Point,SDL_Point> > tiles, list<Entity*> entidad);
 	void setCartel(string message);
 	void hideCartel();
 	void clickEvent(int x, int y, bool leftClick, RendererInteractionDelegate *delegate);
+	void dragLeftClickEvent(int xi, int yi, int xf, int yf);
+	void leftMouseUpEvent(RendererInteractionDelegate *delegate, int x, int y);
 	Entity* selectedEntity;
+
+	list <Entity*> selectedEntities;
+
 	bool isPixelInEscenario(int x, int y);
 	bool isPixelInMenu(int x, int y);
 	void setFutureBuildingView(FutureBuildingView *futureBuildingView);
@@ -109,6 +115,7 @@ private:
 	SDL_Rect escenarioRect;
 	SDL_Rect menuRect;
 	SDL_Rect minimapRect;
+	SDL_Rect selectionArea;
 	int screenWidth;
 	int screenHeight;
 	FutureBuildingView *futureBuildingView; //la vista del edifico a construir para q el usuario decida donde
@@ -124,6 +131,7 @@ private:
 	void drawCartelIfShould();
 	void drawFutureBuildingIfShould();
 	void drawMiniEscenario();
+	void drawSelectionRect();
 	int menuOriginY();
 	void setDrawableForView(View* view);
 	void setDrawableForMiniView(MiniView* view);

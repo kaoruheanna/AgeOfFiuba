@@ -6,14 +6,28 @@
  */
 
 #include "Worker.h"
+#include "../Utils/Log.h"
+const string  TAG = "Worker";
 
-Worker::Worker() {
-	// TODO Auto-generated constructor stub
-
+Worker::Worker(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base)
+: MobileModel(id,nombre, posicion, ancho_base, alto_base){
+	this->life = 250;
 }
 
-Worker::~Worker() {
-	// TODO Auto-generated destructor stub
+Worker::Worker() {}
+
+Worker::~Worker() {}
+
+void Worker::doInteract(){
+	if (!activeInteractionEntity ||
+		!this->canReach(activeInteractionEntity) ||
+		!activeInteractionEntity->estaViva()) {
+		return;
+	}
+
+	this->state = STATE_INTERACTING;
+	activeInteractionEntity->receiveInteraction(this);
+
 }
 
 void Worker::interact(Entity* entity) {
@@ -22,4 +36,13 @@ void Worker::interact(Entity* entity) {
 
 int Worker::getPoderCosecha() {
 	return 1;
+}
+
+void Worker::receiveInteraction(Warrior* entity) {
+	if (!this->estaViva()) return;
+
+	this->life = this->life - entity->getPoderAtaque();
+	if((this->life % 100) == 0) {
+		Log().Get(TAG) << "Worker receive interaction from Warrior vida: " << this->life;
+	}
 }

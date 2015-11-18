@@ -166,7 +166,6 @@ void ServerGameController::actualizarProtagonista(){
 }
 
 void ServerGameController::moverEntidad(MobileModel* newModel, string username) {
-	newModel->stopInteracting();
 	this->escenario->entidadesInteractuando.remove(newModel);
 	// TODO volver a hacer sincronico
 	MobileModel* oldModel = this->getMobileModelForUser(newModel->getId(), username);
@@ -174,6 +173,7 @@ void ServerGameController::moverEntidad(MobileModel* newModel, string username) 
 		// TODO mandar error de que no le pertenece la entidad
 		return;
 	}
+	oldModel->stopInteracting();
 	SDL_Point destino = {newModel->getDestinationX(),newModel->getDestinationY()};
 	this->escenario->moveEntityToPos(oldModel,destino);
 }
@@ -190,11 +190,16 @@ void ServerGameController::interactuar(int selectedEntityId, int targetEntityId)
 		return;
 	}
 
-	//if(selectedEntity->shouldInteractWith(targetEntity)) {
-		Log().Get(TAG) << "Agrego a Interactuar en el server " << selectedEntity->getNombre() << " " << targetEntity->getNombre();
-		selectedEntity->interact(targetEntity);
-		this->escenario->entidadesInteractuando.push_back(selectedEntity);
-	//}
+	Log().Get(TAG) << "Agrego a Interactuar en el server " << selectedEntity->getNombre() << " " << targetEntity->getNombre();
+
+	if(selectedEntity->getClass()==MOBILE_MODEL) {
+		SDL_Point point = this->escenario->mundo->getPuntoMasCercanoADistancia(selectedEntity,targetEntity,selectedEntity->getAlcance());
+		SDL_Point destino = this->escenario->mundo->getCenteredPositionForTile(point);
+		this->escenario->moveEntityToPos((MobileModel*)selectedEntity,destino);
+	}
+
+	selectedEntity->interact(targetEntity);
+	this->escenario->entidadesInteractuando.push_back(selectedEntity);
 
 }
 
@@ -309,6 +314,7 @@ int ServerGameController::userLogin(char* username) {
 	list<Team> teams = this->escenario->getTeams();
 	if(teams.size() <= this->usuarios.size()){
 		// Error de logueo => No hay mas equipos disponibles
+		Log().Get(TAG) << "Cantidad de equipos " << teams.size() << " usuarios" << this->usuarios.size();
 		return -2;
 	}
 	user = new User(string(username));

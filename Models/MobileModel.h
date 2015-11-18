@@ -31,6 +31,7 @@ public:
 	int getDestinationX();
 	int getDestinationY();
 	bool updatePosition();
+	void setMoving(bool moving);
 	bool isMoving();
 	void update(MobileModel* other);
 	void addDestination(int destinationX, int destionationY);
@@ -41,7 +42,6 @@ public:
 	bool esJugador();
 	string getNombreAMostrar();
 
-	bool canReach(Entity* entity);
 	void olvidarCamino();
 	virtual EntityType getClass();
 

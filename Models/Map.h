@@ -30,6 +30,13 @@ class Map {
 
 		//Recibe dos posiciones logicas, la transforma a tiles y te da la distancia en tiles
 		int getDistancia(SDL_Point from,SDL_Point to);
+		//Recive dos tiles y te da la distancia en tiles
+		int getDistanciaForTiles(SDL_Point from,SDL_Point to);
+		//Recive dos Entities y te da la distancia en tiles
+		int getDistancia(Entity* from,Entity* to);
+
+		//Obtiene todos los tiles que están a distancia "distancia"
+		list<SDL_Point> tilesADistancia( Entity* entity,int distancia);
 
 		// Devuelve una posicion de tile al azar o -1, -1 si no hay
 		SDL_Point getEmptyTile();
@@ -52,6 +59,9 @@ class Map {
 
 		queue <SDL_Point> obtenerCaminoIgnoringTiles(SDL_Point origen, SDL_Point destino,list<TileCoordinate> *tilesOccupied);
 		std::list<TileCoordinate> getVecinosLibresForTile(TileCoordinate tile,list<TileCoordinate> *tilesOccupied);
+
+		//Obtiene el tile mas cercano a to desde from
+		SDL_Point getPuntoMasCercanoADistancia( Entity* from, Entity* to, int distancia);
 
 		Map(int alto, int ancho, int tile_ancho, int tile_alto);
 		virtual ~Map();

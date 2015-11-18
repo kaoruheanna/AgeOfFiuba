@@ -208,6 +208,17 @@ std::pair<SDL_Point,SDL_Point> Escenario::getTilesCoordinatesForEntity(Entity *e
 	return std::make_pair(minTile,maxTile);
 }
 
+std::list<pair<SDL_Point,SDL_Point>> Escenario::getTilesCoordinatesForEntities(list<Entity*> entities){
+	list<pair<SDL_Point,SDL_Point>> listaDeTiles;
+	if (entities.empty()){
+		return listaDeTiles;
+	}
+	for (Entity* entity: entities){
+		listaDeTiles.push_back(this->getTilesCoordinatesForEntity(entity));
+	}
+	return listaDeTiles;
+}
+
 //Actualiza todos los modelos en un nuevo loop
 void Escenario::loop() {
 
@@ -279,7 +290,7 @@ void Escenario::moveEntityToPos(MobileModel* mobileModel,SDL_Point destino) {
 }
 
 int Escenario::getDistancia(Entity* from, Entity* to) {
-	return this->mundo->getDistancia(from->getPosicion(),to->getPosicion());
+	return this->mundo->getDistancia(from,to);
 }
 
 Entity* Escenario::crearEntidad(EntidadConfig config) {
@@ -361,6 +372,57 @@ list<MobileModel*> Escenario::getMobileModels() {
 		}
 	}
 	return mobileModels;
+}
+
+list<Entity*> Escenario::getEntidadesEnAreaForJugador(SDL_Point posInicial, SDL_Point posFinal, Team team){
+	list<Entity*> listaDeEntidadesMobiles;
+	list<Entity*> listaDeEdificios;
+	int delta = 4;
+	int inicioX = min(posInicial.x,posFinal.x) - delta;
+	int inicioY = min(posInicial.y,posFinal.y) - delta;
+	int finX = max(posInicial.x,posFinal.x) + delta;
+	int finY = max(posInicial.y,posFinal.y) + delta;
+	int saltoX = 64;
+	int saltoY = 32;
+	if ((min(posInicial.x,posFinal.x)-5)%TILE_WIDTH_PIXELS < TILE_WIDTH_PIXELS/2){
+		saltoX = 32;
+	}
+	if ((min(posInicial.y,posFinal.y)-5)%TILE_HEIGHT_PIXELS < TILE_HEIGHT_PIXELS/2){
+		saltoX = 16;
+	}
+	printf("inicio: %i, %i \n", this->mundo->getTileForPosition({inicioX, inicioY}).x,this->mundo->getTileForPosition({inicioX, inicioY}).y);
+	printf("fin: %i, %i \n", this->mundo->getTileForPosition({finX, finY}).x, this->mundo->getTileForPosition({finX, finY}).y);
+	for (int x = inicioX; x <= finX; x += saltoX){
+		for (int y = inicioY; y <= finY; y += saltoY){
+			printf("posicion: %i, %i \n", this->mundo->getTileForPosition({x,y}).x,this->mundo->getTileForPosition({x,y}).y);
+			Entity* entidad = this->getEntidadEnPosicion({x,y}); //este metodo esta mal TODO
+			if (entidad){
+				if (entidad->getTeam() == team){
+					if (entidad->getClass()==ENTITY && listaDeEdificios.empty()){
+						listaDeEdificios.push_back(entidad);
+					}
+					else{
+						bool puedo = true;
+						for (Entity* e: listaDeEntidadesMobiles){
+							if (e->getId() == entidad->getId()){
+								puedo = false;
+								break;
+							}
+						}
+						if (puedo)
+						listaDeEntidadesMobiles.push_back(entidad);
+					}
+				}
+			}
+		}
+	}
+	if (listaDeEntidadesMobiles.empty()){
+		listaDeEntidadesMobiles.clear();
+		return listaDeEdificios;
+	}
+	listaDeEdificios.clear();
+	printf("size: %i \n", listaDeEntidadesMobiles.size());
+	return listaDeEntidadesMobiles;
 }
 
 void Escenario::agregarEntidad(const string& tipo, SDL_Point posicion,const string& equipo) {

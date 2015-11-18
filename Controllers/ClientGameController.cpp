@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <string>
 #include <iostream>
+#include <cmath>
 #include "../Views/MobileView.h"
 #include "../Views/EntityView.h"
 #include "../Views/MapView.h"
@@ -38,13 +39,18 @@ ClientGameController::ClientGameController(Mensajero *mensajero) {
 
 	this->updated = false;
 	this->serverError = false;
-	this->selectedEntity = NULL;
+
 	this->pendingEntity = NULL;
 	this->futureBuildingView = NULL;
 	this->empezoPartida = false;
+	this->mouseDown = false;
+	this->posInicialMouse = {0,0};
+
 }
 
-ClientGameController::~ClientGameController() {}
+ClientGameController::~ClientGameController() {
+	this->selectedEntities.clear();
+}
 
 void ClientGameController::comenzoPartida() {
 	this->empezoPartida = true;
@@ -235,6 +241,7 @@ void ClientGameController::updateWindow() {
 }
 
 bool ClientGameController::pollEvents(){
+	//TODO ojo revisar los corchetes
 	bool pressedR = false;
 	SDL_Event e;
 	while( SDL_PollEvent( &e ) != 0 ) {
@@ -271,40 +278,44 @@ bool ClientGameController::pollEvents(){
 			//Get mouse position
 			int x, y;
 			SDL_GetMouseState(&x, &y);
+			this->posInicialMouse = {x,y};
 			bool leftClick = (e.button.button == SDL_BUTTON_LEFT);
-			if(this->pendingEntity != NULL){
-				if(leftClick && this->renderer->isPixelInEscenario(x,y)){
-					//construyo
-					this->mensajero->construir(this->pendingEntity);
-					this->limpiarConstruccion();
-					return pressedR;
-				}
-				Log().Get(TAG) << "Cancelo la construccion";
-				this->limpiarConstruccion();
-			}
+			if (leftClick){this->mouseDown = true;};
 			this->renderer->clickEvent(x,y,leftClick,this);
+		}
+
+		if (e.type == SDL_MOUSEBUTTONUP && !this->serverError){
+			if(e.button.button == SDL_BUTTON_LEFT){
+				int x,y;
+				SDL_GetMouseState(&x,&y);
+				this->renderer->leftMouseUpEvent(this, this->posInicialMouse.x, this->posInicialMouse.y);
+				this->mouseDown = false;
+			}
+		}
+
+		if( e.type == SDL_MOUSEMOTION && !this->serverError){
+			bool leftClick = (e.button.button == SDL_BUTTON_LEFT);
+			if (this->mouseDown){
+				int x,y;
+				SDL_GetMouseState(&x,&y);
+				this->renderer->dragLeftClickEvent(this->posInicialMouse.x,this->posInicialMouse.y-32,x,y-32);
+				//POR QUE 32??????
+
+				if(this->pendingEntity != NULL){
+					if(leftClick && this->renderer->isPixelInEscenario(x,y)){
+						//construyo
+						this->mensajero->construir(this->pendingEntity);
+						this->limpiarConstruccion();
+						return pressedR;
+					}
+					Log().Get(TAG) << "Cancelo la construccion";
+					this->limpiarConstruccion();
+				}
+				this->renderer->clickEvent(x,y,leftClick,this);
+			}
 		}
 	}
 	return pressedR;
-}
-
-void ClientGameController::close() {
-	if (this->renderer){
-		this->renderer->close();
-		delete this->renderer;
-	}
-
-	delete this->escenarioView;
-	this->escenarioView = NULL;
-
-	delete this->miniEscenarioView;
-	this->miniEscenarioView = NULL;
-
-	delete this->selectedEntity;
-	this->selectedEntity = NULL;
-
-	delete this->pendingEntity;
-	this->pendingEntity = NULL;
 }
 
 bool ClientGameController::play() {
@@ -368,6 +379,24 @@ bool ClientGameController::play() {
 
 	this->close();
 	return shouldRestart;
+}
+
+void ClientGameController::close() {
+	if (this->renderer){
+		this->renderer->close();
+		delete this->renderer;
+	}
+
+	delete this->escenarioView;
+	this->escenarioView = NULL;
+
+	delete this->miniEscenarioView;
+	this->miniEscenarioView = NULL;
+
+	this->selectedEntities.clear(); //TODO ver si clear borra las entidades.
+
+	delete this->pendingEntity;
+	this->pendingEntity = NULL;
 }
 
 bool ClientGameController::isAlive() {
@@ -484,22 +513,27 @@ bool ClientGameController::inicializado() {
  * RendererInteractionDelegate
  */
 void ClientGameController::leftClickEnEscenario(int x,int y){
-	SDL_Point point = this->renderer->windowToMapPoint({x,y});
-	Entity *entidad = this->escenario->getEntidadEnPosicion(point);
-	if (this->selectedEntity == entidad)
+	SDL_Point tile = this->renderer->windowToMapPoint({x,y});
+	Entity* entidad = this->escenario->getEntidadEnPosicion(tile);
+	if (this->selectedEntities.size() == 1 and this->selectedEntities.front() == entidad){
 		return;
-
-	this->selectedEntity = entidad;
-
+	}
 	std::pair<SDL_Point,SDL_Point> tiles;
-	if(this->selectedEntity != NULL){
+	list<pair<SDL_Point,SDL_Point>> listaDeTile;
+	if (!entidad==NULL){
+		this->selectedEntities.clear();
+		this->selectedEntities.push_front(entidad);
 		this->setMessageForSelectedEntity(entidad);
 		tiles = this->escenario->getTilesCoordinatesForEntity(entidad);
+		listaDeTile.push_front(tiles);
 		entidad->creables = this->getCreablesListForEntityName(entidad->getNombre());
-		this->renderer->setSelectedTilesCoordinates(true,tiles,entidad);
-	} else {
+		this->renderer->setSelectedTilesCoordinates(true,listaDeTile,this->selectedEntities);
+
+	}else{
+		this->selectedEntities.clear();
 		this->renderer->setMessagesInMenu("Selecciona algo!!", "");
-		this->renderer->setSelectedTilesCoordinates(false,tiles,NULL);
+		list<Entity*> listaVacia;
+		this->renderer->setSelectedTilesCoordinates(false,listaDeTile,listaVacia);
 	}
 }
 
@@ -513,35 +547,159 @@ list<string> ClientGameController::getCreablesListForEntityName(string name){
 		aux = *elementoDeTipoActual;
 		if (aux.getNombre() == name){
 			creables = aux.getCreables();
+			return creables;
 		}
 	}
 	return creables;
 }
 
 void ClientGameController::rightClickEnEscenario(int x, int y) {
-	if(this->selectedEntity == NULL){
+	if(this->selectedEntities.empty()){
 		// No se le puede dar ordenes a la nada
 		return;
 	}
 	SDL_Point point = this->renderer->windowToMapPoint({x,y});
 	Entity *entidad = this->escenario->getEntidadEnPosicion(point);
 
-	if(entidad && (this->selectedEntity->getId() != entidad->getId())) {
+	Entity* selectedEntity = this->selectedEntities.front();
+	if(entidad && (selectedEntity->getId() != entidad->getId())) {
 		//Interactuar la seleccionada con la nueva entidad
-		this->mensajero->interactuar(this->selectedEntity->getId(),entidad->getId());
+		//TODO interactuar con todas las unidades.
+		this->mensajero->interactuar(selectedEntity->getId(),entidad->getId());
 		return;
 	}
 	// Mover el personaje seleccionado a la nueva posicion
 	point = this->renderer->proyectedPoint(point, this->escenario->getSize());
 
+
+	//TODO mover unidades
+	this->moverMuchasUnidades(point);
+
+
+}
+
+void ClientGameController::moverMuchasUnidades(SDL_Point destino){
+	queue<SDL_Point> tiles = this->obtenerTilesParaMoverse(destino);
+	for (Entity* entidad: this->selectedEntities){
+		std::cout<<entidad->getNombre()<<"\n";
+		this->moverUnaUnidad(entidad, tiles.front());
+		tiles.pop();
+	}
+}
+
+void ClientGameController::moverUnaUnidad(Entity* entidad, SDL_Point destino){
+	printf("destino: %i, %i \n", destino.x, destino.y);
 	MobileModel* auxModel = new MobileModel();
-	auxModel->setId(this->selectedEntity->getId());
-	auxModel->setDestination(point.x, point.y);
+	auxModel->setId(entidad->getId());
+	auxModel->setDestination(destino.x, destino.y);
 	this->mensajero->moverEntidad(auxModel, username);
 	delete auxModel;
 }
 
+float getAnguloForDireccion(SDL_Point direccion){
+	float angulo;
+	if (direccion.x == 0){
+		angulo = 90;
+	}else{
+		angulo = (atan(direccion.y/direccion.x)*180)/M_PI;
+	}
+	if (direccion.x < 0){
+		angulo += 180;
+	}else if(direccion.y < 0){
+		angulo += 360;
+	}
+	return angulo;
+}
+
+SDL_Point obtenerDireccionPerpendicularParaAngulo(float angulo){
+	SDL_Point dirFormacion = {0,0};
+	if ((angulo >= 0 and angulo <= 22.5) or (angulo > 337.5)){
+		dirFormacion = {0,TILE_HEIGHT_PIXELS};
+	}else if (angulo > 22.5 and  angulo <= 67.5){
+		dirFormacion = {-TILE_WIDTH_PIXELS,TILE_HEIGHT_PIXELS};
+	}else if (angulo > 67.5 and angulo <= 112.5){
+		dirFormacion = {-1,0};
+	}else if (angulo > 112.5 and angulo <= 157.5){
+		dirFormacion = {-TILE_WIDTH_PIXELS,-TILE_WIDTH_PIXELS};
+	}else if (angulo > 157.5 and angulo <= 202.5){
+		dirFormacion = {0,-TILE_HEIGHT_PIXELS};
+	}else if (angulo > 202.5 and angulo <= 247.5){
+		dirFormacion = {TILE_WIDTH_PIXELS,-TILE_HEIGHT_PIXELS};
+	}else if (angulo > 247.5 and angulo <= 292.5){
+		dirFormacion = {TILE_WIDTH_PIXELS,0};
+	}else if (angulo > 292.5 and angulo <= 337.5){
+		dirFormacion = {TILE_WIDTH_PIXELS,TILE_HEIGHT_PIXELS};
+	}
+	return dirFormacion;
+}
+
+queue<SDL_Point> ClientGameController::obtenerTilesParaMoverse(SDL_Point destino){
+	queue<SDL_Point> listaDeTiles;
+	SDL_Point posMedia = this->getPosicionPromedioForSelectedEntities();
+	int cantidadDeTiles = this->selectedEntities.size();
+	int tamFila = 5;
+	SDL_Point direccion = {destino.x - posMedia.x, destino.y - posMedia.y};
+	float angulo = getAnguloForDireccion(direccion);
+	printf("angulo: %f \n", angulo);
+	SDL_Point dirFormacion = obtenerDireccionPerpendicularParaAngulo(angulo);
+	printf("direccion: %i, %i \n", dirFormacion.x, dirFormacion.y);
+	int filas = cantidadDeTiles/tamFila;
+	int i = 0;
+	while (i < cantidadDeTiles){//TODO mejorar para no tener mas de una fila
+		SDL_Point tile = {destino.x + dirFormacion.x*i, destino.y + dirFormacion.y*i};
+		listaDeTiles.push(tile);
+		i+=1;
+	}
+
+	return listaDeTiles;
+}
+
+
+
+SDL_Point ClientGameController::getPosicionPromedioForSelectedEntities(){
+	SDL_Point sumaDePosiciones = {0,0};
+	for (Entity* entidad: this->selectedEntities){
+		sumaDePosiciones.x += entidad->getPosicion().x;
+		sumaDePosiciones.y += entidad->getPosicion().y;
+	}
+	sumaDePosiciones.x /= this->selectedEntities.size();
+	sumaDePosiciones.y /= this->selectedEntities.size();
+	return sumaDePosiciones;
+}
+
+void ClientGameController::leftMouseUp(int x, int y, int w, int h){
+	list<Entity*> listaDeEntidadesSeleccionadas;
+	SDL_Point mapPointInicial = this->renderer->windowToMapPoint({x,y});
+	SDL_Point mapPointFinal = this->renderer->windowToMapPoint({x+w,y+h});
+	//me esta devolviendo las entidades duplicadas.
+	listaDeEntidadesSeleccionadas = this->escenario->getEntidadesEnAreaForJugador(mapPointInicial, mapPointFinal,this->usuario->getTeam());
+	this->setSelectedEntities(listaDeEntidadesSeleccionadas);
+	list <pair<SDL_Point,SDL_Point>> tiles = this->escenario->getTilesCoordinatesForEntities(this->selectedEntities);
+	if (!this->selectedEntities.empty()){
+		this->setMessageForSelectedEntities(listaDeEntidadesSeleccionadas);
+		tiles = this->escenario->getTilesCoordinatesForEntities(listaDeEntidadesSeleccionadas);
+		//TODO ver como devolver los creables para un conjunto de unidades.
+		this->setCreablesForEntities(this->selectedEntities);
+		//entidad->creables = this->getCreablesListForEntityName(entidad->getNombre());
+		this->renderer->setSelectedTilesCoordinates(true,tiles,listaDeEntidadesSeleccionadas);
+	}else{
+		this->renderer->setMessagesInMenu("Selecciona algo!!", "");
+		this->renderer->setSelectedTilesCoordinates(false,tiles,listaDeEntidadesSeleccionadas);
+	}
+}
+
+void ClientGameController::setSelectedEntities(list<Entity*> listaDeEntidades){
+	this->selectedEntities.swap(listaDeEntidades);
+}
+
+void ClientGameController::setCreablesForEntities(list<Entity*> listaDeEntidades){
+	for (Entity* entidad: listaDeEntidades){
+		entidad->creables = this->getCreablesListForEntityName(entidad->getNombre());
+	}
+}
+
 void ClientGameController::setMessageForSelectedEntity(Entity* entity){
+	if (entity == NULL){return;}
 	string equipo = "";
 	switch(entity->getTeam()){
 		case TEAM_RED:
@@ -566,18 +724,26 @@ void ClientGameController::setMessageForSelectedEntity(Entity* entity){
 	}
 
 	this->renderer->setMessagesInMenu("Jugador - "+ equipo,entity->getNombreAMostrar());
+}
 
+/*selecciona un mensaje para una lista de entidades
+ * Por ahora solo toma el mensaje para la primera unidad
+ * TODO inteligencia para seleccionar mensaje.
+ */
+void ClientGameController::setMessageForSelectedEntities(list<Entity*> entities){
+	Entity* entity = entities.front();
+	this->setMessageForSelectedEntity(entity);
 }
 
 void ClientGameController::createEntityButtonPressed(string entityName) {
 	this->limpiarConstruccion();
 
 	if (this->escenario->factory->esBuilding(entityName)){
-		this->pendingEntity = this->escenario->factory->crearEntidadParaConstruir(entityName,this->selectedEntity->getPosicion(),this->selectedEntity->getTeamString());
+		this->pendingEntity = this->escenario->factory->crearEntidadParaConstruir(entityName,this->selectedEntities.front()->getPosicion(),this->selectedEntities.front()->getTeamString());
 		return;
 	}
 
-	list<TileCoordinate> tiles = this->escenario->getVecinosLibresForEntity(this->selectedEntity);
+	list<TileCoordinate> tiles = this->escenario->getVecinosLibresForEntity(this->selectedEntities.front());
 	if (tiles.size() == 0){
 		Log().Get(TAG) << "No hay espacio para crear la entidad";
 		return;
@@ -586,7 +752,9 @@ void ClientGameController::createEntityButtonPressed(string entityName) {
 	TileCoordinate tile = tiles.front();
 	SDL_Point tilePoint = {tile.first,tile.second};
 
-	std::pair<SDL_Point,SDL_Point> tilesEntity = this->escenario->getTilesCoordinatesForEntity(this->selectedEntity);
+	Entity *selectedEntity = this->selectedEntities.front();
+
+	std::pair<SDL_Point,SDL_Point> tilesEntity = this->escenario->getTilesCoordinatesForEntity(selectedEntity);
 	int minX = tilesEntity.first.x;
 	int minY = tilesEntity.first.y;
 	int maxX = tilesEntity.second.x;
@@ -595,7 +763,8 @@ void ClientGameController::createEntityButtonPressed(string entityName) {
 	Log().Get(TAG) << "y crea una unidad en ("<<tilePoint.x<<","<<tilePoint.y<<")";
 
 
-	Entity *tempEntity = this->escenario->factory->crearEntidadParaConstruir(entityName,tilePoint,this->selectedEntity->getTeamString());
+	Entity *tempEntity = this->escenario->factory->crearEntidadParaConstruir(entityName,tilePoint,selectedEntity->getTeamString());
+
 	this->mensajero->construir(tempEntity);
 	delete tempEntity;
 }

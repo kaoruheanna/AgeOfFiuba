@@ -1,6 +1,7 @@
 #include "Map.h"
 #include "Entity.h"
 #include "../GlobalConstants.h"
+#include <limits.h>
 #include "../Utils/Log.h"
 
 const string TAG = "Map";
@@ -76,7 +77,6 @@ bool Map::puedoConstruir(Entity* entidad, SDL_Point tile,list<TileCoordinate> *t
 	}
 	//verificar que en todos los tiles que va a ocupar la entidad se pueda construir
 	SDL_Point fin = {size_x+tile.x-1, size_y+tile.y-1};
-	//no tiene en cuenta los mobileModels
 	bool hayEntities = this->tileSet->sectorEstaBloqueado(tile,fin);
 	bool hayMobileModels = this->tilesOcupadosPorMobileModels(tile,fin,tilesOccupied);
 	return (!hayEntities && !hayMobileModels);
@@ -137,6 +137,7 @@ void Map::sacarEntidad(Entity* entidad) {
 SDL_Point Map::getTileForPosition(SDL_Point point) {
 	return { point.x / TILE_SIZE, point.y / TILE_SIZE };
 }
+
 SDL_Point Map::getPositionForTile(SDL_Point point, bool centered) {
 	int x = point.x * TILE_SIZE;
 	int y = point.y * TILE_SIZE;
@@ -190,16 +191,72 @@ std::list<TileCoordinate> Map::getVecinosLibresForTile(TileCoordinate tile,list<
 	return libres;
 }
 
-int Map::getDistancia(SDL_Point from,SDL_Point to) {
-	//TODO agregar a este cálculo el tamaño de las entidades
+//Recibe Tiles y devuelve la distancia entre ellos
+int Map::getDistanciaForTiles(SDL_Point tileOrigen,SDL_Point tileDestino) {
 
+	int xDiff = abs(tileOrigen.x - tileDestino.x);
+	int yDiff = abs(tileOrigen.y - tileDestino.y);
+	int ajusteDiagonal = ((xDiff>0) && (yDiff>0)) ? 1 : 0;
+	return max(xDiff,yDiff);
+}
+
+//Recibe posiciones logicas y devuelve tiles de distancia entre ellos
+int Map::getDistancia(SDL_Point from,SDL_Point to) {
 	int offset = (TILE_SIZE/2);
 
 	SDL_Point tileOrigen = this->getTileForPosition({from.x-offset,from.y-offset});
 	SDL_Point tileDestino = this->getTileForPosition({to.x-offset,to.y-offset});
+	return this->getDistanciaForTiles(tileOrigen,tileDestino);
+}
 
-	int xDiff = abs(tileOrigen.x - tileDestino.x);
-	int yDiff = abs(tileOrigen.y - tileDestino.y);
+//Recive posiciones logicas y devuelve tiles de distancia entre ellos
+int Map::getDistancia(Entity * from,Entity* to) {
+	list<SDL_Point> tilesFrom = this->tilesADistancia(from,0);
+	list<SDL_Point> tilesTo = this->tilesADistancia(to,0);
 
-	return xDiff+yDiff;
+	int distanciaMinima = INT32_MAX;
+	for (auto from : tilesFrom) {
+		for(auto to: tilesTo) {
+			int distancia = this->getDistanciaForTiles(from,to);
+			if(distancia < distanciaMinima) {
+				distanciaMinima = distancia;
+			}
+		}
+	}
+	return distanciaMinima;
+}
+
+list<SDL_Point> Map::tilesADistancia(Entity* entity,int distancia) {
+	list<SDL_Point> list;
+	SDL_Point baseTile = this->getTileForPosition(entity->getPosicion());
+	for (int i = baseTile.x-distancia; i < (entity->getAnchoBase()+baseTile.x+distancia); i++) {
+		for (int j = baseTile.y-distancia; j < (entity->getAltoBase()+baseTile.y+distancia); j++) {
+			SDL_Point candidato = {i,j};
+			if(!this->tileSet->sectorEstaBloqueado(candidato,candidato)) {
+				list.push_back(candidato);
+			}
+		}
+	}
+
+	return list;
+}
+
+SDL_Point Map::getPuntoMasCercanoADistancia(Entity* fromEntity,Entity* toEntity, int distancia) {
+
+	SDL_Point from = fromEntity->getPosicion();
+	int offset = (TILE_SIZE/2);
+	SDL_Point tileOrigen = this->getTileForPosition({from.x-offset,from.y-offset});
+
+	list<SDL_Point> tilesADistanciaPedida = this->tilesADistancia(toEntity,distancia);
+	SDL_Point mejorTile = {-1,-1};
+	int mejorDistancia = INT32_MAX;
+	for(auto tile : tilesADistanciaPedida) {
+		int distancia = this->getDistanciaForTiles(tileOrigen,tile);
+		if(distancia < mejorDistancia) {
+			mejorTile = tile;
+			mejorDistancia = distancia;
+		}
+	}
+
+	return (mejorTile.x != -1 && mejorTile.y != -1) ? mejorTile : tileOrigen;
 }

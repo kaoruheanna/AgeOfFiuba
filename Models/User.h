@@ -51,10 +51,12 @@ private:
 	string name;
 	Team team;
 	bool active;
+	list<string> resourceNames;
 
 	int comida;
 	int piedra;
 	int madera;
+	int oro;
 };
 
 #endif /* MODELS_USER_H_ */

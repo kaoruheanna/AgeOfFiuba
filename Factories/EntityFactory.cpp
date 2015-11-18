@@ -91,7 +91,7 @@ Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion, bool
 		return new Warrior(id, tipo, pos, size.x,size.y);
 	}
 	if (this->tipos[tipo].getCategoria() == "worker") {
-		return new MobileModel(id, tipo, pos, size.x,size.y);
+		return new Worker(id, tipo, pos, size.x,size.y);
 	}
 	if (this->tipos[tipo].getCategoria() == "resource") {
 		return new Resource(id, tipo, pos, size.x, size.y);

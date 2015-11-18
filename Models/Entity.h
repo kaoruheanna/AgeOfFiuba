@@ -11,7 +11,7 @@
 #include <string>
 #include <SDL2/SDL.h>
 #include "../Red/Serializable.h"
-#include <list>;
+#include <list>
 
 class Warrior;
 class Building;
@@ -34,6 +34,14 @@ enum Team {
 	TEAM_YELLOW
 };
 
+enum EntityState {
+	STATE_NORMAL,
+	STATE_MOVING,
+	STATE_INTERACTING,
+	STATE_DIED,
+	STATE_CREATING
+};
+
 class Entity : public Serializable{
 private:
 	//int id;
@@ -45,6 +53,7 @@ protected:
 	SDL_Point posicion;  // posicion en el mapa (coordenadas logicas)
 	int id;
 	Team team = TEAM_NEUTRAL;
+	EntityState state = STATE_NORMAL;
 	Entity* activeInteractionEntity;
 	int life;
 
@@ -66,6 +75,8 @@ public:
 	virtual string getNombreAMostrar();
 	virtual bool admiteNublado();
 
+	EntityState getState();
+
 	void setTeam(Team team);
 	Team getTeam();
 	string getTeamString();
@@ -76,10 +87,9 @@ public:
 	void stopInteracting();
 	void interact(Entity* entity);
 
-	virtual bool shouldInteractWith(Entity* entity);
-	virtual bool shouldReceiveInteraction(Entity* entity);
-	virtual bool shouldReceiveInteraction(Building* entity);
-	virtual bool shouldReceiveInteraction(Warrior* entity);
+	//Metodos de interaccion
+	virtual int getAlcance();
+	bool canReach(Entity* entity);
 
 	virtual void doInteract() {};
 	virtual void receiveInteraction(Entity* entity) {};

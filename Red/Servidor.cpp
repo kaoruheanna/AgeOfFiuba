@@ -109,6 +109,8 @@ void* atenderCliente(void* arg) {
 		} else {
 			delete mensaje;
 			// TODO diferenciar maximos equipos de nombre tomado
+			printf("Servidor - Error de logeo: %i\n", errorLogueo);
+
 			mensaje = new Mensaje(ERROR_NOMBRE_TOMADO, "server");
 			resultado = enviarSerializable(info->socket, mensaje);
 			printf("Servidor - Responde al mensaje con resultado: %i\n", resultado);

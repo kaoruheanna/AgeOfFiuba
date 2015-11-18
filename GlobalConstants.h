@@ -24,7 +24,7 @@ const bool GENERATE_RESOURCES = false;
 
 //TILES
 const std::string TILE_DEFAULT_NAME = "tileDefault";
-const std::string TILE_DEFAULT_PATH = "img/grass1_32.png";
+const std::string TILE_DEFAULT_PATH = "img/grass1_32g.png";
 const std::string MINI_TILE_DEFAULT_NAME = "miniTileDefault";
 const std::string MINI_TILE_DEFAULT_PATH = "img/tile_green.png";
 const std::string MISSING_IMAGE_PATH = "img/missingImage.png";

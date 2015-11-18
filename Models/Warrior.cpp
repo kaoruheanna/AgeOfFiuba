@@ -11,18 +11,32 @@
 const string TAG = "Warrior";
 
 Warrior::Warrior(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base)
-: MobileModel(id,nombre, posicion, ancho_base, alto_base){}
+: MobileModel(id,nombre, posicion, ancho_base, alto_base){
+	this->life = 1000;
+}
 
 Warrior::Warrior() {}
 
 Warrior::~Warrior() {}
 
 void Warrior::doInteract() {
+	if (!activeInteractionEntity ||
+		!this->canReach(activeInteractionEntity) ||
+		this->isMoving() ||
+		this->getTeam() == activeInteractionEntity->getTeam() ||
+		!activeInteractionEntity->estaViva()) {
+		return;
+	}
+
+	this->state = STATE_INTERACTING;
 	activeInteractionEntity->receiveInteraction(this);
 }
 
-void Warrior::receiveInteraction(Building* entity) {
-	Log().Get(TAG) << "Warrior receive interaction from building -> Do nothing";
+void Warrior::receiveInteraction(Warrior* entity) {
+	this->life = this->life - entity->getPoderAtaque();
+	if((this->life % 100) == 0) {
+		Log().Get(TAG) << "Warrior receive interaction from Warrior vida: " << this->life;
+	}
 }
 
 int Warrior::getPoderAtaque() {
@@ -45,12 +59,3 @@ void Warrior::getBlockFromIndex(int currentIndex, void* buffer) {
 void Warrior::deserialize(int totalBlockCount, int currentBlock, void* blockData) {
 	MobileModel::deserialize(totalBlockCount,currentBlock,blockData);
 }
-
-// Should interact
-bool Warrior::shouldInteractWith(Entity* entity){
-	return entity->shouldReceiveInteraction(this);
-}
-
-bool Warrior::shouldReceiveInteraction(Entity* entity){return false;}
-bool Warrior::shouldReceiveInteraction(Building* entity){return true;}
-bool Warrior::shouldReceiveInteraction(Warrior* entity){return true;}

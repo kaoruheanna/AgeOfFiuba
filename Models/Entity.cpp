@@ -5,6 +5,7 @@
 #include <SDL2/SDL.h>
 #include "../GlobalConstants.h"
 #include "../Utils/Log.h"
+#include "../Utils/EscenarioSingleton.h"
 
 using namespace std;
 
@@ -193,18 +194,29 @@ bool Entity::admiteNublado() {
 	return this->getClass()!=MOBILE_MODEL;
 }
 
+
+
+EntityState Entity::getState() {
+	return this->state;
+}
+
+
 void Entity::stopInteracting() {
 	activeInteractionEntity = NULL;
+	this->state = STATE_NORMAL;
 }
 
 void Entity::interact(Entity* entity){
 	activeInteractionEntity = entity;
 }
 
-// Should interact defatuls
-bool Entity::shouldInteractWith(Entity* entity){
-	return entity->shouldReceiveInteraction(this);
+bool Entity::canReach(Entity* entity) {
+	Escenario* escenario = EscenarioSingleton::get();
+	int distancia = escenario->getDistancia(this,entity);
+	return (distancia <= this->getAlcance());
 }
-bool Entity::shouldReceiveInteraction(Entity* entity) {return false;}
-bool Entity::shouldReceiveInteraction(Building* entity){return false;}
-bool Entity::shouldReceiveInteraction(Warrior* entity){return false;}
+
+int Entity::getAlcance() {
+	return 1;
+}
+
