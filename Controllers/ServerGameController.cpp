@@ -79,6 +79,13 @@ void ServerGameController::init() {
 	escenarioInicializado(this->mensajeros,this->escenario,this->config->getPath());
 }
 
+void ServerGameController::clearResources() {
+	mapaDeRecursos["comida"] = 0;
+	mapaDeRecursos["madera"] = 0;
+	mapaDeRecursos["oro"] = 0;
+	mapaDeRecursos["piedra"] = 0;
+}
+
 void ServerGameController::play() {
 
 	if (!this->inicializado()) {
@@ -89,6 +96,9 @@ void ServerGameController::play() {
 	}
 	this->enviarEventos();
 	this->enviarComienzo();
+
+	this->clearResources();
+
 	while( true ) {
 		this->loopEscenario();
 		this->sleep();
@@ -111,14 +121,22 @@ void ServerGameController::obtenerEventos() {
 void ServerGameController::enviarEventos() {
 	this->actualizarProtagonista();
 
+	User* auxUser = new User();
+	auxUser->setActive(true);
+	auxUser->setTeam(TEAM_RED);
+	auxUser->setResourceValues(mapaDeRecursos["comida"],mapaDeRecursos["madera"],mapaDeRecursos["piedra"],mapaDeRecursos["oro"]);//TEST
+
+
 	list<Mensajero*>::iterator mensajero;
 	for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
 		Mensajero* mensajeroReal = (*mensajero);
 		actualizarEntidades(mensajeroReal,this->entidadesActualizadas);
 		agregarEntidades(mensajeroReal,this->escenario->entidadesAgregadas);
+		mensajeroReal->actualizarRecursos(auxUser);
 	}
 	this->entidadesActualizadas.clear();
 	this->escenario->entidadesAgregadas.clear();
+	delete auxUser;//TEST
 
 	list<Entity*>::iterator entidadEliminada;
 	for (entidadEliminada = recursosEliminados.begin(); entidadEliminada != recursosEliminados.end(); ++entidadEliminada){
@@ -146,7 +164,26 @@ void ServerGameController::enviarEventos() {
 
 void ServerGameController::loopEscenario() {
 	this->obtenerEventos();
+
+
+	list<Entity*> entidades = this->escenario->getListaEntidades();
+	list<Entity*>::iterator iterador;
+	for (iterador = entidades.begin(); iterador != entidades.end(); ++iterador){
+		(*iterador)->setResourcesToZero();
+	}
+
+
 	this->escenario->loop();
+
+
+	for (iterador = entidades.begin(); iterador != entidades.end(); ++iterador){
+
+			mapaDeRecursos["comida"] = mapaDeRecursos["comida"] + ((*iterador)->foodGathered);
+			mapaDeRecursos["madera"] = mapaDeRecursos["madera"] + ((*iterador)->woodGathered);
+			mapaDeRecursos["piedra"] = mapaDeRecursos["piedra"] + ((*iterador)->stoneGathered);
+			mapaDeRecursos["oro"] = mapaDeRecursos["oro"] + ((*iterador)->goldGathered);
+	}
+
 	this->enviarEventos();
 }
 
@@ -196,6 +233,7 @@ void ServerGameController::interactuar(int selectedEntityId, int targetEntityId)
 	}
 
 	Log().Get(TAG) << "Agrego a Interactuar en el server " << selectedEntity->getNombre() << " " << targetEntity->getNombre();
+	Log().Get(TAG) << "Vida Inicial " << targetEntity->getLife();
 
 	if(selectedEntity->getClass()==MOBILE_MODEL) {
 		SDL_Point point = this->escenario->mundo->getPuntoMasCercanoADistancia(selectedEntity,targetEntity,selectedEntity->getAlcance());

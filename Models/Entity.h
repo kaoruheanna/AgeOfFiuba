@@ -42,12 +42,20 @@ enum EntityState {
 	STATE_CREATING
 };
 
+struct PropiedadesTipoUnidad{
+	int alcance;
+	int vidaInicial;
+	int poderAtaque;
+	int escudo;
+};
+
 class Entity : public Serializable{
 private:
 	//int id;
 	int ancho_base; //x
 	int alto_base; //y
 	void Init(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base);
+
 
 protected:
 	string nombre;
@@ -56,16 +64,20 @@ protected:
 	Team team = TEAM_NEUTRAL;
 	EntityState state = STATE_NORMAL;
 	Entity* activeInteractionEntity;
-	int initialLife;
 	int life;
-	int alcance;
+	PropiedadesTipoUnidad propiedadesTipoUnidad;
 
 	// Serializable methods
 	char* deserializeString(void* blockData);
 	void serializeString(char* string, void* buffer);
 	int serializeStringSize(char* string);
+	int vidaDescontada(Entity* entity);
 
 public:
+	int foodGathered;
+		int woodGathered;
+		int stoneGathered;
+		int goldGathered;
 	list<string> creables;
 	void setId(int id);
 	int getId();
@@ -77,6 +89,8 @@ public:
 	virtual bool esJugador();
 	virtual string getNombreAMostrar();
 	virtual bool admiteNublado();
+
+	void setResourcesToZero();
 
 	EntityState getState();
 
@@ -92,7 +106,15 @@ public:
 	void interact(Entity* entity);
 
 	//Metodos de interaccion
+	virtual PropiedadesTipoUnidad getPropiedadesTipoUnidad();
+	virtual void setPropiedadesTipoUnidad(PropiedadesTipoUnidad propiedades);
+
+	//Solo lectura
 	virtual int getAlcance();
+	virtual int getPoderAtaque();
+	virtual int getLife();
+	virtual int getEscudo();
+
 	bool canReach(Entity* entity);
 
 	virtual void doInteract() {};

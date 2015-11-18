@@ -16,9 +16,11 @@ class Map {
 		//matriz de tiles
 		int tile_ancho;
 		int tile_alto;
-		TileSet* tileSet;
+
 
 	public:
+		TileSet* tileSet;
+
 		int getHeight();
 		int getWidth();
 		int getTileHeight();
@@ -41,6 +43,11 @@ class Map {
 		// Devuelve una posicion de tile al azar o -1, -1 si no hay
 		SDL_Point getEmptyTile();
 		SDL_Point posicionRelativaRect(SDL_Rect,SDL_Point);
+
+
+		/*bool construirEntidad(Entity*,SDL_Point);
+		bool puedoConstruir(Entity*,SDL_Point);
+		bool posicionVacia(SDL_Point);*/
 
 		//recibe la entidad, el tile de inicio, y los tiles ocupados por los mobile models
 		bool construirEntidad(Entity*,SDL_Point,list<TileCoordinate> *tilesOccupied);

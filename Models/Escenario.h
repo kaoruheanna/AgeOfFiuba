@@ -63,6 +63,9 @@ class Escenario {
 		bool tileOcupadoForEntity(TileCoordinate tile,Entity* entity);
 		void moveEntityToPos(MobileModel* mobileModel,SDL_Point destino);
 		int getDistancia(Entity* from, Entity* to);
+		bool posicionValidaParaCaminar(SDL_Point posicion);
+		bool posicionVacia(SDL_Point posicion);
+		bool posicionValida(SDL_Point posicion);
 
 		SDL_Point getSize();
 		Entity* crearEntidad(EntidadConfig config);

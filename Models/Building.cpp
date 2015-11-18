@@ -31,7 +31,7 @@ void Building::receiveInteraction(Warrior* entity) {
 		return;
 	}
 
-	this->life = this->life - entity->getPoderAtaque();
+	this->life = this->life - this->vidaDescontada(entity);;
 	if((this->life % 100) == 0) {
 		Log().Get(TAG) << "Building receive interaction from Warrior vida: " << this->life;
 	}

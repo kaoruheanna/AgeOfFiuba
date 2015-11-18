@@ -12,15 +12,30 @@ using namespace std;
 const string TAG ="Entity";
 
 Entity::Entity(){
+//	Log().Get(TAG) << "constructor 1";
 	this->Init(0,"",{0,0},1,1);
+	this->goldGathered = 0;
+	this->woodGathered = 0;
+	this->foodGathered = 0;
+	this->stoneGathered = 0;
 }
 
 Entity::Entity(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base){
+//	Log().Get(TAG) << "------constructor 2:"<<nombre;
 	this->Init(id,nombre,posicion,ancho_base,alto_base);
+	this->goldGathered = 0;
+		this->woodGathered = 0;
+		this->foodGathered = 0;
+		this->stoneGathered = 0;
 }
 
 Entity::Entity(int id,string nombre, int ancho_base, int alto_base){
+//	Log().Get(TAG) << "constructor 3";
 	this->Init(id,nombre,{-1,-1},ancho_base,alto_base);
+	this->goldGathered = 0;
+		this->woodGathered = 0;
+		this->foodGathered = 0;
+		this->stoneGathered = 0;
 }
 
 void Entity::Init(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base) {
@@ -29,14 +44,19 @@ void Entity::Init(int id, string nombre, SDL_Point posicion, int ancho_base, int
 	this->ancho_base = ancho_base;
 	this->alto_base = alto_base;
 	this->id = id;
-	this->alcance = 1;
-	this->initialLife = 100;
-	this->life = this->initialLife;
+	this->life = 100;
 	this->activeInteractionEntity = NULL;
 }
 
 Entity::~Entity(){
 
+}
+
+void Entity::setResourcesToZero(){
+	this->goldGathered = 0;
+		this->woodGathered = 0;
+		this->foodGathered = 0;
+		this->stoneGathered = 0;
 }
 
 string Entity::toString(){
@@ -111,7 +131,7 @@ string Entity::getTeamString(){
 }
 
 bool Entity::estaViva() {
-	return this->life >= 0;
+	return this->life > 0;
 }
 
 void Entity::matar() {
@@ -121,7 +141,7 @@ void Entity::matar() {
 //Serializar
 // Metodos de serializacion
 int Entity::getTotalBlockCount() {
-	return 4;
+	return 6;
 }
 
 int Entity::getBlockSizeFromIndex(int currentIndex) {
@@ -131,8 +151,12 @@ int Entity::getBlockSizeFromIndex(int currentIndex) {
 		return sizeof(SDL_Point);
 	} else if(currentIndex == 2){
 		return sizeof(int);
-	} else {
+	} else if(currentIndex == 3) {
 		return sizeof(Team);
+	} else if (currentIndex ==4) {
+		return sizeof(int);
+	} else {
+		return sizeof(EntityState);
 	}
 }
 
@@ -145,6 +169,10 @@ void Entity::getBlockFromIndex(int currentIndex, void* buffer) {
 		memcpy(buffer, &this->id, sizeof(int));
 	} else if (currentIndex == 3){
 		memcpy(buffer, &this->team, sizeof(Team));
+	} else if (currentIndex == 4) {
+		memcpy(buffer, &this->life, sizeof(int));
+	} else if (currentIndex == 5){
+		memcpy(buffer, &this->state, sizeof(EntityState));
 	}
 }
 
@@ -159,6 +187,10 @@ void Entity::deserialize(int totalBlockCount, int currentBlock, void* blockData)
 		memcpy(&this->id, blockData, sizeof(int));
 	} else if (currentBlock == 3) {
 		memcpy(&this->team, blockData, sizeof(Team));
+	} else if (currentBlock == 4) {
+		memcpy(&this->life, blockData, sizeof(int));
+	} else if (currentBlock == 5){
+		memcpy(&this->state, blockData, sizeof(EntityState));
 	}
 }
 
@@ -183,6 +215,7 @@ void Entity::update(Entity* entity) {
 	this->ancho_base = entity->ancho_base;
 	this->alto_base = entity->alto_base;
 	this->life = entity->life;
+	this->state = entity->state;
 }
 
 EntityType Entity::getClass() {
@@ -215,7 +248,34 @@ bool Entity::canReach(Entity* entity) {
 	return (distancia <= this->getAlcance());
 }
 
-int Entity::getAlcance() {
-	return 1;
+void Entity::setPropiedadesTipoUnidad(PropiedadesTipoUnidad propiedades) {
+	this->propiedadesTipoUnidad = propiedades;
+	this->life = this->propiedadesTipoUnidad.vidaInicial;
 }
 
+PropiedadesTipoUnidad Entity::getPropiedadesTipoUnidad() {
+	return this->propiedadesTipoUnidad;
+}
+
+int Entity::getAlcance() {
+	return this->propiedadesTipoUnidad.alcance;
+}
+
+int Entity::getPoderAtaque() {
+	return this->propiedadesTipoUnidad.poderAtaque;
+}
+
+int Entity::getLife() {
+	return this->life;
+}
+
+int Entity::getEscudo() {
+	return this->propiedadesTipoUnidad.escudo;
+}
+
+int Entity::vidaDescontada(Entity* entity) {
+	int escudo = this->getEscudo() ? (rand() % this->getEscudo()) : 0;
+	int ataque = entity->getPoderAtaque() ? (rand() % entity->getPoderAtaque()) : 0;
+	int vidaDescontada = ataque - escudo;
+	return (vidaDescontada > 0) ? vidaDescontada : 0;
+}
