@@ -298,8 +298,7 @@ bool ClientGameController::pollEvents(){
 			if (this->mouseDown){
 				int x,y;
 				SDL_GetMouseState(&x,&y);
-				this->renderer->dragLeftClickEvent(this->posInicialMouse.x,this->posInicialMouse.y-32,x,y-32);
-				//POR QUE 32??????
+				this->renderer->dragLeftClickEvent(this->posInicialMouse.x,this->posInicialMouse.y,x,y);
 
 				if(this->pendingEntity != NULL){
 					if(leftClick && this->renderer->isPixelInEscenario(x,y)){
