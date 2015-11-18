@@ -46,6 +46,7 @@ struct PropiedadesTipoUnidad{
 	int alcance;
 	int vidaInicial;
 	int poderAtaque;
+	int escudo;
 };
 
 class Entity : public Serializable{
@@ -54,6 +55,7 @@ private:
 	int ancho_base; //x
 	int alto_base; //y
 	void Init(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base);
+
 
 protected:
 	string nombre;
@@ -69,8 +71,13 @@ protected:
 	char* deserializeString(void* blockData);
 	void serializeString(char* string, void* buffer);
 	int serializeStringSize(char* string);
+	int vidaDescontada(Entity* entity);
 
 public:
+	int foodGathered;
+		int woodGathered;
+		int stoneGathered;
+		int goldGathered;
 	list<string> creables;
 	void setId(int id);
 	int getId();
@@ -83,6 +90,8 @@ public:
 	virtual string getNombreAMostrar();
 	virtual bool admiteNublado();
 
+	void setResourcesToZero();
+
 	EntityState getState();
 
 	void setTeam(Team team);
@@ -90,6 +99,7 @@ public:
 	string getTeamString();
 
 	bool estaViva();
+	void matar();
 	void update(Entity* entity);
 	//Double Dispatch Intract en forma de visitor
 	void stopInteracting();
@@ -103,6 +113,7 @@ public:
 	virtual int getAlcance();
 	virtual int getPoderAtaque();
 	virtual int getLife();
+	virtual int getEscudo();
 
 	bool canReach(Entity* entity);
 

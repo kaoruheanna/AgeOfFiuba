@@ -79,6 +79,13 @@ void ServerGameController::init() {
 	escenarioInicializado(this->mensajeros,this->escenario,this->config->getPath());
 }
 
+void ServerGameController::clearResources() {
+	mapaDeRecursos["comida"] = 0;
+	mapaDeRecursos["madera"] = 0;
+	mapaDeRecursos["oro"] = 0;
+	mapaDeRecursos["piedra"] = 0;
+}
+
 void ServerGameController::play() {
 
 	if (!this->inicializado()) {
@@ -89,6 +96,9 @@ void ServerGameController::play() {
 	}
 	this->enviarEventos();
 	this->enviarComienzo();
+
+	this->clearResources();
+
 	while( true ) {
 		this->loopEscenario();
 		this->sleep();
@@ -111,14 +121,22 @@ void ServerGameController::obtenerEventos() {
 void ServerGameController::enviarEventos() {
 	this->actualizarProtagonista();
 
+	User* auxUser = new User();
+	auxUser->setActive(true);
+	auxUser->setTeam(TEAM_RED);
+	auxUser->setResourceValues(mapaDeRecursos["comida"],mapaDeRecursos["madera"],mapaDeRecursos["piedra"],mapaDeRecursos["oro"]);//TEST
+
+
 	list<Mensajero*>::iterator mensajero;
 	for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
 		Mensajero* mensajeroReal = (*mensajero);
 		actualizarEntidades(mensajeroReal,this->entidadesActualizadas);
 		agregarEntidades(mensajeroReal,this->escenario->entidadesAgregadas);
+		mensajeroReal->actualizarRecursos(auxUser);
 	}
 	this->entidadesActualizadas.clear();
 	this->escenario->entidadesAgregadas.clear();
+	delete auxUser;//TEST
 
 	list<Entity*>::iterator entidadEliminada;
 	for (entidadEliminada = recursosEliminados.begin(); entidadEliminada != recursosEliminados.end(); ++entidadEliminada){
@@ -137,11 +155,35 @@ void ServerGameController::enviarEventos() {
 		//aparecenRecursos(nuevoMensajero,this->escenario->getListaEntidades());
 	}
 	this->mensajerosAgregados.clear();
+
+	if(this->debeActualizarUsuarios){
+		this->debeActualizarUsuarios = false;
+		this->mandarUsuarios();
+	}
 }
 
 void ServerGameController::loopEscenario() {
 	this->obtenerEventos();
+
+
+	list<Entity*> entidades = this->escenario->getListaEntidades();
+	list<Entity*>::iterator iterador;
+	for (iterador = entidades.begin(); iterador != entidades.end(); ++iterador){
+		(*iterador)->setResourcesToZero();
+	}
+
+
 	this->escenario->loop();
+
+
+	for (iterador = entidades.begin(); iterador != entidades.end(); ++iterador){
+
+			mapaDeRecursos["comida"] = mapaDeRecursos["comida"] + ((*iterador)->foodGathered);
+			mapaDeRecursos["madera"] = mapaDeRecursos["madera"] + ((*iterador)->woodGathered);
+			mapaDeRecursos["piedra"] = mapaDeRecursos["piedra"] + ((*iterador)->stoneGathered);
+			mapaDeRecursos["oro"] = mapaDeRecursos["oro"] + ((*iterador)->goldGathered);
+	}
+
 	this->enviarEventos();
 }
 
@@ -241,6 +283,22 @@ void ServerGameController::desapareceEntidad(Entity* recurso) {
 	this->recursosEliminados.push_back(recurso);
 }
 
+void ServerGameController::equipoPerdio(Team equipo) {
+	User* teamUser = this->getUserByTeam(equipo);
+	if(teamUser != NULL){
+		teamUser->perdio = true;
+		this->debeActualizarUsuarios = true;
+	}
+}
+
+void ServerGameController::equipoGano(Team equipo) {
+	User* teamUser = this->getUserByTeam(equipo);
+	if(teamUser != NULL){
+		teamUser->gano = true;
+		this->debeActualizarUsuarios = true;
+	}
+}
+
 // TODO Implementar el manejo de usuarios
 
 void ServerGameController::setUserActive(char* username) {
@@ -254,6 +312,9 @@ void ServerGameController::setUserInactive(char* username) {
 	User* user = this->getUserByName(username);
 	if(user != NULL){
 		user->setActive(false);
+		if(this->escenario->tipo != NULL){
+			this->escenario->tipo->equipoInactivo(user->getTeam());
+		}
 	}
 }
 
@@ -262,6 +323,18 @@ User* ServerGameController::getUserByName(string username) {
 	list<User*>::iterator userIt = this->usuarios.begin();
 	while(found == NULL && (userIt != this->usuarios.end())){
 		if((*userIt)->getName().compare(username) == 0){
+			found = (*userIt);
+		}
+		++userIt;
+	}
+	return found;
+}
+
+User* ServerGameController::getUserByTeam(Team team) {
+	User* found = NULL;
+	list<User*>::iterator userIt = this->usuarios.begin();
+	while(found == NULL && (userIt != this->usuarios.end())){
+		if((*userIt)->getTeam() == team){
 			found = (*userIt);
 		}
 		++userIt;
@@ -313,9 +386,9 @@ int ServerGameController::userLogin(char* username) {
 	}
 	// Crear nuevo usuario
 	list<Team> teams = this->escenario->getTeams();
-	if(teams.size() <= this->usuarios.size()){
+	if(teams.size() <= this->usuarios.size() || this->comenzoPartida){
 		// Error de logueo => No hay mas equipos disponibles
-		Log().Get(TAG) << "Cantidad de equipos " << teams.size() << " usuarios" << this->usuarios.size();
+		Log().Get(TAG) << "Cantidad de equipos " << teams.size() << " usuarios" << this->usuarios.size() << " comenzo partida " << this->comenzoPartida;
 		return -2;
 	}
 	user = new User(string(username));
@@ -332,7 +405,6 @@ int ServerGameController::userLogin(char* username) {
 }
 
 void ServerGameController::mandarUsuarios() {
-	list<MobileModel*> mobileModels = this->escenario->getMobileModels();
 	list<Mensajero*>::iterator mensajero;
 	for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
 		Mensajero* mensajeroReal = (*mensajero);

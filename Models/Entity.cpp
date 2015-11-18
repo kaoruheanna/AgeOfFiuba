@@ -12,15 +12,30 @@ using namespace std;
 const string TAG ="Entity";
 
 Entity::Entity(){
+//	Log().Get(TAG) << "constructor 1";
 	this->Init(0,"",{0,0},1,1);
+	this->goldGathered = 0;
+	this->woodGathered = 0;
+	this->foodGathered = 0;
+	this->stoneGathered = 0;
 }
 
 Entity::Entity(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base){
+//	Log().Get(TAG) << "------constructor 2:"<<nombre;
 	this->Init(id,nombre,posicion,ancho_base,alto_base);
+	this->goldGathered = 0;
+		this->woodGathered = 0;
+		this->foodGathered = 0;
+		this->stoneGathered = 0;
 }
 
 Entity::Entity(int id,string nombre, int ancho_base, int alto_base){
+//	Log().Get(TAG) << "constructor 3";
 	this->Init(id,nombre,{-1,-1},ancho_base,alto_base);
+	this->goldGathered = 0;
+		this->woodGathered = 0;
+		this->foodGathered = 0;
+		this->stoneGathered = 0;
 }
 
 void Entity::Init(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base) {
@@ -35,6 +50,13 @@ void Entity::Init(int id, string nombre, SDL_Point posicion, int ancho_base, int
 
 Entity::~Entity(){
 
+}
+
+void Entity::setResourcesToZero(){
+	this->goldGathered = 0;
+		this->woodGathered = 0;
+		this->foodGathered = 0;
+		this->stoneGathered = 0;
 }
 
 string Entity::toString(){
@@ -110,6 +132,10 @@ string Entity::getTeamString(){
 
 bool Entity::estaViva() {
 	return this->life > 0;
+}
+
+void Entity::matar() {
+	this->life = 0;
 }
 
 //Serializar
@@ -243,4 +269,13 @@ int Entity::getLife() {
 	return this->life;
 }
 
+int Entity::getEscudo() {
+	return this->propiedadesTipoUnidad.escudo;
+}
 
+int Entity::vidaDescontada(Entity* entity) {
+	int escudo = this->getEscudo() ? (rand() % this->getEscudo()) : 0;
+	int ataque = entity->getPoderAtaque() ? (rand() % entity->getPoderAtaque()) : 0;
+	int vidaDescontada = ataque - escudo;
+	return (vidaDescontada > 0) ? vidaDescontada : 0;
+}

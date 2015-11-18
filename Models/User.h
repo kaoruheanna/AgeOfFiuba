@@ -32,12 +32,20 @@ public:
 	bool isActive();
 	void setActive(bool active);
 
+	bool estaJugando();
+	bool yaPerdio();
+	bool yaGano();
+
+	bool perdio;
+	bool gano;
+
 	// Resource methods
 
 	void addResourceToCollect(string resourceName);
 	void didCollectResource(string resourceName);
 	list<string> getResourcesNames();
 	int getValueForResource(string resourceName);
+	void setResourceValues(int comida,int madera,int piedra,int oro);
 
 
 	// Serializable methods

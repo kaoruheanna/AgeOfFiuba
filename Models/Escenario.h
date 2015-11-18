@@ -16,6 +16,7 @@
 #include "../Factories/EntityFactory.h"
 #include "../Utils/ResourcesManager.h"
 #include "FogOfWar.h"
+#include "TipoPartida/TipoPartida.h"
 using namespace std;
 
 class EscenarioDelagate {
@@ -26,6 +27,8 @@ public:
 	virtual void desapareceEntidad(Entity* recurso) = 0;
 	virtual void actualizaPersonaje(MobileModel* entity) = 0;
 	virtual void actualizaEntidad(Entity* entity) = 0;
+	virtual void equipoPerdio(Team equipo) = 0;
+	virtual void equipoGano(Team equipo) = 0;
 };
 
 class Escenario {
@@ -43,6 +46,7 @@ class Escenario {
 	public:
 		Map* mundo;
 		EntityFactory *factory;
+		TipoPartida* tipo;
 		string toString ();
 		bool updated;
 

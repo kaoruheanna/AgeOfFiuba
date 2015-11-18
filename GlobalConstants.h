@@ -44,6 +44,10 @@ const std::string NOMBRE_EQUIPO_RED = "RED";
 const std::string NOMBRE_EQUIPO_BLUE = "BLUE";
 const std::string NOMBRE_EQUIPO_GREEN = "GREEN";
 const std::string NOMBRE_EQUIPO_YELLOW = "YELLOW";
+//entidades para el tipo de partida
+const std::string NOMBRE_CENTRO_URBANO = "centro";
+const std::string NOMBRE_REY = "rey";
+const std::string NOMBRE_BANDERA = "bandera";
 
 const int  FOG_VISIBLE = 255;
 const int  FOG_VISITED = 128;

@@ -39,6 +39,18 @@ void User::setActive(bool active) {
 	this->active = active;
 }
 
+bool User::estaJugando() {
+	return !this->gano && !this->perdio;
+}
+
+bool User::yaPerdio() {
+	return this->perdio;
+}
+
+bool User::yaGano() {
+	return this->gano;
+}
+
 void User::update(User* newData) {
 	this->setActive(newData->isActive());
 	this->setTeam(newData->getTeam());
@@ -46,6 +58,8 @@ void User::update(User* newData) {
 	this->madera = newData->madera;
 	this->piedra = newData->piedra;
 	this->oro = newData->oro;
+	this->gano = newData->gano;
+	this->perdio = newData->perdio;
 }
 
 // Resources methods
@@ -87,6 +101,8 @@ int User::getValueForResource(string resourceName) {
 // Serializable methods
 User::User() {
 	this->active = false;
+	this->perdio = false;
+	this->gano = false;
 	this->team = TEAM_NEUTRAL;
 	this->name = "";
 
@@ -96,9 +112,16 @@ User::User() {
 	this->oro = 0;
 }
 
+void User::setResourceValues(int comida,int madera,int piedra,int oro){
+	this->comida = comida;
+	this->madera = madera;
+	this->piedra = piedra;
+	this->oro = oro;
+}
+
 //TODO desharcodear los recursos o harcodearlos en todos lados igual
 int User::getTotalBlockCount() {
-	return 6;
+	return 9;
 }
 
 int User::getBlockSizeFromIndex(int currentIndex) {
@@ -106,7 +129,7 @@ int User::getBlockSizeFromIndex(int currentIndex) {
 		return (this->name.length() + 1);
 	} else if(currentIndex == 1){
 		return sizeof(Team);
-	} else if(currentIndex == 2){
+	} else if(currentIndex == 2 || currentIndex >= 7){
 		return sizeof(bool);
 	} else {
 		return sizeof(int);
@@ -126,6 +149,12 @@ void User::getBlockFromIndex(int currentIndex, void* buffer) {
 		memcpy(buffer, &this->madera, sizeof(int));
 	} else if(currentIndex == 5){
 		memcpy(buffer, &this->piedra, sizeof(int));
+	} else if(currentIndex == 6){
+		memcpy(buffer, &this->oro, sizeof(int));
+	} else if(currentIndex == 7){
+		memcpy(buffer, &this->gano, sizeof(bool));
+	} else if(currentIndex == 8){
+		memcpy(buffer, &this->perdio, sizeof(bool));
 	}
 }
 
@@ -145,5 +174,11 @@ void User::deserialize(int totalBlockCount, int currentBlock, void* blockData) {
 		memcpy(&this->madera, blockData, sizeof(int));
 	} else if(currentBlock == 5){
 		memcpy(&this->piedra, blockData, sizeof(int));
+	} else if(currentBlock == 6){
+		memcpy(&this->oro, blockData, sizeof(int));
+	} else if(currentBlock == 7){
+		memcpy(&this->gano, blockData, sizeof(bool));
+	} else if(currentBlock == 8){
+		memcpy(&this->perdio, blockData, sizeof(bool));
 	}
 }

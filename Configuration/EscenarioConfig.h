@@ -25,6 +25,7 @@ public:
 
 	std::list<EntidadConfig> getEntidades();
 	std::string getNombre();
+	std::string getTipo();
 	int getSizeX();
 	int getSizeY();
 	EntidadConfig getProtagonista();
@@ -35,6 +36,7 @@ private:
 	void cargarEscenarioPorDefecto();
 	void validarTamanio();
 	bool verificarNombre();
+	bool verificarTipo();
 	bool validarINT(std::string);
 	void parsearProtagonista();
 	void parsearEntidades();
@@ -42,6 +44,7 @@ private:
 	int sizeX;
 	int sizeY;
 	std::string nombre;
+	std::string tipo;
 	EntidadConfig protagonista;
 	std::list<EntidadConfig> lista;
 };

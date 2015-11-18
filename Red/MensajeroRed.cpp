@@ -96,9 +96,11 @@ void MensajeroRed::esperaMensaje() {
 				delete resource;
 				break;
 			case ACTUALIZA_ENTIDAD:
+//				Log().Get(TAG) << "Creo entity desde MensajerRed-ActualizaEntidad";
 				entity = new Entity();
 				resultado = recibirSerializable(this->socket, entity);
 //				Log().Get(TAG) << "ACTUALIZA_ENTIDAD: "<<entity->getNombre();
+//				Log().Get(TAG) << "Creo entity desde MensajerRed-ActualizaEntidad 2";
 				this->escucha->actualizarEntidad(new Entity(*entity));
 				delete entity;
 				break;
@@ -109,6 +111,7 @@ void MensajeroRed::esperaMensaje() {
 				delete user;
 				break;
 			case CONSTRUIR:
+				Log().Get(TAG) << "Creo entity desde MensajerRed-ActualizaEntidad";
 				entity = new Entity();
 				resultado = recibirSerializable(this->socket, entity);
 				this->escucha->construir(entity);

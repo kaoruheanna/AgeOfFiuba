@@ -14,11 +14,13 @@ const std::string TAG = "EscenarioConfig";
 EscenarioConfig::EscenarioConfig() {
 	this->sizeX = 0;
 	this->sizeY = 0;
+	this->tipo = "debug";
 }
 
 EscenarioConfig::EscenarioConfig(YAML::Node nodo){
 	this->sizeX = 0;
 	this->sizeY = 0;
+	this->tipo = "debug";
 	this->nodoEscenario = nodo;
 	this->validarContenido();
 
@@ -39,6 +41,7 @@ void EscenarioConfig::validarContenido(){
 				this->nombre = "NombreDefault";
 //				Log().Get(TAG,logWARNING) << "El nombre del escenario es incorrecto, se carga un nombre por defecto";
 			}
+			this->verificarTipo();
 			this->validarTamanio();
 			this->parsearProtagonista();
 			this->parsearEntidades();
@@ -53,6 +56,19 @@ bool EscenarioConfig::verificarNombre(){
 	}
 	try{
 		this->nombre = this->nodoEscenario[0]["nombre"].as<std::string>();
+		return true;
+	}
+	catch(YAML::RepresentationException& error){
+		return false;
+	}
+}
+
+bool EscenarioConfig::verificarTipo() {
+	if (!this->nodoEscenario[0]["tipo"] || this->nodoEscenario[0]["tipo"].IsNull() || !this->nodoEscenario[0]["tipo"].IsDefined()){
+		return false;
+	}
+	try{
+		this->tipo = this->nodoEscenario[0]["tipo"].as<std::string>();
 		return true;
 	}
 	catch(YAML::RepresentationException& error){
@@ -134,6 +150,10 @@ std::list<EntidadConfig> EscenarioConfig::getEntidades() {
 
 std::string EscenarioConfig::getNombre() {
 	return (this->nombre);
+}
+
+std::string EscenarioConfig::getTipo(){
+	return (this->tipo);
 }
 int EscenarioConfig::getSizeX() {
 	return (this->sizeX);
