@@ -198,7 +198,6 @@ void MensajeroRed::desapareceRecurso(Resource* recurso) {
 void MensajeroRed::actualizaPersonaje(MobileModel* entity) {
 	Mensaje* mensaje = new Mensaje(APARECE_PERSONAJE, this->sender);
 	int resultado = enviarSerializable(this->socket, mensaje);
-	//printf("Cliente - actualizaPersonaje con resultado: %i\n", resultado);
 	delete mensaje;
 	resultado = enviarSerializable(this->socket, entity);
 	//printf("Cliente - personaje con resultado: %i\n", resultado);

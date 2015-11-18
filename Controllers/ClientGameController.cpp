@@ -416,8 +416,9 @@ void ClientGameController::actualizaPersonaje(MobileModel* entity) {
 	Entity* model = this->escenario->entidadConId(entity->getId());
 	if(model == NULL){
 		// no existia, tiene q crearse
-		this->escenario->agregarEntidad(entity);
-		this->escenario->actualizarTileOcupadaPorPersonaje(entity);
+		MobileModel* newModel = new MobileModel(*entity);
+		this->escenario->agregarEntidad(newModel);
+		this->escenario->actualizarTileOcupadaPorPersonaje(newModel);
 		// TODO cambiar como detecta este numero
 //		posicionInicialProtagonista = entity->getPosicion();
 		this->updated = true;
@@ -769,9 +770,6 @@ void ClientGameController::createEntityButtonPressed(string entityName) {
 	int minY = tilesEntity.first.y;
 	int maxX = tilesEntity.second.x;
 	int maxY = tilesEntity.second.y;
-	Log().Get(TAG) << "la entidad ocupa los tiles:("<<minX<<","<<minY<<") al ("<<maxX<<","<<maxY<<")";
-	Log().Get(TAG) << "y crea una unidad en ("<<tilePoint.x<<","<<tilePoint.y<<")";
-
 
 	Entity *tempEntity = this->escenario->factory->crearEntidadParaConstruir(entityName,tilePoint,selectedEntity->getTeamString());
 

@@ -429,6 +429,8 @@ void Escenario::agregarEntidad(const string& tipo, SDL_Point posicion,const stri
 	SDL_Point tile = this->mundo->getTileForPosition(posicion);
 	Entity* entity = this->factory->crearEntidad(tipo,tile,equipo);
 	this->construirEntidad(entity, entity->getPosicion());
+	//SI no la construye deberia liberar memoria?
+
 }
 
 bool Escenario::posicionValida(SDL_Point posicion){
