@@ -27,12 +27,12 @@ EntityFactory::~EntityFactory() {}
 SDL_Point EntityFactory::getPositionForTile(const string& tipo, SDL_Point posicion,bool centered) {
 	if (posicion.x < 0 || posicion.x >= this->mundo->getWidth()) {
 		posicion.x = 0;
-		Log().Get("Escenario", logWARNING) << "La entidad " << tipo
+		Log().Get(TAG, logWARNING) << "La entidad " << tipo
 				<< " esta fuera del mapa en ancho. Asumida posicion x = 0.";
 	}
 	if (posicion.y < 0 || posicion.y >= this->mundo->getHeight()) {
 		posicion.y = 0;
-		Log().Get("Escenario", logWARNING) << "La entidad " << tipo
+		Log().Get(TAG, logWARNING) << "La entidad " << tipo
 				<< " esta fuera del mapa en alto. Asumida posicion y = 0.";
 	}
 	// Cambia de coordenadas tile a coordenadas mapa "pixel"
@@ -45,18 +45,18 @@ SDL_Point EntityFactory::getSize(const string& tipo) {
 	if (this->tipos.count(tipo)) {
 		size = {tipoConfig.getAnchoBase(), tipoConfig.getAltoBase() };
 	} else {
-		Log().Get("Escenario", logWARNING) << "No se encontro el tipo "
+		Log().Get(TAG, logWARNING) << "No se encontro el tipo "
 				<< tipo << ". Usando tamaño de la base 1x1.";
 	}
 	if (size.x < 1) {
 		size.x = 1;
-		Log().Get("Escenario", logWARNING) << "Ancho de base del tipo "
+		Log().Get(TAG, logWARNING) << "Ancho de base del tipo "
 				<< tipo
 				<< " no puede ser menor a una unidad. Usando una unidad de ancho.";
 	}
 	if (size.y < 1) {
 		size.y = 1;
-		Log().Get("Escenario", logWARNING) << "Alto de base del tipo "
+		Log().Get(TAG, logWARNING) << "Alto de base del tipo "
 				<< tipo
 				<< " no puede ser menor a una unidad. Usando una unidad de alto.";
 	}
@@ -81,7 +81,7 @@ int getId(bool reset) {
 Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion, bool aumentarID) {
 	int id = (aumentarID) ? getId(false) : 0;
 	if (tipo == "") {
-		Log().Get("Escenario", logWARNING) << "La entidad tiene que tener un tipo. Descartando entidad.";
+		Log().Get(TAG, logWARNING) << "La entidad tiene que tener un tipo. Descartando entidad.";
 		return NULL;
 	}
 	SDL_Point pos = this->getPositionForTile(tipo,posicion,(this->tipos[tipo].getCategoria() == "warrior"));
@@ -106,6 +106,7 @@ Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion, bool
 		return returnEntity;
 	}
 
+	Log().Get(TAG) << "Creo entity desde EntityFactory";
 	return new Entity(id,tipo, pos, size.x, size.y);
 }
 

@@ -112,7 +112,7 @@ bool Map::construirEntidad(Entity* entidad, SDL_Point posicion,list<TileCoordina
 		return false;
 	}
 
-	Log().Get(TAG) << "COnstruyo "<<entidad->getNombre();
+//	Log().Get(TAG) << "COnstruyo "<<entidad->getNombre();
 	for (int i = 0; i < entidad->getAnchoBase(); i++){
 		for (int j = 0; j < entidad->getAltoBase(); j++){
 			SDL_Point tile = {i+tilePos.x,j+tilePos.y};

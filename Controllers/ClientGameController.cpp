@@ -415,12 +415,14 @@ void ClientGameController::actualizaPersonaje(MobileModel* entity) {
 
 	Entity* model = this->escenario->entidadConId(entity->getId());
 	if(model == NULL){
+//		Log().Get(TAG) << "No existia el personaje, tiene que crearse";
 		// no existia, tiene q crearse
+//		Log().Get(TAG) << "Creo entity desde actualizaPersonaje";
 		MobileModel* newModel = new MobileModel(*entity);
 		this->escenario->agregarEntidad(newModel);
 		this->escenario->actualizarTileOcupadaPorPersonaje(newModel);
 		// TODO cambiar como detecta este numero
-//		posicionInicialProtagonista = entity->getPosicion();
+
 		this->updated = true;
 		return;
 	}
@@ -473,18 +475,23 @@ void ClientGameController::actualizarEntidad(Entity* entity) {
 		return;
 	}
 
-	Entity* newEntity = this->escenario->entidadConId(entity->getId());
+	Log().Get(TAG) << entity->getNombre() <<"me llego con tamaño:"<<entity->getAnchoBase()<<"x"<<entity->getAltoBase();
 
-	if(newEntity) {
-		if( newEntity->getClass() == MOBILE_MODEL) {
+	Entity* existingEntity = this->escenario->entidadConId(entity->getId());
+
+	if(existingEntity) {
+		if(existingEntity->getClass() == MOBILE_MODEL) {
+			delete entity;
 			return;
 		}
 
-		newEntity->update(entity);
-		if (!newEntity->estaViva()) {
-			this->escenario->eliminarEntidadConID(newEntity->getId());
+		existingEntity->update(entity);
+		if (!existingEntity->estaViva()) {
+			this->escenario->eliminarEntidadConID(existingEntity->getId());
 		}
+		delete entity;
 	} else {
+		//Hecho asi creo q la entity esta viva del lado del server
 		SDL_Point posicion = entity->getPosicion();
 		this->escenario->construirEntidad(entity,posicion);
 	}
@@ -522,7 +529,7 @@ void ClientGameController::leftClickEnEscenario(int x,int y){
 	}
 	std::pair<SDL_Point,SDL_Point> tiles;
 	list<pair<SDL_Point,SDL_Point>> listaDeTile;
-	if (!entidad==NULL){
+	if (entidad!=NULL){
 		this->selectedEntities.clear();
 		this->selectedEntities.push_front(entidad);
 		this->setMessageForSelectedEntity(entidad);
@@ -770,7 +777,10 @@ void ClientGameController::createEntityButtonPressed(string entityName) {
 	int minY = tilesEntity.first.y;
 	int maxX = tilesEntity.second.x;
 	int maxY = tilesEntity.second.y;
-	Log().Get(TAG) << "la entidad ocupa los tiles:("<<minX<<","<<minY<<") al ("<<maxX<<","<<maxY<<")";
+//	Log().Get(TAG) << "la entidad: "<<selectedEntity->getNombre() <<" ocupa los tiles:("<<minX<<","<<minY<<") al ("<<maxX<<","<<maxY<<")";
+//	Log().Get(TAG) << selectedEntity->getAnchoBase() <<"x"<<selectedEntity->getAltoBase();
+
+
 	Log().Get(TAG) << "y crea una unidad en ("<<tilePoint.x<<","<<tilePoint.y<<")";
 
 
