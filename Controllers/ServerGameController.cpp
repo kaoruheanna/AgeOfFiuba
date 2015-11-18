@@ -228,6 +228,7 @@ void ServerGameController::interactuar(int selectedEntityId, int targetEntityId)
 	}
 
 	Log().Get(TAG) << "Agrego a Interactuar en el server " << selectedEntity->getNombre() << " " << targetEntity->getNombre();
+	Log().Get(TAG) << "Vida Inicial " << targetEntity->getLife();
 
 	if(selectedEntity->getClass()==MOBILE_MODEL) {
 		SDL_Point point = this->escenario->mundo->getPuntoMasCercanoADistancia(selectedEntity,targetEntity,selectedEntity->getAlcance());

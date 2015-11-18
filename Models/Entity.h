@@ -42,6 +42,13 @@ enum EntityState {
 	STATE_CREATING
 };
 
+struct PropiedadesTipoUnidad{
+	int alcance;
+	int vidaInicial;
+	int poderAtaque;
+	int escudo;
+};
+
 class Entity : public Serializable{
 private:
 	//int id;
@@ -57,14 +64,14 @@ protected:
 	Team team = TEAM_NEUTRAL;
 	EntityState state = STATE_NORMAL;
 	Entity* activeInteractionEntity;
-	int initialLife;
 	int life;
-	int alcance;
+	PropiedadesTipoUnidad propiedadesTipoUnidad;
 
 	// Serializable methods
 	char* deserializeString(void* blockData);
 	void serializeString(char* string, void* buffer);
 	int serializeStringSize(char* string);
+	int vidaDescontada(Entity* entity);
 
 public:
 	int foodGathered;
@@ -98,7 +105,15 @@ public:
 	void interact(Entity* entity);
 
 	//Metodos de interaccion
+	virtual PropiedadesTipoUnidad getPropiedadesTipoUnidad();
+	virtual void setPropiedadesTipoUnidad(PropiedadesTipoUnidad propiedades);
+
+	//Solo lectura
 	virtual int getAlcance();
+	virtual int getPoderAtaque();
+	virtual int getLife();
+	virtual int getEscudo();
+
 	bool canReach(Entity* entity);
 
 	virtual void doInteract() {};
