@@ -114,6 +114,10 @@ bool Entity::estaViva() {
 	return this->life >= 0;
 }
 
+void Entity::matar() {
+	this->life = 0;
+}
+
 //Serializar
 // Metodos de serializacion
 int Entity::getTotalBlockCount() {

@@ -32,6 +32,13 @@ public:
 	bool isActive();
 	void setActive(bool active);
 
+	bool estaJugando();
+	bool yaPerdio();
+	bool yaGano();
+
+	bool perdio;
+	bool gano;
+
 	// Resource methods
 
 	void addResourceToCollect(string resourceName);

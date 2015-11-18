@@ -137,6 +137,11 @@ void ServerGameController::enviarEventos() {
 		//aparecenRecursos(nuevoMensajero,this->escenario->getListaEntidades());
 	}
 	this->mensajerosAgregados.clear();
+
+	if(this->debeActualizarUsuarios){
+		this->debeActualizarUsuarios = false;
+		this->mandarUsuarios();
+	}
 }
 
 void ServerGameController::loopEscenario() {
@@ -240,6 +245,22 @@ void ServerGameController::desapareceEntidad(Entity* recurso) {
 	this->recursosEliminados.push_back(recurso);
 }
 
+void ServerGameController::equipoPerdio(Team equipo) {
+	User* teamUser = this->getUserByTeam(equipo);
+	if(teamUser != NULL){
+		teamUser->perdio = true;
+		this->debeActualizarUsuarios = true;
+	}
+}
+
+void ServerGameController::equipoGano(Team equipo) {
+	User* teamUser = this->getUserByTeam(equipo);
+	if(teamUser != NULL){
+		teamUser->gano = true;
+		this->debeActualizarUsuarios = true;
+	}
+}
+
 // TODO Implementar el manejo de usuarios
 
 void ServerGameController::setUserActive(char* username) {
@@ -253,6 +274,9 @@ void ServerGameController::setUserInactive(char* username) {
 	User* user = this->getUserByName(username);
 	if(user != NULL){
 		user->setActive(false);
+		if(this->escenario->tipo != NULL){
+			this->escenario->tipo->equipoInactivo(user->getTeam());
+		}
 	}
 }
 
@@ -261,6 +285,18 @@ User* ServerGameController::getUserByName(string username) {
 	list<User*>::iterator userIt = this->usuarios.begin();
 	while(found == NULL && (userIt != this->usuarios.end())){
 		if((*userIt)->getName().compare(username) == 0){
+			found = (*userIt);
+		}
+		++userIt;
+	}
+	return found;
+}
+
+User* ServerGameController::getUserByTeam(Team team) {
+	User* found = NULL;
+	list<User*>::iterator userIt = this->usuarios.begin();
+	while(found == NULL && (userIt != this->usuarios.end())){
+		if((*userIt)->getTeam() == team){
 			found = (*userIt);
 		}
 		++userIt;
@@ -312,9 +348,9 @@ int ServerGameController::userLogin(char* username) {
 	}
 	// Crear nuevo usuario
 	list<Team> teams = this->escenario->getTeams();
-	if(teams.size() <= this->usuarios.size()){
+	if(teams.size() <= this->usuarios.size() || this->comenzoPartida){
 		// Error de logueo => No hay mas equipos disponibles
-		Log().Get(TAG) << "Cantidad de equipos " << teams.size() << " usuarios" << this->usuarios.size();
+		Log().Get(TAG) << "Cantidad de equipos " << teams.size() << " usuarios" << this->usuarios.size() << " comenzo partida " << this->comenzoPartida;
 		return -2;
 	}
 	user = new User(string(username));
@@ -331,7 +367,6 @@ int ServerGameController::userLogin(char* username) {
 }
 
 void ServerGameController::mandarUsuarios() {
-	list<MobileModel*> mobileModels = this->escenario->getMobileModels();
 	list<Mensajero*>::iterator mensajero;
 	for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
 		Mensajero* mensajeroReal = (*mensajero);

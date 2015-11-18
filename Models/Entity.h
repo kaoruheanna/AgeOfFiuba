@@ -85,6 +85,7 @@ public:
 	string getTeamString();
 
 	bool estaViva();
+	void matar();
 	void update(Entity* entity);
 	//Double Dispatch Intract en forma de visitor
 	void stopInteracting();

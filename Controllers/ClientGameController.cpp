@@ -368,6 +368,14 @@ bool ClientGameController::play() {
 		this->renderer->drawViews();
 		this->sleep();
 		this->mensajero->ping();
+		if(!this->usuario->estaJugando()){
+			this->serverError = true;
+			if(this->usuario->yaGano()){
+				this->renderer->setCartel("Ganaste :D");
+			} else {
+				this->renderer->setCartel("Perdiste y.y");
+			}
+		}
 	}
 
 	while( !this->shouldQuit && !shouldRestart ){
@@ -496,8 +504,11 @@ void ClientGameController::configEscenario(const string path) {
 
 void ClientGameController::errorDeLogueo() {
 	if(this->renderer != NULL){
-		this->renderer->setCartel("Hay un error en la conexion.");
-		this->serverError = true;
+		if(!this->serverError){
+			this->serverError = true;
+			// this->renderer->setCartel("Hay un error en la conexion.");
+			this->renderer->setCartel("Perdiste y.y");
+		}
 	} else {
 		printf("El nombre escrito ya esta tomado. Por favor elija otro.");
 		this->shouldQuit = true;

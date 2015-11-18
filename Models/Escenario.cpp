@@ -1,6 +1,8 @@
 #include "Escenario.h"
 #include "../Utils/Log.h"
 #include "../GlobalConstants.h"
+#include "TipoPartida/PartidaNormal.h"
+#include "TipoPartida/PartidaRey.h"
 
 using namespace std;
 const string TAG = "Escenario";
@@ -11,6 +13,7 @@ void Escenario::init() {
 	this->name = escenarioConfig.getNombre();
 	this->inicializacionCorrecta = false;
 	this->updated = true;
+	this->tipo = NULL;
 	if (this->name == "") {
 		this->name = "sinNombre";
 		Log().Get("Escenario", logWARNING)
@@ -63,6 +66,14 @@ void Escenario::init() {
 		}
 	}
 
+	if(this->inicializacionCorrecta){
+		if(escenarioConfig.getTipo().compare(NOMBRE_CENTRO_URBANO) == 0){
+			this->tipo = new PartidaNormal();
+		} else if(escenarioConfig.getTipo().compare(NOMBRE_REY) == 0){
+			this->tipo = new PartidaRey();
+		}
+	}
+
 	if (!this->inicializacionCorrecta && this->mundo != NULL) {
 		delete this->mundo;
 		this->mundo = NULL;
@@ -76,6 +87,10 @@ Escenario::Escenario(EscenarioConfig config, list<TipoConfig> tipos) :  escenari
 }
 
 Escenario::~Escenario(){
+	if(this->tipo != NULL){
+		delete this->tipo;
+		this->tipo = NULL;
+	}
 }
 
 
@@ -252,6 +267,25 @@ void Escenario::loop() {
 	for(auto entidad : this->entidadesInteractuando) {
 		entidad->doInteract();
 		this->delegate->actualizaEntidad(entidad);
+	}
+
+	if(this->tipo != NULL){
+		this->tipo->calcularEstado(this->entidades);
+		list<Team> equiposCambiados = this->tipo->obtenerCambios();
+		for(auto equipo: equiposCambiados){
+			switch(this->tipo->obtenerEstado(equipo)){
+				case PERDIO:
+					this->delegate->equipoPerdio(equipo);
+					break;
+				case GANO:
+					this->delegate->equipoGano(equipo);
+					break;
+				case JUGANDO:
+					// Sigue jugando. No avisar.
+					break;
+			}
+		}
+		equiposCambiados.clear();
 	}
 
 	//Eliminar los que mueren

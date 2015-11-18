@@ -50,6 +50,8 @@ public:
 	virtual void apareceEntidad(Entity* entidad);
 	virtual void desapareceEntidad(Entity* entidad);
 	virtual void construir(Entity* entity);
+	virtual void equipoPerdio(Team equipo);
+	virtual void equipoGano(Team equipo);
 private:
 	GameConfiguration *config;
 	list<Mensajero*> mensajeros;
@@ -63,6 +65,7 @@ private:
 	void sleep();
 
 	User* getUserByName(string name);
+	User* getUserByTeam(Team team);
 	Entity* getEntityForUser(int entityId, string username);
 	MobileModel* getMobileModelForUser(int entityId, string username);
 
@@ -73,6 +76,7 @@ private:
 	list<Entity*> entidadesActualizadas;
 	list<Entity*> recursosAgregados;
 	list<Entity*> recursosEliminados;
+	bool debeActualizarUsuarios;
 	bool debeActualizarPersonaje;
 	TileCoordinate* moverPersonajeAlPunto;
 };

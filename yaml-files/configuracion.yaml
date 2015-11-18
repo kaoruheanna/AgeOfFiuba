@@ -144,12 +144,26 @@ tipos:
    alto_frame: 64
    ancho_frame: 72
 
+ - nombre: centro
+   categoria: building
+   imagen: img/whatermill.png
+   miniImagen: img/tile_orange.png
+   imagenBoton: img/boton-molino.png
+   ancho_base: 4
+   alto_base : 4
+   pixel_ref_x: 80
+   pixel_ref_y: 75
+   fps: 10
+   ancho_frame: 200
+   alto_frame: 145
+
 
 escenario:
  - nombre: orleans
    size_x: 40
    size_y: 40
-   
+   tipo: centro   
+
    entidades:
 
    - [x: 1, y: 7, tipo: casa]
@@ -159,6 +173,8 @@ escenario:
    - [x: 14, y: 9, tipo: caballo, equipo: RED]
    - [x: 1, y: 2, tipo: soldado, equipo: RED]
    - [x: 3, y: 3, tipo: soldado, equipo: RED]
+   - [x: 20, y: 20, tipo: centro, equipo: RED]
+   - [x: 20, y: 30, tipo: centro, equipo: BLUE]
    - [x: 5, y: 10, tipo: piedra]
    - [x: 5, y: 12, tipo: oro]
    - [x: 5, y: 14, tipo: comida]
