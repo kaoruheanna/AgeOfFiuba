@@ -38,6 +38,7 @@ public:
 	void didCollectResource(string resourceName);
 	list<string> getResourcesNames();
 	int getValueForResource(string resourceName);
+	void setResourceValues(int comida,int madera,int piedra,int oro);
 
 
 	// Serializable methods

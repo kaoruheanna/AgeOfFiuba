@@ -96,6 +96,13 @@ User::User() {
 	this->oro = 0;
 }
 
+void User::setResourceValues(int comida,int madera,int piedra,int oro){
+	this->comida = comida;
+	this->madera = madera;
+	this->piedra = piedra;
+	this->oro = oro;
+}
+
 //TODO desharcodear los recursos o harcodearlos en todos lados igual
 int User::getTotalBlockCount() {
 	return 6;

@@ -43,6 +43,7 @@ public:
 
 	bool comenzoPartida; // No usar => Solo para el play
 	void addUser(char* username); // No usar => Solo para el play
+	map<string,int> mapaDeRecursos;
 
 	//EscenarioDelegate
 	virtual void actualizaEntidad(Entity* entity);
@@ -67,6 +68,8 @@ private:
 	MobileModel* getMobileModelForUser(int entityId, string username);
 
 	void enviarComienzo();
+	void clearResources();
+
 	//Para actualizar
 	list<Mensajero*> mensajerosAgregados;
 
