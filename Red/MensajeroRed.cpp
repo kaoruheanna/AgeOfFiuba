@@ -5,6 +5,7 @@
  *      Author: nico
  */
 
+#include "PairIntSerializable.h"
 #include "../GlobalConstants.h"
 #include "../Models/MobileModel.h"
 #include "../Models/Resource.h"
@@ -35,6 +36,7 @@ void MensajeroRed::esperaMensaje() {
 	Resource* resource = NULL;
 	Entity* entity = NULL;
 	User* user = NULL;
+	PairIntSerializable* pair;
 	int resultado = recibirSerializable(this->socket, recibido);
 	printf("MensajeroRed - Recibi resultado: %i con mensaje: %s\n", resultado, recibido->toString());
 	while(resultado > 0){
@@ -68,6 +70,13 @@ void MensajeroRed::esperaMensaje() {
 				//printf("MensajeroRed - Recibi personaje con resultado: %i y sender: %s\n", resultado, recibido->getSender());
 				this->escucha->moverEntidad(modelo, string(recibido->getSender()));
 				delete modelo;
+				break;
+			case INTERACTUAR:
+				pair = new PairIntSerializable();
+				resultado = recibirSerializable(this->socket, pair);
+				//printf("MensajeroRed - Recibi personaje con resultado: %i y sender: %s\n", resultado, recibido->getSender());
+				this->escucha->interactuar(pair->first,pair->second);
+				delete pair;
 				break;
 			case APARECE_RECURSO:
 				resource = new Resource();
@@ -206,6 +215,17 @@ void MensajeroRed::moverEntidad(MobileModel* entity, string username) {
 	delete mensaje;
 	resultado = enviarSerializable(this->socket, entity);
 	//printf("Cliente - personaje con resultado: %i\n", resultado);
+}
+
+
+void MensajeroRed::interactuar(int selectedEntityId, int targetEntityId) {
+	Mensaje* mensaje = new Mensaje(INTERACTUAR, this->sender);
+	int resultado = enviarSerializable(this->socket, mensaje);
+	printf("Cliente - interactuar entidad %d,%d con resultado: %i\n",selectedEntityId,targetEntityId, resultado);
+	delete mensaje;
+
+	resultado = enviarSerializable(this->socket, new PairIntSerializable(selectedEntityId,targetEntityId));
+	printf("Cliente - interactuar enviado con resultado: %i\n", resultado);
 }
 
 void MensajeroRed::cambioUsuario(User* user) {

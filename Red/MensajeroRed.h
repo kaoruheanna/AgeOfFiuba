@@ -34,6 +34,8 @@ public:
 	virtual void loguearse(char* nombre);
 	virtual void moverEntidad(MobileModel* entity, string username);
 	virtual void construir(Entity* entity);
+	virtual void interactuar(int selectedEntityId, int targetEntityId);
+
 //	virtual void sePuedeConstruir(Entity* entity);
 	// Metodos para checkear estado de la conexion
 	bool connectionAlive;
