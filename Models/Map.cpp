@@ -79,7 +79,6 @@ bool Map::puedoConstruir(Entity* entidad, SDL_Point tile){
 	return !(this -> tileSet->sectorEstaBloqueado(tile,fin));
 }
 
-
 bool Map::construirEntidad(Entity* entidad, SDL_Point posicion){
 	if (entidad->getClass() == MOBILE_MODEL){
 		// el tileset no guarda los tiles ocupados por los mobile models

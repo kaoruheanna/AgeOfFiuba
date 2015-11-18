@@ -565,12 +565,36 @@ void ClientGameController::rightClickEnEscenario(int x, int y) {
 
 }
 
+void ClientGameController::leftMouseUp(int x, int y, int w, int h){
+	list<Entity*> listaDeEntidadesSeleccionadas;
+	SDL_Point mapPointInicial = this->renderer->windowToMapPoint({x,y});
+	SDL_Point mapPointFinal = this->renderer->windowToMapPoint({x+w,y+h});
+	//TODO getEntidadesEnAreaForJugador no anda 100% bien.
+	listaDeEntidadesSeleccionadas = this->escenario->getEntidadesEnAreaForJugador(mapPointInicial, mapPointFinal,this->usuario->getTeam());
+	this->setSelectedEntities(listaDeEntidadesSeleccionadas);
+	list <pair<SDL_Point,SDL_Point>> tiles = this->escenario->getTilesCoordinatesForEntities(this->selectedEntities);
+	if (!this->selectedEntities.empty()){
+		this->setMessageForSelectedEntities(listaDeEntidadesSeleccionadas);
+		tiles = this->escenario->getTilesCoordinatesForEntities(listaDeEntidadesSeleccionadas);
+		//TODO ver como devolver los creables para un conjunto de unidades.
+		this->setCreablesForEntities(this->selectedEntities);
+		//entidad->creables = this->getCreablesListForEntityName(entidad->getNombre());
+		this->renderer->setSelectedTilesCoordinates(true,tiles,listaDeEntidadesSeleccionadas);
+	}else{
+		this->renderer->setMessagesInMenu("Selecciona algo!!", "");
+		this->renderer->setSelectedTilesCoordinates(false,tiles,listaDeEntidadesSeleccionadas);
+	}
+}
+
 void ClientGameController::moverMuchasUnidades(SDL_Point destino){
 	queue<SDL_Point> tiles = this->obtenerTilesParaMoverse(destino);
 	for (Entity* entidad: this->selectedEntities){
-		std::cout<<entidad->getNombre()<<"\n";
-		this->moverUnaUnidad(entidad, tiles.front());
-		tiles.pop();
+		//TODO toda entidad deberia tener un destino asignado.
+		if (!tiles.empty()){
+			std::cout<<entidad->getNombre()<<"\n";
+			this->moverUnaUnidad(entidad, tiles.front());
+			tiles.pop();
+		}
 	}
 }
 
@@ -634,11 +658,12 @@ queue<SDL_Point> ClientGameController::obtenerTilesParaMoverse(SDL_Point destino
 	printf("angulo: %f, direccion: %i, %i \n",angulo, dirFormacion.x, dirFormacion.y);
 	int filas = cantidadDeTiles/tamFila;
 	int i = 0;
-	//dirFormacion = {TILE_WIDTH_PIXELS/2,0};
 	while (i < cantidadDeTiles){//TODO mejorar para no tener mas de una fila
 		SDL_Point tile = {destinoCentrado.x + (dirFormacion.x*i), destinoCentrado.y + (dirFormacion.y*i)};
-		listaDeTiles.push(tile);
-		printf("tile: %i, %i \n", tile.x, tile.y);
+		//TODO ver si el tile es valido.
+		if (this->escenario->posicionValidaParaCaminar(tile)){
+			listaDeTiles.push(tile);
+		}
 		i+=1;
 	}
 
@@ -656,27 +681,6 @@ SDL_Point ClientGameController::getPosicionPromedioForSelectedEntities(){
 	sumaDePosiciones.x /= this->selectedEntities.size();
 	sumaDePosiciones.y /= this->selectedEntities.size();
 	return sumaDePosiciones;
-}
-
-void ClientGameController::leftMouseUp(int x, int y, int w, int h){
-	list<Entity*> listaDeEntidadesSeleccionadas;
-	SDL_Point mapPointInicial = this->renderer->windowToMapPoint({x,y});
-	SDL_Point mapPointFinal = this->renderer->windowToMapPoint({x+w,y+h});
-	//TODO getEntidadesEnAreaForJugador no anda 100% bien.
-	listaDeEntidadesSeleccionadas = this->escenario->getEntidadesEnAreaForJugador(mapPointInicial, mapPointFinal,this->usuario->getTeam());
-	this->setSelectedEntities(listaDeEntidadesSeleccionadas);
-	list <pair<SDL_Point,SDL_Point>> tiles = this->escenario->getTilesCoordinatesForEntities(this->selectedEntities);
-	if (!this->selectedEntities.empty()){
-		this->setMessageForSelectedEntities(listaDeEntidadesSeleccionadas);
-		tiles = this->escenario->getTilesCoordinatesForEntities(listaDeEntidadesSeleccionadas);
-		//TODO ver como devolver los creables para un conjunto de unidades.
-		this->setCreablesForEntities(this->selectedEntities);
-		//entidad->creables = this->getCreablesListForEntityName(entidad->getNombre());
-		this->renderer->setSelectedTilesCoordinates(true,tiles,listaDeEntidadesSeleccionadas);
-	}else{
-		this->renderer->setMessagesInMenu("Selecciona algo!!", "");
-		this->renderer->setSelectedTilesCoordinates(false,tiles,listaDeEntidadesSeleccionadas);
-	}
 }
 
 void ClientGameController::setSelectedEntities(list<Entity*> listaDeEntidades){

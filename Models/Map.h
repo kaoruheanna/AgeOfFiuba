@@ -46,6 +46,7 @@ class Map {
 
 		bool construirEntidad(Entity*,SDL_Point);
 		bool puedoConstruir(Entity*,SDL_Point);
+		bool posicionVacia(SDL_Point);
 		void sacarEntidad(Entity*);
 
 		SDL_Point getTileForPosition(SDL_Point point);
