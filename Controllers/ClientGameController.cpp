@@ -770,6 +770,9 @@ void ClientGameController::createEntityButtonPressed(string entityName) {
 	int minY = tilesEntity.first.y;
 	int maxX = tilesEntity.second.x;
 	int maxY = tilesEntity.second.y;
+	Log().Get(TAG) << "la entidad ocupa los tiles:("<<minX<<","<<minY<<") al ("<<maxX<<","<<maxY<<")";
+	Log().Get(TAG) << "y crea una unidad en ("<<tilePoint.x<<","<<tilePoint.y<<")";
+
 
 	Entity *tempEntity = this->escenario->factory->crearEntidadParaConstruir(entityName,tilePoint,selectedEntity->getTeamString());
 

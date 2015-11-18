@@ -98,7 +98,7 @@ void MensajeroRed::esperaMensaje() {
 			case ACTUALIZA_ENTIDAD:
 				entity = new Entity();
 				resultado = recibirSerializable(this->socket, entity);
-				Log().Get(TAG) << "ACTUALIZA_ENTIDAD: "<<entity->getNombre();
+//				Log().Get(TAG) << "ACTUALIZA_ENTIDAD: "<<entity->getNombre();
 				this->escucha->actualizarEntidad(new Entity(*entity));
 				delete entity;
 				break;
@@ -166,12 +166,9 @@ void MensajeroRed::configEscenario(const string path) {
 
 void MensajeroRed::actualizarEntidad(Entity* entity) {
 	Mensaje* mensaje = new Mensaje(ACTUALIZA_ENTIDAD, this->sender);
-	Log().Get(TAG) << "Server->cliente: 1)envio entidad"<<entity->getNombre();
 	int resultado = enviarSerializable(this->socket, mensaje);
-	Log().Get(TAG) << "Server->cliente: 2)envio entidad:"<<resultado;
 	delete mensaje;
 	resultado = enviarSerializable(this->socket, entity);
-	Log().Get(TAG) << "Server->cliente: 3)envio entidad:"<<resultado;
 }
 
 
@@ -242,14 +239,10 @@ void MensajeroRed::cambioUsuario(User* user) {
 }
 
 void MensajeroRed::construir(Entity* entity) {
-	Log().Get(TAG) << "construir: "<<entity->getNombre();
 	Mensaje* mensaje = new Mensaje(CONSTRUIR, this->sender);
 	int resultado = enviarSerializable(this->socket, mensaje);
-	Log().Get(TAG) << "Construir con resultado:"<<resultado;
-
 	delete mensaje;
 	resultado = enviarSerializable(this->socket, entity);
-	Log().Get(TAG) << "enviada entidad con resultado:"<<resultado;
 }
 
 void MensajeroRed::comenzoPartida() {
