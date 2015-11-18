@@ -792,3 +792,7 @@ void ClientGameController::limpiarConstruccion(){
 	}
 	this->renderer->setFutureBuildingView(NULL);
 }
+
+void ClientGameController::actualizarRecursos(User* auxUser){
+	this->usuario->update(auxUser);
+}

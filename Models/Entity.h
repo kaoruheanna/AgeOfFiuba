@@ -49,6 +49,7 @@ private:
 	int alto_base; //y
 	void Init(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base);
 
+
 protected:
 	string nombre;
 	SDL_Point posicion;  // posicion en el mapa (coordenadas logicas)
@@ -66,6 +67,10 @@ protected:
 	int serializeStringSize(char* string);
 
 public:
+	int foodGathered;
+		int woodGathered;
+		int stoneGathered;
+		int goldGathered;
 	list<string> creables;
 	void setId(int id);
 	int getId();
@@ -77,6 +82,8 @@ public:
 	virtual bool esJugador();
 	virtual string getNombreAMostrar();
 	virtual bool admiteNublado();
+
+	void setResourcesToZero();
 
 	EntityState getState();
 
