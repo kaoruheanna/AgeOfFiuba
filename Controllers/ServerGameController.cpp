@@ -43,7 +43,9 @@ void actualizarEntidades(Mensajero* mensajero,list<Entity*> entities) {
 	list<Entity*>::iterator entidad;
 	for (entidad = entities.begin(); entidad != entities.end(); ++entidad){
 		Entity* entidadReal = (*entidad);
-		mensajero->actualizarEntidad(entidadReal);
+		if (entidadReal->getClass() != MOBILE_MODEL){
+			mensajero->actualizarEntidad(entidadReal);
+		}
 	}
 }
 
@@ -92,14 +94,17 @@ void ServerGameController::play() {
 		init();
 	}
 	while( !comenzoPartida ){
+		this->resolverMensajeros();
 		this->sleep();
 	}
+	this->resolverMensajeros();
 	this->enviarEventos();
 	this->enviarComienzo();
 
 	this->clearResources();
 
 	while( true ) {
+		this->resolverMensajeros();
 		this->loopEscenario();
 		this->sleep();
 	}
@@ -150,15 +155,26 @@ void ServerGameController::enviarEventos() {
 	}
 	recursosEliminados.clear();
 
+	if(this->debeActualizarUsuarios){
+		this->debeActualizarUsuarios = false;
+		this->mandarUsuarios();
+	}
+}
+
+/**
+ * Metodo para agregar nuevos mensajeros y mantenerlos a todos pingeados
+ * Si se saca de cualquier while genera los problemas de desconexion
+ */
+void ServerGameController::resolverMensajeros() {
+	// Agregar nuevos mensajeros
 	for(auto nuevoMensajero : this->mensajerosAgregados) {
 		this->mensajeros.push_back(nuevoMensajero);
 		//aparecenRecursos(nuevoMensajero,this->escenario->getListaEntidades());
 	}
 	this->mensajerosAgregados.clear();
-
-	if(this->debeActualizarUsuarios){
-		this->debeActualizarUsuarios = false;
-		this->mandarUsuarios();
+	// Pingear a todos para que no se desconecten
+	for(auto mensajero : this->mensajeros){
+		mensajero->ping();
 	}
 }
 

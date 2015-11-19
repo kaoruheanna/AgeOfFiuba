@@ -101,7 +101,7 @@ void MensajeroRed::esperaMensaje() {
 				resultado = recibirSerializable(this->socket, entity);
 //				Log().Get(TAG) << "ACTUALIZA_ENTIDAD: "<<entity->getNombre();
 //				Log().Get(TAG) << "Creo entity desde MensajerRed-ActualizaEntidad 2";
-				this->escucha->actualizarEntidad(new Entity(*entity));
+				this->escucha->actualizarEntidad(entity);
 				delete entity;
 				break;
 			case CAMBIO_USUARIO:
@@ -122,6 +122,7 @@ void MensajeroRed::esperaMensaje() {
 				this->escucha->comenzoPartida();
 				break;
 			case PING:
+				//printf("Recibi PING!!!\n");
 				break;
 			default: // No se pudo entender el mensaje
 				resultado = -1;

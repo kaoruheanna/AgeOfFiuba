@@ -64,6 +64,7 @@ private:
 	void actualizarProtagonista();
 	void mandarUsuarios();
 	void sleep();
+	void resolverMensajeros();
 
 	User* getUserByName(string name);
 	User* getUserByTeam(Team team);

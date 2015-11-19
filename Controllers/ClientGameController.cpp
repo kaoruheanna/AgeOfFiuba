@@ -489,7 +489,6 @@ void ClientGameController::actualizarEntidad(Entity* entity) {
 
 	if(existingEntity) {
 		if(existingEntity->getClass() == MOBILE_MODEL) {
-			delete entity;
 			return;
 		}
 
@@ -497,7 +496,6 @@ void ClientGameController::actualizarEntidad(Entity* entity) {
 		if (!existingEntity->estaViva()) {
 			this->escenario->eliminarEntidadConID(existingEntity->getId());
 		}
-		delete entity;
 	} else {
 		//Hecho asi creo q la entity esta viva del lado del server
 		SDL_Point posicion = entity->getPosicion();
