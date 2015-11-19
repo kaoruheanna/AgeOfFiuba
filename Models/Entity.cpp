@@ -52,13 +52,6 @@ Entity::~Entity(){
 
 }
 
-void Entity::setResourcesToZero(){
-	this->goldGathered = 0;
-		this->woodGathered = 0;
-		this->foodGathered = 0;
-		this->stoneGathered = 0;
-}
-
 string Entity::toString(){
 	string n ="Entidad con nombre: ";
 	n.append(this->nombre);

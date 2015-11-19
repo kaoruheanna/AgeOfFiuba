@@ -92,7 +92,7 @@ public:
 	virtual bool admiteNublado();
 	void resetResourcesGathered();
 	bool hasGatheredResources();
-	void setResourcesToZero();
+
 
 	EntityState getState();
 
