@@ -279,3 +279,21 @@ int Entity::vidaDescontada(Entity* entity) {
 	int vidaDescontada = ataque - escudo;
 	return (vidaDescontada > 0) ? vidaDescontada : 0;
 }
+
+void Entity::resetResourcesGathered() {
+	this->foodGathered = 0;
+	this->woodGathered = 0;
+	this->goldGathered = 0;
+	this->stoneGathered = 0;
+}
+
+bool Entity::hasGatheredResources() {
+	return ((this->foodGathered > 0) ||
+			(this->woodGathered > 0) ||
+			(this->goldGathered > 0) ||
+			(this->stoneGathered > 0));
+}
+
+bool Entity::shouldInteract() {
+	return (this->activeInteractionEntity != NULL);
+}

@@ -34,7 +34,7 @@ public:
 	virtual void cambioUsuario(User* user);
 //	virtual void errorConstruir();
 	virtual void comenzoPartida();
-	virtual void actualizarRecursos(User* auxUser);
+//	virtual void actualizarRecursos(User* auxUser);
 
 private:
 	ServerGameController* server;
