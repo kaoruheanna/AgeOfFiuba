@@ -17,6 +17,7 @@ public:
 	virtual ~MobileView();
 	void setModel(MobileModel *model);
 	virtual void setDrawableDeshabilitado(Drawable *drawable);
+	Drawable* getDrawable();
 	MotionDirection getMotionDirection();
 	void render(Renderer* renderer);
 

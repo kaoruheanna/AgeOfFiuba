@@ -55,14 +55,15 @@ void Sprite::onTextureChange(){
 	}
 }
 
-AnimationStatus Sprite::getAnimation(MotionDirection currentDirection, bool currentlyMoving, AnimationStatus lastStatus) {
+AnimationStatus Sprite::getAnimation(MotionDirection currentDirection, bool currentlyMoving, bool currentlyInteracting, AnimationStatus lastStatus) {
 	AnimationStatus newStatus;
 	newStatus.direction = currentDirection;
 	newStatus.isMoving = currentlyMoving;
+	newStatus.isInteracting = currentlyInteracting;
 	newStatus.animationIndex = 0;
 
 	// si no se esta moviendo no importa el animationIndex
-	if (!currentlyMoving){
+	if (!currentlyMoving && !currentlyInteracting){
 		return newStatus;
 	}
 
@@ -77,6 +78,8 @@ AnimationStatus Sprite::getAnimation(MotionDirection currentDirection, bool curr
 		index = 0;
 	}
 	newStatus.animationIndex = index;
+
+
 	return newStatus;
 }
 

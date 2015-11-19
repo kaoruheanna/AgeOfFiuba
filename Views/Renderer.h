@@ -99,6 +99,7 @@ private:
 	SDL_Renderer* sdlRenderer;
 	list< pair<SDL_Point,DrawableWithState> > drawablesToPaint;
 	std::map<std::string, Drawable*> drawablesByInstanceName;
+	std::map<std::string, Drawable*> drawablesInteractByInstanceName;
 	Drawable* missingImageDrawable;
 	Drawable* miniMissingImageDrawable;
 	ScreenMenu* screenMenu;
@@ -124,6 +125,7 @@ private:
 	bool loadMediaForMiniMap(list<TipoConfig>* tipos);
 	bool isInsideWindow(SDL_Rect* rect);
 	Drawable* getDrawableFromTipoConfig(TipoConfig tipo);
+	Drawable* getDrawableInteractFromTipoConfig(TipoConfig tipo);
 	void drawTopBar();
 	void drawMenu();
 	void drawEscenario();

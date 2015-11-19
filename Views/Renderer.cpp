@@ -124,6 +124,20 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 		  } else {
 			  Log().Get(TAG,logWARNING) << "Tipo N°" << i << " no se pudo cargar la imagen.";
 		  }
+		  //Cargar Textura Interactuando
+		  if (tipo.getImagenInteractuando() == ""){
+			  //Log().Get(TAG,logDEBUG) << "Tipo N°" << i << "no tiene imagen interactuando";
+		  }
+		  else{
+			  nodoDrawable = this->getDrawableInteractFromTipoConfig(tipo);
+			  bool textureLoaded = nodoDrawable->loadTextureFromFile(tipo.getImagenInteractuando(), this->sdlRenderer);
+			  if(textureLoaded){
+				  this->drawablesByInstanceName.insert(
+						  std::pair<std::string,Drawable*>(tipo.getNombre() + "-interactuando", nodoDrawable));
+			  } else {
+				  Log().Get(TAG,logWARNING) << "Tipo N°" << i << " no se pudo cargar la imagen de la interaccion.";
+			  }
+		  }
 		  // Cargar textura deshabilitado
 		  if(tipo.getImagenDeshabilitado().compare(tipo.getImagen()) != 0){
 			  nodoDrawable = this->getDrawableFromTipoConfig(tipo);
@@ -188,7 +202,6 @@ bool Renderer::loadMediaForMiniMap(list<TipoConfig>* tipos){
 			int pixelRefType = tipo.getMinimapPixelRefType();
 			int x = (pixelRefType == MinimapPixelRefTypeCentered) ? (TILE_WIDTH_PIXELS/2) : pixelRefX;
 			int y = (pixelRefType == MinimapPixelRefTypeCentered) ? (TILE_HEIGHT_PIXELS/2) : pixelRefY;
-
 			Drawable *nodoDrawable = new Drawable(x,y);
 			bool textureLoaded = nodoDrawable->loadTextureFromFile(tipo.getMiniImagen(), this->sdlRenderer);
 			if(textureLoaded){
@@ -211,6 +224,22 @@ Drawable* Renderer::getDrawableFromTipoConfig(TipoConfig tipo){
 
 	Drawable *drawable = new Drawable(
 		tipo.getPixelRefX(), tipo.getPixelRefY()
+	);
+	return drawable;
+}
+
+Drawable* Renderer::getDrawableInteractFromTipoConfig(TipoConfig tipo){
+	if(tipo.getFPS() > 0){
+		Sprite *sprite = new Sprite(
+			tipo.getPixelRefXInteract(), tipo.getPixelRefYInteract(),
+			tipo.getAnchoFrameInteract(), tipo.getAltoFrameInteract(),
+			tipo.getFPS(), tipo.getDelay()
+		);
+		return sprite;
+	}
+
+	Drawable *drawable = new Drawable(
+		tipo.getPixelRefXInteract(), tipo.getPixelRefYInteract()
 	);
 	return drawable;
 }
@@ -565,13 +594,13 @@ void Renderer::setEscenarioView(EscenarioView *escenarioView){
 void Renderer::updatedEscenario(){
 	MapView *mapView = this->escenarioView->getMapView();
 	this->setDrawableForView(mapView);
-
 	list<View*>* entitiesViews = this->escenarioView->getEntitiesView();
 	list<View*>::iterator i;
 	for(i=entitiesViews->begin(); i != entitiesViews->end(); ++i) {
 		View* view = *i;
 		this->setDrawableForView(view);
 	}
+
 }
 
 void Renderer::setDrawableForView(View* view){
@@ -590,6 +619,12 @@ void Renderer::setDrawableForView(View* view){
 		drawable = found->second;
 	}
 	view->setDrawableDeshabilitado(drawable);
+	//Find interaction drawable
+	found = this->drawablesByInstanceName.find(view->getType() + "-interactuando");
+	if(found != this->drawablesByInstanceName.end()){
+		drawable = found->second;
+	}
+	view->setInteractingDrawable(drawable);
 }
 
 // MINIMAP

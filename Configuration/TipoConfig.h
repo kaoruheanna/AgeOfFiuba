@@ -29,6 +29,7 @@ public:
 	string getMiniImagen();
 	string getImagenBoton();
 	string getImagenDeshabilitado();
+	string getImagenInteractuando();
 	int getAnchoBase();
 	int getAltoBase();
 	int getPixelRefX();
@@ -37,6 +38,10 @@ public:
 	int getDelay();
 	int getAltoFrame();
 	int getAnchoFrame();
+	int getPixelRefXInteract();
+	int getPixelRefYInteract();
+	int getAltoFrameInteract();
+	int getAnchoFrameInteract();
 	int getMinimapPixelRefType();
 	PropiedadesTipoUnidad getPropiedadesTipoUnidad();
 	string getCategoria();
@@ -46,6 +51,7 @@ private:
 	string nombre;
 	string imagen;
 	string imagenDeshabilitado;
+	string imagenInteractuando;
 	string miniImagen;
 	string imagenBoton;
 	int anchoBase;
@@ -56,6 +62,10 @@ private:
 	int delay;
 	int altoFrame;
 	int anchoFrame;
+	int pixelRefXInteract;
+	int pixelRefYInteract;
+	int altoFrameInteract;
+	int anchoFrameInteract;
 	int minimapPixelRefType;
 	PropiedadesTipoUnidad propiedadesTipoUnidad;
 	string categoria;

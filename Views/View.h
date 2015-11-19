@@ -20,6 +20,7 @@ public:
 	virtual ~View();
 	virtual void render(Renderer* renderer);
 	void setDrawable(Drawable *drawable);
+	void setInteractingDrawable(Drawable *drawable);
 	Drawable* getDrawable();
 	virtual void setDrawableDeshabilitado(Drawable *drawable);
 	void setOrigin(int x, int y);
@@ -29,6 +30,7 @@ public:
 protected:
 	SDL_Point origin;
 	Drawable *drawable;
+	Drawable *interactingDrawable;
 	AnimationStatus animationStatus;
 
 private:

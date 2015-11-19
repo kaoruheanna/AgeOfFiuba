@@ -18,6 +18,7 @@ TipoConfig::TipoConfig() {
 	this->fps = 0;
 	this->imagen = "";
 	this->imagenDeshabilitado = "";
+	this->imagenInteractuando = "";
 	this->miniImagen = "";
 	this->imagenBoton = "";
 	this->nombre = "";
@@ -44,6 +45,10 @@ TipoConfig::TipoConfig(YAML::Node nodo): TipoConfig(){
 	this->pixelRefY = TipoConfig::getIntAttribute(nodo, "pixel_ref_y", this->pixelRefY);
 	this->anchoFrame = TipoConfig::getIntAttribute(nodo, "ancho_frame", this->anchoFrame);
 	this->altoFrame = TipoConfig::getIntAttribute(nodo, "alto_frame", this->altoFrame);
+	this->pixelRefXInteract = TipoConfig::getIntAttribute(nodo, "pixel_ref_x_int", this->pixelRefXInteract);
+	this->pixelRefYInteract = TipoConfig::getIntAttribute(nodo, "pixel_ref_y_int", this->pixelRefYInteract);
+	this->anchoFrameInteract = TipoConfig::getIntAttribute(nodo, "ancho_frame_int", this->anchoFrameInteract);
+	this->altoFrameInteract = TipoConfig::getIntAttribute(nodo, "alto_frame_int", this->altoFrameInteract);
 	this->minimapPixelRefType = TipoConfig::getIntAttribute(nodo, "mini_map_pixel_ref_type", this->minimapPixelRefType);
 	this->propiedadesTipoUnidad.alcance = TipoConfig::getIntAttribute(nodo, "alcance", this->propiedadesTipoUnidad.alcance);
 	this->propiedadesTipoUnidad.poderAtaque = TipoConfig::getIntAttribute(nodo, "poder_ataque", this->propiedadesTipoUnidad.poderAtaque);
@@ -51,6 +56,7 @@ TipoConfig::TipoConfig(YAML::Node nodo): TipoConfig(){
 	this->propiedadesTipoUnidad.escudo = TipoConfig::getIntAttribute(nodo, "escudo", this->propiedadesTipoUnidad.escudo);
 
 	this->imagen = TipoConfig::getStringAttribute(nodo, "imagen", this->imagen);
+	this->imagenInteractuando = TipoConfig::getStringAttribute(nodo, "imagenInteractuando", this->imagenInteractuando);
 	this->imagenDeshabilitado = TipoConfig::getStringAttribute(nodo, "imagenDeshabilitado", this->imagenDeshabilitado);
 	this->miniImagen = TipoConfig::getStringAttribute(nodo, "miniImagen", this->miniImagen);
 	this->imagenBoton = TipoConfig::getStringAttribute(nodo, "imagenBoton", this->imagenBoton);
@@ -155,6 +161,9 @@ string TipoConfig::getImagen() {
 string TipoConfig::getImagenDeshabilitado() {
 	return this->imagenDeshabilitado;
 }
+string TipoConfig::getImagenInteractuando(){
+	return this->imagenInteractuando;
+}
 string TipoConfig::getMiniImagen() {
 	return this->miniImagen;
 }
@@ -179,12 +188,23 @@ int TipoConfig::getFPS() {
 int TipoConfig::getDelay() {
 	return this->delay;
 }
-
 int TipoConfig::getAltoFrame() {
 	return this->altoFrame;
 }
 int TipoConfig::getAnchoFrame() {
 	return this->anchoFrame;
+}
+int TipoConfig::getPixelRefXInteract() {
+	return this->pixelRefXInteract;
+}
+int TipoConfig::getPixelRefYInteract() {
+	return this->pixelRefYInteract;
+}
+int TipoConfig::getAltoFrameInteract() {
+	return this->altoFrameInteract;
+}
+int TipoConfig::getAnchoFrameInteract() {
+	return this->anchoFrameInteract;
 }
 int TipoConfig::getMinimapPixelRefType() {
 	return this->minimapPixelRefType;

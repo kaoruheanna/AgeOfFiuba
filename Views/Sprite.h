@@ -18,7 +18,7 @@ public:
 	Sprite(int mainTilePositionX, int mainTilePositionY, int spriteWidth, int spriteHeight, float fps, float delay);
 	virtual ~Sprite();
 	SDL_Rect* getClipRect();
-	AnimationStatus getAnimation(MotionDirection currentDirection, bool currentlyMoving, AnimationStatus lastStatus);
+	AnimationStatus getAnimation(MotionDirection currentDirection, bool currentlyMoving, bool currentlyInteracting, AnimationStatus lastStatus);
 	void animate(AnimationStatus status);
 
 protected:

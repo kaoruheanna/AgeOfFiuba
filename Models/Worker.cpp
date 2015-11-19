@@ -25,7 +25,6 @@ void Worker::doInteract(){
 		!activeInteractionEntity->estaViva()) {
 			return;
 	}
-
 	this->state = STATE_INTERACTING;
 	activeInteractionEntity->receiveInteraction(this);
 }

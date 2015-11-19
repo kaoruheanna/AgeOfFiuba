@@ -242,6 +242,10 @@ void Entity::interact(Entity* entity){
 	activeInteractionEntity = entity;
 }
 
+bool Entity::isInteracting(){
+	return (this->state == STATE_INTERACTING);
+}
+
 bool Entity::canReach(Entity* entity) {
 	Escenario* escenario = EscenarioSingleton::get();
 	int distancia = escenario->getDistancia(this,entity);

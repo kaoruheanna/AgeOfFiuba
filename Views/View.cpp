@@ -9,22 +9,25 @@
 
 View::View(std::string name) {
 	this->drawable = NULL;
+	this->interactingDrawable = NULL;
 	SDL_Point origin = {0,0};
 	this->origin = origin;
 	this->type = name;
 	this->animationStatus.direction = MotionDirection(0);
 	this->animationStatus.animationIndex = 0;
 	this->animationStatus.isMoving = false;
+	this->animationStatus.isInteracting = false;
 }
 
 View::~View() {
 	this->drawable = NULL;
+	this->interactingDrawable = NULL;
 	this->animationStatus.animationIndex = 0;
 	this->animationStatus.isMoving = NULL;
+	this->animationStatus.isInteracting = NULL; //TODO ver si es necesario
 }
 
 void View::setDrawableDeshabilitado(Drawable *drawable) {
-//TODO que hay que hacer aca?
 }
 
 void View::render(Renderer* renderer ) {
@@ -35,6 +38,10 @@ void View::render(Renderer* renderer ) {
 
 void View::setDrawable(Drawable *drawable){
 	this->drawable = drawable;
+}
+
+void View::setInteractingDrawable(Drawable *drawable){
+	this->interactingDrawable = drawable;
 }
 
 SDL_Point View::getOrigin(){
