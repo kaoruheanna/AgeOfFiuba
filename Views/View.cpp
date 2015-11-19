@@ -19,10 +19,12 @@ View::View(std::string name) {
 
 View::~View() {
 	this->drawable = NULL;
+	this->animationStatus.animationIndex = 0;
+	this->animationStatus.isMoving = NULL;
 }
 
 void View::setDrawableDeshabilitado(Drawable *drawable) {
-
+//TODO que hay que hacer aca?
 }
 
 void View::render(Renderer* renderer ) {

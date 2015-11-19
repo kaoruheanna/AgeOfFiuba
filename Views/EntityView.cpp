@@ -17,7 +17,9 @@ EntityView::EntityView(std::string type): View(type) {
 }
 
 EntityView::~EntityView() {
-	// TODO Auto-generated destructor stub
+	// TODO destruir view.
+	this->model = NULL;
+
 }
 
 void EntityView::setModel(Entity *model) {

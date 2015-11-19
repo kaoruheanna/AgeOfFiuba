@@ -48,5 +48,3 @@ void MiniEscenarioView::addEntityMiniView(MiniView *miniView){
 list<MiniView*>* MiniEscenarioView::getEntitiesMiniView() {
 	return &(this->entitiesMiniViews);
 }
-
-

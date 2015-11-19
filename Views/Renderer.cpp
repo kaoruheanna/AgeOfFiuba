@@ -47,6 +47,7 @@ Renderer::Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos) {
 
 Renderer::~Renderer() {
 	// TODO Auto-generated destructor stub
+	this->close();
 }
 
 bool Renderer::initSDL() {
@@ -221,9 +222,11 @@ void Renderer::close() {
 	  delete it->second;
 	}
 
-	this->fog->close();
-	delete this->fog;
-	this->fog = NULL;
+	if (this->fog != NULL){
+		this->fog->close();
+		delete this->fog;
+		this->fog = NULL;
+	}
 
 	this->missingImageDrawable->free();
 	delete this->missingImageDrawable;
@@ -676,9 +679,10 @@ void Renderer::setMessagesInMenu(std::string firstMessage, std::string secondMes
 }
 
 void Renderer::setSelectedTilesCoordinates(bool selected,std::list<pair<SDL_Point,SDL_Point>> tiles, list<Entity*> entidad){
-	//TODO hay que arreglar esto para que funcione para todas las unidades seleccionadas.
+
 	this->hasSelectedTiles = selected;
 	this->selectedTilesCoordinates = tiles.front();// TODO hay que cambiar esto.
+	this->selectedEntities.clear();
 	this->selectedEntities.swap(entidad);
 }
 
@@ -799,6 +803,7 @@ void Renderer::setFutureBuildingView(FutureBuildingView *futureBuildingView) {
 }
 
 void Renderer::drawSelectionRect(){
+	SDL_RenderSetViewport(this->sdlRenderer, &this->escenarioRect);
 	SDL_SetRenderDrawColor( this->sdlRenderer, 0xFF, 0xFF, 0xFF, 0x00 );
 	SDL_RenderDrawRect( this->sdlRenderer, &this->selectionArea);
 }

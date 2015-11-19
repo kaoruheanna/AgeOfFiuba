@@ -16,13 +16,14 @@ ResourceCounter::ResourceCounter(int x,int y,int width,int height,string resourc
 	this->y = y;
 	this->width = width;
 	this->height = height;
-	this->resourceName = resourceName;
+	this->resourceName = string(resourceName);
 	this->label = new TextLabel(x,y);
 	this->setResourceValue(0);
 }
 
 ResourceCounter::~ResourceCounter() {
 	delete this->label;
+	this->resourceName = "";
 }
 
 void ResourceCounter::render(Renderer* renderer) {

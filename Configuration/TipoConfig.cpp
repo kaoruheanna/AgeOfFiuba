@@ -78,7 +78,7 @@ list<string> TipoConfig::parsearCreables(YAML::Node nodo){
 	if (nodo["creables"] && nodo["creables"].IsDefined() && nodo["creables"].IsSequence() && !nodo["creables"].IsNull()){
 		nodoCreables = nodo["creables"];
 		for (std::size_t i=0;i < nodoCreables.size();i++){
-			//NO realiza verificacion alguna sobre la cadena de caracteres, toma lo que haya
+			//TODO NO realiza verificacion alguna sobre la cadena de caracteres, toma lo que haya
 			string creable = nodoCreables[i].as<string>();
 			listaDeCreables.push_back(creable);
 		}

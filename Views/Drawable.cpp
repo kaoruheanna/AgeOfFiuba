@@ -14,6 +14,13 @@ const std::string TAG = "Drawable";
 
 Drawable::~Drawable() {
 	// TODO Auto-generated destructor stub
+	this->mainTilePosition = {0,0};
+	this->height = 0;
+	this->width = 0;
+	if (!this->texture == NULL){
+		SDL_DestroyTexture(this->texture);
+		this->texture=NULL;
+	}
 }
 
 Drawable::Drawable(int mainTilePositionX, int mainTilePositionY){

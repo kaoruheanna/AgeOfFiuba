@@ -85,10 +85,13 @@ EstadoDeVisibilidad FogOfWar::getEstado(int posicionX, int posicionY){
 }
 
 void FogOfWar::close(){
-	for (int x = 0; x < ancho; ++x){
-			delete (this->matrizDeVisibilidad[x]);
+	for (int x = 0; x < this->ancho; ++x){
+			if (this->matrizDeVisibilidad != NULL)
+				delete[] (this->matrizDeVisibilidad[x]);
 	}
-	delete (this->matrizDeVisibilidad);
+	if (this->matrizDeVisibilidad != NULL)
+		delete[] (this->matrizDeVisibilidad);
+		this->matrizDeVisibilidad = NULL;
 }
 
 FogOfWar::~FogOfWar() {

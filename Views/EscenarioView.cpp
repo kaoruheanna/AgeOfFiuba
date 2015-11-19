@@ -20,7 +20,7 @@ EscenarioView::~EscenarioView() {
 	list<View*>::iterator i;
 	for(i=this->entitiesViews.begin(); i != this->entitiesViews.end(); ++i) {
 		View* view = *i;
-		delete view;
+		delete (view);
 	}
 	this->entitiesViews.clear();
 }
