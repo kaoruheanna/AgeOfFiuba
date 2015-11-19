@@ -17,6 +17,7 @@ public:
 	virtual ~EntityView();
 	void setModel(Entity *model);
 	void render(Renderer* renderer);
+	Drawable* getDrawable();
 
 protected:
 	SDL_Point getOrigin();

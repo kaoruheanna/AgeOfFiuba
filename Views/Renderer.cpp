@@ -47,6 +47,7 @@ Renderer::Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos) {
 
 Renderer::~Renderer() {
 	// TODO Auto-generated destructor stub
+	this->close();
 }
 
 bool Renderer::initSDL() {
@@ -123,6 +124,20 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 		  } else {
 			  Log().Get(TAG,logWARNING) << "Tipo N°" << i << " no se pudo cargar la imagen.";
 		  }
+		  //Cargar Textura Interactuando
+		  if (tipo.getImagenInteractuando() == ""){
+			  //Log().Get(TAG,logDEBUG) << "Tipo N°" << i << "no tiene imagen interactuando";
+		  }
+		  else{
+			  nodoDrawable = this->getDrawableInteractFromTipoConfig(tipo);
+			  bool textureLoaded = nodoDrawable->loadTextureFromFile(tipo.getImagenInteractuando(), this->sdlRenderer);
+			  if(textureLoaded){
+				  this->drawablesByInstanceName.insert(
+						  std::pair<std::string,Drawable*>(tipo.getNombre() + "-interactuando", nodoDrawable));
+			  } else {
+				  Log().Get(TAG,logWARNING) << "Tipo N°" << i << " no se pudo cargar la imagen de la interaccion.";
+			  }
+		  }
 		  // Cargar textura deshabilitado
 		  if(tipo.getImagenDeshabilitado().compare(tipo.getImagen()) != 0){
 			  nodoDrawable = this->getDrawableFromTipoConfig(tipo);
@@ -187,7 +202,6 @@ bool Renderer::loadMediaForMiniMap(list<TipoConfig>* tipos){
 			int pixelRefType = tipo.getMinimapPixelRefType();
 			int x = (pixelRefType == MinimapPixelRefTypeCentered) ? (TILE_WIDTH_PIXELS/2) : pixelRefX;
 			int y = (pixelRefType == MinimapPixelRefTypeCentered) ? (TILE_HEIGHT_PIXELS/2) : pixelRefY;
-
 			Drawable *nodoDrawable = new Drawable(x,y);
 			bool textureLoaded = nodoDrawable->loadTextureFromFile(tipo.getMiniImagen(), this->sdlRenderer);
 			if(textureLoaded){
@@ -214,6 +228,22 @@ Drawable* Renderer::getDrawableFromTipoConfig(TipoConfig tipo){
 	return drawable;
 }
 
+Drawable* Renderer::getDrawableInteractFromTipoConfig(TipoConfig tipo){
+	if(tipo.getFPS() > 0){
+		Sprite *sprite = new Sprite(
+			tipo.getPixelRefXInteract(), tipo.getPixelRefYInteract(),
+			tipo.getAnchoFrameInteract(), tipo.getAltoFrameInteract(),
+			tipo.getFPS(), tipo.getDelay()
+		);
+		return sprite;
+	}
+
+	Drawable *drawable = new Drawable(
+		tipo.getPixelRefXInteract(), tipo.getPixelRefYInteract()
+	);
+	return drawable;
+}
+
 void Renderer::close() {
 	//Free loaded images
 	for(map<std::string, Drawable*>::iterator it = this->drawablesByInstanceName.begin(); it != this->drawablesByInstanceName.end(); ++it) {
@@ -221,9 +251,11 @@ void Renderer::close() {
 	  delete it->second;
 	}
 
-	this->fog->close();
-	delete this->fog;
-	this->fog = NULL;
+	if (this->fog != NULL){
+		this->fog->close();
+		delete this->fog;
+		this->fog = NULL;
+	}
 
 	this->missingImageDrawable->free();
 	delete this->missingImageDrawable;
@@ -562,13 +594,13 @@ void Renderer::setEscenarioView(EscenarioView *escenarioView){
 void Renderer::updatedEscenario(){
 	MapView *mapView = this->escenarioView->getMapView();
 	this->setDrawableForView(mapView);
-
 	list<View*>* entitiesViews = this->escenarioView->getEntitiesView();
 	list<View*>::iterator i;
 	for(i=entitiesViews->begin(); i != entitiesViews->end(); ++i) {
 		View* view = *i;
 		this->setDrawableForView(view);
 	}
+
 }
 
 void Renderer::setDrawableForView(View* view){
@@ -587,6 +619,12 @@ void Renderer::setDrawableForView(View* view){
 		drawable = found->second;
 	}
 	view->setDrawableDeshabilitado(drawable);
+	//Find interaction drawable
+	found = this->drawablesByInstanceName.find(view->getType() + "-interactuando");
+	if(found != this->drawablesByInstanceName.end()){
+		drawable = found->second;
+	}
+	view->setInteractingDrawable(drawable);
 }
 
 // MINIMAP
@@ -676,9 +714,10 @@ void Renderer::setMessagesInMenu(std::string firstMessage, std::string secondMes
 }
 
 void Renderer::setSelectedTilesCoordinates(bool selected,std::list<pair<SDL_Point,SDL_Point>> tiles, list<Entity*> entidad){
-	//TODO hay que arreglar esto para que funcione para todas las unidades seleccionadas.
+
 	this->hasSelectedTiles = selected;
 	this->selectedTilesCoordinates = tiles.front();// TODO hay que cambiar esto.
+	this->selectedEntities.clear();
 	this->selectedEntities.swap(entidad);
 }
 
@@ -799,6 +838,7 @@ void Renderer::setFutureBuildingView(FutureBuildingView *futureBuildingView) {
 }
 
 void Renderer::drawSelectionRect(){
+	SDL_RenderSetViewport(this->sdlRenderer, &this->escenarioRect);
 	SDL_SetRenderDrawColor( this->sdlRenderer, 0xFF, 0xFF, 0xFF, 0x00 );
 	SDL_RenderDrawRect( this->sdlRenderer, &this->selectionArea);
 }

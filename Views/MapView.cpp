@@ -12,7 +12,7 @@ MapView::MapView(std::string type): View(type) {
 }
 
 MapView::~MapView() {
-	// TODO Auto-generated destructor stub
+	this->model=NULL;
 }
 
 void MapView::setModel(Map *model) {

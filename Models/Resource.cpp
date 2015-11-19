@@ -30,23 +30,21 @@ void Resource::receiveInteraction(Warrior* entity) {
 }
 
 void Resource::receiveInteraction(Worker *entity) {
-	int antigua = this->life;
-	int actual = this->life - entity->getPoderCosecha();
-	this->life = actual;
-	if (antigua > 0){
+	if (this->estaViva()){
 		if (this->getNombre().compare("comida") == 0){
-			entity->foodGathered = antigua-actual;
-
+			entity->foodGathered = entity->getPoderCosecha();
 		}
 		else if (this->getNombre().compare("arbol") == 0){
-				entity->woodGathered = antigua-actual;
+			entity->woodGathered = entity->getPoderCosecha();
 		}
 		else if (this->getNombre().compare("piedra") == 0){
-				entity->stoneGathered = antigua-actual;
+			entity->stoneGathered = entity->getPoderCosecha();
 		}
 		else if (this->getNombre().compare("oro") == 0){
-				entity->goldGathered = antigua-actual;
+			entity->goldGathered = entity->getPoderCosecha();
 		}
+
+		this->life -= entity->getPoderCosecha();
 	}
 }
 

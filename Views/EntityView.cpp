@@ -17,7 +17,9 @@ EntityView::EntityView(std::string type): View(type) {
 }
 
 EntityView::~EntityView() {
-	// TODO Auto-generated destructor stub
+	// TODO destruir view.
+	this->model = NULL;
+
 }
 
 void EntityView::setModel(Entity *model) {
@@ -32,11 +34,18 @@ SDL_Point EntityView::getOrigin(){
 	return this->model->getPosicion();
 }
 
+Drawable* EntityView::getDrawable(){
+	if (this->model->isInteracting()){
+		return this->drawable;
+	}else{
+		return this->drawable;
+	}
+}
+
 void EntityView::render(Renderer* renderer) {
 	SDL_Point point = this->getOrigin();
-	this->animationStatus = this->drawable->getAnimation(this->animationStatus.direction,true,this->animationStatus);
-	this->drawable->animate(this->animationStatus);
-	renderer->draw(point.x, point.y, this->drawable, this->model->admiteNublado());
-
+	this->animationStatus = this->drawable->getAnimation(this->animationStatus.direction,true,false,this->animationStatus);
+	this->getDrawable()->animate(this->animationStatus);
+	renderer->draw(point.x, point.y, this->getDrawable(), this->model->admiteNublado());
 }
 

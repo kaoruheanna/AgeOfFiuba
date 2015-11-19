@@ -264,9 +264,11 @@ void Escenario::loop() {
 	}
 
 	//Interacciones
-	for(auto entidad : this->entidadesInteractuando) {
-		entidad->doInteract();
-		this->delegate->actualizaEntidad(entidad);
+	for(auto entidad : this->entidades) {
+		if (entidad->shouldInteract()){
+			entidad->doInteract();
+			this->delegate->actualizaEntidad(entidad);
+		}
 	}
 
 	if(this->tipo != NULL){

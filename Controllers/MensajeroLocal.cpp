@@ -62,9 +62,9 @@ void MensajeroLocal::cambioUsuario(User* user) {
 	this->cliente->cambioUsuario(user);
 }
 
-void MensajeroLocal::actualizarRecursos(User* auxUser) {
-	this->cliente->actualizarRecursos(auxUser);
-}
+//void MensajeroLocal::actualizarRecursos(User* auxUser) {
+//	this->cliente->actualizarRecursos(auxUser);
+//}
 
 // Metodos Cliente -> Servidor
 void MensajeroLocal::loguearse(char* nombre) {

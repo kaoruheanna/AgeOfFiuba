@@ -39,6 +39,12 @@ public:
 	bool perdio;
 	bool gano;
 
+
+	int comida;
+	int piedra;
+	int madera;
+	int oro;
+
 	// Resource methods
 
 	void addResourceToCollect(string resourceName);
@@ -61,10 +67,6 @@ private:
 	bool active;
 	list<string> resourceNames;
 
-	int comida;
-	int piedra;
-	int madera;
-	int oro;
 };
 
 #endif /* MODELS_USER_H_ */

@@ -20,7 +20,7 @@ TopBar::TopBar(int width, int height) {
 }
 
 TopBar::~TopBar() {
-	for (list<ResourceCounter*>::iterator it = this->resourcesCounters.begin(); it != this->resourcesCounters.end(); it++){
+	for (list<ResourceCounter*>::iterator it = this->resourcesCounters.begin(); it != this->resourcesCounters.end(); ++it){
 		ResourceCounter *counter = *it;
 		delete counter;
 	}
@@ -57,7 +57,7 @@ void TopBar::setProtagonista(User *protagonista) {
 	int horizontalSpacing = 20;
 	int resourceX = horizontalSpacing;
 
-	for (list<string>::iterator it = names.begin(); it != names.end(); it++){
+	for (list<string>::iterator it = names.begin(); it != names.end(); ++it){
 		string name = *it;
 		ResourceCounter *counter = new ResourceCounter(resourceX,verticalSpacing,counterWidth,counterHeight,name);
 		this->resourcesCounters.push_back(counter);

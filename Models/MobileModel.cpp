@@ -127,6 +127,10 @@ bool MobileModel::isMoving() {
 	return this->moving;
 }
 
+bool MobileModel::isInteracting(){
+	return (this->state == STATE_INTERACTING);
+}
+
 void MobileModel::update(MobileModel* other) {
 	this->setTeam(other->getTeam());
 	this->setMoving(other->isMoving());

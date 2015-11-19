@@ -14,6 +14,13 @@ const std::string TAG = "Drawable";
 
 Drawable::~Drawable() {
 	// TODO Auto-generated destructor stub
+	this->mainTilePosition = {0,0};
+	this->height = 0;
+	this->width = 0;
+	if (!this->texture == NULL){
+		SDL_DestroyTexture(this->texture);
+		this->texture=NULL;
+	}
 }
 
 Drawable::Drawable(int mainTilePositionX, int mainTilePositionY){
@@ -24,13 +31,13 @@ Drawable::Drawable(int mainTilePositionX, int mainTilePositionY){
 }
 
 bool Drawable::loadTextureFromFile(std::string path,SDL_Renderer* sdlRenderer){
+	//TODO aca estaba trabajando
 	//Load image at specified path
 	SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
 	if( loadedSurface == NULL ) {
 		Log().Get(TAG,logWARNING) << "No se pudo cargar la imagen:'"<<path.c_str()<<"' - error: "<<IMG_GetError();
 		return false;
 	}
-
 	bool result = this->loadTextureFromSurface(sdlRenderer, loadedSurface);
 	//Get rid of old loaded surface
 	SDL_FreeSurface( loadedSurface );
@@ -80,11 +87,12 @@ void Drawable::free(){
 void Drawable::animate(AnimationStatus status){
 }
 
-AnimationStatus Drawable::getAnimation(MotionDirection currentDirection, bool currentlyMoving, AnimationStatus lastStatus){
+AnimationStatus Drawable::getAnimation(MotionDirection currentDirection, bool currentlyMoving, bool currentlyInteracting, AnimationStatus lastStatus){
 	AnimationStatus nextStatus;
 	nextStatus.direction = SOUTH;
 	nextStatus.animationIndex = 0;
 	nextStatus.isMoving = false;
+	nextStatus.isInteracting = false;
 	return nextStatus;
 }
 

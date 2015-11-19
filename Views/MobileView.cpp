@@ -17,7 +17,10 @@ MobileView::MobileView(std::string type): View(type) {
 }
 
 MobileView::~MobileView() {
-	this->auxDrawable = NULL;
+	if (!this->auxDrawable == NULL){
+		delete(this->auxDrawable);
+		this->auxDrawable = NULL;
+	}
 }
 
 void MobileView::setModel(MobileModel *model) {
@@ -26,6 +29,14 @@ void MobileView::setModel(MobileModel *model) {
 
 void MobileView::setDrawableDeshabilitado(Drawable *drawable) {
 	this->auxDrawable = drawable;
+}
+
+Drawable* MobileView::getDrawable(){
+	if (this->model->isInteracting()){
+		return this->interactingDrawable;
+	}else{
+		return this->drawable;
+	}
 }
 
 SDL_Point MobileView::getOrigin(){
@@ -43,12 +54,10 @@ SDL_Point MobileView::getOrigin(){
 
 void MobileView::render(Renderer* renderer) {
 	MotionDirection currentDirection = this->getMotionDirection();
-	this->animationStatus = this->drawable->getAnimation(currentDirection,this->model->isMoving(),this->animationStatus);
+	this->animationStatus = this->getDrawable()->getAnimation(currentDirection,this->model->isMoving(),this->model->isInteracting(),this->animationStatus);
 	SDL_Point point = this->getOrigin();
-	this->drawable->animate(this->animationStatus);
-	renderer->draw(point.x, point.y, this->drawable,false);
-
-	//View::render(renderer);
+	this->getDrawable()->animate(this->animationStatus);
+	renderer->draw(point.x, point.y, this->getDrawable(),false);
 }
 
 // REVISAR EL TEMA CON LA ROTACION

@@ -33,6 +33,7 @@ public:
 	bool updatePosition();
 	void setMoving(bool moving);
 	bool isMoving();
+	bool isInteracting();
 	void update(MobileModel* other);
 	void addDestination(int destinationX, int destionationY);
 	SDL_Point getNextDestination();
@@ -56,6 +57,7 @@ private:
 	int destinationX;
 	int destinationY;
 	bool moving;
+	bool interacting;
 
 	int getSpeed();
 

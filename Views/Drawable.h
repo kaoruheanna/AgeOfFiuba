@@ -26,6 +26,7 @@ struct AnimationStatus {
 	MotionDirection direction;
 	int animationIndex;
 	bool isMoving;
+	bool isInteracting;
 };
 
 
@@ -38,7 +39,7 @@ public:
 	bool loadTextureFromFile(std::string path,SDL_Renderer* sdlRenderer);
 	virtual SDL_Rect* getClipRect();
 	virtual void animate(AnimationStatus status);
-	virtual AnimationStatus getAnimation(MotionDirection currentDirection, bool currentlyMoving, AnimationStatus lastStatus);
+	virtual AnimationStatus getAnimation(MotionDirection currentDirection, bool currentlyMoving, bool currentlyInteracting, AnimationStatus lastStatus);
 	void free();
 	int getHeight();
 
