@@ -21,13 +21,13 @@ Worker::~Worker() {}
 void Worker::doInteract(){
 	if (!activeInteractionEntity ||
 		!this->canReach(activeInteractionEntity) ||
+		this->isMoving() ||
 		!activeInteractionEntity->estaViva()) {
-		return;
+			return;
 	}
 
 	this->state = STATE_INTERACTING;
 	activeInteractionEntity->receiveInteraction(this);
-
 }
 
 void Worker::interact(Entity* entity) {

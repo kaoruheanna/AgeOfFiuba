@@ -59,13 +59,6 @@ Entity::~Entity(){
 
 }
 
-void Entity::setResourcesToZero(){
-	this->goldGathered = 0;
-		this->woodGathered = 0;
-		this->foodGathered = 0;
-		this->stoneGathered = 0;
-}
-
 string Entity::toString(){
 	string n ="Entidad con nombre: ";
 	n.append(this->nombre);
@@ -285,4 +278,22 @@ int Entity::vidaDescontada(Entity* entity) {
 	int ataque = entity->getPoderAtaque() ? (rand() % entity->getPoderAtaque()) : 0;
 	int vidaDescontada = ataque - escudo;
 	return (vidaDescontada > 0) ? vidaDescontada : 0;
+}
+
+void Entity::resetResourcesGathered() {
+	this->foodGathered = 0;
+	this->woodGathered = 0;
+	this->goldGathered = 0;
+	this->stoneGathered = 0;
+}
+
+bool Entity::hasGatheredResources() {
+	return ((this->foodGathered > 0) ||
+			(this->woodGathered > 0) ||
+			(this->goldGathered > 0) ||
+			(this->stoneGathered > 0));
+}
+
+bool Entity::shouldInteract() {
+	return (this->activeInteractionEntity != NULL);
 }

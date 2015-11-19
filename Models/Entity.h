@@ -75,10 +75,11 @@ protected:
 
 public:
 	int foodGathered;
-		int woodGathered;
-		int stoneGathered;
-		int goldGathered;
+	int woodGathered;
+	int stoneGathered;
+	int goldGathered;
 	list<string> creables;
+
 	void setId(int id);
 	int getId();
 	SDL_Point getPosicion();
@@ -89,8 +90,9 @@ public:
 	virtual bool esJugador();
 	virtual string getNombreAMostrar();
 	virtual bool admiteNublado();
+	void resetResourcesGathered();
+	bool hasGatheredResources();
 
-	void setResourcesToZero();
 
 	EntityState getState();
 
@@ -122,6 +124,7 @@ public:
 	virtual void receiveInteraction(Building* entity) {};
 	virtual void receiveInteraction(Warrior* entity) {};
 	virtual void receiveInteraction(Worker *entity) {};
+	bool shouldInteract();
 
 	string toString();
 	// Serializable methods

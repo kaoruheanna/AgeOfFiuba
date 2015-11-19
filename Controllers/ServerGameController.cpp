@@ -79,13 +79,6 @@ void ServerGameController::init() {
 	escenarioInicializado(this->mensajeros,this->escenario,this->config->getPath());
 }
 
-void ServerGameController::clearResources() {
-	mapaDeRecursos["comida"] = 0;
-	mapaDeRecursos["madera"] = 0;
-	mapaDeRecursos["oro"] = 0;
-	mapaDeRecursos["piedra"] = 0;
-}
-
 void ServerGameController::play() {
 
 	if (!this->inicializado()) {
@@ -96,8 +89,6 @@ void ServerGameController::play() {
 	}
 	this->enviarEventos();
 	this->enviarComienzo();
-
-	this->clearResources();
 
 	while( true ) {
 		this->loopEscenario();
@@ -121,22 +112,14 @@ void ServerGameController::obtenerEventos() {
 void ServerGameController::enviarEventos() {
 	this->actualizarProtagonista();
 
-	User* auxUser = new User();
-	auxUser->setActive(true);
-	auxUser->setTeam(TEAM_RED);
-	auxUser->setResourceValues(mapaDeRecursos["comida"],mapaDeRecursos["madera"],mapaDeRecursos["piedra"],mapaDeRecursos["oro"]);//TEST
-
-
 	list<Mensajero*>::iterator mensajero;
 	for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
 		Mensajero* mensajeroReal = (*mensajero);
 		actualizarEntidades(mensajeroReal,this->entidadesActualizadas);
 		agregarEntidades(mensajeroReal,this->escenario->entidadesAgregadas);
-		mensajeroReal->actualizarRecursos(auxUser);
 	}
 	this->entidadesActualizadas.clear();
 	this->escenario->entidadesAgregadas.clear();
-	delete auxUser;//TEST
 
 	list<Entity*>::iterator entidadEliminada;
 	for (entidadEliminada = recursosEliminados.begin(); entidadEliminada != recursosEliminados.end(); ++entidadEliminada){
@@ -162,28 +145,31 @@ void ServerGameController::enviarEventos() {
 	}
 }
 
-void ServerGameController::loopEscenario() {
-	this->obtenerEventos();
-
-
+void ServerGameController::setResourcesGathered() {
 	list<Entity*> entidades = this->escenario->getListaEntidades();
 	list<Entity*>::iterator iterador;
-	for (iterador = entidades.begin(); iterador != entidades.end(); ++iterador){
-		(*iterador)->setResourcesToZero();
+	for (iterador = entidades.begin(); iterador != entidades.end();++iterador) {
+		Entity* entity = *iterador;
+		//Preguntar si recolecto o no
+		if (entity->hasGatheredResources()) {
+			User* user = this->getUserByTeam(entity->getTeam());
+			//			if (user && user->isActive()){
+			if (user) {
+				user->comida += entity->foodGathered;
+				user->madera += entity->woodGathered;
+				user->piedra += entity->stoneGathered;
+				user->oro += entity->goldGathered;
+				entity->resetResourcesGathered();
+				this->debeActualizarUsuarios = true;
+			}
+		}
 	}
+}
 
-
+void ServerGameController::loopEscenario() {
+	this->obtenerEventos();
 	this->escenario->loop();
-
-
-	for (iterador = entidades.begin(); iterador != entidades.end(); ++iterador){
-
-			mapaDeRecursos["comida"] = mapaDeRecursos["comida"] + ((*iterador)->foodGathered);
-			mapaDeRecursos["madera"] = mapaDeRecursos["madera"] + ((*iterador)->woodGathered);
-			mapaDeRecursos["piedra"] = mapaDeRecursos["piedra"] + ((*iterador)->stoneGathered);
-			mapaDeRecursos["oro"] = mapaDeRecursos["oro"] + ((*iterador)->goldGathered);
-	}
-
+	this->setResourcesGathered();
 	this->enviarEventos();
 }
 

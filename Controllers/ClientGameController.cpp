@@ -483,7 +483,7 @@ void ClientGameController::actualizarEntidad(Entity* entity) {
 		return;
 	}
 
-	Log().Get(TAG) << entity->getNombre() <<"me llego con tamaño:"<<entity->getAnchoBase()<<"x"<<entity->getAltoBase();
+//	Log().Get(TAG) << entity->getNombre() <<"me llego con tamaño:"<<entity->getAnchoBase()<<"x"<<entity->getAltoBase();
 
 	Entity* existingEntity = this->escenario->entidadConId(entity->getId());
 
@@ -815,6 +815,6 @@ void ClientGameController::limpiarConstruccion(){
 	this->renderer->setFutureBuildingView(NULL);
 }
 
-void ClientGameController::actualizarRecursos(User* auxUser){
-	this->usuario->update(auxUser);
-}
+//void ClientGameController::actualizarRecursos(User* auxUser){
+//	this->usuario->update(auxUser);
+//}
