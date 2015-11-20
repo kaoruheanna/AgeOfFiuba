@@ -772,12 +772,15 @@ void Renderer::clickEvent(int x, int y, bool leftClick, RendererInteractionDeleg
 		}
 		return;
 	}
-
 	if (this->isPixelInMenu(x,y)){
 		//le resto el offset del viewport
 		int xMenu = x - this->menuRect.x;
 		int yMenu = y - this->menuRect.y;
-		this->screenMenu->clickEvent(xMenu,yMenu,delegate);
+		delegate->checkSelectedInTeam();
+		if (this->allowedToBuild)
+		{
+			this->screenMenu->clickEvent(xMenu,yMenu,delegate);
+		}
 	}
 
 }

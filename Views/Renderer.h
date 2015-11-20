@@ -41,6 +41,7 @@ public:
 	virtual void rightClickEnEscenario(int x, int y){};
 	virtual void leftMouseUp(int x, int y, int w, int h){};
 	virtual void createEntityButtonPressed(string entityName){};
+	virtual void checkSelectedInTeam(){};
 };
 
 struct DrawableWithState {
@@ -53,6 +54,7 @@ class Renderer {
 public:
 	SDL_Point mainTilePosition;
 	SDL_Point miniMapMainTilePosition;
+	bool allowedToBuild;
 
 	Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos);
 	virtual ~Renderer();

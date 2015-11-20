@@ -769,6 +769,17 @@ void ClientGameController::setMessageForSelectedEntities(list<Entity*> entities)
 	this->setMessageForSelectedEntity(entity);
 }
 
+void ClientGameController::checkSelectedInTeam(){
+	list<Entity*>::iterator iterador;
+	this->renderer->allowedToBuild = false;
+	for(iterador = this->selectedEntities.begin(); iterador != this->selectedEntities.end(); ++iterador){
+		Entity* entidad = (*iterador);
+		if (this->isEntityFromMyTeam(entidad)){
+			this->renderer->allowedToBuild = true;;
+		}
+	}
+}
+
 void ClientGameController::createEntityButtonPressed(string entityName) {
 	this->limpiarConstruccion();
 

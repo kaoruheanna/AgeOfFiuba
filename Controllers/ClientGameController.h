@@ -32,6 +32,7 @@ public:
 	virtual void rightClickEnEscenario(int x, int y);
 	virtual void leftMouseUp(int x, int y, int w, int h);
 	virtual void createEntityButtonPressed(string entityName);
+	virtual void checkSelectedInTeam();
 
 	string username;
 
