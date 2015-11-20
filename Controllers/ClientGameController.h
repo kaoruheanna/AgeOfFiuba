@@ -103,7 +103,7 @@ private:
 	virtual void cambioUsuario(User* user);
 	virtual void comenzoPartida();
 //	virtual void actualizarRecursos(User* auxUser);
-
+	bool isEntityFromMyTeam(Entity* entidad);
 };
 
 #endif /* CONTROLLERS_CLIENTGAMECONTROLLER_H_ */

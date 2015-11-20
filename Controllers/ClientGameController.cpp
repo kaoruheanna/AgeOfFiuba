@@ -279,7 +279,7 @@ bool ClientGameController::pollEvents(){
 			//Get mouse position
 			int x, y;
 			SDL_GetMouseState(&x, &y);
-			printf("mouse: %i, %i \n", x,y);
+			//printf("mouse: %i, %i \n", x,y);
 			this->posInicialMouse = {x,y};
 			bool leftClick = (e.button.button == SDL_BUTTON_LEFT);
 			if (leftClick){this->mouseDown = true;};
@@ -579,9 +579,9 @@ void ClientGameController::rightClickEnEscenario(int x, int y) {
 	SDL_Point point = this->renderer->windowToMapPoint({x,y});
 	Entity *entidad = this->escenario->getEntidadEnPosicion(point);
 
-	if(entidad) {
+	if (entidad) {
 		for (Entity* selectedEntity: this->selectedEntities){
-			if (selectedEntity->getId() != entidad->getId()) {
+			if ((this->isEntityFromMyTeam(selectedEntity))&&(selectedEntity->getId() != entidad->getId())) {
 				this->mensajero->interactuar(selectedEntity->getId(),entidad->getId());
 			}
 		}
@@ -618,19 +618,26 @@ void ClientGameController::leftMouseUp(int x, int y, int w, int h){
 	}
 }
 
+bool ClientGameController::isEntityFromMyTeam(Entity* entidad) {
+	return (entidad->getTeam() == this->usuario->getTeam());
+}
+
 void ClientGameController::moverMuchasUnidades(SDL_Point destino){
 	queue<SDL_Point> tiles = this->obtenerTilesParaMoverse(destino);
 	for (Entity* entidad: this->selectedEntities){
 		//TODO toda entidad deberia tener un destino asignado.
-		if (!tiles.empty()){
-			std::cout<<entidad->getNombre()<<"\n";
-			this->moverUnaUnidad(entidad, tiles.front());
-			tiles.pop();
+		if ((!tiles.empty())) {
+				std::cout<<entidad->getNombre()<<"\n";
+				this->moverUnaUnidad(entidad, tiles.front());
+				tiles.pop();
 		}
 	}
 }
 
 void ClientGameController::moverUnaUnidad(Entity* entidad, SDL_Point destino){
+	if(!this->isEntityFromMyTeam(entidad)){
+		return;
+	}
 	MobileModel* auxModel = new MobileModel();
 	auxModel->setId(entidad->getId());
 	auxModel->setDestination(destino.x, destino.y);
