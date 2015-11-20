@@ -97,9 +97,6 @@ class Escenario {
 
 		list<Team> getTeams();
 		list<MobileModel*> getMobileModels();
-
-
-		list<Entity*> entidadesInteractuando;
 };
 
 #endif
