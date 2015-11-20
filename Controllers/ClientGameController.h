@@ -102,8 +102,6 @@ private:
 	virtual void actualizaPersonaje(MobileModel* entity);
 	virtual void cambioUsuario(User* user);
 	virtual void comenzoPartida();
-//	virtual void actualizarRecursos(User* auxUser);
-
 };
 
 #endif /* CONTROLLERS_CLIENTGAMECONTROLLER_H_ */

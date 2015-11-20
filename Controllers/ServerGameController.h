@@ -43,14 +43,13 @@ public:
 
 	bool comenzoPartida; // No usar => Solo para el play
 	void addUser(char* username); // No usar => Solo para el play
-//	map<string,int> mapaDeRecursos;
 
 	//EscenarioDelegate
 	virtual void actualizaEntidad(Entity* entity);
 	virtual void actualizaPersonaje(MobileModel* entity);
 	virtual void apareceEntidad(Entity* entidad);
 	virtual void desapareceEntidad(Entity* entidad);
-	virtual void construir(Entity* entity);
+	virtual void construir(Entity* tempEntity);
 	virtual void equipoPerdio(Team equipo);
 	virtual void equipoGano(Team equipo);
 private:

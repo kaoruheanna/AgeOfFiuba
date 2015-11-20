@@ -77,6 +77,7 @@ int Entity::getId() {
 	return this->id;
 }
 
+//devuelve la posicion logica
 SDL_Point Entity::getPosicion(){
 	return this->posicion;
 }
