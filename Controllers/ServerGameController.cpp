@@ -210,7 +210,6 @@ void ServerGameController::actualizarProtagonista(){
 }
 
 void ServerGameController::moverEntidad(MobileModel* newModel, string username) {
-	this->escenario->entidadesInteractuando.remove(newModel);
 	// TODO volver a hacer sincronico
 	MobileModel* oldModel = this->getMobileModelForUser(newModel->getId(), username);
 	if(oldModel == NULL){
@@ -244,8 +243,6 @@ void ServerGameController::interactuar(int selectedEntityId, int targetEntityId)
 	}
 
 	selectedEntity->interact(targetEntity);
-	this->escenario->entidadesInteractuando.push_back(selectedEntity);
-
 }
 
 void ServerGameController::addMensajero(Mensajero* mensajero) {
