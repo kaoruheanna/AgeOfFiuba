@@ -55,6 +55,8 @@ void TextLabel::loadTexture(SDL_Renderer *sdlRenderer,TTF_Font *font){
 	}
 }
 
+
+
 void TextLabel::setMessage(string newMessage) {
 	if (this->message == newMessage){
 		return;

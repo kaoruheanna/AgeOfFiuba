@@ -62,6 +62,10 @@ void ScreenMenu::setMessages(std::string firstMessage, std::string secondMessage
 	this->statusMenu->setMessageForSecondLabel(secondMessage);
 }
 
+void ScreenMenu::setStatusForEntity(Entity* entity)
+{
+	this->statusMenu->setStatusDataForEntity(entity);
+}
 void ScreenMenu::clickEvent(int x, int y, RendererInteractionDelegate *delegate) {
 	//si no esta dentro de actionsMenu no hace nada
 	this->actionsMenu->clickEvent(x,y,delegate);

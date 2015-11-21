@@ -28,6 +28,7 @@ public:
 	void renderMenuForEntity(Renderer* renderer,std::list<Entity *>selectedEntity);
 	void setMessages(std::string firstMessage, std::string secondMessage);
 	void clickEvent(int x, int y, RendererInteractionDelegate *delegate);
+	void setStatusForEntity(Entity* entity);
 
 private:
 	int width;

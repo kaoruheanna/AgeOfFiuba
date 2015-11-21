@@ -549,7 +549,7 @@ void ClientGameController::leftClickEnEscenario(int x,int y){
 
 	}else{
 		this->selectedEntities.clear();
-		this->renderer->setMessagesInMenu("Selecciona algo!!", "");
+		this->renderer->setMessagesInMenu(NULL);
 		list<Entity*> listaVacia;
 		this->renderer->setSelectedTilesCoordinates(false,listaDeTile,listaVacia);
 	}
@@ -613,7 +613,7 @@ void ClientGameController::leftMouseUp(int x, int y, int w, int h){
 		//entidad->creables = this->getCreablesListForEntityName(entidad->getNombre());
 		this->renderer->setSelectedTilesCoordinates(true,tiles,listaDeEntidadesSeleccionadas);
 	}else{
-		this->renderer->setMessagesInMenu("Selecciona algo!!", "");
+		this->renderer->setMessagesInMenu(NULL);
 		this->renderer->setSelectedTilesCoordinates(false,tiles,listaDeEntidadesSeleccionadas);
 	}
 }
@@ -733,31 +733,34 @@ void ClientGameController::setCreablesForEntities(list<Entity*> listaDeEntidades
 }
 
 void ClientGameController::setMessageForSelectedEntity(Entity* entity){
-	if (entity == NULL){return;}
-	string equipo = "";
-	switch(entity->getTeam()){
-		case TEAM_RED:
-			equipo = NOMBRE_EQUIPO_RED;
-			break;
-		case TEAM_BLUE:
-			equipo = NOMBRE_EQUIPO_BLUE;
-			break;
-		case TEAM_GREEN:
-			equipo = NOMBRE_EQUIPO_GREEN;
-			break;
-		case TEAM_YELLOW:
-			equipo = NOMBRE_EQUIPO_YELLOW;
-			break;
-		default:
-			equipo = NOMBRE_EQUIPO_NEUTRAL;
+//	//if (entity == NULL){return;}
+//	string equipo = "";
+//	switch(entity->getTeam()){
+//		case TEAM_RED:
+//			equipo = NOMBRE_EQUIPO_RED;
+//			break;
+//		case TEAM_BLUE:
+//			equipo = NOMBRE_EQUIPO_BLUE;
+//			break;
+//		case TEAM_GREEN:
+//			equipo = NOMBRE_EQUIPO_GREEN;
+//			break;
+//		case TEAM_YELLOW:
+//			equipo = NOMBRE_EQUIPO_YELLOW;
+//			break;
+//		default:
+//			equipo = NOMBRE_EQUIPO_NEUTRAL;
+//
+//	}
+	//if (!(entity->esJugador())){
 
-	}
-	if (!(entity->esJugador())){
-		this->renderer->setMessagesInMenu("Entidad - "+ equipo,entity->getNombreAMostrar());
-		return;
-	}
 
-	this->renderer->setMessagesInMenu("Jugador - "+ equipo,entity->getNombreAMostrar());
+	//this->renderer->setMessagesInMenu("Entidad - "+ equipo,entity->getNombreAMostrar());
+	this->renderer->setMessagesInMenu(entity);
+	//return;
+	//}
+
+	///this->renderer->setMessagesInMenu("Jugador - "+ equipo,entity->getNombreAMostrar());
 }
 
 /*selecciona un mensaje para una lista de entidades

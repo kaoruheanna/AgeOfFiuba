@@ -713,6 +713,11 @@ void Renderer::setMessagesInMenu(std::string firstMessage, std::string secondMes
 	this->screenMenu->setMessages(firstMessage,secondMessage);
 }
 
+
+void Renderer::setMessagesInMenu(Entity* entity){
+	this->screenMenu->setStatusForEntity(entity);
+}
+
 void Renderer::setSelectedTilesCoordinates(bool selected,std::list<pair<SDL_Point,SDL_Point>> tiles, list<Entity*> entidad){
 
 	this->hasSelectedTiles = selected;
