@@ -24,6 +24,7 @@ TopBar::~TopBar() {
 		ResourceCounter *counter = *it;
 		delete counter;
 	}
+	this->resourcesCounters.clear();
 }
 
 void TopBar::render(Renderer* renderer) {

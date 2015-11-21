@@ -18,6 +18,7 @@ public:
 	void setModel(Entity *model);
 	void render(Renderer* renderer);
 	Drawable* getDrawable();
+	bool hasModelWithId(int id);
 
 protected:
 	SDL_Point getOrigin();

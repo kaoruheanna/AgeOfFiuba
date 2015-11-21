@@ -12,6 +12,8 @@
 
 class Renderer;
 class TextLabel;
+class Entity;
+class Button;
 
 class StatusMenu {
 public:
@@ -20,6 +22,7 @@ public:
 	void render(Renderer* renderer);
 	void setMessageForFirstLabel(std::string message);
 	void setMessageForSecondLabel(std::string message);
+	void setStatusDataForEntity(Entity* entity);
 
 private:
 	int x;
@@ -28,6 +31,13 @@ private:
 	int height;
 	TextLabel *firstLabel;
 	TextLabel *secondLabel;
+	TextLabel *thirdLabel;
+	Button* entityStatusIcon;
+	std::string currentEntityName;
+
+	void setStatusIcon(Entity* entity);
+	void deleteCurrentIcon();
+	void setStatusBlank();
 };
 
 #endif /* STATUSMENU_H_ */

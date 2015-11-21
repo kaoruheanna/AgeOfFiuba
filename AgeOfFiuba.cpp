@@ -44,12 +44,16 @@ int main( int argc, char* args[] )
 		if(isClient || isServer){
 			char *port = NULL;
 			char *ip = NULL;
+			char *config = NULL;
 			for(int index = 2; index < argc; index++){
 				if((strcmp(args[index], "-port") == 0) && (index + 1) < argc){
 					port = args[index + 1];
 				}
 				if((strcmp(args[index], "-ip") == 0) && (index + 1) < argc){
 					ip = args[index + 1];
+				}
+				if((strcmp(args[index], "-config") == 0) && (index + 1) < argc){
+					config = args[index + 1];
 				}
 			}
 			if(port == NULL){
@@ -68,9 +72,16 @@ int main( int argc, char* args[] )
 				printf("Termino el cliente\n");
 				delete cliente;
 			} else {
+				if(config == NULL){
+					printf("No config file passed. Using default path: %s\n", CONFIG_CUSTOM.c_str());
+				}
 				Servidor* servidor = new Servidor();
 				printf("Empieza el server con puerto: %i\n", portNumber);
-				servidor->empezar(portNumber);
+				if(config == NULL){
+					servidor->empezar(portNumber, CONFIG_CUSTOM.c_str());
+				} else {
+					servidor->empezar(portNumber, config);
+				}
 				printf("Termino el server\n");
 				delete servidor;
 			}

@@ -16,7 +16,7 @@ public:
 
 	Servidor();
 	virtual ~Servidor();
-	void empezar(int port);
+	void empezar(int port, const char* configPath);
 };
 
 #endif /* RED_SERVIDOR_H_ */

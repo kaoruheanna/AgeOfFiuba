@@ -12,7 +12,7 @@ MapView::MapView(std::string type): View(type) {
 }
 
 MapView::~MapView() {
-	this->model=NULL;
+	this->model = NULL;
 }
 
 void MapView::setModel(Map *model) {

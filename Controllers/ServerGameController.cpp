@@ -15,7 +15,6 @@ static const string TAG = "ServerGameController";
 ServerGameController::ServerGameController(GameConfiguration *config) :  config(config) {
 	escenario = NULL;
 	debeActualizarPersonaje = false;
-	moverPersonajeAlPunto = NULL;
 	comenzoPartida = false;
 }
 
@@ -30,16 +29,7 @@ void escenarioInicializado(list<Mensajero*> mensajeros,Escenario* escenario, con
 	}
 }
 
-void aparecenRecursos(Mensajero* mensajero,list<Entity*> recursos) {
-	list<Entity*>::iterator entidad;
-	for (entidad = recursos.begin(); entidad != recursos.end(); ++entidad){
-		Entity* entidadReal = (*entidad);
-		Log().Get(TAG) << entidadReal->getNombre();
-		mensajero->apareceRecurso((Resource*)entidadReal);
-	}
-}
-
-void actualizarEntidades(Mensajero* mensajero,list<Entity*> entities) {
+void actualizarEntidadesEstaticas(Mensajero* mensajero,list<Entity*> entities) {
 	list<Entity*>::iterator entidad;
 	for (entidad = entities.begin(); entidad != entities.end(); ++entidad){
 		Entity* entidadReal = (*entidad);
@@ -49,7 +39,7 @@ void actualizarEntidades(Mensajero* mensajero,list<Entity*> entities) {
 	}
 }
 
-void agregarEntidades(Mensajero* mensajero,list<Entity*> entities) {
+void agregarEntidadesEstaticas(Mensajero* mensajero,list<Entity*> entities) {
 	list<Entity*>::iterator entidad;
 	for (entidad = entities.begin(); entidad != entities.end(); ++entidad){
 		Entity* entidadReal = (*entidad);
@@ -120,23 +110,26 @@ void ServerGameController::enviarEventos() {
 	list<Mensajero*>::iterator mensajero;
 	for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
 		Mensajero* mensajeroReal = (*mensajero);
-		actualizarEntidades(mensajeroReal,this->entidadesActualizadas);
-		agregarEntidades(mensajeroReal,this->escenario->entidadesAgregadas);
+		actualizarEntidadesEstaticas(mensajeroReal,this->entidadesEstaticasActualizadas);
+		agregarEntidadesEstaticas(mensajeroReal,this->escenario->entidadesAgregadas);
 	}
-	this->entidadesActualizadas.clear();
+	this->entidadesEstaticasActualizadas.clear();
 	this->escenario->entidadesAgregadas.clear();
 
-	list<Entity*>::iterator entidadEliminada;
-	for (entidadEliminada = recursosEliminados.begin(); entidadEliminada != recursosEliminados.end(); ++entidadEliminada){
-		Entity* entidadReal = (*entidadEliminada);
-		recursosAgregados.remove(entidadReal);
-		list<Mensajero*>::iterator mensajero;
-		for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
-			Mensajero* mensajeroReal = (*mensajero);
-			mensajeroReal->desapareceRecurso((Resource*)entidadReal);
-		}
-	}
-	recursosEliminados.clear();
+/*
+ * Hay q ver si esto va (no estoy seguro)
+ */
+//	list<Entity*>::iterator entidadEliminada;
+//	for (entidadEliminada = recursosEliminados.begin(); entidadEliminada != recursosEliminados.end(); ++entidadEliminada){
+//		Entity* entidadReal = (*entidadEliminada);
+//		recursosAgregados.remove(entidadReal);
+//		list<Mensajero*>::iterator mensajero;
+//		for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
+//			Mensajero* mensajeroReal = (*mensajero);
+//			mensajeroReal->desapareceRecurso((Resource*)entidadReal);
+//		}
+//	}
+//	recursosEliminados.clear();
 
 	if(this->debeActualizarUsuarios){
 		this->debeActualizarUsuarios = false;
@@ -152,7 +145,6 @@ void ServerGameController::resolverMensajeros() {
 	// Agregar nuevos mensajeros
 	for(auto nuevoMensajero : this->mensajerosAgregados) {
 		this->mensajeros.push_back(nuevoMensajero);
-		//aparecenRecursos(nuevoMensajero,this->escenario->getListaEntidades());
 	}
 	this->mensajerosAgregados.clear();
 	// Pingear a todos para que no se desconecten
@@ -270,16 +262,24 @@ void ServerGameController::actualizaPersonaje(MobileModel* entity){
 	this->debeActualizarPersonaje = true;
 }
 
-void ServerGameController::apareceEntidad(Entity* recurso) {
-	this->recursosAgregados.push_back(recurso);
+void ServerGameController::actualizaEntidadEstatica(Entity* entidad) {
+	if (entidad->esMobileModel()){
+		return;
+	}
+
+	//evito guardarla dos veces
+	for(auto savedEntity : this->entidadesEstaticasActualizadas) {
+		if (savedEntity->getId() == entidad->getId()){
+			return;
+		}
+	}
+
+	this->entidadesEstaticasActualizadas.push_back(entidad);
 }
 
-void ServerGameController::actualizaEntidad(Entity* recurso) {
-	this->entidadesActualizadas.push_back(recurso);
-}
-
-void ServerGameController::desapareceEntidad(Entity* recurso) {
-	this->recursosEliminados.push_back(recurso);
+//ver si esto va
+void ServerGameController::desapareceEntidad(Entity* entidad) {
+//	this->recursosEliminados.push_back(recurso);
 }
 
 void ServerGameController::equipoPerdio(Team equipo) {
@@ -414,6 +414,7 @@ void ServerGameController::mandarUsuarios() {
 	}
 }
 
-void ServerGameController::construir(Entity* entity){
-	this->escenario->agregarEntidad(entity->getNombre(),entity->getPosicion(),entity->getTeamString());
+void ServerGameController::construir(Entity* tempEntity){
+	LogicPosition logicPosition = LogicPosition(tempEntity->getPosicion().x,tempEntity->getPosicion().y);
+	this->escenario->crearYAgregarNuevaEntidad(tempEntity->getNombre(),logicPosition,tempEntity->getTeamString());
 }

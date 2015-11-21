@@ -24,13 +24,10 @@ public:
 	// Metodos Servidor -> Cliente
 	virtual void errorDeLogueo(){}; // TODO agregar la razon del logueo (nombre tomado o maximos equipos)
 	virtual void configEscenario(const string path){};
-	virtual void apareceRecurso(Resource* recurso){};
-	virtual void desapareceRecurso(Resource* recurso){};
 	virtual void actualizarEntidad(Entity* entity){};
-	virtual void actualizaPersonaje(MobileModel* entity){};
+	virtual void actualizaPersonaje(MobileModel* tempEntity){};
 	virtual void cambioUsuario(User* user){};
 	virtual void comenzoPartida(){};
-//	virtual void actualizarRecursos(User* auxUser){};
 };
 
 class Mensajero : public MensajeroCliente {
@@ -43,6 +40,6 @@ public:
 	virtual void loguearse(char* nombre){};
 	virtual void moverEntidad(MobileModel* entity, string username){};
 	virtual void interactuar(int selectedEntityId, int targetEntityId){};
-	virtual void construir(Entity* entity){};
+	virtual void construir(Entity* tempEntity){};
 };
 #endif /* CONTROLLERS_MENSAJERO_H_ */

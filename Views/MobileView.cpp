@@ -17,10 +17,8 @@ MobileView::MobileView(std::string type): View(type) {
 }
 
 MobileView::~MobileView() {
-	if (!this->auxDrawable == NULL){
-		delete(this->auxDrawable);
-		this->auxDrawable = NULL;
-	}
+	this->model = NULL;
+	this->auxDrawable = NULL;
 }
 
 void MobileView::setModel(MobileModel *model) {

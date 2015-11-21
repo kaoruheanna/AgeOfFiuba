@@ -82,7 +82,10 @@ public:
 
 	void setId(int id);
 	int getId();
+
+	//devuelve la posicion logica
 	SDL_Point getPosicion();
+
 	int getAnchoBase();
 	int getAltoBase();
 	string getNombre();
@@ -92,7 +95,8 @@ public:
 	virtual bool admiteNublado();
 	void resetResourcesGathered();
 	bool hasGatheredResources();
-
+	Entity* getActiveInteractionEntity();
+	bool esMobileModel();
 
 	EntityState getState();
 	bool isInteracting();

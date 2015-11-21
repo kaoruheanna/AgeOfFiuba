@@ -20,13 +20,13 @@ NO MODIFICAR configuracion.yaml NI BORRAR LA CARPETA img YA QUE SON LOS DATOS DE
 Como funciona el cliente / servidor:
 
 - Tiene que haber un servidor prendido. Puede haber varios clientes por servidor.
-- Para prender un servidor ejecutar: AgeOfFiuba -s -port {Numero del puerto}
+- Para prender un servidor ejecutar: AgeOfFiuba -s -port {Numero del puerto} -config {path al yaml del escenario (es opcional)}
 - Para prender un cliente y conectarlo a un servidor ejecutar: AgeOfFiuba -c -port {Puerto del servidor} -ip {IP del servidor}
 
 Prueba local de cliente / servidor:
 
 - Abrir dos terminales
-- En una ejecutar: AgeOfFiuba -s -port 8080
+- En una ejecutar: AgeOfFiuba -s -port 8080 -config yaml-files/partida_bandera_2.yaml
 - En la otra ejecturar: AgeOfFiuba -c -port 8080 -ip 127.0.0.1
 
 Para poder compilar el proyecto se necesitan las siguientes librerias:

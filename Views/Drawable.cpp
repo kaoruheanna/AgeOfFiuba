@@ -17,10 +17,7 @@ Drawable::~Drawable() {
 	this->mainTilePosition = {0,0};
 	this->height = 0;
 	this->width = 0;
-	if (!this->texture == NULL){
-		SDL_DestroyTexture(this->texture);
-		this->texture=NULL;
-	}
+	this->free();
 }
 
 Drawable::Drawable(int mainTilePositionX, int mainTilePositionY){
@@ -80,8 +77,10 @@ SDL_Texture* Drawable::getTexture(){
 }
 
 void Drawable::free(){
-	SDL_DestroyTexture( this-> texture );
-	this->texture = NULL;
+	if(this->texture != NULL){
+		SDL_DestroyTexture( this-> texture );
+		this->texture = NULL;
+	}
 }
 
 void Drawable::animate(AnimationStatus status){

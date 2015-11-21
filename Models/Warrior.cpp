@@ -20,16 +20,27 @@ Warrior::Warrior() {}
 Warrior::~Warrior() {}
 
 void Warrior::doInteract() {
-	if (!activeInteractionEntity ||
-		!this->canReach(activeInteractionEntity) ||
-		this->isMoving() ||
-		this->getTeam() == activeInteractionEntity->getTeam() ||
-		!activeInteractionEntity->estaViva()) {
+	if (!this->estaViva()){
+		return;
+	}
+	if (!this->activeInteractionEntity){
+		return;
+	}
+	if (!this->canReach(this->activeInteractionEntity)){
+		return;
+	}
+	if (this->isMoving()){
+		return;
+	}
+	if (this->getTeam() == this->activeInteractionEntity->getTeam()){
+		return;
+	}
+	if (!this->activeInteractionEntity->estaViva()){
 		return;
 	}
 
 	this->state = STATE_INTERACTING;
-	activeInteractionEntity->receiveInteraction(this);
+	this->activeInteractionEntity->receiveInteraction(this);
 }
 
 void Warrior::receiveInteraction(Warrior* entity) {

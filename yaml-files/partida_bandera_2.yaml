@@ -81,7 +81,6 @@ tipos:
  - nombre: soldado
    categoria: warrior
    imagen: img/soldadoRomanoCaminando.png
-   imagenInteractuando: img/soldadoRomanoAtacando.png
    imagenDeshabilitado: img/soldadoAge.png
    miniImagen: img/tile_red.png
    imagenBoton: img/boton-soldadoRomano.png
@@ -89,10 +88,6 @@ tipos:
    alto_base : 1
    pixel_ref_x: 20
    pixel_ref_y: 38
-   alto_frame_int: 51
-   ancho_frame_int: 61
-   pixel_ref_x_int: 28
-   pixel_ref_y_int: 42
    fps: 35
    delay: 0
    alto_frame: 45
@@ -115,10 +110,10 @@ tipos:
    pixel_ref_y: 32
    alto_frame: 40
    ancho_frame: 24
-   alto_frame_int: 72
-   ancho_frame_int: 70
-   pixel_ref_x_int: 42
-   pixel_ref_y_int: 50
+   alto_frame_int: 40
+   ancho_frame_int: 24
+   pixel_ref_x_int: 14
+   pixel_ref_y_int: 32
    fps: 35
    delay: 0
    mini_map_pixel_ref_type: 1
@@ -130,7 +125,6 @@ tipos:
  - nombre: caballo
    categoria: warrior
    imagen: img/caballoCaminando.png
-   imagenInteractuando: img/caballoAtacando.png
    imagenDeshabilitado: img/soldadoAge.png
    miniImagen: img/tile_red.png
    imagenBoton: img/boton-caballo.png
@@ -138,10 +132,6 @@ tipos:
    alto_base : 1
    pixel_ref_x: 40
    pixel_ref_y: 84
-   alto_frame_int: 103
-   ancho_frame_int: 116
-   pixel_ref_x_int: 74
-   pixel_ref_y_int: 84
    fps: 35
    delay: 0
    alto_frame: 121
@@ -154,7 +144,6 @@ tipos:
  - nombre: ballestero
    categoria: warrior
    imagen: img/ballesteroCaminando.png
-   imagenInteractuando: img/ballesteroAtacando.png
    imagenDeshabilitado: img/soldadoAge.png
    miniImagen: img/tile_red.png
    imagenBoton: img/boton-ballestero.png
@@ -166,10 +155,6 @@ tipos:
    delay: 0
    alto_frame: 49
    ancho_frame: 38
-   alto_frame_int: 50
-   ancho_frame_int: 48
-   pixel_ref_x_int: 24
-   pixel_ref_y_int: 42
    mini_map_pixel_ref_type: 1
    alcance: 3
    vida_inicial: 500
@@ -196,7 +181,6 @@ tipos:
  - nombre: bombardero
    categoria: warrior
    imagen: img/bombarderoCaminando.png
-   imagenInteractuando: img/bombarderoAtacando.png
    imagenDeshabilitado: img/soldadoAge.png
    miniImagen: img/tile_red.png
    imagenBoton: img/boton-bombardero.png
@@ -208,10 +192,6 @@ tipos:
    delay: 0
    alto_frame: 53
    ancho_frame: 57
-   alto_frame_int: 53
-   ancho_frame_int: 57
-   pixel_ref_x_int: 27
-   pixel_ref_y_int: 44
    mini_map_pixel_ref_type: 1
    alcance: 3
    vida_inicial: 500
@@ -220,7 +200,6 @@ tipos:
  - nombre: lancero
    categoria: warrior
    imagen: img/lanceroCaminando.png
-   imagenInteractuando: img/lanceroAtacando.png
    imagenDeshabilitado: img/soldadoAge.png
    miniImagen: img/tile_red.png
    imagenBoton: img/boton-lancero.png
@@ -232,10 +211,6 @@ tipos:
    delay: 0
    alto_frame: 66
    ancho_frame: 65
-   alto_frame_int: 51
-   ancho_frame_int: 61
-   pixel_ref_x_int: 28
-   pixel_ref_y_int: 42
    mini_map_pixel_ref_type: 1
    alcance: 3
    vida_inicial: 500
@@ -272,73 +247,51 @@ tipos:
    alto_frame: 145
    vida_inicial: 1000
 
+ - nombre: bandera
+   categoria: building
+   imagen: img/whatermill.png
+   miniImagen: img/tile_orange.png
+   imagenBoton: img/boton-molino.png
+   ancho_base: 4
+   alto_base : 4
+   pixel_ref_x: 80
+   pixel_ref_y: 75
+   fps: 10
+   ancho_frame: 200
+   alto_frame: 145
+   vida_inicial: 1
+
 
 escenario:
- - nombre: orleans
+ - nombre: captura_la_bandera
    size_x: 40
    size_y: 40
-   tipo: centro   
+   tipo: bandera
 
    entidades:
 
-   - [x: 1, y: 7, tipo: casa]
-   - [x: 20, y: 10, tipo: archeryRange, equipo: RED]
-   - [x: 1, y: 1, tipo: soldado, equipo: RED]
-   - [x: 10, y: 10, tipo: ballestero, equipo: RED]
-   - [x: 10, y: 12, tipo: rey, equipo: RED]
-   - [x: 10, y: 14, tipo: bombardero, equipo: RED]
-   - [x: 10, y: 16, tipo: lancero, equipo: RED]
-   - [x: 18, y: 9, tipo: aldeano, equipo: RED]
-   - [x: 14, y: 9, tipo: caballo, equipo: RED]
-   - [x: 14, y: 10, tipo: caballo, equipo: RED]
-   - [x: 14, y: 11, tipo: caballo, equipo: RED]
-   - [x: 14, y: 12, tipo: caballo, equipo: RED]
-   - [x: 14, y: 13, tipo: caballo, equipo: RED]
-   - [x: 14, y: 14, tipo: caballo, equipo: RED]
-   - [x: 14, y: 15, tipo: caballo, equipo: RED]
-   - [x: 14, y: 16, tipo: caballo, equipo: RED]
-   - [x: 14, y: 17, tipo: caballo, equipo: RED]
-   - [x: 1, y: 2, tipo: soldado, equipo: RED]
-   - [x: 3, y: 3, tipo: soldado, equipo: RED]
-   - [x: 20, y: 20, tipo: centro, equipo: RED]
-   - [x: 20, y: 30, tipo: centro, equipo: BLUE]
-   - [x: 18, y: 27, tipo: soldado, equipo: BLUE]
-   - [x: 5, y: 10, tipo: piedra]
-   - [x: 5, y: 12, tipo: oro]
-   - [x: 5, y: 14, tipo: comida]
-   - [x: 7, y: 2, tipo: arbol]
-   - [x: 7, y: 3, tipo: arbol]
-   - [x: 7, y: 4, tipo: arbol]
-   - [x: 7, y: 5, tipo: arbol]
-   - [x: 6, y: 5, tipo: arbol]   
-   - [x: 4, y: 5, tipo: arbol]
-   - [x: 4, y: 2, tipo: arbol]
-   - [x: 4, y: 3, tipo: arbol]
-   - [x: 4, y: 4, tipo: arbol]
-   - [x: 4, y: 5, tipo: arbol]
-   - [x: 4, y: 6, tipo: arbol]
-   - [x: 4, y: 7, tipo: arbol]
-   - [x: 5, y: 7, tipo: arbol]
-   - [x: 6, y: 7, tipo: arbol]
-   - [x: 7, y: 7, tipo: arbol]
-   - [x: 8, y: 7, tipo: arbol]
-   - [x: 9, y: 7, tipo: arbol]
-   - [x: 9, y: 6, tipo: arbol]
-   - [x: 9, y: 5, tipo: arbol]
-   - [x: 9, y: 4, tipo: arbol]
-   - [x: 9, y: 3, tipo: arbol]
-   - [x: 9, y: 2, tipo: arbol]
-   - [x: 9, y: 1, tipo: arbol]
-   - [x: 11, y: 7, tipo: arbol]
-   - [x: 11, y: 6, tipo: arbol]
-   - [x: 11, y: 5, tipo: arbol]
-   - [x: 11, y: 4, tipo: arbol]
-   - [x: 11, y: 3, tipo: arbol]
-   - [x: 11, y: 2, tipo: arbol]
-   - [x: 11, y: 1, tipo: arbol]
-   - [x: 11, y: 0, tipo: arbol]
-   - [x: 5, y: 5, tipo: arbol]
-   - [x: 18, y: 18, tipo: casa]
+   - [x: 0, y: 0, tipo: bandera, equipo: RED]
+   - [x: 5, y: 5, tipo: aldeano, equipo: RED]
+   - [x: 5, y: 6, tipo: aldeano, equipo: RED]
+   - [x: 6, y: 6, tipo: comida]
+   - [x: 6, y: 7, tipo: comida]
+   - [x: 7, y: 6, tipo: comida]
+   - [x: 7, y: 7, tipo: comida]
+   - [x: 20, y: 10, tipo: piedra]
+   - [x: 20, y: 11, tipo: piedra]
+   - [x: 20, y: 30, tipo: piedra]
+   - [x: 20, y: 31, tipo: piedra]
+   - [x: 20, y: 20, tipo: oro]
+   - [x: 20, y: 21, tipo: oro]
+   - [x: 21, y: 20, tipo: oro]
+   - [x: 21, y: 21, tipo: oro]
+   - [x: 31, y: 31, tipo: comida]
+   - [x: 32, y: 31, tipo: comida]
+   - [x: 31, y: 32, tipo: comida]
+   - [x: 32, y: 32, tipo: comida]
+   - [x: 34, y: 34, tipo: aldeano, equipo: BLUE]
+   - [x: 34, y: 35, tipo: aldeano, equipo: BLUE]
+   - [x: 36, y: 36, tipo: bandera, equipo: BLUE]
    
    protagonista:
    - tipo: soldado

@@ -23,6 +23,7 @@ ResourceCounter::ResourceCounter(int x,int y,int width,int height,string resourc
 
 ResourceCounter::~ResourceCounter() {
 	delete this->label;
+	this->label = NULL;
 	this->resourceName = "";
 }
 

@@ -81,26 +81,9 @@ void MensajeroRed::esperaMensaje() {
 				this->escucha->interactuar(pair->first,pair->second);
 				delete pair;
 				break;
-			case APARECE_RECURSO:
-				resource = new Resource();
-				resultado = recibirSerializable(this->socket, resource);
-				//printf("MensajeroRed - Recibi aparece resource con resultado: %i\n", resultado);
-				this->escucha->apareceRecurso(resource);
-				delete resource;
-				break;
-			case DESAPARECE_RECURSO:
-				resource = new Resource();
-				resultado = recibirSerializable(this->socket, resource);
-				//printf("MensajeroRed - Recibi  desaparece resource con resultado: %i\n", resultado);
-				this->escucha->desapareceRecurso(resource);
-				delete resource;
-				break;
 			case ACTUALIZA_ENTIDAD:
-//				Log().Get(TAG) << "Creo entity desde MensajerRed-ActualizaEntidad";
 				entity = new Entity();
 				resultado = recibirSerializable(this->socket, entity);
-//				Log().Get(TAG) << "ACTUALIZA_ENTIDAD: "<<entity->getNombre();
-//				Log().Get(TAG) << "Creo entity desde MensajerRed-ActualizaEntidad 2";
 				this->escucha->actualizarEntidad(entity);
 				delete entity;
 				break;
@@ -111,7 +94,6 @@ void MensajeroRed::esperaMensaje() {
 				delete user;
 				break;
 			case CONSTRUIR:
-				Log().Get(TAG) << "Creo entity desde MensajerRed-ActualizaEntidad";
 				entity = new Entity();
 				resultado = recibirSerializable(this->socket, entity);
 				this->escucha->construir(entity);
@@ -175,27 +157,6 @@ void MensajeroRed::actualizarEntidad(Entity* entity) {
 	resultado = enviarSerializable(this->socket, entity);
 }
 
-
-void MensajeroRed::apareceRecurso(Resource* recurso) {
-	Mensaje* mensaje = new Mensaje(APARECE_RECURSO, this->sender);
-	//printf("Cliente - apareceRecurso para enviar\n");
-	int resultado = enviarSerializable(this->socket, mensaje);
-	//printf("Cliente - apareceRecurso con resultado: %i\n", resultado);
-	delete mensaje;
-	resultado = enviarSerializable(this->socket, recurso);
-	//printf("Cliente - apareceRecurso con resultado: %i\n", resultado);
-}
-
-void MensajeroRed::desapareceRecurso(Resource* recurso) {
-	Mensaje* mensaje = new Mensaje(DESAPARECE_RECURSO, this->sender);
-	//printf("Cliente - desapareceRecurso para enviar\n");
-	int resultado = enviarSerializable(this->socket, mensaje);
-	//printf("Cliente - desapareceRecurso con resultado: %i\n", resultado);
-	delete mensaje;
-	resultado = enviarSerializable(this->socket, recurso);
-	//printf("Cliente - desapareceRecurso con resultado: %i\n", resultado);
-}
-
 void MensajeroRed::actualizaPersonaje(MobileModel* entity) {
 	Mensaje* mensaje = new Mensaje(APARECE_PERSONAJE, this->sender);
 	int resultado = enviarSerializable(this->socket, mensaje);
@@ -242,11 +203,11 @@ void MensajeroRed::cambioUsuario(User* user) {
 
 }
 
-void MensajeroRed::construir(Entity* entity) {
+void MensajeroRed::construir(Entity* tempEntity) {
 	Mensaje* mensaje = new Mensaje(CONSTRUIR, this->sender);
 	int resultado = enviarSerializable(this->socket, mensaje);
 	delete mensaje;
-	resultado = enviarSerializable(this->socket, entity);
+	resultado = enviarSerializable(this->socket, tempEntity);
 }
 
 void MensajeroRed::comenzoPartida() {
