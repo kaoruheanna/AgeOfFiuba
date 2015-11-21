@@ -240,6 +240,7 @@ void Entity::stopInteracting() {
 
 void Entity::interact(Entity* entity){
 	activeInteractionEntity = entity;
+	this->state = STATE_INTERACTING;
 }
 
 bool Entity::isInteracting(){

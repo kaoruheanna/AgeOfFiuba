@@ -241,8 +241,8 @@ void ServerGameController::interactuar(int selectedEntityId, int targetEntityId)
 		SDL_Point destino = this->escenario->mundo->getCenteredPositionForTile(point);
 		this->escenario->moveEntityToPos((MobileModel*)selectedEntity,destino);
 	}
-
 	selectedEntity->interact(targetEntity);
+
 }
 
 void ServerGameController::addMensajero(Mensajero* mensajero) {

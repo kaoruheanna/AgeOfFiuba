@@ -134,6 +134,7 @@ bool MobileModel::isInteracting(){
 void MobileModel::update(MobileModel* other) {
 	this->setTeam(other->getTeam());
 	this->setMoving(other->isMoving());
+	this->state = other->state;
 	this->posicion = other->getPosicion();
 }
 

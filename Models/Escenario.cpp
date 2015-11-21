@@ -254,6 +254,7 @@ void Escenario::loop() {
 			if (this->tileOcupadoForEntity(newTile,model)){
 				model->setPosicion(oldPosition);
 				model->olvidarCamino();
+				//TODO habria que recalcular el camino
 			} else {
 				actualizarPersonajes = true;
 			}

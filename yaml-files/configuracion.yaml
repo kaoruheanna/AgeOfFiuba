@@ -81,6 +81,7 @@ tipos:
  - nombre: soldado
    categoria: warrior
    imagen: img/soldadoRomanoCaminando.png
+   imagenInteractuando: img/soldadoRomanoAtacando.png
    imagenDeshabilitado: img/soldadoAge.png
    miniImagen: img/tile_red.png
    imagenBoton: img/boton-soldadoRomano.png
@@ -88,6 +89,10 @@ tipos:
    alto_base : 1
    pixel_ref_x: 20
    pixel_ref_y: 38
+   alto_frame_int: 40
+   ancho_frame_int: 24
+   pixel_ref_x_int: 14
+   pixel_ref_y_int: 32
    fps: 35
    delay: 0
    alto_frame: 45
@@ -110,10 +115,10 @@ tipos:
    pixel_ref_y: 32
    alto_frame: 40
    ancho_frame: 24
-   alto_frame_int: 40
-   ancho_frame_int: 24
-   pixel_ref_x_int: 14
-   pixel_ref_y_int: 32
+   alto_frame_int: 72
+   ancho_frame_int: 70
+   pixel_ref_x_int: 42
+   pixel_ref_y_int: 50
    fps: 35
    delay: 0
    mini_map_pixel_ref_type: 1
@@ -125,6 +130,7 @@ tipos:
  - nombre: caballo
    categoria: warrior
    imagen: img/caballoCaminando.png
+   imagenInteractuando: img/caballoAtacando.png
    imagenDeshabilitado: img/soldadoAge.png
    miniImagen: img/tile_red.png
    imagenBoton: img/boton-caballo.png
@@ -132,6 +138,10 @@ tipos:
    alto_base : 1
    pixel_ref_x: 40
    pixel_ref_y: 84
+   alto_frame_int: 40
+   ancho_frame_int: 24
+   pixel_ref_x_int: 14
+   pixel_ref_y_int: 32
    fps: 35
    delay: 0
    alto_frame: 121
@@ -144,6 +154,7 @@ tipos:
  - nombre: ballestero
    categoria: warrior
    imagen: img/ballesteroCaminando.png
+   imagenInteractuando: img/ballesteroAtacando.png
    imagenDeshabilitado: img/soldadoAge.png
    miniImagen: img/tile_red.png
    imagenBoton: img/boton-ballestero.png
@@ -155,6 +166,10 @@ tipos:
    delay: 0
    alto_frame: 49
    ancho_frame: 38
+   alto_frame_int: 40
+   ancho_frame_int: 24
+   pixel_ref_x_int: 14
+   pixel_ref_y_int: 32
    mini_map_pixel_ref_type: 1
    alcance: 3
    vida_inicial: 500
@@ -173,6 +188,10 @@ tipos:
    delay: 0
    alto_frame: 94
    ancho_frame: 89
+   alto_frame_int: 40
+   ancho_frame_int: 24
+   pixel_ref_x_int: 14
+   pixel_ref_y_int: 32
    mini_map_pixel_ref_type: 1
    alcance: 3
    vida_inicial: 500
@@ -181,6 +200,7 @@ tipos:
  - nombre: bombardero
    categoria: warrior
    imagen: img/bombarderoCaminando.png
+   imagenInteractuando: img/bombarderoAtacando.png
    imagenDeshabilitado: img/soldadoAge.png
    miniImagen: img/tile_red.png
    imagenBoton: img/boton-bombardero.png
@@ -192,6 +212,10 @@ tipos:
    delay: 0
    alto_frame: 53
    ancho_frame: 57
+   alto_frame_int: 40
+   ancho_frame_int: 24
+   pixel_ref_x_int: 14
+   pixel_ref_y_int: 32
    mini_map_pixel_ref_type: 1
    alcance: 3
    vida_inicial: 500
@@ -200,6 +224,7 @@ tipos:
  - nombre: lancero
    categoria: warrior
    imagen: img/lanceroCaminando.png
+   imagenInteractuando: img/lanceroAtacando.png
    imagenDeshabilitado: img/soldadoAge.png
    miniImagen: img/tile_red.png
    imagenBoton: img/boton-lancero.png
@@ -211,6 +236,10 @@ tipos:
    delay: 0
    alto_frame: 66
    ancho_frame: 65
+   alto_frame_int: 40
+   ancho_frame_int: 24
+   pixel_ref_x_int: 14
+   pixel_ref_y_int: 32
    mini_map_pixel_ref_type: 1
    alcance: 3
    vida_inicial: 500
