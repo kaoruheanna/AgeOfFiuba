@@ -281,7 +281,20 @@ bool ClientGameController::pollEvents(){
 			SDL_GetMouseState(&x, &y);
 			this->posInicialMouse = {x,y};
 			bool leftClick = (e.button.button == SDL_BUTTON_LEFT);
-			if (leftClick){this->mouseDown = true;};
+			if (leftClick){
+				this->mouseDown = true;
+
+				if(this->pendingEntity != NULL){
+					if(leftClick && this->renderer->isPixelInEscenario(x,y)){
+						//construyo
+						this->mensajero->construir(this->pendingEntity);
+						this->limpiarConstruccion();
+						return pressedR;
+					}
+					Log().Get(TAG) << "Cancelo la construccion";
+					this->limpiarConstruccion();
+				}
+			};
 			this->renderer->clickEvent(x,y,leftClick,this);
 		}
 
@@ -294,23 +307,16 @@ bool ClientGameController::pollEvents(){
 			}
 		}
 
-		if( e.type == SDL_MOUSEBUTTONDOWN && !this->serverError){
+		if( e.type == SDL_MOUSEMOTION && !this->serverError){
 			bool leftClick = (e.button.button == SDL_BUTTON_LEFT);
+
+
 			if (this->mouseDown){
 				int x,y;
 				SDL_GetMouseState(&x,&y);
 				this->renderer->dragLeftClickEvent(this->posInicialMouse.x,this->posInicialMouse.y,x,y);
 
-				if(this->pendingEntity != NULL){
-					if(leftClick && this->renderer->isPixelInEscenario(x,y)){
-						//construyo
-						this->mensajero->construir(this->pendingEntity);
-						this->limpiarConstruccion();
-						return pressedR;
-					}
-					Log().Get(TAG) << "Cancelo la construccion";
-					this->limpiarConstruccion();
-				}
+
 				this->renderer->clickEvent(x,y,leftClick,this);
 			}
 		}
