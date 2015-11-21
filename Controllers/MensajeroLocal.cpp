@@ -42,14 +42,6 @@ void MensajeroLocal::interactuar(int selectedEntityId, int targetEntityId) {
 	this->server->interactuar(selectedEntityId, targetEntityId) ;
 }
 
-void MensajeroLocal::apareceRecurso(Resource* recurso){
-	this->cliente->apareceRecurso(new Resource(*recurso));
-}
-
-void MensajeroLocal::desapareceRecurso(Resource* recurso){
-	this->cliente->desapareceRecurso(new Resource(*recurso));
-}
-
 void MensajeroLocal::actualizarEntidad(Entity* entity) {
 	this->cliente->actualizarEntidad(entity);
 }

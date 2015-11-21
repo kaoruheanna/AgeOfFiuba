@@ -468,24 +468,6 @@ void ClientGameController::cambioUsuario(User* user) {
 	}
 }
 
-void ClientGameController::apareceRecurso(Resource* recurso) {
-	if (!this->inicializado())
-			return;
-
-	if(!this->escenario->existeRecursoConID(recurso->getId())) {
-	}
-	this->updated = true;
-}
-
-void ClientGameController::desapareceRecurso(Resource* recurso){
-	if (!this->inicializado())
-		return;
-
-	if(this->escenario->eliminarEntidadConID(recurso->getId())) {
-		this->updated = true;
-	}
-}
-
 //actualiza las entidades que no son mobile models
 void ClientGameController::actualizarEntidad(Entity* tempEntity) {
 	if (!this->inicializado()) {
@@ -497,6 +479,7 @@ void ClientGameController::actualizarEntidad(Entity* tempEntity) {
 		return;
 	}
 
+	Log().Get(TAG)<<"Recibi "<<tempEntity->getNombre()<<" con vida:"<<tempEntity->getLife();
 	Entity* existingEntity = this->escenario->entidadConId(tempEntity->getId());
 	if (existingEntity == NULL){
 		//como no existia, tengo que crearla.
@@ -622,8 +605,6 @@ void ClientGameController::rightClickEnEscenario(int x, int y) {
 
 	//TODO mover unidades
 	this->moverMuchasUnidades(point);
-
-
 }
 
 void ClientGameController::leftMouseUp(int x, int y, int w, int h){
@@ -761,34 +742,7 @@ void ClientGameController::setCreablesForEntities(list<Entity*> listaDeEntidades
 }
 
 void ClientGameController::setMessageForSelectedEntity(Entity* entity){
-//	//if (entity == NULL){return;}
-//	string equipo = "";
-//	switch(entity->getTeam()){
-//		case TEAM_RED:
-//			equipo = NOMBRE_EQUIPO_RED;
-//			break;
-//		case TEAM_BLUE:
-//			equipo = NOMBRE_EQUIPO_BLUE;
-//			break;
-//		case TEAM_GREEN:
-//			equipo = NOMBRE_EQUIPO_GREEN;
-//			break;
-//		case TEAM_YELLOW:
-//			equipo = NOMBRE_EQUIPO_YELLOW;
-//			break;
-//		default:
-//			equipo = NOMBRE_EQUIPO_NEUTRAL;
-//
-//	}
-	//if (!(entity->esJugador())){
-
-
-	//this->renderer->setMessagesInMenu("Entidad - "+ equipo,entity->getNombreAMostrar());
 	this->renderer->setMessagesInMenu(entity);
-	//return;
-	//}
-
-	///this->renderer->setMessagesInMenu("Jugador - "+ equipo,entity->getNombreAMostrar());
 }
 
 /*selecciona un mensaje para una lista de entidades

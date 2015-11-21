@@ -109,12 +109,6 @@ char* Mensaje::toString() {
 		case APARECE_PERSONAJE:
 			type = "APARECE_PERSONAJE";
 			break;
-		case APARECE_RECURSO:
-			type = "APARECE_RECURSO";
-			break;
-		case DESAPARECE_RECURSO:
-			type = "DESAPARECE_RECURSO";
-			break;
 		case PING:
 			type = "PING";
 			break;

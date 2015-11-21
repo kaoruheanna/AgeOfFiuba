@@ -81,20 +81,6 @@ void MensajeroRed::esperaMensaje() {
 				this->escucha->interactuar(pair->first,pair->second);
 				delete pair;
 				break;
-			case APARECE_RECURSO:
-				resource = new Resource();
-				resultado = recibirSerializable(this->socket, resource);
-				//printf("MensajeroRed - Recibi aparece resource con resultado: %i\n", resultado);
-				this->escucha->apareceRecurso(resource);
-				delete resource;
-				break;
-			case DESAPARECE_RECURSO:
-				resource = new Resource();
-				resultado = recibirSerializable(this->socket, resource);
-				//printf("MensajeroRed - Recibi  desaparece resource con resultado: %i\n", resultado);
-				this->escucha->desapareceRecurso(resource);
-				delete resource;
-				break;
 			case ACTUALIZA_ENTIDAD:
 				entity = new Entity();
 				resultado = recibirSerializable(this->socket, entity);
@@ -169,26 +155,6 @@ void MensajeroRed::actualizarEntidad(Entity* entity) {
 	int resultado = enviarSerializable(this->socket, mensaje);
 	delete mensaje;
 	resultado = enviarSerializable(this->socket, entity);
-}
-
-void MensajeroRed::apareceRecurso(Resource* recurso) {
-	Mensaje* mensaje = new Mensaje(APARECE_RECURSO, this->sender);
-	//printf("Cliente - apareceRecurso para enviar\n");
-	int resultado = enviarSerializable(this->socket, mensaje);
-	//printf("Cliente - apareceRecurso con resultado: %i\n", resultado);
-	delete mensaje;
-	resultado = enviarSerializable(this->socket, recurso);
-	//printf("Cliente - apareceRecurso con resultado: %i\n", resultado);
-}
-
-void MensajeroRed::desapareceRecurso(Resource* recurso) {
-	Mensaje* mensaje = new Mensaje(DESAPARECE_RECURSO, this->sender);
-	//printf("Cliente - desapareceRecurso para enviar\n");
-	int resultado = enviarSerializable(this->socket, mensaje);
-	//printf("Cliente - desapareceRecurso con resultado: %i\n", resultado);
-	delete mensaje;
-	resultado = enviarSerializable(this->socket, recurso);
-	//printf("Cliente - desapareceRecurso con resultado: %i\n", resultado);
 }
 
 void MensajeroRed::actualizaPersonaje(MobileModel* entity) {

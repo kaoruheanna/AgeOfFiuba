@@ -47,7 +47,6 @@ public:
 	//EscenarioDelegate
 	virtual void actualizaEntidad(Entity* entity);
 	virtual void actualizaPersonaje(MobileModel* entity);
-	virtual void apareceEntidad(Entity* entidad);
 	virtual void desapareceEntidad(Entity* entidad);
 	virtual void construir(Entity* tempEntity);
 	virtual void equipoPerdio(Team equipo);
@@ -77,8 +76,7 @@ private:
 	list<Mensajero*> mensajerosAgregados;
 
 	list<Entity*> entidadesActualizadas;
-	list<Entity*> recursosAgregados;
-	list<Entity*> recursosEliminados;
+//	list<Entity*> recursosEliminados;
 	bool debeActualizarUsuarios;
 	bool debeActualizarPersonaje;
 	TileCoordinate* moverPersonajeAlPunto;

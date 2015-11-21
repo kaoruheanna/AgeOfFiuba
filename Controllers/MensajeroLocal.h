@@ -27,8 +27,6 @@ public:
 
 	//Metodos Servidor->Cliente
 	virtual void configEscenario(const string path);
-	virtual void apareceRecurso(Resource* recurso);
-	virtual void desapareceRecurso(Resource* recurso);
 	virtual void actualizarEntidad(Entity* entity);
 	virtual void actualizaPersonaje(MobileModel* tempEntity);
 	virtual void cambioUsuario(User* user);

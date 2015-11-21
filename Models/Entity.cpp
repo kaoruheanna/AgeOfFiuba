@@ -225,12 +225,9 @@ bool Entity::admiteNublado() {
 	return this->getClass()!=MOBILE_MODEL;
 }
 
-
-
 EntityState Entity::getState() {
 	return this->state;
 }
-
 
 void Entity::stopInteracting() {
 	activeInteractionEntity = NULL;

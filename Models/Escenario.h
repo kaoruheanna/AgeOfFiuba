@@ -22,8 +22,10 @@ class EscenarioDelagate {
 public:
 	EscenarioDelagate(){};
 	virtual ~EscenarioDelagate(){};
-	virtual void apareceEntidad(Entity* recurso) = 0;
-	virtual void desapareceEntidad(Entity* recurso) = 0;
+
+	//ver si se usa
+	virtual void desapareceEntidad(Entity* entidad) = 0;
+
 	virtual void actualizaPersonaje(MobileModel* entity) = 0;
 	virtual void actualizaEntidad(Entity* entity) = 0;
 	virtual void equipoPerdio(Team equipo) = 0;

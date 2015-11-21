@@ -285,6 +285,7 @@ void Escenario::loop() {
 	}
 
 	//Eliminar los que mueren
+	// ver si se usa
 	for(auto entidad : this->entidades) {
 		if (!entidad->estaViva()) {
 			this->delegate->desapareceEntidad(entidad);
