@@ -27,7 +27,7 @@ public:
 	virtual void desapareceEntidad(Entity* entidad) = 0;
 
 	virtual void actualizaPersonaje(MobileModel* entity) = 0;
-	virtual void actualizaEntidad(Entity* entity) = 0;
+	virtual void actualizaEntidadEstatica(Entity* entity) = 0;
 	virtual void equipoPerdio(Team equipo) = 0;
 	virtual void equipoGano(Team equipo) = 0;
 };

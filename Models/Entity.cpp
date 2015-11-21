@@ -235,7 +235,8 @@ void Entity::stopInteracting() {
 }
 
 void Entity::interact(Entity* entity){
-	activeInteractionEntity = entity;
+	//el seteo no es mutuo
+	this->activeInteractionEntity = entity;
 }
 
 bool Entity::isInteracting(){
@@ -296,4 +297,12 @@ bool Entity::hasGatheredResources() {
 
 bool Entity::shouldInteract() {
 	return (this->activeInteractionEntity != NULL);
+}
+
+Entity* Entity::getActiveInteractionEntity() {
+	return this->activeInteractionEntity;
+}
+
+bool Entity::esMobileModel(){
+	return (this->getClass() == MOBILE_MODEL);
 }

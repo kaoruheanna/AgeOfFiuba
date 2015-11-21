@@ -245,6 +245,7 @@ tipos:
    fps: 10
    ancho_frame: 200
    alto_frame: 145
+   vida_inicial: 1000
 
 
 escenario:
@@ -276,6 +277,7 @@ escenario:
    - [x: 3, y: 3, tipo: soldado, equipo: RED]
    - [x: 20, y: 20, tipo: centro, equipo: RED]
    - [x: 20, y: 30, tipo: centro, equipo: BLUE]
+   - [x: 18, y: 27, tipo: soldado, equipo: BLUE]
    - [x: 5, y: 10, tipo: piedra]
    - [x: 5, y: 12, tipo: oro]
    - [x: 5, y: 14, tipo: comida]

@@ -45,7 +45,7 @@ public:
 	void addUser(char* username); // No usar => Solo para el play
 
 	//EscenarioDelegate
-	virtual void actualizaEntidad(Entity* entity);
+	virtual void actualizaEntidadEstatica(Entity* entity);
 	virtual void actualizaPersonaje(MobileModel* entity);
 	virtual void desapareceEntidad(Entity* entidad);
 	virtual void construir(Entity* tempEntity);
@@ -75,7 +75,7 @@ private:
 	//Para actualizar
 	list<Mensajero*> mensajerosAgregados;
 
-	list<Entity*> entidadesActualizadas;
+	list<Entity*> entidadesEstaticasActualizadas;
 //	list<Entity*> recursosEliminados;
 	bool debeActualizarUsuarios;
 	bool debeActualizarPersonaje;

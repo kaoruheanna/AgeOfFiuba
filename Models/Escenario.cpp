@@ -261,7 +261,14 @@ void Escenario::loop() {
 	for(auto entidad : this->entidades) {
 		if (entidad->shouldInteract()){
 			entidad->doInteract();
-			this->delegate->actualizaEntidad(entidad);
+			if (!entidad->esMobileModel()){
+				this->delegate->actualizaEntidadEstatica(entidad);
+			}
+
+			Entity *otherEntity = entidad->getActiveInteractionEntity();
+			if (otherEntity && !otherEntity->esMobileModel()){
+				this->delegate->actualizaEntidadEstatica(otherEntity);
+			}
 		}
 	}
 

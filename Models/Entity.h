@@ -95,7 +95,8 @@ public:
 	virtual bool admiteNublado();
 	void resetResourcesGathered();
 	bool hasGatheredResources();
-
+	Entity* getActiveInteractionEntity();
+	bool esMobileModel();
 
 	EntityState getState();
 	bool isInteracting();

@@ -42,6 +42,7 @@ void MensajeroLocal::interactuar(int selectedEntityId, int targetEntityId) {
 	this->server->interactuar(selectedEntityId, targetEntityId) ;
 }
 
+//solo entidades estaticas
 void MensajeroLocal::actualizarEntidad(Entity* entity) {
 	this->cliente->actualizarEntidad(entity);
 }

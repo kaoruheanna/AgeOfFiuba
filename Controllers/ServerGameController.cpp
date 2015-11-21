@@ -30,18 +30,17 @@ void escenarioInicializado(list<Mensajero*> mensajeros,Escenario* escenario, con
 	}
 }
 
-void actualizarEntidades(Mensajero* mensajero,list<Entity*> entities) {
+void actualizarEntidadesEstaticas(Mensajero* mensajero,list<Entity*> entities) {
 	list<Entity*>::iterator entidad;
 	for (entidad = entities.begin(); entidad != entities.end(); ++entidad){
 		Entity* entidadReal = (*entidad);
 		if (entidadReal->getClass() != MOBILE_MODEL){
-			Log().Get(TAG)<<"Envio "<<entidadReal->getNombre()<<" con vida:"<<entidadReal->getLife();
 			mensajero->actualizarEntidad(entidadReal);
 		}
 	}
 }
 
-void agregarEntidades(Mensajero* mensajero,list<Entity*> entities) {
+void agregarEntidadesEstaticas(Mensajero* mensajero,list<Entity*> entities) {
 	list<Entity*>::iterator entidad;
 	for (entidad = entities.begin(); entidad != entities.end(); ++entidad){
 		Entity* entidadReal = (*entidad);
@@ -112,10 +111,10 @@ void ServerGameController::enviarEventos() {
 	list<Mensajero*>::iterator mensajero;
 	for (mensajero = mensajeros.begin(); mensajero != mensajeros.end(); ++mensajero){
 		Mensajero* mensajeroReal = (*mensajero);
-		actualizarEntidades(mensajeroReal,this->entidadesActualizadas);
-		agregarEntidades(mensajeroReal,this->escenario->entidadesAgregadas);
+		actualizarEntidadesEstaticas(mensajeroReal,this->entidadesEstaticasActualizadas);
+		agregarEntidadesEstaticas(mensajeroReal,this->escenario->entidadesAgregadas);
 	}
-	this->entidadesActualizadas.clear();
+	this->entidadesEstaticasActualizadas.clear();
 	this->escenario->entidadesAgregadas.clear();
 
 /*
@@ -264,8 +263,19 @@ void ServerGameController::actualizaPersonaje(MobileModel* entity){
 	this->debeActualizarPersonaje = true;
 }
 
-void ServerGameController::actualizaEntidad(Entity* recurso) {
-	this->entidadesActualizadas.push_back(recurso);
+void ServerGameController::actualizaEntidadEstatica(Entity* entidad) {
+	if (entidad->esMobileModel()){
+		return;
+	}
+
+	//evito guardarla dos veces
+	for(auto savedEntity : this->entidadesEstaticasActualizadas) {
+		if (savedEntity->getId() == entidad->getId()){
+			return;
+		}
+	}
+
+	this->entidadesEstaticasActualizadas.push_back(entidad);
 }
 
 //ver si esto va
