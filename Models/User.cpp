@@ -15,6 +15,11 @@ User::User(string name) : User() {
 	this->resourceNames.push_back(RECURSO_MADERA);
 	this->resourceNames.push_back(RECURSO_PIEDRA);
 	this->resourceNames.push_back(RECURSO_ORO);
+
+	this->comida = INITIAL_RESOURCES;
+	this->piedra = INITIAL_RESOURCES;
+	this->oro = INITIAL_RESOURCES;
+	this->madera = INITIAL_RESOURCES;
 }
 
 User::~User() { }
