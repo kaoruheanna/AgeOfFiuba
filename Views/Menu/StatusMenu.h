@@ -32,7 +32,8 @@ private:
 	TextLabel *entityNameLabel;
 	TextLabel *entityTeamLabel;
 	TextLabel *remainingLifeLabel;
-	TextLabel *specialFeatureLabel;
+	TextLabel *attackFeatureLabel;
+	TextLabel *defenseFeatureLabel;
 	TextLabel *constructionProgressLabel;
 	Button* entityStatusIcon;
 	std::string currentEntityName;

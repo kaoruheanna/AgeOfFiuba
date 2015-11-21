@@ -48,6 +48,7 @@ struct PropiedadesTipoUnidad{
 	int vidaInicial;
 	int poderAtaque;
 	int escudo;
+	int escudoDistancia;
 };
 
 struct CostoConstruccion {
@@ -133,6 +134,7 @@ public:
 	virtual int getPoderAtaque();
 	virtual int getLife();
 	virtual int getEscudo();
+	virtual int getEscudoDistancia();
 	virtual int getVidaInicial();
 
 	bool canReach(Entity* entity);
