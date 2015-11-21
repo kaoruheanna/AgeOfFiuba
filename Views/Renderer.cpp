@@ -311,26 +311,39 @@ void Renderer::close() {
 	SDL_Quit();
 }
 
+float proyectedOnY(DrawableToOrder toOrder) {
+	int minX = toOrder.minTile.x;
+	int minY = toOrder.minTile.y;
+	int maxX = toOrder.maxTile.x;
+	int maxY = toOrder.maxTile.y;
+
+	int alto = (maxY - minY);
+	int ancho = (maxX - minX);
+	int lado = max(alto,ancho);
+
+	SDL_Point a = {minX,minY + lado + 1};
+	SDL_Point b = {minX + lado + 1,minY};
+
+	float x1=a.x;
+	float y1=a.y;
+	float x2=b.x;
+	float y2=b.y;
+
+	float dividendo = (x2-x1);
+	if(dividendo){
+		return (((0-x1)*(y2-y1))/dividendo)+y1;
+	} else {
+		Log().Get(TAG) << "no puedo dividir por 0";
+		return (float)toOrder.minTile.x;
+	}
+}
+
 // Start drawing from left to right scaning from top to bottom
 bool drawOrder (DrawableToOrder firstToOrder,DrawableToOrder secondToOrder) {
-	if ((firstToOrder.maxTile.x <= secondToOrder.minTile.x)){
-		return true;
-	}
+	float proyectadoFirst = proyectedOnY(firstToOrder);
+	float proyectadoSecond = proyectedOnY(secondToOrder);
+	return proyectadoSecond > proyectadoFirst;
 
-	if ((firstToOrder.maxTile.y <= secondToOrder.minTile.y)){
-		return true;
-	}
-
-	if ((firstToOrder.minTile.x >= secondToOrder.maxTile.x)){
-		return false;
-	}
-
-	if ((firstToOrder.minTile.y >= secondToOrder.maxTile.y)){
-		return false;
-	}
-
-	//Si llegue hasta aca se solapan en algun punto
-	return false;
 }
 
 void Renderer::drawViews() {
