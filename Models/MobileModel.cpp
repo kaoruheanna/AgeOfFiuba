@@ -107,7 +107,7 @@ bool MobileModel::updatePosition() {
 	if (hypotenuse < speed){
 		this->posicion.x = this->destinationX;
 		this->posicion.y = this->destinationY;
-		return true;
+		return ((this->posicion.x != this->destinationX) || (this->posicion.y = this->destinationY));
 	}
 
 	double displacementX = round(speed * (deltaX / hypotenuse));
@@ -147,6 +147,11 @@ SDL_Point MobileModel::getNextDestination(){
 	return destination;
 }
 
+SDL_Point MobileModel::getFinalDestination(){
+	SDL_Point destination = this->path.back();
+	return destination;
+}
+
 SDL_Point MobileModel::getNextPosition(){
 	if (!this->moving){
 		return this->posicion;
@@ -174,6 +179,10 @@ void MobileModel::setPath(queue<SDL_Point> new_path){
 void MobileModel::clearPath(){
 	queue<SDL_Point,deque<SDL_Point>> empty;
 	this->path.swap(empty);
+}
+
+int MobileModel::getLargoCamino() {
+	return this->path.size();
 }
 
 bool MobileModel::esJugador() {

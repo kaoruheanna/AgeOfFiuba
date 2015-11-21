@@ -94,6 +94,8 @@ class Escenario {
 
 		// Manejo de varios personajes
 		map<int, TileCoordinate> tilesWithIds;
+		// Para recalcular los caminos
+		map<int, int> recalculoCount;
 
 		list<Team> getTeams();
 		list<MobileModel*> getMobileModels();
