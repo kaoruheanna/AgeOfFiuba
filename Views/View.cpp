@@ -60,3 +60,7 @@ std::string View::getType() {
 Drawable* View::getDrawable(){
 	return this->drawable;
 }
+
+bool View::hasModelWithId(int id) {
+	return false;
+}

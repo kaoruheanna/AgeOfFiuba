@@ -51,7 +51,7 @@ void MensajeroLocal::desapareceRecurso(Resource* recurso){
 }
 
 void MensajeroLocal::actualizarEntidad(Entity* entity) {
-	this->cliente->actualizarEntidad(new Entity(*entity));
+	this->cliente->actualizarEntidad(entity);
 }
 
 void MensajeroLocal::actualizaPersonaje(MobileModel* entity){
@@ -62,17 +62,13 @@ void MensajeroLocal::cambioUsuario(User* user) {
 	this->cliente->cambioUsuario(user);
 }
 
-//void MensajeroLocal::actualizarRecursos(User* auxUser) {
-//	this->cliente->actualizarRecursos(auxUser);
-//}
-
 // Metodos Cliente -> Servidor
 void MensajeroLocal::loguearse(char* nombre) {
 	this->server->loguearse(nombre);
 }
 
-void MensajeroLocal::construir(Entity *entity) {
-	this->server->construir(new Entity(*entity));
+void MensajeroLocal::construir(Entity *tempEntity) {
+	this->server->construir(tempEntity);
 }
 
 

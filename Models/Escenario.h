@@ -14,7 +14,6 @@
 #include "../Configuration/EscenarioConfig.h"
 #include "../Configuration/TipoConfig.h"
 #include "../Factories/EntityFactory.h"
-#include "../Utils/ResourcesManager.h"
 #include "FogOfWar.h"
 #include "TipoPartida/TipoPartida.h"
 using namespace std;
@@ -37,7 +36,6 @@ class Escenario {
 		list<Entity*> entidades;
 		list<Team> teams;
 		MobileModel* protagonista;
-		ResourcesManager* resourcesManager;
 
 		bool cosecharEnPosicion(SDL_Point point, MobileModel* protagonista);
 		void init();
@@ -53,10 +51,9 @@ class Escenario {
 		EscenarioDelagate* delegate;
 		list<Entity*> entidadesAgregadas;
 
-		bool agregarEntidad(Entity*);
-		bool construirEntidad(Entity* entidad,SDL_Point origenLogico);
+		bool guardarEntidad(Entity* entidad);
 		bool puedeConstruirEntidad(Entity* entidad,SDL_Point origenLogico);
-		void agregarEntidad(const string& tipo, SDL_Point posicion,const string& equipo);
+		Entity* crearYAgregarNuevaEntidad(const string& tipo, LogicPosition logicPosition,const string& equipo,bool aumentarID = true);
 
 		void vaciarEntidades();
 		void loop();
@@ -68,8 +65,7 @@ class Escenario {
 		bool posicionValida(SDL_Point posicion);
 
 		SDL_Point getSize();
-		Entity* crearEntidad(EntidadConfig config);
-		Entity* crearEntidad(const string& tipo, SDL_Point posicion);
+		Entity* crearEntidadFromConfig(EntidadConfig config);
 		list<Entity*> getListaEntidades(); // Se usa para agregar las vistas de las entidades
 		list<Entity*> getListaRecursos(); // Se usa para agregar las vistas de las entidades
 		bool eliminarEntidadConID(int id);

@@ -26,6 +26,7 @@ public:
 	std::string getType();
 	void setModel(Entity *model);
 	static string NombreDrawableFromNombreTipo(string nombreTipo);
+	bool hasModelWithId(int id);
 
 protected:
 	Drawable *drawable;

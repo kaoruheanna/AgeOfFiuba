@@ -82,7 +82,10 @@ public:
 
 	void setId(int id);
 	int getId();
+
+	//devuelve la posicion logica
 	SDL_Point getPosicion();
+
 	int getAnchoBase();
 	int getAltoBase();
 	string getNombre();

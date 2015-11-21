@@ -65,3 +65,7 @@ string MiniView::NombreDrawableFromNombreTipo(string nombreTipo){
 	return "mini-"+nombreTipo;
 }
 
+bool MiniView::hasModelWithId(int id) {
+	return (this->model && (this->model->getId() == id));
+}
+

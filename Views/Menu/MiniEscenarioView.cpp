@@ -48,3 +48,15 @@ void MiniEscenarioView::addEntityMiniView(MiniView *miniView){
 list<MiniView*>* MiniEscenarioView::getEntitiesMiniView() {
 	return &(this->entitiesMiniViews);
 }
+
+void MiniEscenarioView::removeEntityMiniViewForId(int id) {
+	list<MiniView*>::iterator it;
+	for (it = this->entitiesMiniViews.begin(); it != this->entitiesMiniViews.end();it++){
+		MiniView *view = *it;
+		if (view->hasModelWithId(id)){
+			this->entitiesMiniViews.erase(it);
+			delete view;
+			return;
+		}
+	}
+}

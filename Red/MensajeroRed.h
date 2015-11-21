@@ -22,7 +22,6 @@ public:
 	virtual void errorDeLogueo();
 	virtual void configEscenario(const string path);
 	virtual void apareceRecurso(Resource* recurso);
-//	virtual void actualizaEntity(Entity* entity);
 	virtual void desapareceRecurso(Resource* recurso);
 	virtual void actualizaPersonaje(MobileModel* entity);
 	virtual void cambioUsuario(User* user);
@@ -32,12 +31,13 @@ public:
 	// Metodos Cliente -> Servidor
 	virtual void loguearse(char* nombre);
 	virtual void moverEntidad(MobileModel* entity, string username);
-	virtual void construir(Entity* entity);
+	virtual void construir(Entity* tempEntity);
 	virtual void interactuar(int selectedEntityId, int targetEntityId);
 
 	// Metodos para checkear estado de la conexion
 	bool connectionAlive;
 	int getSocket();
+
 private:
 	int socket;
 	Mensajero* escucha;
