@@ -41,6 +41,7 @@ public:
 	virtual void rightClickEnEscenario(int x, int y){};
 	virtual void leftMouseUp(int x, int y, int w, int h){};
 	virtual void createEntityButtonPressed(string entityName){};
+	virtual void checkSelectedInTeam(){};
 };
 
 struct DrawableWithState {
@@ -53,6 +54,7 @@ class Renderer {
 public:
 	SDL_Point mainTilePosition;
 	SDL_Point miniMapMainTilePosition;
+	bool allowedToBuild;
 
 	Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos);
 	virtual ~Renderer();
@@ -80,6 +82,7 @@ public:
 	FogOfWar* getFog();
 	void setProtagonista(User *protagonista);
 	void setMessagesInMenu(std::string firstMessage, std::string secondMessage);
+	void setMessagesInMenu(Entity* entity);
 	void setSelectedTilesCoordinates(bool selected,std::list<pair<SDL_Point,SDL_Point> > tiles, list<Entity*> entidad);
 	void setCartel(string message);
 	void hideCartel();

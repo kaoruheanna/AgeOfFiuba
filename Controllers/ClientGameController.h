@@ -32,17 +32,16 @@ public:
 	virtual void rightClickEnEscenario(int x, int y);
 	virtual void leftMouseUp(int x, int y, int w, int h);
 	virtual void createEntityButtonPressed(string entityName);
+	virtual void checkSelectedInTeam();
 
 	string username;
 
 private:
 	User* usuario;
 	Mensajero* mensajero;
-
 	Entity* pendingEntity; //entidad a construir
 	FutureBuildingView* futureBuildingView;
 	list<Entity*> selectedEntities;
-
 	bool shouldQuit;
 	bool serverError;
 	EscenarioView *escenarioView;
@@ -77,22 +76,20 @@ private:
 	queue <SDL_Point> obtenerTilesParaMoverse(SDL_Point destino);
 	SDL_Point getPosicionPromedioForSelectedEntities();
 	void eliminarEntity(Entity* entityToDelete);
-
-	// Metodos y variables para que no se vaya el scroll del mapa
-	SDL_Point intialPointWindowWrapper;
-	SDL_Point finalPointWindowWrapper;
-
-	SDL_Point posicionInicialProtagonista;
-
-	int vertixSlope;
-	int middlePoint;
-
-	SDL_Point getMaxVertixForPoint(int yPosition);
+	bool isEntityFromMyTeam(Entity* entidad);
 	void agregarVistasParaEntidad(Entity* entidad);
 	void agregarVistasParaPersonaje(MobileModel* personaje);
 	void actualizarEntidades(list<Entity*> entidades);
 	void loopEscenario();
 	void limpiarConstruccion();
+
+	// Metodos y variables para que no se vaya el scroll del mapa
+	SDL_Point intialPointWindowWrapper;
+	SDL_Point finalPointWindowWrapper;
+	SDL_Point posicionInicialProtagonista;
+	int vertixSlope;
+	int middlePoint;
+	SDL_Point getMaxVertixForPoint(int yPosition);
 
 	//Mensajero Cliente
 	virtual void errorDeLogueo();

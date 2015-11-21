@@ -578,7 +578,7 @@ void ClientGameController::leftClickEnEscenario(int x,int y){
 
 	}else{
 		this->selectedEntities.clear();
-		this->renderer->setMessagesInMenu("Selecciona algo!!", "");
+		this->renderer->setMessagesInMenu(NULL);
 		list<Entity*> listaVacia;
 		this->renderer->setSelectedTilesCoordinates(false,listaDeTile,listaVacia);
 	}
@@ -608,9 +608,9 @@ void ClientGameController::rightClickEnEscenario(int x, int y) {
 	SDL_Point point = this->renderer->windowToMapPoint({x,y});
 	Entity *entidad = this->escenario->getEntidadEnPosicion(point);
 
-	if(entidad) {
+	if (entidad) {
 		for (Entity* selectedEntity: this->selectedEntities){
-			if (selectedEntity->getId() != entidad->getId()) {
+			if ((this->isEntityFromMyTeam(selectedEntity))&&(selectedEntity->getId() != entidad->getId())) {
 				this->mensajero->interactuar(selectedEntity->getId(),entidad->getId());
 			}
 		}
@@ -642,24 +642,31 @@ void ClientGameController::leftMouseUp(int x, int y, int w, int h){
 		//entidad->creables = this->getCreablesListForEntityName(entidad->getNombre());
 		this->renderer->setSelectedTilesCoordinates(true,tiles,listaDeEntidadesSeleccionadas);
 	}else{
-		this->renderer->setMessagesInMenu("Selecciona algo!!", "");
+		this->renderer->setMessagesInMenu(NULL);
 		this->renderer->setSelectedTilesCoordinates(false,tiles,listaDeEntidadesSeleccionadas);
 	}
+}
+
+bool ClientGameController::isEntityFromMyTeam(Entity* entidad) {
+	return (entidad->getTeam() == this->usuario->getTeam());
 }
 
 void ClientGameController::moverMuchasUnidades(SDL_Point destino){
 	queue<SDL_Point> tiles = this->obtenerTilesParaMoverse(destino);
 	for (Entity* entidad: this->selectedEntities){
 		//TODO toda entidad deberia tener un destino asignado.
-		if (!tiles.empty()){
-			std::cout<<entidad->getNombre()<<"\n";
-			this->moverUnaUnidad(entidad, tiles.front());
-			tiles.pop();
+		if ((!tiles.empty())) {
+				std::cout<<entidad->getNombre()<<"\n";
+				this->moverUnaUnidad(entidad, tiles.front());
+				tiles.pop();
 		}
 	}
 }
 
 void ClientGameController::moverUnaUnidad(Entity* entidad, SDL_Point destino){
+	if(!this->isEntityFromMyTeam(entidad)){
+		return;
+	}
 	MobileModel* auxModel = new MobileModel();
 	auxModel->setId(entidad->getId());
 	auxModel->setDestination(destino.x, destino.y);
@@ -754,31 +761,34 @@ void ClientGameController::setCreablesForEntities(list<Entity*> listaDeEntidades
 }
 
 void ClientGameController::setMessageForSelectedEntity(Entity* entity){
-	if (entity == NULL){return;}
-	string equipo = "";
-	switch(entity->getTeam()){
-		case TEAM_RED:
-			equipo = NOMBRE_EQUIPO_RED;
-			break;
-		case TEAM_BLUE:
-			equipo = NOMBRE_EQUIPO_BLUE;
-			break;
-		case TEAM_GREEN:
-			equipo = NOMBRE_EQUIPO_GREEN;
-			break;
-		case TEAM_YELLOW:
-			equipo = NOMBRE_EQUIPO_YELLOW;
-			break;
-		default:
-			equipo = NOMBRE_EQUIPO_NEUTRAL;
+//	//if (entity == NULL){return;}
+//	string equipo = "";
+//	switch(entity->getTeam()){
+//		case TEAM_RED:
+//			equipo = NOMBRE_EQUIPO_RED;
+//			break;
+//		case TEAM_BLUE:
+//			equipo = NOMBRE_EQUIPO_BLUE;
+//			break;
+//		case TEAM_GREEN:
+//			equipo = NOMBRE_EQUIPO_GREEN;
+//			break;
+//		case TEAM_YELLOW:
+//			equipo = NOMBRE_EQUIPO_YELLOW;
+//			break;
+//		default:
+//			equipo = NOMBRE_EQUIPO_NEUTRAL;
+//
+//	}
+	//if (!(entity->esJugador())){
 
-	}
-	if (!(entity->esJugador())){
-		this->renderer->setMessagesInMenu("Entidad - "+ equipo,entity->getNombreAMostrar());
-		return;
-	}
 
-	this->renderer->setMessagesInMenu("Jugador - "+ equipo,entity->getNombreAMostrar());
+	//this->renderer->setMessagesInMenu("Entidad - "+ equipo,entity->getNombreAMostrar());
+	this->renderer->setMessagesInMenu(entity);
+	//return;
+	//}
+
+	///this->renderer->setMessagesInMenu("Jugador - "+ equipo,entity->getNombreAMostrar());
 }
 
 /*selecciona un mensaje para una lista de entidades
@@ -788,6 +798,17 @@ void ClientGameController::setMessageForSelectedEntity(Entity* entity){
 void ClientGameController::setMessageForSelectedEntities(list<Entity*> entities){
 	Entity* entity = entities.front();
 	this->setMessageForSelectedEntity(entity);
+}
+
+void ClientGameController::checkSelectedInTeam(){
+	list<Entity*>::iterator iterador;
+	this->renderer->allowedToBuild = false;
+	for(iterador = this->selectedEntities.begin(); iterador != this->selectedEntities.end(); ++iterador){
+		Entity* entidad = (*iterador);
+		if (this->isEntityFromMyTeam(entidad)){
+			this->renderer->allowedToBuild = true;;
+		}
+	}
 }
 
 void ClientGameController::createEntityButtonPressed(string entityName) {
