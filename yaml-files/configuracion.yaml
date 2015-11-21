@@ -89,10 +89,10 @@ tipos:
    alto_base : 1
    pixel_ref_x: 20
    pixel_ref_y: 38
-   alto_frame_int: 40
-   ancho_frame_int: 24
-   pixel_ref_x_int: 14
-   pixel_ref_y_int: 32
+   alto_frame_int: 51
+   ancho_frame_int: 61
+   pixel_ref_x_int: 28
+   pixel_ref_y_int: 42
    fps: 35
    delay: 0
    alto_frame: 45
@@ -138,10 +138,10 @@ tipos:
    alto_base : 1
    pixel_ref_x: 40
    pixel_ref_y: 84
-   alto_frame_int: 40
-   ancho_frame_int: 24
-   pixel_ref_x_int: 14
-   pixel_ref_y_int: 32
+   alto_frame_int: 103
+   ancho_frame_int: 116
+   pixel_ref_x_int: 74
+   pixel_ref_y_int: 84
    fps: 35
    delay: 0
    alto_frame: 121
@@ -166,10 +166,10 @@ tipos:
    delay: 0
    alto_frame: 49
    ancho_frame: 38
-   alto_frame_int: 40
-   ancho_frame_int: 24
-   pixel_ref_x_int: 14
-   pixel_ref_y_int: 32
+   alto_frame_int: 50
+   ancho_frame_int: 48
+   pixel_ref_x_int: 24
+   pixel_ref_y_int: 42
    mini_map_pixel_ref_type: 1
    alcance: 3
    vida_inicial: 500
@@ -188,10 +188,6 @@ tipos:
    delay: 0
    alto_frame: 94
    ancho_frame: 89
-   alto_frame_int: 40
-   ancho_frame_int: 24
-   pixel_ref_x_int: 14
-   pixel_ref_y_int: 32
    mini_map_pixel_ref_type: 1
    alcance: 3
    vida_inicial: 500
@@ -212,10 +208,10 @@ tipos:
    delay: 0
    alto_frame: 53
    ancho_frame: 57
-   alto_frame_int: 40
-   ancho_frame_int: 24
-   pixel_ref_x_int: 14
-   pixel_ref_y_int: 32
+   alto_frame_int: 53
+   ancho_frame_int: 57
+   pixel_ref_x_int: 27
+   pixel_ref_y_int: 44
    mini_map_pixel_ref_type: 1
    alcance: 3
    vida_inicial: 500
@@ -236,10 +232,10 @@ tipos:
    delay: 0
    alto_frame: 66
    ancho_frame: 65
-   alto_frame_int: 40
-   ancho_frame_int: 24
-   pixel_ref_x_int: 14
-   pixel_ref_y_int: 32
+   alto_frame_int: 51
+   ancho_frame_int: 61
+   pixel_ref_x_int: 28
+   pixel_ref_y_int: 42
    mini_map_pixel_ref_type: 1
    alcance: 3
    vida_inicial: 500
