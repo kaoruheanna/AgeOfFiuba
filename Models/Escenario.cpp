@@ -7,7 +7,7 @@
 using namespace std;
 const string TAG = "Escenario";
 
-
+//Crea escenario a partir de la configuracion
 void Escenario::init() {
 	this->teams.clear();
 	this->name = escenarioConfig.getNombre();
@@ -16,41 +16,39 @@ void Escenario::init() {
 	this->tipo = NULL;
 	if (this->name == "") {
 		this->name = "sinNombre";
-		Log().Get("Escenario", logWARNING)
-				<< "El escenario tiene que tener un nombre. Usando nombre "
-				<< this->name;
+		Log().Get(TAG, logWARNING) << "El escenario tiene que tener un nombre. Usando nombre "<< this->name;
 	}
+
 	if (escenarioConfig.getSizeX() < 1) {
-		Log().Get("Escenario", logWARNING) << "El escenario " << this->name
-				<< " tiene que ser al menos una unidad de ancho. Cargando escenario default.";
+		Log().Get(TAG, logWARNING) << "El escenario " << this->name << " tiene que ser al menos una unidad de ancho. Cargando escenario default.";
+
 	} else if (escenarioConfig.getSizeY() < 1) {
-		Log().Get("Escenario", logWARNING) << "El escenario " << this->name
-				<< " tiene que ser al menos una unidad de alto. Cargando escenario default.";
+		Log().Get(TAG, logWARNING) << "El escenario " << this->name << " tiene que ser al menos una unidad de alto. Cargando escenario default.";
+
 	} else {
-		this->mundo = new Map(escenarioConfig.getSizeX(), escenarioConfig.getSizeY(),
-				TILE_WIDTH_PIXELS, TILE_HEIGHT_PIXELS);
-		factory = new EntityFactory(this->mundo, tiposConfigList);
+		this->mundo = new Map(escenarioConfig.getSizeX(), escenarioConfig.getSizeY(),TILE_WIDTH_PIXELS, TILE_HEIGHT_PIXELS);
+		this->factory = new EntityFactory(this->mundo, tiposConfigList);
 		this->protagonista = NULL;
 		this->inicializacionCorrecta = true;
-		list<EntidadConfig>::iterator configEntidad;
+		list<EntidadConfig>::iterator itConfigEntidad;
 		list<EntidadConfig> configs = escenarioConfig.getEntidades();
 		int indice = 0;
-		for (configEntidad = configs.begin();
-				configEntidad != configs.end(); ++configEntidad) {
-			Entity* entidad = this->crearEntidadFromConfig(*configEntidad);
+
+		for (itConfigEntidad = configs.begin(); itConfigEntidad != configs.end(); ++itConfigEntidad) {
+			Entity* entidad = this->crearEntidadFromConfig(*itConfigEntidad);
 			if (entidad == NULL) {
-				Log().Get("Escenario", logWARNING) << "La entidad N° "
-						<< indice << " del escenario " << this->name
-						<< " no pudo ser creada.";
+				Log().Get(TAG, logWARNING) << "La entidad N° "<< indice << " del escenario " << this->name<< " no pudo ser creada.";
 			} else {
+				Log().Get(TAG)<<"Creado "<<entidad->getNombre()<<" de tamaño:"<<entidad->getAnchoBase()<<"x"<<entidad->getAltoBase();
+				Log().Get(TAG)<<"En posicon "<<entidad->getPosicion().x<<"x"<<entidad->getPosicion().y<<" y del equipo "<<entidad->getTeamString();
+
+
 				bool agregado = false;
 				agregado = this->guardarEntidad(entidad);
 
 				if (!agregado) {
 					delete entidad;
-					Log().Get("Escenario", logWARNING) << "La entidad N° "
-							<< indice << " del escenario " << this->name
-							<< " no fue agregada al mapa. La misma no puede estar en la misma posicion que otra entidad.";
+					Log().Get(TAG, logWARNING)<<"La entidad N° "<<indice<<" del escenario "<<this->name<<" no fue agregada al mapa. La misma no puede estar en la misma posicion que otra entidad.";
 				} else if(entidad->getTeam() != TEAM_NEUTRAL){
 					list<Team>::iterator found = find(this->teams.begin(), this->teams.end(), entidad->getTeam());
 					if(found == this->teams.end()){
@@ -190,6 +188,12 @@ Entity* Escenario::getEntidadEnPosicion(SDL_Point point) {
 		int maxTileX = pair.second.x;
 		int minTileY = pair.first.y;
 		int maxTileY = pair.second.y;
+
+//		if (entidadReal->getNombre() == "archeryRange"){
+//			Log().Get(TAG)<<entidadReal->getNombre()<<":("<<minTileX<<","<<minTileY<<") ("<<maxTileX<<","<<maxTileY<<")";
+//			Log().Get(TAG)<<"ancho:"<<entidadReal->getAnchoBase()<<", alto:"<<entidadReal->getAltoBase();
+//		}
+
 		bool sameX = ((tile.x >= minTileX) && (tile.x <= maxTileX));
 		bool sameY = ((tile.y >= minTileY) && (tile.y <= maxTileY));
 
@@ -416,11 +420,9 @@ list<Entity*> Escenario::getEntidadesEnAreaForJugador(SDL_Point posInicial, SDL_
 	if ((min(posInicial.y,posFinal.y)-5)%TILE_HEIGHT_PIXELS < TILE_HEIGHT_PIXELS/2){
 		saltoX = 16;
 	}
-	printf("inicio: %i, %i \n", this->mundo->getTileForPosition({inicioX, inicioY}).x,this->mundo->getTileForPosition({inicioX, inicioY}).y);
-	printf("fin: %i, %i \n", this->mundo->getTileForPosition({finX, finY}).x, this->mundo->getTileForPosition({finX, finY}).y);
+
 	for (int x = inicioX; x <= finX; x += saltoX){
 		for (int y = inicioY; y <= finY; y += saltoY){
-			printf("posicion: %i, %i \n", this->mundo->getTileForPosition({x,y}).x,this->mundo->getTileForPosition({x,y}).y);
 			Entity* entidad = this->getEntidadEnPosicion({x,y}); //este metodo esta mal TODO
 			if (entidad){
 				if (entidad->getTeam() == team){

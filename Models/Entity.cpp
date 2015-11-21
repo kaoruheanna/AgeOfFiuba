@@ -213,8 +213,6 @@ int Entity::serializeStringSize(char* string) {
 void Entity::update(Entity* entity) {
 	this->nombre = entity->nombre;
 	this->posicion = entity->posicion;
-	this->ancho_base = entity->ancho_base;
-	this->alto_base = entity->alto_base;
 	this->life = entity->life;
 	this->state = entity->state;
 }

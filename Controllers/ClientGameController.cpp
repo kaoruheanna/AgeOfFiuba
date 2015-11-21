@@ -278,7 +278,6 @@ bool ClientGameController::pollEvents(){
 			//Get mouse position
 			int x, y;
 			SDL_GetMouseState(&x, &y);
-			printf("mouse: %i, %i \n", x,y);
 			this->posInicialMouse = {x,y};
 			bool leftClick = (e.button.button == SDL_BUTTON_LEFT);
 			if (leftClick){this->mouseDown = true;};
@@ -563,8 +562,8 @@ bool ClientGameController::inicializado() {
  * RendererInteractionDelegate
  */
 void ClientGameController::leftClickEnEscenario(int x,int y){
-	SDL_Point tile = this->renderer->windowToMapPoint({x,y});
-	Entity* entidad = this->escenario->getEntidadEnPosicion(tile);
+	SDL_Point logicPosition = this->renderer->windowToMapPoint({x,y});
+	Entity* entidad = this->escenario->getEntidadEnPosicion(logicPosition);
 	if (this->selectedEntities.size() == 1 and this->selectedEntities.front() == entidad){
 		return;
 	}
@@ -719,7 +718,6 @@ queue<SDL_Point> ClientGameController::obtenerTilesParaMoverse(SDL_Point destino
 	SDL_Point direccion = {destinoCentrado.x - posMedia.x, destinoCentrado.y - posMedia.y};
 	float angulo = getAnguloForDireccion(direccion);
 	SDL_Point dirFormacion = obtenerDireccionPerpendicularParaAngulo(angulo);
-	printf("angulo: %f, direccion: %i, %i \n",angulo, dirFormacion.x, dirFormacion.y);
 	int filas = cantidadDeTiles/tamFila;
 	int i = 0;
 	while (i < cantidadDeTiles){//TODO mejorar para no tener mas de una fila

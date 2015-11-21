@@ -38,7 +38,7 @@ public:
 private:
 	User* usuario;
 	Mensajero* mensajero;
-//	Entity* selectedEntity;
+
 	Entity* pendingEntity; //entidad a construir
 	FutureBuildingView* futureBuildingView;
 	list<Entity*> selectedEntities;
