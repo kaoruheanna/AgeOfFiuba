@@ -15,7 +15,6 @@ static const string TAG = "ServerGameController";
 ServerGameController::ServerGameController(GameConfiguration *config) :  config(config) {
 	escenario = NULL;
 	debeActualizarPersonaje = false;
-	moverPersonajeAlPunto = NULL;
 	comenzoPartida = false;
 }
 

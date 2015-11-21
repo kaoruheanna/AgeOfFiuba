@@ -246,8 +246,27 @@ void Escenario::loop() {
 
 			// Si se cruza con otro usuario, lo freno y borro el camino
 			if (this->tileOcupadoForEntity(newTile,model)){
+				Log().Get(TAG) << "Recalcular camino para " << model->getId() << " pos: " << oldPosition.x << "," << oldPosition.y;
+				SDL_Point destino = model->getFinalDestination();
 				model->setPosicion(oldPosition);
-				model->olvidarCamino();
+
+				queue <SDL_Point> camino = this->getCaminoForMobileModel(oldPosition,destino,model);
+				if(camino.size() <= 0) {
+					Log().Get(TAG) << "Modelo " << model->getId() << "esta en "<< model->getPosicion().x <<","<< model->getPosicion().y<<" no puede llegar a " << destino.x << "," << destino.y;
+					model->olvidarCamino();
+				} else {
+					Log().Get(TAG) << "Le seteo un nuevo camino de tamanio " << camino.size();
+
+
+					//Por las dudas para que no se quede iterando en este else
+					recalculoCount[model->getId()]++;
+					if(recalculoCount[model->getId()] < 10) {
+						model->setPath(camino);
+					} else {
+						model->olvidarCamino();
+					}
+				}
+
 			} else {
 				actualizarPersonajes = true;
 			}
@@ -323,8 +342,9 @@ void Escenario::moveEntityToPos(MobileModel* mobileModel,SDL_Point destino) {
 	Log().Get(TAG, logDEBUG) << "Trato de mover la entidad:"<<mobileModel->getNombre()<<"con el id:"<<mobileModel->getId();
 	SDL_Point origen = mobileModel->getPosicion();
 	queue <SDL_Point> camino = this->getCaminoForMobileModel(origen,destino,mobileModel);
+	recalculoCount[mobileModel->getId()] = 0;
 	mobileModel->setPath(camino);
-	Log().Get(TAG, logDEBUG) << "El personaje: " << mobileModel->getId() << "se mueve al: " << mobileModel->getDestinationX() << " , " << mobileModel->getDestinationY() << " camino: " << camino.size();
+	Log().Get(TAG, logDEBUG) << "El personaje: " << mobileModel->getId() << " esta en " << mobileModel->getPosicion().x << "," << mobileModel->getPosicion().y << " se mueve al: " << mobileModel->getDestinationX() << " , " << mobileModel->getDestinationY() << " camino: " << camino.size();
 }
 
 int Escenario::getDistancia(Entity* from, Entity* to) {

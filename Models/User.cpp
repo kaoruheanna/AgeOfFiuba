@@ -91,8 +91,7 @@ int User::getValueForResource(string resourceName) {
 		return this->madera;
 	} else if(resourceName.compare("piedra") == 0){
 		return this->piedra;
-	}
-	else if(resourceName.compare("oro") == 0){
+	} else if(resourceName.compare("oro") == 0){
 			return this->oro;
 	}
 	return 0;

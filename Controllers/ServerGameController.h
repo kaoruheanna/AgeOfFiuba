@@ -79,7 +79,6 @@ private:
 //	list<Entity*> recursosEliminados;
 	bool debeActualizarUsuarios;
 	bool debeActualizarPersonaje;
-	TileCoordinate* moverPersonajeAlPunto;
 };
 
 #endif /* CONTROLLERS_SERVERGAMECONTROLLER_H_ */
