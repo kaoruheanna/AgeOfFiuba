@@ -213,6 +213,10 @@ deque<SDL_Point> TileSet::obtenerCaminoIgnoringTiles(TileCoordinate tileOrigen, 
 		// Si esta ocupada, no hago nada
 		Log().Get(TAG) << "Si esta ocupada, busco la vacia mas cercana";
 		list<TileCoordinate> vecinos = this->vecinosLibres(tileDestino,tilesOccupied);
+		if(!vecinos.size()) {
+			return caminoVacio;
+		}
+
 		TileCoordinate vecino = vecinos.front();
 		while (this->posicionOcupada(vecino) && vecinos.size()>1) {
 			vecinos.pop_front();
