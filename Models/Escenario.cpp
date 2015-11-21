@@ -3,6 +3,7 @@
 #include "../GlobalConstants.h"
 #include "TipoPartida/PartidaNormal.h"
 #include "TipoPartida/PartidaRey.h"
+#include "TipoPartida/PartidaBandera.h"
 
 using namespace std;
 const string TAG = "Escenario";
@@ -66,6 +67,8 @@ void Escenario::init() {
 			this->tipo = new PartidaNormal();
 		} else if(escenarioConfig.getTipo().compare(NOMBRE_REY) == 0){
 			this->tipo = new PartidaRey();
+		} else if(escenarioConfig.getTipo().compare(NOMBRE_BANDERA) == 0){
+			this->tipo = new PartidaBandera();
 		}
 	}
 

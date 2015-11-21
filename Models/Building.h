@@ -19,6 +19,9 @@ public:
 
 	virtual void interact(Entity* entity);
 	virtual void receiveInteraction(Warrior* entity);
+
+	// Solo se usa para el modo de juego "bandera" => no es necesario pasarlo por red
+	Team asesino;
 };
 
 #endif /* MODELS_BUILDING_H_ */
