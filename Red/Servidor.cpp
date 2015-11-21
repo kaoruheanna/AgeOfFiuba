@@ -27,6 +27,11 @@ struct InfoCliente {
 	int socket;
 };
 
+struct InfoServidor {
+	ServerGameController** modelos;
+	string* configFile;
+};
+
 Servidor::Servidor() {
 	this->modelos = NULL;
 }
@@ -38,7 +43,7 @@ void* atenderCliente(void* infoCliente);
 void* simularModelos(void* modelos);
 void* pingearCliente(void* args);
 
-void Servidor::empezar(int port) {
+void Servidor::empezar(int port, const char* configPath) {
 	int sd = socket(AF_INET, SOCK_STREAM, 0);
 	if(sd < 0){
 		printf("Servidor - Fallo el socket con error %i\n", sd);
@@ -59,8 +64,11 @@ void Servidor::empezar(int port) {
 		printf("Servidor - Fallo el listen\n");
 		return; // ERR: -1
 	}
+	InfoServidor* serverInfo = (InfoServidor*) malloc(sizeof(InfoServidor));
+	serverInfo->configFile = new string(configPath);
+	serverInfo->modelos = &this->modelos;
 	pthread_create((pthread_t*) malloc(sizeof(pthread_t)), NULL,
-			simularModelos, (void*)&this->modelos);
+			simularModelos, (void*)serverInfo);
 	while(true){
 		printf("Servidor - Esperando un cliente\n");
 		sockaddr_in client_addr;
@@ -136,9 +144,12 @@ void* pingearCliente(void* args) {
 }
 
 void* simularModelos(void* arg) {
-	ServerGameController* modelos = new ServerGameController(new GameConfiguration(CONFIG_CUSTOM));
-	(*(ServerGameController**)arg) = modelos;
+	InfoServidor* infoServer = (InfoServidor*)arg;
+	ServerGameController* modelos = new ServerGameController(new GameConfiguration(*infoServer->configFile));
+	(*(infoServer->modelos)) = modelos;
 	modelos->init();
 	modelos->play();
+	delete infoServer->configFile;
+	free(infoServer);
 	return NULL;
 }

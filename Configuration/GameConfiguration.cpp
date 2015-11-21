@@ -59,9 +59,10 @@ int GameConfiguration::getTamanioY(){
 //ESTA FUNCION VA A COMPROBAR QUE EL ARCHIVO RESPETE LAS ESPECIFICACIONES DE YAML, NO VERIFICA LA VALIDACION DE VALORES
 void GameConfiguration::loadFile(const string archivoAParsear){
 	this->path = archivoAParsear;
+	Log().Get(TAG, logINFO) << "Cargando configuracion del archivo " << archivoAParsear << " ...";
 	try{
 	this->nodoRaiz = YAML::LoadFile(archivoAParsear);
-		if (!nodoRaiz["pantalla"] && !nodoRaiz["configuracion"] && !nodoRaiz["tipos"] && !nodoRaiz["esceario"]){
+		if (!nodoRaiz["pantalla"] && !nodoRaiz["configuracion"] && !nodoRaiz["tipos"] && !nodoRaiz["escenario"]){
 			this->nodoRaiz = YAML::LoadFile(CONFIG_DEFAULT);
 			this->path = CONFIG_DEFAULT;
 			Log().Get(TAG,logERROR) << "El archivo no tiene ninguno de los campos necesarios";
