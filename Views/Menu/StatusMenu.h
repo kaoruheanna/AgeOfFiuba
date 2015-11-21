@@ -31,6 +31,7 @@ private:
 	int height;
 	TextLabel *firstLabel;
 	TextLabel *secondLabel;
+	TextLabel *thirdLabel;
 	Button* entityStatusIcon;
 	std::string currentEntityName;
 
