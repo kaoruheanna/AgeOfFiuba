@@ -67,6 +67,7 @@ private:
 	void initWindowSizes();
 	void initMap();
 	bool inicializado();
+	SDL_Point posicionInicialEntidadClave();
 	void setMessageForSelectedEntity(Entity* entity);
 	void setMessageForSelectedEntities(list<Entity*> entities);
 	list<string> getCreablesListForEntityName(string name);
@@ -87,7 +88,6 @@ private:
 	// Metodos y variables para que no se vaya el scroll del mapa
 	SDL_Point intialPointWindowWrapper;
 	SDL_Point finalPointWindowWrapper;
-	SDL_Point posicionInicialProtagonista;
 	int vertixSlope;
 	int middlePoint;
 	SDL_Point getMaxVertixForPoint(int yPosition);
