@@ -51,10 +51,10 @@ void StatusMenu::actualizarVida(){
 
 void StatusMenu::actualizarProgreso(){
 	if (this->entityClicked->getProgresoConstruccion() < PROGRESO_COMPLETO){
+			int currentPercentage = (((this->entityClicked->getProgresoConstruccion())*100)/PROGRESO_COMPLETO);
 			this->constructionProgressLabel->setMessage("Porcentaje Terminado: "
-					+ this->convertIntToString(this->entityClicked->getProgresoConstruccion())
-					+ " / "
-					+ this->convertIntToString(PROGRESO_COMPLETO));
+					+ this->convertIntToString(currentPercentage)
+					+ "%");
 		}
 		else{
 			this->constructionProgressLabel->setMessage("");
@@ -164,11 +164,9 @@ void StatusMenu::setStatusDataForEntity(Entity* entity){
 
 	//Si la entidad esta muerta limpio el menu
 	if (!entity->estaViva()){
-			this->setStatusBlank();
-			return;
+		this->setStatusBlank();
+		return;
 	}
-
-
 
 	//Si clickeo algo seteo los parametros de icono y labels
 	this->entityClicked = entity;

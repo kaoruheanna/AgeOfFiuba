@@ -529,7 +529,6 @@ void ClientGameController::eliminarEntity(Entity* entityToDelete){
 
 void ClientGameController::configEscenario(const string path) {
 	this->config = new GameConfiguration(path);
-//	this->escenario = new Escenario(this->config->getEscenario(), this->config->getTipos());
 	this->escenario = EscenarioSingleton::get(new Escenario(this->config->getEscenario(),this->config->getTipos()));
 }
 
