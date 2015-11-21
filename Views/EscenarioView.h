@@ -23,6 +23,7 @@ public:
 	void addEntityView(View* view);
 	MapView* getMapView();
 	list<View*>* getEntitiesView();
+	void removeEntityViewForId(int id);
 
 private:
 	MapView *mapView;

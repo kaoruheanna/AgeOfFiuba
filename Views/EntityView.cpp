@@ -49,3 +49,7 @@ void EntityView::render(Renderer* renderer) {
 	renderer->draw(point.x, point.y, this->getDrawable(), this->model->admiteNublado());
 }
 
+bool EntityView::hasModelWithId(int id) {
+	return (this->model && (this->model->getId() == id));
+}
+

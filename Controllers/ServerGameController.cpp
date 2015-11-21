@@ -414,6 +414,7 @@ void ServerGameController::mandarUsuarios() {
 	}
 }
 
-void ServerGameController::construir(Entity* entity){
-	this->escenario->agregarEntidad(entity->getNombre(),entity->getPosicion(),entity->getTeamString());
+void ServerGameController::construir(Entity* tempEntity){
+	LogicPosition logicPosition = LogicPosition(tempEntity->getPosicion().x,tempEntity->getPosicion().y);
+	this->escenario->crearYAgregarNuevaEntidad(tempEntity->getNombre(),logicPosition,tempEntity->getTeamString());
 }

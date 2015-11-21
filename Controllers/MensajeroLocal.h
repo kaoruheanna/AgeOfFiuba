@@ -30,7 +30,7 @@ public:
 	virtual void apareceRecurso(Resource* recurso);
 	virtual void desapareceRecurso(Resource* recurso);
 	virtual void actualizarEntidad(Entity* entity);
-	virtual void actualizaPersonaje(MobileModel* entity);
+	virtual void actualizaPersonaje(MobileModel* tempEntity);
 	virtual void cambioUsuario(User* user);
 	virtual void comenzoPartida();
 

@@ -76,6 +76,7 @@ private:
 	void moverUnaUnidad(Entity* entidad, SDL_Point destino);
 	queue <SDL_Point> obtenerTilesParaMoverse(SDL_Point destino);
 	SDL_Point getPosicionPromedioForSelectedEntities();
+	void eliminarEntity(Entity* entityToDelete);
 
 	// Metodos y variables para que no se vaya el scroll del mapa
 	SDL_Point intialPointWindowWrapper;
@@ -87,8 +88,8 @@ private:
 	int middlePoint;
 
 	SDL_Point getMaxVertixForPoint(int yPosition);
-	void agregarEntidad(Entity* entidad);
-	void agregarPersonaje(MobileModel* personaje);
+	void agregarVistasParaEntidad(Entity* entidad);
+	void agregarVistasParaPersonaje(MobileModel* personaje);
 	void actualizarEntidades(list<Entity*> entidades);
 	void loopEscenario();
 	void limpiarConstruccion();
@@ -98,8 +99,8 @@ private:
 	virtual void configEscenario(const string path);
 	virtual void apareceRecurso(Resource* recurso);
 	virtual void desapareceRecurso(Resource* recurso);
-	virtual void actualizarEntidad(Entity* entity);
-	virtual void actualizaPersonaje(MobileModel* entity);
+	virtual void actualizarEntidad(Entity* tempEntity);
+	virtual void actualizaPersonaje(MobileModel* tempEntity);
 	virtual void cambioUsuario(User* user);
 	virtual void comenzoPartida();
 };

@@ -60,11 +60,10 @@ void ClientGameController::comenzoPartida() {
 	}
 }
 
-void ClientGameController::agregarEntidad(Entity* entidad) {
+void ClientGameController::agregarVistasParaEntidad(Entity* entidad) {
 	EntityView* entityView = new EntityView(entidad->getNombre());
 	entityView->setModel(entidad);
 	this->escenarioView->addEntityView(entityView);
-
 
 	// agrego mini vista
 	string miniName = MiniView::NombreDrawableFromNombreTipo(entidad->getNombre());
@@ -73,7 +72,7 @@ void ClientGameController::agregarEntidad(Entity* entidad) {
 	this->miniEscenarioView->addEntityMiniView(miniView);
 }
 
-void ClientGameController::agregarPersonaje(MobileModel* personaje) {
+void ClientGameController::agregarVistasParaPersonaje(MobileModel* personaje) {
 	// Agrego vista del personaje
 	MobileView *personajeView = new MobileView(personaje->getNombre());
 	personajeView->setModel(personaje);
@@ -95,10 +94,10 @@ void ClientGameController::actualizarEntidades(list<Entity*> entidades) {
 		Entity* entidadReal = (*entidad);
 		switch(entidadReal->getClass()){
 			case MOBILE_MODEL:
-				this->agregarPersonaje((MobileModel*)entidadReal);
+				this->agregarVistasParaPersonaje((MobileModel*)entidadReal);
 				break;
 			default:
-				this->agregarEntidad(entidadReal);
+				this->agregarVistasParaEntidad(entidadReal);
 		}
 	}
 	// Refrescar las vistas
@@ -417,30 +416,41 @@ void ClientGameController::sleep(){
 }
 
 // el server le avisa que se actualizaron personajes
-void ClientGameController::actualizaPersonaje(MobileModel* entity) {
-	if (!this->inicializado())
+void ClientGameController::actualizaPersonaje(MobileModel* tempEntity) {
+	if (!this->inicializado()){
 		return;
+	}
 
-	Entity* model = this->escenario->entidadConId(entity->getId());
+	if(!this->escenario->factory->esMobileModel(tempEntity->getNombre())){
+		Log().Get(TAG) << "Por aca solo actualizo mobile models ("<<tempEntity->getNombre()<<")";
+		return;
+	}
+
+	Entity* model = this->escenario->entidadConId(tempEntity->getId());
 	if(model == NULL){
-//		Log().Get(TAG) << "No existia el personaje, tiene que crearse";
-		// no existia, tiene q crearse
-//		Log().Get(TAG) << "Creo entity desde actualizaPersonaje";
-		MobileModel* newModel = new MobileModel(*entity);
-		this->escenario->agregarEntidad(newModel);
-		this->escenario->actualizarTileOcupadaPorPersonaje(newModel);
-		// TODO cambiar como detecta este numero
+		Log().Get(TAG) << "No existia el personaje, tiene que crearse";
+
+		LogicPosition logicPosition = LogicPosition(tempEntity->getPosicion().x,tempEntity->getPosicion().y);
+
+		//la crea pero sin que se ponga el id automaticamente
+		model = this->escenario->crearYAgregarNuevaEntidad(tempEntity->getNombre(),logicPosition,tempEntity->getTeamString(),false);
+		if (model == NULL){
+			Log().Get(TAG) << "No se pudo crear la entidad. Dejo q crashee para poder rastrearlo si pasa";
+			return;
+		}
+		model->setId(tempEntity->getId());
 
 		this->updated = true;
+	}
+
+	MobileModel* protagonista = (MobileModel*)model;
+	protagonista->update(tempEntity);
+
+	if (!protagonista->estaViva()) {
+		this->eliminarEntity(protagonista);
 		return;
 	}
 
-	if(model->getClass() != MOBILE_MODEL){
-		// El modelo no se mueve y.y
-		return;
-	}
-	MobileModel* protagonista = (MobileModel*)model;
-	protagonista->update(entity);
 	this->escenario->actualizarTileOcupadaPorPersonaje(protagonista);
 }
 
@@ -464,7 +474,6 @@ void ClientGameController::apareceRecurso(Resource* recurso) {
 			return;
 
 	if(!this->escenario->existeRecursoConID(recurso->getId())) {
-		this->escenario->agregarEntidad(new Resource(*recurso));
 	}
 	this->updated = true;
 }
@@ -478,31 +487,54 @@ void ClientGameController::desapareceRecurso(Resource* recurso){
 	}
 }
 
-void ClientGameController::actualizarEntidad(Entity* entity) {
+//actualiza las entidades que no son mobile models
+void ClientGameController::actualizarEntidad(Entity* tempEntity) {
 	if (!this->inicializado()) {
+		return;
+	}
+
+	if (this->escenario->factory->esMobileModel(tempEntity->getNombre())){
+		Log().Get(TAG) << "no tengo que actualizar los mobiles models por aca ("<<tempEntity->getNombre()<<")";
 		return;
 	}
 
 //	Log().Get(TAG) << entity->getNombre() <<"me llego con tamaño:"<<entity->getAnchoBase()<<"x"<<entity->getAltoBase();
 
-	Entity* existingEntity = this->escenario->entidadConId(entity->getId());
+	Entity* existingEntity = this->escenario->entidadConId(tempEntity->getId());
+	if (existingEntity == NULL){
+		//como no existia, tengo que crearla.
+		LogicPosition logicPosition = LogicPosition(tempEntity->getPosicion().x,tempEntity->getPosicion().y);
 
-	if(existingEntity) {
-		if(existingEntity->getClass() == MOBILE_MODEL) {
-			return;
+		//la crea pero sin que se ponga el id automaticamente
+		existingEntity = this->escenario->crearYAgregarNuevaEntidad(tempEntity->getNombre(),logicPosition,tempEntity->getTeamString(),false);
+		if (existingEntity == NULL){
+			Log().Get(TAG) << "No se pudo crear la entidad. Dejo q crashee para poder rastrearlo si pasa";
 		}
+		existingEntity->setId(tempEntity->getId());
+	}
 
-		existingEntity->update(entity);
-		if (!existingEntity->estaViva()) {
-			this->escenario->eliminarEntidadConID(existingEntity->getId());
-		}
-	} else {
-		//Hecho asi creo q la entity esta viva del lado del server
-		SDL_Point posicion = entity->getPosicion();
-		this->escenario->construirEntidad(entity,posicion);
+	existingEntity->update(tempEntity);
+
+	if (!existingEntity->estaViva()) {
+		this->eliminarEntity(existingEntity);
 	}
 
 	this->updated = true;
+}
+
+void ClientGameController::eliminarEntity(Entity* entityToDelete){
+	// Si estaba seleccionado, lo deselecciono
+	list<Entity*>::iterator it;
+	for (it = this->selectedEntities.begin(); it != this->selectedEntities.end(); it++) {
+		Entity* selectedEntity = *it;
+		if (selectedEntity->getId() == entityToDelete->getId()) {
+			this->selectedEntities.erase(it);
+		}
+	}
+	this->escenarioView->removeEntityViewForId(entityToDelete->getId());
+	this->miniEscenarioView->removeEntityMiniViewForId(entityToDelete->getId());;
+
+	this->escenario->eliminarEntidadConID(entityToDelete->getId());
 }
 
 void ClientGameController::configEscenario(const string path) {
@@ -793,10 +825,10 @@ void ClientGameController::createEntityButtonPressed(string entityName) {
 	Log().Get(TAG) << "y crea una unidad en ("<<tilePoint.x<<","<<tilePoint.y<<")";
 
 
-	Entity *tempEntity = this->escenario->factory->crearEntidadParaConstruir(entityName,tilePoint,selectedEntity->getTeamString());
+	Entity *tempEntityMobile = this->escenario->factory->crearEntidadParaConstruir(entityName,tilePoint,selectedEntity->getTeamString());
 
-	this->mensajero->construir(tempEntity);
-	delete tempEntity;
+	this->mensajero->construir(tempEntityMobile);
+	delete tempEntityMobile;
 }
 
 //libera las cosas que usa para la construccion
@@ -812,7 +844,3 @@ void ClientGameController::limpiarConstruccion(){
 	}
 	this->renderer->setFutureBuildingView(NULL);
 }
-
-//void ClientGameController::actualizarRecursos(User* auxUser){
-//	this->usuario->update(auxUser);
-//}

@@ -23,6 +23,7 @@ public:
 	void render(Renderer* renderer);
 	void addEntityMiniView(MiniView* miniview);
 	list<MiniView*>* getEntitiesMiniView();
+	void removeEntityMiniViewForId(int id);
 
 private:
 	MiniMapView *miniMapView;

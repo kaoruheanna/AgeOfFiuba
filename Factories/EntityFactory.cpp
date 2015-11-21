@@ -145,3 +145,12 @@ bool EntityFactory::esBuilding(const string& tipo) {
 
 	return (this->tipos[tipo].getCategoria() == "building");
 }
+
+bool EntityFactory::esMobileModel(const string& tipo) {
+	if (tipo == ""){
+		return false;
+	}
+	string categoria = this->tipos[tipo].getCategoria();
+
+	return ((categoria == "warrior") || (categoria == "worker"));
+}

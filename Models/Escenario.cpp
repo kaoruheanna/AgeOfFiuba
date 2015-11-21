@@ -37,18 +37,15 @@ void Escenario::init() {
 		int indice = 0;
 		for (configEntidad = configs.begin();
 				configEntidad != configs.end(); ++configEntidad) {
-			Entity* entidad = this->crearEntidad(*configEntidad);
+			Entity* entidad = this->crearEntidadFromConfig(*configEntidad);
 			if (entidad == NULL) {
 				Log().Get("Escenario", logWARNING) << "La entidad N° "
 						<< indice << " del escenario " << this->name
 						<< " no pudo ser creada.";
 			} else {
 				bool agregado = false;
-				if(entidad->getClass() == MOBILE_MODEL){
-					agregado = this->agregarEntidad(entidad);
-				} else {
-					agregado = this->construirEntidad(entidad, entidad->getPosicion());
-				}
+				agregado = this->guardarEntidad(entidad);
+
 				if (!agregado) {
 					delete entidad;
 					Log().Get("Escenario", logWARNING) << "La entidad N° "
@@ -78,8 +75,6 @@ void Escenario::init() {
 		delete this->mundo;
 		this->mundo = NULL;
 	}
-	//Inicializar resources Manager
-	this->resourcesManager = new ResourcesManager(this);
 }
 
 Escenario::Escenario(EscenarioConfig config, list<TipoConfig> tipos) :  escenarioConfig(config), tiposConfigList(tipos){
@@ -99,27 +94,21 @@ string Escenario::toString(){
 	return n.append(this-> name);
 }
 
-bool Escenario::agregarEntidad(Entity* entidad){
-	this->entidadesAgregadas.push_back(entidad);
-	this->entidades.push_back(entidad);
-	return true;
-}
-
-bool Escenario::construirEntidad(Entity* entidad,SDL_Point origenLogico){
+bool Escenario::guardarEntidad(Entity* entidad){
 	list<TileCoordinate> tilesOccupied = this->tilesOcupadasPorMobileModels(NULL);
 
-	SDL_Point tilePos = this->mundo->getTileForPosition(origenLogico);
+	SDL_Point tilePos = this->mundo->getTileForPosition(entidad->getPosicion());
 	if (!this->mundo->puedoConstruir(entidad,tilePos,&tilesOccupied)){
 		// no puedo construir porque esta ocupado alguno de los tiles
 		return false;
 	}
 
-	entidad->setPosicion(origenLogico);
-	this->agregarEntidad(entidad);
+	this->entidadesAgregadas.push_back(entidad);
+	this->entidades.push_back(entidad);
 
 	if (entidad->getClass() != MOBILE_MODEL){
 		//si no es un mobile model setea los tiles como ocupados
-		this->mundo->construirEntidad(entidad,origenLogico,&tilesOccupied);
+		this->mundo->construirEntidad(entidad,entidad->getPosicion(),&tilesOccupied);
 	}
 	return true;
 }
@@ -163,12 +152,13 @@ bool Escenario::existeRecursoConID(int id) {
 //Devuelve true si lo pudo borrar
 bool Escenario::eliminarEntidadConID(int id) {
 	list<Entity*>::iterator entidad;
-	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
+	for (entidad = this->entidades.begin(); entidad != this->entidades.end(); ++entidad) {
 		Entity* entidadReal = (*entidad);
 		if (entidadReal->getId() == id) {
-				this->mundo->sacarEntidad(entidadReal);
-				entidades.erase(entidad);
-				return true;
+			this->mundo->sacarEntidad(entidadReal);
+			this->entidades.erase(entidad);
+			delete entidadReal;
+			return true;
 		}
 	}
 	return false;
@@ -329,7 +319,7 @@ int Escenario::getDistancia(Entity* from, Entity* to) {
 	return this->mundo->getDistancia(from,to);
 }
 
-Entity* Escenario::crearEntidad(EntidadConfig config) {
+Entity* Escenario::crearEntidadFromConfig(EntidadConfig config) {
 	SDL_Point posicion = {config.getX(), config.getY()};
 	string tipo = config.getTipo();
 	return factory->crearEntidad(tipo, posicion, config.getEquipo());
@@ -401,7 +391,7 @@ list<Team> Escenario::getTeams() {
 list<MobileModel*> Escenario::getMobileModels() {
 	list<MobileModel*> mobileModels;
 	list<Entity*>::iterator entidad;
-	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
+	for (entidad = this->entidades.begin(); entidad != this->entidades.end(); ++entidad) {
 		Entity* entity = (*entidad);
 		if(entity->getClass() == MOBILE_MODEL){
 			mobileModels.push_back((MobileModel*)entity);
@@ -461,12 +451,20 @@ list<Entity*> Escenario::getEntidadesEnAreaForJugador(SDL_Point posInicial, SDL_
 	return listaDeEntidadesMobiles;
 }
 
-void Escenario::agregarEntidad(const string& tipo, SDL_Point posicion,const string& equipo) {
+Entity* Escenario::crearYAgregarNuevaEntidad(const string& tipo, LogicPosition logicPosition,const string& equipo,bool aumentarID) {
+	SDL_Point posicion = {logicPosition.first,logicPosition.second};
 	SDL_Point tile = this->mundo->getTileForPosition(posicion);
-	Entity* entity = this->factory->crearEntidad(tipo,tile,equipo);
-	this->construirEntidad(entity, entity->getPosicion());
-	//SI no la construye deberia liberar memoria?
 
+	Entity* newEntity = this->factory->crearEntidad(tipo,tile,equipo,aumentarID);
+	//si no la puede construir porque no hay lugar la elimino y "falla" silenciosamente
+	if (!this->puedeConstruirEntidad(newEntity,newEntity->getPosicion())){
+		Log().Get(TAG) << "No se pudo crear la entidad porque no habia espacio"<<tipo;
+		delete newEntity;
+		return NULL;
+	}
+
+	this->guardarEntidad(newEntity);
+	return newEntity;
 }
 
 bool Escenario::posicionValida(SDL_Point posicion){

@@ -48,4 +48,18 @@ list<View*>* EscenarioView::getEntitiesView() {
 	return &(this->entitiesViews);
 }
 
+void EscenarioView::removeEntityViewForId(int id) {
+	list<View*>::iterator it;
+	for (it = this->entitiesViews.begin(); it != this->entitiesViews.end();it++){
+		View *view = *it;
+		if (view->hasModelWithId(id)){
+			this->entitiesViews.erase(it);
+			delete view;
+			return;
+		}
+	}
+}
+
+
+
 
