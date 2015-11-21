@@ -18,9 +18,7 @@ enum MensajeType {
 	MOVER_PERSONAJE, /* Cliente => Servidor: Mover su personaje a la posicion */
 	INTERACTUAR, /* Cliente => Servidor: Interactuar una entidad con otra */
 	APARECE_PERSONAJE, /* Servidor => Cliente: Indica la posicion y estado de un personaje */
-	APARECE_RECURSO, /* Servidor => Cliente: Indica que hay un recurso y en que posicion */
 	ACTUALIZA_ENTIDAD, /* Servidor => Cliente: Indica que hay una actualizacion en una entity */
-	DESAPARECE_RECURSO, /* Servidor => Cliente: Indica que se consumio un recurso */
 	PING, /* Para probar si el servidor / cliente esta conectado */
 	ERROR_MAXIMOS_EQUIPOS, /* Servidor => Cliente: No se puede loguear porque todos los equipos estan tomados */
 	CAMBIO_USUARIO, /* Servidor => Cliente: Indica cuando un valor de un usuario cambio o cuando aparece un nuevo usuario */

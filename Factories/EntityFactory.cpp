@@ -78,13 +78,13 @@ int getId(bool reset) {
 	return id;
 }
 
-Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion, bool aumentarID) {
+Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point tile, bool aumentarID) {
 	int id = (aumentarID) ? getId(false) : 0;
 	if (tipo == "") {
 		Log().Get(TAG, logWARNING) << "La entidad tiene que tener un tipo. Descartando entidad.";
 		return NULL;
 	}
-	SDL_Point pos = this->getPositionForTile(tipo,posicion,(this->tipos[tipo].getCategoria() == "warrior"));
+	SDL_Point pos = this->getPositionForTile(tipo,tile,(this->tipos[tipo].getCategoria() == "warrior"));
 	SDL_Point size = this->getSize(tipo);
 
 	Entity* returnEntity = NULL;
@@ -110,8 +110,8 @@ Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion, bool
 	return new Entity(id,tipo, pos, size.x, size.y);
 }
 
-Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point posicion, const string& equipo, bool aumentarID) {
-	Entity* entidad = this->crearEntidad(tipo, posicion,aumentarID);
+Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point tile, const string& equipo, bool aumentarID) {
+	Entity* entidad = this->crearEntidad(tipo, tile,aumentarID);
 	if(equipo.compare(NOMBRE_EQUIPO_RED) == 0){
 		entidad->setTeam(TEAM_RED);
 
@@ -144,4 +144,13 @@ bool EntityFactory::esBuilding(const string& tipo) {
 	}
 
 	return (this->tipos[tipo].getCategoria() == "building");
+}
+
+bool EntityFactory::esMobileModel(const string& tipo) {
+	if (tipo == ""){
+		return false;
+	}
+	string categoria = this->tipos[tipo].getCategoria();
+
+	return ((categoria == "warrior") || (categoria == "worker"));
 }

@@ -26,6 +26,7 @@ public:
 	void setOrigin(int x, int y);
 	virtual SDL_Point getOrigin();
 	std::string getType();
+	virtual bool hasModelWithId(int id);
 
 protected:
 	SDL_Point origin;
