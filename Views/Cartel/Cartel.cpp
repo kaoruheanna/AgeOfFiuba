@@ -21,6 +21,7 @@ Cartel::Cartel(int x, int y) {
 
 Cartel::~Cartel() {
 	delete this->label;
+	this->label = NULL;
 }
 
 void Cartel::render(Renderer* renderer) {

@@ -389,7 +389,7 @@ bool ClientGameController::play() {
 }
 
 void ClientGameController::close() {
-	if (this->renderer){
+	if (this->renderer != NULL){
 		this->renderer->close();
 		delete this->renderer;
 	}

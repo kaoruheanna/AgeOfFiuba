@@ -47,7 +47,7 @@ Renderer::Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos) {
 
 Renderer::~Renderer() {
 	// TODO Auto-generated destructor stub
-	this->close();
+	// this->close();
 }
 
 bool Renderer::initSDL() {
