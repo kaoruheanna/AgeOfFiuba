@@ -106,3 +106,7 @@ MotionDirection MobileView::getMotionDirection() {
 
 	return this->animationStatus.direction;
 }
+
+bool MobileView::hasModelWithId(int id) {
+	return (this->model && (this->model->getId() == id));
+}

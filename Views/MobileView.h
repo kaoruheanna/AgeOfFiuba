@@ -20,6 +20,7 @@ public:
 	Drawable* getDrawable();
 	MotionDirection getMotionDirection();
 	void render(Renderer* renderer);
+	bool hasModelWithId(int id);
 
 protected:
 	SDL_Point getOrigin();

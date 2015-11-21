@@ -21,6 +21,7 @@
 const std::string TAG = "Renderer";
 const std::string SUFIJO_FUTURE_BUILDING = "-future";
 const std::string SUFIJO_BUILDING_INCOMPLETE = "-incompleto";
+const std::string SUFIJO_INTERACTUANDO = "-interactuando";
 
 Renderer::Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos) {
 	this->window = NULL;
@@ -135,7 +136,7 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 			  bool textureLoaded = nodoDrawable->loadTextureFromFile(tipo.getImagenInteractuando(), this->sdlRenderer);
 			  if(textureLoaded){
 				  this->drawablesByInstanceName.insert(
-						  std::pair<std::string,Drawable*>(tipo.getNombre() + "-interactuando", nodoDrawable));
+						  std::pair<std::string,Drawable*>(tipo.getNombre() + SUFIJO_INTERACTUANDO, nodoDrawable));
 			  } else {
 				  Log().Get(TAG,logWARNING) << "Tipo N°" << i << " no se pudo cargar la imagen de la interaccion.";
 			  }
@@ -650,7 +651,7 @@ void Renderer::setDrawableForView(View* view){
 	}
 	view->setDrawableDeshabilitado(drawable);
 	//Find interaction drawable
-	found = this->drawablesByInstanceName.find(view->getType() + "-interactuando");
+	found = this->drawablesByInstanceName.find(view->getType() + SUFIJO_INTERACTUANDO);
 	if(found != this->drawablesByInstanceName.end()){
 		drawable = found->second;
 	}

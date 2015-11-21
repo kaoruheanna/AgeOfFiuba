@@ -60,6 +60,17 @@ void EscenarioView::removeEntityViewForId(int id) {
 	}
 }
 
+bool EscenarioView::hasViewForEntityWithId(int id){
+	list<View*>::iterator it;
+	for (it = this->entitiesViews.begin(); it != this->entitiesViews.end();it++){
+		View *view = *it;
+		if (view->hasModelWithId(id)){
+			return true;
+		}
+	}
+	return false;
+}
+
 
 
 
