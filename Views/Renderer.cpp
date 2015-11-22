@@ -19,6 +19,7 @@
 #include "FutureBuildingView.h"
 
 const std::string TAG = "Renderer";
+const std::string SUFIJO_FUTURE_BUILDING = "-future";
 
 Renderer::Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos) {
 	this->window = NULL;
@@ -161,6 +162,20 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 		  }
 	  }
 	  i++;
+	}
+
+	//creo los drawables para future building
+	for (list<TipoConfig>::iterator it = tipos.begin(); it != tipos.end(); ++it) {
+		TipoConfig tipo = *it;
+		if (tipo.getCategoria() == "building"){
+			Drawable *nodoDrawable = this->getDrawableFromTipoConfig(tipo);
+			bool textureLoaded = nodoDrawable->loadTextureFromFile(tipo.getImagen(), this->sdlRenderer);
+			 if(textureLoaded){
+				 string nombre = tipo.getNombre()+SUFIJO_FUTURE_BUILDING;
+				 Log().Get(TAG) << "guardo:"<<nombre;
+				 this->drawablesByInstanceName.insert(pair<string,Drawable*>(nombre,nodoDrawable));
+			}
+		}
 	}
 
 	bool minimapSuccess = this->loadMediaForMiniMap(&tipos);
@@ -843,9 +858,18 @@ bool Renderer::isPixelInRect(int x, int y, SDL_Rect rect){
 
 void Renderer::setFutureBuildingView(FutureBuildingView *futureBuildingView) {
 	this->futureBuildingView = futureBuildingView;
-	if (this->futureBuildingView){
-		this->setDrawableForView(this->futureBuildingView);
+	if (!this->futureBuildingView){
+		return;
 	}
+	string nombre = this->futureBuildingView->getType()+SUFIJO_FUTURE_BUILDING;
+	std::map<std::string,Drawable *>::iterator found = this->drawablesByInstanceName.find(nombre);
+	Drawable* drawable = NULL;
+	if(found != this->drawablesByInstanceName.end()){
+		drawable = found->second;
+	} else {
+		drawable = this->missingImageDrawable;
+	}
+	futureBuildingView->setDrawable(drawable);
 }
 
 void Renderer::drawSelectionRect(){
