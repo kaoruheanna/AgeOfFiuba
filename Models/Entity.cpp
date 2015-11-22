@@ -237,8 +237,19 @@ int Entity::getEscudo() {
 	return this->propiedadesTipoUnidad.escudo;
 }
 
+
+int Entity::getEscudoDistancia() {
+	return this->propiedadesTipoUnidad.escudoDistancia;
+}
+
 int Entity::vidaDescontada(Entity* entity) {
-	int escudo = this->getEscudo() ? (rand() % this->getEscudo()) : 0;
+	int escudo = 0;
+	if (entity->getAlcance()>1) {
+		escudo = this->getEscudoDistancia() ? (rand() % this->getEscudoDistancia()) : 0;
+	} else {
+		escudo = this->getEscudo() ? (rand() % this->getEscudo()) : 0;
+	}
+
 	int ataque = entity->getPoderAtaque() ? (rand() % entity->getPoderAtaque()) : 0;
 	int vidaDescontada = ataque - escudo;
 	return (vidaDescontada > 0) ? vidaDescontada : 0;

@@ -52,6 +52,7 @@ tipos:
    - aldeano
    vida_inicial: 10000
    escudo: 1
+   escudo_distancia: 10
    costo_oro: 1
    costo_piedra: 5
    costo_arbol: 10
@@ -279,7 +280,7 @@ tipos:
    ancho_frame: 200
    alto_frame: 145
    vida_inicial: 1000
-
+   escudo_distancia: 10
 
 escenario:
  - nombre: orleans

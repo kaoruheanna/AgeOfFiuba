@@ -294,7 +294,7 @@ bool ClientGameController::pollEvents(){
 			}
 		}
 
-		if( e.type == SDL_MOUSEMOTION && !this->serverError){
+		if( e.type == SDL_MOUSEBUTTONDOWN && !this->serverError){
 			bool leftClick = (e.button.button == SDL_BUTTON_LEFT);
 			if (this->mouseDown){
 				int x,y;

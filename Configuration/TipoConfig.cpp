@@ -59,6 +59,8 @@ TipoConfig::TipoConfig(YAML::Node nodo): TipoConfig(){
 	this->propiedadesTipoUnidad.poderAtaque = TipoConfig::getIntAttribute(nodo, "poder_ataque", this->propiedadesTipoUnidad.poderAtaque);
 	this->propiedadesTipoUnidad.vidaInicial = TipoConfig::getIntAttribute(nodo, "vida_inicial", this->propiedadesTipoUnidad.vidaInicial);
 	this->propiedadesTipoUnidad.escudo = TipoConfig::getIntAttribute(nodo, "escudo", this->propiedadesTipoUnidad.escudo);
+	this->propiedadesTipoUnidad.escudoDistancia = TipoConfig::getIntAttribute(nodo, "escudo_distancia", this->propiedadesTipoUnidad.escudoDistancia);
+
 	this->costoConstruccion.costoArbol = TipoConfig::getIntAttribute(nodo, "costo_arbol", this->costoConstruccion.costoArbol);
 	this->costoConstruccion.costoPiedra = TipoConfig::getIntAttribute(nodo, "costo_piedra", this->costoConstruccion.costoPiedra);
 	this->costoConstruccion.costoOro = TipoConfig::getIntAttribute(nodo, "costo_oro", this->costoConstruccion.costoOro);

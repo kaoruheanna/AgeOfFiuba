@@ -22,8 +22,9 @@ StatusMenu::StatusMenu(int x, int y, int width, int height) {
 	this->entityNameLabel = new TextLabel(x+60,y);
 	this->entityTeamLabel = new TextLabel(x+60,y+20);
 	this->remainingLifeLabel = new TextLabel(x+60,y+40);
-	this->specialFeatureLabel = new TextLabel(x+5,y+60);
-	this->constructionProgressLabel = new TextLabel(x+5,y+80);
+	this->attackFeatureLabel = new TextLabel(x+5,y+60);
+	this->defenseFeatureLabel = new TextLabel(x+5,y+80);
+	this->constructionProgressLabel = new TextLabel(x+5,y+100);
 	this->entityStatusIcon = NULL;
 	this->entityClicked = NULL;
 	this->currentEntityName = "";
@@ -35,7 +36,8 @@ StatusMenu::~StatusMenu() {
 	delete this->entityNameLabel;
 	delete this->entityTeamLabel;
 	delete this->remainingLifeLabel;
-	delete this->specialFeatureLabel;
+	delete this->attackFeatureLabel;
+	delete this->defenseFeatureLabel;
 	delete this->constructionProgressLabel;
 }
 
@@ -49,10 +51,10 @@ void StatusMenu::actualizarVida(){
 
 void StatusMenu::actualizarProgreso(){
 	if (this->entityClicked->getProgresoConstruccion() < PROGRESO_COMPLETO){
+			int currentPercentage = (((this->entityClicked->getProgresoConstruccion())*100)/PROGRESO_COMPLETO);
 			this->constructionProgressLabel->setMessage("Porcentaje Terminado: "
-					+ this->convertIntToString(this->entityClicked->getProgresoConstruccion())
-					+ " / "
-					+ this->convertIntToString(PROGRESO_COMPLETO));
+					+ this->convertIntToString(currentPercentage)
+					+ "%");
 		}
 		else{
 			this->constructionProgressLabel->setMessage("");
@@ -77,7 +79,8 @@ void StatusMenu::render(Renderer* renderer) {
 		this->entityTeamLabel->render(renderer);
 		this->actualizarVida();
 		this->remainingLifeLabel->render(renderer);
-		this->specialFeatureLabel->render(renderer);
+		this->attackFeatureLabel->render(renderer);
+		this->defenseFeatureLabel->render(renderer);
 		this->actualizarProgreso();
 		this->constructionProgressLabel->render(renderer);
 	}
@@ -114,6 +117,7 @@ string StatusMenu::convertIntToString(int number) {
 void StatusMenu::setSpecialFeatures() {
 
 	//FEATURE PODER DE ATAQUE Y ESCUDO
+	/*
 	if (this->entityClicked->getEscudo() > 0) {
 		this->specialFeatureLabel->setMessage(
 				"Escudo: " + (this->convertIntToString(this->entityClicked->getEscudo())));
@@ -124,8 +128,17 @@ void StatusMenu::setSpecialFeatures() {
 	} else {
 		this->specialFeatureLabel->setMessage("");
 	}
-
-
+*/
+	this->attackFeatureLabel->setMessage(
+					"Poder De Ataque: " +
+					(this->convertIntToString(this->entityClicked->getPoderAtaque())) +
+					" Alcance: " +
+					(this->convertIntToString(this->entityClicked->getAlcance())));
+	this->defenseFeatureLabel->setMessage(
+						"Escudo: " +
+						(this->convertIntToString(this->entityClicked->getEscudo())) +
+						" Escudo a Distancia: " +
+						(this->convertIntToString(this->entityClicked->getEscudoDistancia())));
 	//FEATURE POGRESO DE LA CONSTRUCCION
 	this->actualizarProgreso();
 }
@@ -167,7 +180,8 @@ void StatusMenu::setStatusBlank(){
 	this->entityNameLabel->setMessage("");
 	this->entityTeamLabel->setMessage("");
 	this->remainingLifeLabel->setMessage("");
-	this->specialFeatureLabel->setMessage("");
+	this->attackFeatureLabel->setMessage("");
+	this->defenseFeatureLabel->setMessage("");
 	this->constructionProgressLabel->setMessage("");
 	this->currentEntityName = "";
 }

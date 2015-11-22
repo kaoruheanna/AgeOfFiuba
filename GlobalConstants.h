@@ -13,7 +13,7 @@
 const int DELAY_MILISEC = 20; //50 frames por segundo
 const int PROTAGONISTA_SPEED = 5;
 const int SCROLL_SPEED = 20;
-const int MENU_HEIGHT = 130;
+const int MENU_HEIGHT = 150;
 const int MENU_SPACING = 10;
 const int TOP_BAR_HEIGHT = 30;
 const int CARTEL_WIDTH = 300;
