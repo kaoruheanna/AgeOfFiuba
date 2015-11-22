@@ -16,6 +16,7 @@ public:
 	Building(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base);
 	Building();
 	virtual ~Building();
+	virtual EntityType getClass();
 
 	virtual void interact(Entity* entity);
 	virtual void receiveInteraction(Warrior* entity);

@@ -14,12 +14,11 @@ EntityView::EntityView(std::string type): View(type) {
 	this->model = NULL;
 	SDL_Point pr = {0,0};
 	this->pixelRef = pr;
+	this->construccionIncompletaDrawable = NULL;
 }
 
 EntityView::~EntityView() {
-	// TODO destruir view.
 	this->model = NULL;
-
 }
 
 void EntityView::setModel(Entity *model) {
@@ -35,6 +34,10 @@ SDL_Point EntityView::getOrigin(){
 }
 
 Drawable* EntityView::getDrawable(){
+	if (!(this->model->esProgresoCompleto()) && this->construccionIncompletaDrawable){
+		return this->construccionIncompletaDrawable;
+	}
+
 	if (this->model->isInteracting()){
 		return this->drawable;
 	}else{
@@ -53,3 +56,10 @@ bool EntityView::hasModelWithId(int id) {
 	return (this->model && (this->model->getId() == id));
 }
 
+bool EntityView::isBuildingView() {
+	return (this->model && this->model->esBuilding());
+}
+
+void EntityView::setConstruccionIncompletaDrawable(Drawable *drawable){
+	this->construccionIncompletaDrawable = drawable;
+}

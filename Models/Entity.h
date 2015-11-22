@@ -23,7 +23,8 @@ using namespace std;
 enum EntityType {
 	ENTITY,
 	MOBILE_MODEL,
-	RESOURCE
+	RESOURCE,
+	BUILDING
 };
 
 enum Team {
@@ -104,11 +105,8 @@ public:
 	void resetResourcesGathered();
 	bool hasGatheredResources();
 	Entity* getActiveInteractionEntity();
+	bool esBuilding();
 	bool esMobileModel();
-//	int getCostoOro();
-//	int getCostoPiedra();
-//	int getCostoComida();
-//	int getCostoArbol();
 	void setCostoConstruccion(CostoConstruccion costo);
 	CostoConstruccion getCostoConstruccion();
 

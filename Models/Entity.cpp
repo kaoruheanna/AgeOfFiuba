@@ -270,21 +270,9 @@ bool Entity::esMobileModel(){
 	return (this->getClass() == MOBILE_MODEL);
 }
 
-//int Entity::getCostoOro() {
-//	return this->costoOro;
-//}
-//
-//int Entity::getCostoArbol() {
-//	return this->costoArbol;
-//}
-//
-//int Entity::getCostoPiedra() {
-//	return this->costoPiedra;
-//}
-//
-//int Entity::getCostoComida() {
-//	return this->costoComida;
-//}
+bool Entity::esBuilding(){
+	return (this->getClass() == BUILDING);
+}
 
 void Entity::setCostoConstruccion(CostoConstruccion costo){
 	this->costoConstruccion = costo;

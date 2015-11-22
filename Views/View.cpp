@@ -27,7 +27,11 @@ View::~View() {
 	this->animationStatus.isInteracting = NULL; //TODO ver si es necesario
 }
 
+//solo lo usan los mobileviews
 void View::setDrawableDeshabilitado(Drawable *drawable) {
+}
+//solo lo usan los entitiesViews
+void View::setConstruccionIncompletaDrawable(Drawable *drawable) {
 }
 
 void View::render(Renderer* renderer ) {
@@ -62,5 +66,9 @@ Drawable* View::getDrawable(){
 }
 
 bool View::hasModelWithId(int id) {
+	return false;
+}
+
+bool View::isBuildingView() {
 	return false;
 }

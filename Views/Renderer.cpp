@@ -20,6 +20,7 @@
 
 const std::string TAG = "Renderer";
 const std::string SUFIJO_FUTURE_BUILDING = "-future";
+const std::string SUFIJO_BUILDING_INCOMPLETE = "-incompleto";
 
 Renderer::Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos) {
 	this->window = NULL;
@@ -164,16 +165,23 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 	  i++;
 	}
 
-	//creo los drawables para future building
+	//creo los drawables para future building e incompleto
 	for (list<TipoConfig>::iterator it = tipos.begin(); it != tipos.end(); ++it) {
 		TipoConfig tipo = *it;
 		if (tipo.getCategoria() == "building"){
-			Drawable *nodoDrawable = this->getDrawableFromTipoConfig(tipo);
-			bool textureLoaded = nodoDrawable->loadTextureFromFile(tipo.getImagen(), this->sdlRenderer);
-			 if(textureLoaded){
+			Drawable *futureDrawable = this->getDrawableFromTipoConfig(tipo);
+			bool textureLoaded = futureDrawable->loadTextureFromFile(tipo.getImagen(), this->sdlRenderer);
+			if(textureLoaded){
 				 string nombre = tipo.getNombre()+SUFIJO_FUTURE_BUILDING;
-				 Log().Get(TAG) << "guardo:"<<nombre;
-				 this->drawablesByInstanceName.insert(pair<string,Drawable*>(nombre,nodoDrawable));
+				 this->drawablesByInstanceName.insert(pair<string,Drawable*>(nombre,futureDrawable));
+			}
+
+			Drawable *incompletoDrawable = this->getDrawableFromTipoConfig(tipo);
+			textureLoaded = incompletoDrawable->loadTextureFromFile(tipo.getImagen(), this->sdlRenderer);
+			if(textureLoaded){
+				SDL_SetTextureAlphaMod(incompletoDrawable->getTexture(),80);
+				string nombre = tipo.getNombre()+SUFIJO_BUILDING_INCOMPLETE;
+				this->drawablesByInstanceName.insert(pair<string,Drawable*>(nombre,incompletoDrawable));
 			}
 		}
 	}
@@ -647,6 +655,12 @@ void Renderer::setDrawableForView(View* view){
 		drawable = found->second;
 	}
 	view->setInteractingDrawable(drawable);
+
+	found = this->drawablesByInstanceName.find(view->getType() + SUFIJO_BUILDING_INCOMPLETE);
+	if(found != this->drawablesByInstanceName.end()){
+		drawable = found->second;
+	}
+	view->setConstruccionIncompletaDrawable(drawable);
 }
 
 // MINIMAP

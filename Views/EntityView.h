@@ -19,6 +19,8 @@ public:
 	void render(Renderer* renderer);
 	Drawable* getDrawable();
 	bool hasModelWithId(int id);
+	bool isBuildingView();
+	void setConstruccionIncompletaDrawable(Drawable *drawable);
 
 protected:
 	SDL_Point getOrigin();
@@ -26,6 +28,7 @@ protected:
 private:
 	Entity* model;
 	SDL_Point pixelRef;
+	Drawable* construccionIncompletaDrawable;
 };
 
 #endif /* ENTITYVIEW_H_ */

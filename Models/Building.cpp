@@ -24,6 +24,10 @@ Building::Building() : Entity(0,"", {0, 0}, 1, 1) {
 
 Building::~Building() {}
 
+EntityType Building::getClass() {
+	return BUILDING;
+}
+
 void Building::interact(Entity* entity) {
 	entity->receiveInteraction(this);
 }
