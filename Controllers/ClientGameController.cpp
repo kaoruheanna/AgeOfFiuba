@@ -87,23 +87,43 @@ void ClientGameController::agregarVistasParaPersonaje(MobileModel* personaje) {
 }
 
 void ClientGameController::actualizarEntidades(list<Entity*> entidades) {
-	this->escenarioView->getEntitiesView()->clear();
-	this->miniEscenarioView->getEntitiesMiniView()->clear();
-	// Agrego todas las entidades
-	list<Entity*>::iterator entidad;
-	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
-		Entity* entidadReal = (*entidad);
-		switch(entidadReal->getClass()){
-			case MOBILE_MODEL:
+	bool updated = false;
+	for (list<Entity*>::iterator it = entidades.begin(); it != entidades.end(); it++) {
+		Entity *entidadReal = *it;
+		if (!this->escenarioView->hasViewForEntityWithId(entidadReal->getId())){
+			Log().Get(TAG)<<"Agrego vista para entidad:"<<entidadReal->getId();
+			if (entidadReal->esMobileModel()){
 				this->agregarVistasParaPersonaje((MobileModel*)entidadReal);
-				break;
-			default:
+			} else {
 				this->agregarVistasParaEntidad(entidadReal);
+			}
+			updated = true;
 		}
 	}
-	// Refrescar las vistas
-	this->renderer->updatedEscenario();
-	this->renderer->updatedMiniEscenario();
+
+	if (updated){
+		// Refrescar las vistas
+		this->renderer->updatedEscenario();
+		this->renderer->updatedMiniEscenario();
+	}
+
+//	this->escenarioView->getEntitiesView()->clear();
+//	this->miniEscenarioView->getEntitiesMiniView()->clear();
+	// Agrego todas las entidades
+//	list<Entity*>::iterator entidad;
+//	for (entidad = entidades.begin(); entidad != entidades.end(); ++entidad) {
+//		Entity* entidadReal = (*entidad);
+//		switch(entidadReal->getClass()){
+//			case MOBILE_MODEL:
+//				this->agregarVistasParaPersonaje((MobileModel*)entidadReal);
+//				break;
+//			default:
+//				this->agregarVistasParaEntidad(entidadReal);
+//		}
+//	}
+//	// Refrescar las vistas
+//	this->renderer->updatedEscenario();
+//	this->renderer->updatedMiniEscenario();
 }
 
 void ClientGameController::initMap(){

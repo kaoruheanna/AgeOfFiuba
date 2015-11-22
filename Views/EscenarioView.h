@@ -24,6 +24,7 @@ public:
 	MapView* getMapView();
 	list<View*>* getEntitiesView();
 	void removeEntityViewForId(int id);
+	bool hasViewForEntityWithId(int id);
 
 private:
 	MapView *mapView;
