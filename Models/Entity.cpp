@@ -98,6 +98,10 @@ void Entity::setProgresoConstruccion(int progreso) {
 	this->progresoConstruccion = progreso;
 }
 
+bool Entity::esProgresoCompleto() {
+	return (this->progresoConstruccion >= PROGRESO_COMPLETO);
+}
+
 int Entity::getAnchoBase(){
 	return this->ancho_base;
 }

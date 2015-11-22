@@ -86,6 +86,7 @@ public:
 	SDL_Point getPosicion();//devuelve la posicion logica
 	int getProgresoConstruccion();
 	void setProgresoConstruccion(int progreso);
+	bool esProgresoCompleto();
 	int getAnchoBase();
 	int getAltoBase();
 	string getNombre();
