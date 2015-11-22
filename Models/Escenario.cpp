@@ -259,7 +259,6 @@ void Escenario::loop() {
 				} else {
 					Log().Get(TAG) << "Le seteo un nuevo camino de tamanio " << camino.size();
 
-
 					//Por las dudas para que no se quede iterando en este else
 					recalculoCount[model->getId()]++;
 					if(recalculoCount[model->getId()] < 10) {

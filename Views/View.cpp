@@ -16,7 +16,6 @@ View::View(std::string name) {
 	this->animationStatus.direction = MotionDirection(0);
 	this->animationStatus.animationIndex = 0;
 	this->animationStatus.isMoving = false;
-	this->animationStatus.isInteracting = false;
 }
 
 View::~View() {
@@ -24,7 +23,6 @@ View::~View() {
 	this->interactingDrawable = NULL;
 	this->animationStatus.animationIndex = 0;
 	this->animationStatus.isMoving = NULL;
-	this->animationStatus.isInteracting = NULL; //TODO ver si es necesario
 }
 
 void View::setDrawableDeshabilitado(Drawable *drawable) {

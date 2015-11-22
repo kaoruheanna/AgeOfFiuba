@@ -235,7 +235,7 @@ void Entity::stopInteracting() {
 }
 
 void Entity::interact(Entity* entity){
-	this->state = STATE_INTERACTING; //TODO si la interaccion falla no deberia interactuar
+	//this->state = STATE_INTERACTING; //TODO si la interaccion falla no deberia interactuar
 	//el seteo no es mutuo
 	this->activeInteractionEntity = entity;
 }

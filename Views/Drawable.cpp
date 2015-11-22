@@ -86,12 +86,11 @@ void Drawable::free(){
 void Drawable::animate(AnimationStatus status){
 }
 
-AnimationStatus Drawable::getAnimation(MotionDirection currentDirection, bool currentlyMoving, bool currentlyInteracting, AnimationStatus lastStatus){
+AnimationStatus Drawable::getAnimation(MotionDirection currentDirection, bool currentlyMoving, AnimationStatus lastStatus){
 	AnimationStatus nextStatus;
 	nextStatus.direction = SOUTH;
 	nextStatus.animationIndex = 0;
 	nextStatus.isMoving = false;
-	nextStatus.isInteracting = false;
 	return nextStatus;
 }
 
