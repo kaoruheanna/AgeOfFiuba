@@ -23,17 +23,17 @@ Entity::Entity(){
 	this->ancho_base = 0;
 	this->alto_base = 0;
 	this->id = -1;
-	this->life = 10;
+	this->life = 100;
 	this->activeInteractionEntity = NULL; //TODO que no sea null
 	this->progresoConstruccion = PROGRESO_COMPLETO;
-//	this->costoArbol = 0;
-//	this->costoComida = 0;
-//	this->costoOro = 0;
-//	this->costoPiedra = 0;
 	this->costoConstruccion.costoArbol = 0;
 	this->costoConstruccion.costoComida = 0;
 	this->costoConstruccion.costoOro = 0;
 	this->costoConstruccion.costoPiedra = 0;
+	this->propiedadesTipoUnidad.alcance = 1;
+	this->propiedadesTipoUnidad.escudo = 1;
+	this->propiedadesTipoUnidad.poderAtaque = 0;
+	this->propiedadesTipoUnidad.vidaInicial = 100;
 }
 
 Entity::Entity(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base){
@@ -63,14 +63,14 @@ void Entity::Init(int id, string nombre, SDL_Point posicion, int ancho_base, int
 	this->life = 100;
 	this->activeInteractionEntity = NULL;
 	this->progresoConstruccion = PROGRESO_COMPLETO;
-//	this->costoArbol = 0;
-//	this->costoComida = 0;
-//	this->costoOro = 0;
-//	this->costoPiedra = 0;
 	this->costoConstruccion.costoArbol = 0;
 	this->costoConstruccion.costoComida = 0;
 	this->costoConstruccion.costoOro = 0;
 	this->costoConstruccion.costoPiedra = 0;
+	this->propiedadesTipoUnidad.alcance = 1;
+	this->propiedadesTipoUnidad.escudo = 1;
+	this->propiedadesTipoUnidad.poderAtaque = 0;
+	this->propiedadesTipoUnidad.vidaInicial = 100;
 }
 
 Entity::~Entity(){

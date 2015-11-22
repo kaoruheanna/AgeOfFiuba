@@ -65,7 +65,7 @@ bool ActionsMenu::isPixelInButton(int x, int y, Button *button){
 }
 
 void ActionsMenu::setButtonsForSelectedEntity(Entity *selectedEntity) {
-	if (!selectedEntity){
+	if (!selectedEntity || (!selectedEntity->esProgresoCompleto())){
 		this->deleteButtons();
 		this->entityID = 0;
 		return;

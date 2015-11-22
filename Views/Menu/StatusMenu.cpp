@@ -151,11 +151,9 @@ void StatusMenu::setStatusDataForEntity(Entity* entity){
 
 	//Si la entidad esta muerta limpio el menu
 	if (!entity->estaViva()){
-			this->setStatusBlank();
-			return;
+		this->setStatusBlank();
+		return;
 	}
-
-
 
 	//Si clickeo algo seteo los parametros de icono y labels
 	this->entityClicked = entity;
