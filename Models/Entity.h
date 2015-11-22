@@ -66,6 +66,7 @@ protected:
 	Entity* activeInteractionEntity;
 	int life;
 	PropiedadesTipoUnidad propiedadesTipoUnidad;
+	int progresoConstruccion;
 
 	// Serializable methods
 	char* deserializeString(void* blockData);
@@ -82,10 +83,9 @@ public:
 
 	void setId(int id);
 	int getId();
-
-	//devuelve la posicion logica
-	SDL_Point getPosicion();
-
+	SDL_Point getPosicion();//devuelve la posicion logica
+	int getProgresoConstruccion();
+	void setProgresoConstruccion(int progreso);
 	int getAnchoBase();
 	int getAltoBase();
 	string getNombre();

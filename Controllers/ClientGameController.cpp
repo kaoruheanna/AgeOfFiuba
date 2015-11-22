@@ -479,6 +479,8 @@ void ClientGameController::actualizarEntidad(Entity* tempEntity) {
 		return;
 	}
 
+//	Log().Get(TAG) << "Progreso construccion de la entidad recibida:"<<tempEntity->getProgresoConstruccion();
+
 	Entity* existingEntity = this->escenario->entidadConId(tempEntity->getId());
 	if (existingEntity == NULL){
 		//como no existia, tengo que crearla.

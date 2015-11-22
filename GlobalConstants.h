@@ -18,6 +18,7 @@ const int MENU_SPACING = 10;
 const int TOP_BAR_HEIGHT = 30;
 const int CARTEL_WIDTH = 300;
 const int CARTEL_HEIGHT = 100;
+const int PROGRESO_COMPLETO = 100;
 
 // Configuracion para que aparezcan nuevos resources
 const bool GENERATE_RESOURCES = false;
