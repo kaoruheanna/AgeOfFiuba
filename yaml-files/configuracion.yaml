@@ -52,6 +52,10 @@ tipos:
    - aldeano
    vida_inicial: 10000
    escudo: 1
+   costo_oro: 1
+   costo_piedra: 5
+   costo_arbol: 10
+   costo_comida: 0
 
  - nombre: archeryRange
    categoria: building
@@ -101,6 +105,10 @@ tipos:
    alcance: 1
    vida_inicial: 250
    poder_ataque: 3
+   costo_oro: 1
+   costo_piedra: 0
+   costo_arbol: 0
+   costo_comida: 10
    
  - nombre: aldeano
    categoria: worker

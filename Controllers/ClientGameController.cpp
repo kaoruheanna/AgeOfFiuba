@@ -19,6 +19,7 @@
 #include "../Views/EscenarioView.h"
 #include "../Views/Menu/MiniEscenarioView.h"
 #include "../Views/Menu/MiniMapView.h"
+#include "../Utils/EscenarioSingleton.h"
 
 #include "Mensajero.h"
 
@@ -528,7 +529,8 @@ void ClientGameController::eliminarEntity(Entity* entityToDelete){
 
 void ClientGameController::configEscenario(const string path) {
 	this->config = new GameConfiguration(path);
-	this->escenario = new Escenario(this->config->getEscenario(), this->config->getTipos());
+//	this->escenario = new Escenario(this->config->getEscenario(), this->config->getTipos());
+	this->escenario = EscenarioSingleton::get(new Escenario(this->config->getEscenario(),this->config->getTipos()));
 }
 
 void ClientGameController::errorDeLogueo() {
@@ -777,6 +779,10 @@ void ClientGameController::checkSelectedInTeam(){
 void ClientGameController::createEntityButtonPressed(string entityName) {
 	this->limpiarConstruccion();
 
+	CostoConstruccion costo = this->escenario->factory->getCostoConstruccion(entityName);
+
+	Log().Get(TAG)<<"Costo-> arbol:"<<costo.costoArbol<<", comida:"<<costo.costoComida<<", piedra:"<<costo.costoPiedra<<", oro:"<<costo.costoOro;
+
 	if (this->escenario->factory->esBuilding(entityName)){
 		this->constructorPendiente = this->selectedEntities.front();
 		this->pendingEntity = this->escenario->factory->crearEntidadParaConstruir(entityName,this->constructorPendiente->getPosicion(),this->selectedEntities.front()->getTeamString());
@@ -799,12 +805,6 @@ void ClientGameController::createEntityButtonPressed(string entityName) {
 	int minY = tilesEntity.first.y;
 	int maxX = tilesEntity.second.x;
 	int maxY = tilesEntity.second.y;
-//	Log().Get(TAG) << "la entidad: "<<selectedEntity->getNombre() <<" ocupa los tiles:("<<minX<<","<<minY<<") al ("<<maxX<<","<<maxY<<")";
-//	Log().Get(TAG) << selectedEntity->getAnchoBase() <<"x"<<selectedEntity->getAltoBase();
-
-
-	Log().Get(TAG) << "y crea una unidad en ("<<tilePoint.x<<","<<tilePoint.y<<")";
-
 
 	Entity *tempEntityMobile = this->escenario->factory->crearEntidadParaConstruir(entityName,tilePoint,selectedEntity->getTeamString());
 

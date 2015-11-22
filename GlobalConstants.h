@@ -50,6 +50,12 @@ const std::string NOMBRE_CENTRO_URBANO = "centro";
 const std::string NOMBRE_REY = "rey";
 const std::string NOMBRE_BANDERA = "bandera";
 
+//recursos
+const std::string RECURSO_COMIDA = "comida";
+const std::string RECURSO_MADERA = "madera";
+const std::string RECURSO_PIEDRA = "piedra";
+const std::string RECURSO_ORO = "oro";
+
 const int  FOG_VISIBLE = 255;
 const int  FOG_VISITED = 128;
 

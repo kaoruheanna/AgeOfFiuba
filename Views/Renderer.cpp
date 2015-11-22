@@ -547,13 +547,18 @@ void Renderer::drawTextureInRect(SDL_Texture *texture,SDL_Rect rect){
 	SDL_RenderCopy(this->sdlRenderer, texture, NULL, &rect);
 }
 
-void Renderer::drawActionButtonWithNameInRect(string name, SDL_Rect rect){
+void Renderer::drawActionButtonWithNameInRect(string name, SDL_Rect rect,bool enabled){
 	std::map<std::string,Drawable *>::iterator found = this->drawablesByInstanceName.find(name);
 	Drawable* drawable = NULL;
 	if(found != this->drawablesByInstanceName.end()){
 		drawable = found->second;
 	} else {
 		drawable = this->missingImageDrawable;
+	}
+	if (enabled){
+		SDL_SetTextureColorMod(drawable->getTexture(),255,255,255 );
+	} else {
+		SDL_SetTextureColorMod(drawable->getTexture(), 84,84,84);
 	}
 	SDL_RenderCopy(this->sdlRenderer, drawable->getTexture(), NULL, &rect);
 }
@@ -709,10 +714,8 @@ FogOfWar* Renderer::getFog(){
 
 void Renderer::setProtagonista(User *protagonista) {
 	this->topBar->setProtagonista(protagonista);
+	this->screenMenu->setUser(protagonista);
 }
-
-
-
 
 void Renderer::setMessagesInMenu(Entity* entity){
 	this->screenMenu->setStatusForEntity(entity);

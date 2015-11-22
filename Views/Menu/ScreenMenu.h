@@ -17,6 +17,7 @@ class StatusMenu;
 class View;
 class ActionsMenu;
 class Entity;
+class User;
 
 class ScreenMenu {
 
@@ -28,6 +29,7 @@ public:
 	void renderMenuForEntity(Renderer* renderer,std::list<Entity *>selectedEntity);
 	void clickEvent(int x, int y, RendererInteractionDelegate *delegate);
 	void setStatusForEntity(Entity* entity);
+	void setUser(User *user);
 
 private:
 	int width;

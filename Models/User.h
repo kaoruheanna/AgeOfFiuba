@@ -31,6 +31,7 @@ public:
 
 	bool isActive();
 	void setActive(bool active);
+	bool puedePagar(CostoConstruccion costo);
 
 	bool estaJugando();
 	bool yaPerdio();

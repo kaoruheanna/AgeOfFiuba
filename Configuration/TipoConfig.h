@@ -46,6 +46,7 @@ public:
 	PropiedadesTipoUnidad getPropiedadesTipoUnidad();
 	string getCategoria();
 	list<string> getCreables();
+	CostoConstruccion getCostoConstruccion();
 
 private:
 	string nombre;
@@ -70,6 +71,7 @@ private:
 	PropiedadesTipoUnidad propiedadesTipoUnidad;
 	string categoria;
 	list<string> creables;
+	CostoConstruccion costoConstruccion;
 
 	static int getIntAttribute(YAML::Node nodo, string attributeName, int defaultValue);
 	static string getStringAttribute(YAML::Node nodo, string attributeName, string defaultValue);

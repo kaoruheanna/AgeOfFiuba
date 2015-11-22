@@ -16,6 +16,7 @@ class Renderer;
 class RendererInteractionDelegate;
 class Button;
 class Entity;
+class User;
 
 class ActionsMenu {
 public:
@@ -23,6 +24,7 @@ public:
 	virtual ~ActionsMenu();
 	void render(Renderer* renderer,Entity *selectedEntity);
 	void clickEvent(int x, int y, RendererInteractionDelegate *delegate);
+	void setUser(User *user);
 
 private:
 	int x;
@@ -31,10 +33,12 @@ private:
 	int height;
 	list<Button*> buttons;
 	string entityName;
+	User *user;
 
 	bool isPixelInButton(int x, int y, Button *button);
 	void setButtonsForSelectedEntity(Entity *selectedEntity);
 	void deleteButtons();
+	void updateButtons();
 };
 
 #endif /* ACTIONSMENU_H_ */

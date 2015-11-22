@@ -49,13 +49,19 @@ struct PropiedadesTipoUnidad{
 	int escudo;
 };
 
+struct CostoConstruccion {
+	int costoOro;
+	int costoPiedra;
+	int costoComida;
+	int costoArbol;
+};
+
 class Entity : public Serializable{
 private:
 	//int id;
 	int ancho_base; //x
 	int alto_base; //y
 	void Init(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base);
-
 
 protected:
 	string nombre;
@@ -67,6 +73,7 @@ protected:
 	int life;
 	PropiedadesTipoUnidad propiedadesTipoUnidad;
 	int progresoConstruccion;
+	CostoConstruccion costoConstruccion;
 
 	// Serializable methods
 	char* deserializeString(void* blockData);
@@ -98,6 +105,12 @@ public:
 	bool hasGatheredResources();
 	Entity* getActiveInteractionEntity();
 	bool esMobileModel();
+//	int getCostoOro();
+//	int getCostoPiedra();
+//	int getCostoComida();
+//	int getCostoArbol();
+	void setCostoConstruccion(CostoConstruccion costo);
+	CostoConstruccion getCostoConstruccion();
 
 	EntityState getState();
 	bool isInteracting();
@@ -122,7 +135,7 @@ public:
 	virtual int getPoderAtaque();
 	virtual int getLife();
 	virtual int getEscudo();
-	virtual int getVidaInicial();;
+	virtual int getVidaInicial();
 
 	bool canReach(Entity* entity);
 

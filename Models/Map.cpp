@@ -95,7 +95,6 @@ bool Map::tilesOcupadosPorMobileModels(SDL_Point tileInicio,SDL_Point tileFin,li
 		bool ocupadoEnX = ((x >= tileInicio.x) && (x <= tileFin.x));
 		bool ocupadoEnY = ((y >= tileInicio.y) && (y <= tileFin.y));
 		if (ocupadoEnX && ocupadoEnY){
-			Log().Get(TAG) << "Tile Ocupado por mobile model";
 			return true;
 		}
 	}

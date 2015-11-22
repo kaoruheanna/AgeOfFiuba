@@ -14,6 +14,7 @@ Button::Button(int x, int y, int width, int height) {
 	this->width = width;
 	this->height = height;
 	this->entityName = "";
+	this->enabled = false;
 }
 
 Button::~Button() {
@@ -23,7 +24,7 @@ Button::~Button() {
 void Button::render(Renderer *renderer){
 	if (this->entityName != ""){
 		SDL_Rect rect = {this->x,this->y,this->width,this->height};
-		renderer->drawActionButtonWithNameInRect("boton-"+this->entityName,rect);
+		renderer->drawActionButtonWithNameInRect("boton-"+this->entityName,rect,this->enabled);
 	}
 }
 
@@ -34,3 +35,8 @@ void Button::pressed(RendererInteractionDelegate *delegate){
 void Button::setEntityName(string name) {
 	this->entityName = name;
 }
+
+string Button::getEntityName() {
+	return this->entityName;
+}
+

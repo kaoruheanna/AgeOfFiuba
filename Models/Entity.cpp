@@ -26,6 +26,14 @@ Entity::Entity(){
 	this->life = 10;
 	this->activeInteractionEntity = NULL; //TODO que no sea null
 	this->progresoConstruccion = PROGRESO_COMPLETO;
+//	this->costoArbol = 0;
+//	this->costoComida = 0;
+//	this->costoOro = 0;
+//	this->costoPiedra = 0;
+	this->costoConstruccion.costoArbol = 0;
+	this->costoConstruccion.costoComida = 0;
+	this->costoConstruccion.costoOro = 0;
+	this->costoConstruccion.costoPiedra = 0;
 }
 
 Entity::Entity(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base){
@@ -55,6 +63,14 @@ void Entity::Init(int id, string nombre, SDL_Point posicion, int ancho_base, int
 	this->life = 100;
 	this->activeInteractionEntity = NULL;
 	this->progresoConstruccion = PROGRESO_COMPLETO;
+//	this->costoArbol = 0;
+//	this->costoComida = 0;
+//	this->costoOro = 0;
+//	this->costoPiedra = 0;
+	this->costoConstruccion.costoArbol = 0;
+	this->costoConstruccion.costoComida = 0;
+	this->costoConstruccion.costoOro = 0;
+	this->costoConstruccion.costoPiedra = 0;
 }
 
 Entity::~Entity(){
@@ -252,6 +268,30 @@ Entity* Entity::getActiveInteractionEntity() {
 
 bool Entity::esMobileModel(){
 	return (this->getClass() == MOBILE_MODEL);
+}
+
+//int Entity::getCostoOro() {
+//	return this->costoOro;
+//}
+//
+//int Entity::getCostoArbol() {
+//	return this->costoArbol;
+//}
+//
+//int Entity::getCostoPiedra() {
+//	return this->costoPiedra;
+//}
+//
+//int Entity::getCostoComida() {
+//	return this->costoComida;
+//}
+
+void Entity::setCostoConstruccion(CostoConstruccion costo){
+	this->costoConstruccion = costo;
+}
+
+CostoConstruccion Entity::getCostoConstruccion() {
+	return this->costoConstruccion;
 }
 
 //Serializar

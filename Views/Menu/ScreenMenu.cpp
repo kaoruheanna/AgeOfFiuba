@@ -10,6 +10,7 @@
 #include "StatusMenu.h"
 #include "../../GlobalConstants.h"
 #include "ActionsMenu.h"
+#include "../../Models/User.h"
 
 ScreenMenu::ScreenMenu(int width, int height) {
 	this->width = width;
@@ -57,14 +58,16 @@ void ScreenMenu::renderMenuForEntity(Renderer* renderer,std::list<Entity *> sele
 	}
 }
 
-
-void ScreenMenu::setStatusForEntity(Entity* entity)
-{
+void ScreenMenu::setStatusForEntity(Entity* entity) {
 	this->statusMenu->setStatusDataForEntity(entity);
 }
+
 void ScreenMenu::clickEvent(int x, int y, RendererInteractionDelegate *delegate) {
 	//si no esta dentro de actionsMenu no hace nada
 	this->actionsMenu->clickEvent(x,y,delegate);
 }
 
+void ScreenMenu::setUser(User *user) {
+	this->actionsMenu->setUser(user);
+}
 

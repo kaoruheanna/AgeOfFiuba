@@ -55,12 +55,12 @@ void Building::receiveInteraction(Worker* worker){
 		return;
 	}
 
-	int progreso = this->getProgresoConstruccion();
-	progreso += worker->getPoderCosecha();
-	Log().Get(TAG) << "Building receive interaction from worker progreso: " << progreso;
-	this->setProgresoConstruccion(progreso);
-
 	if (this->esProgresoCompleto()){
 		worker->stopInteracting();
 	}
+
+	int progreso = this->getProgresoConstruccion();
+	progreso += worker->getPoderCosecha();
+//	Log().Get(TAG) << "Building receive interaction from worker progreso: " << progreso;
+	this->setProgresoConstruccion(progreso);
 }
