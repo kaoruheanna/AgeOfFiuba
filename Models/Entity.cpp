@@ -25,6 +25,7 @@ Entity::Entity(){
 	this->id = -1;
 	this->life = 10;
 	this->activeInteractionEntity = NULL; //TODO que no sea null
+	this->progresoConstruccion = PROGRESO_COMPLETO;
 }
 
 Entity::Entity(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base){
@@ -53,6 +54,7 @@ void Entity::Init(int id, string nombre, SDL_Point posicion, int ancho_base, int
 	this->id = id;
 	this->life = 100;
 	this->activeInteractionEntity = NULL;
+	this->progresoConstruccion = PROGRESO_COMPLETO;
 }
 
 Entity::~Entity(){
@@ -80,6 +82,24 @@ int Entity::getId() {
 //devuelve la posicion logica
 SDL_Point Entity::getPosicion(){
 	return this->posicion;
+}
+
+int Entity::getProgresoConstruccion() {
+	return this->progresoConstruccion;
+}
+
+void Entity::setProgresoConstruccion(int progreso) {
+	if (progreso < 0){
+		progreso = 0;
+	}
+	if (progreso > PROGRESO_COMPLETO){
+		progreso = PROGRESO_COMPLETO;
+	}
+	this->progresoConstruccion = progreso;
+}
+
+bool Entity::esProgresoCompleto() {
+	return (this->progresoConstruccion >= PROGRESO_COMPLETO);
 }
 
 int Entity::getAnchoBase(){
@@ -137,84 +157,6 @@ bool Entity::estaViva() {
 
 void Entity::matar() {
 	this->life = 0;
-}
-
-//Serializar
-// Metodos de serializacion
-int Entity::getTotalBlockCount() {
-	return 6;
-}
-
-int Entity::getBlockSizeFromIndex(int currentIndex) {
-	if(currentIndex == 0){
-		return this->serializeStringSize((char*)this->nombre.c_str());
-	} else if (currentIndex == 1){
-		return sizeof(SDL_Point);
-	} else if(currentIndex == 2){
-		return sizeof(int);
-	} else if(currentIndex == 3) {
-		return sizeof(Team);
-	} else if (currentIndex ==4) {
-		return sizeof(int);
-	} else {
-		return sizeof(EntityState);
-	}
-}
-
-void Entity::getBlockFromIndex(int currentIndex, void* buffer) {
-	if(currentIndex == 0){
-		this->serializeString((char*)this->nombre.c_str(), buffer);
-	} else if (currentIndex == 1) {
-		memcpy(buffer, &this->posicion, sizeof(SDL_Point));
-	} else if(currentIndex == 2){
-		memcpy(buffer, &this->id, sizeof(int));
-	} else if (currentIndex == 3){
-		memcpy(buffer, &this->team, sizeof(Team));
-	} else if (currentIndex == 4) {
-		memcpy(buffer, &this->life, sizeof(int));
-	} else if (currentIndex == 5){
-		memcpy(buffer, &this->state, sizeof(EntityState));
-	}
-}
-
-void Entity::deserialize(int totalBlockCount, int currentBlock, void* blockData) {
-	if(currentBlock == 0){
-		char* nombre = this->deserializeString(blockData);
-		this->nombre = string(nombre);
-		free(nombre);
-	} else if(currentBlock == 1){
-		memcpy(&this->posicion, blockData, sizeof(SDL_Point));
-	} else if (currentBlock == 2) {
-		memcpy(&this->id, blockData, sizeof(int));
-	} else if (currentBlock == 3) {
-		memcpy(&this->team, blockData, sizeof(Team));
-	} else if (currentBlock == 4) {
-		memcpy(&this->life, blockData, sizeof(int));
-	} else if (currentBlock == 5){
-		memcpy(&this->state, blockData, sizeof(EntityState));
-	}
-}
-
-char* Entity::deserializeString(void* blockData) {
-	char* toDeserialize = (char*) blockData;
-	char* string = (char*) malloc(this->serializeStringSize(toDeserialize));
-	this->serializeString(toDeserialize, (void*) string);
-	return string;
-}
-
-void Entity::serializeString(char* string, void* buffer) {
-	strcpy((char*) buffer, string);
-}
-
-int Entity::serializeStringSize(char* string) {
-	return strlen(string) + 1;
-}
-
-void Entity::update(Entity* entity) {
-	this->nombre = entity->nombre;
-	this->posicion = entity->posicion;
-	this->life = entity->life;
-	this->state = entity->state;
 }
 
 EntityType Entity::getClass() {
@@ -310,4 +252,89 @@ Entity* Entity::getActiveInteractionEntity() {
 
 bool Entity::esMobileModel(){
 	return (this->getClass() == MOBILE_MODEL);
+}
+
+//Serializar
+// Metodos de serializacion
+int Entity::getTotalBlockCount() {
+	return 7;
+}
+
+int Entity::getBlockSizeFromIndex(int currentIndex) {
+	if(currentIndex == 0){
+		return this->serializeStringSize((char*)this->nombre.c_str());
+	} else if (currentIndex == 1){
+		return sizeof(SDL_Point);
+	} else if(currentIndex == 2){
+		return sizeof(int);
+	} else if(currentIndex == 3) {
+		return sizeof(Team);
+	} else if (currentIndex ==4) {
+		return sizeof(int);
+	} else if (currentIndex == 5){
+		return sizeof(EntityState);
+	} else {
+		return sizeof(int);
+	}
+}
+
+void Entity::getBlockFromIndex(int currentIndex, void* buffer) {
+	if(currentIndex == 0){
+		this->serializeString((char*)this->nombre.c_str(), buffer);
+	} else if (currentIndex == 1) {
+		memcpy(buffer, &this->posicion, sizeof(SDL_Point));
+	} else if(currentIndex == 2){
+		memcpy(buffer, &this->id, sizeof(int));
+	} else if (currentIndex == 3){
+		memcpy(buffer, &this->team, sizeof(Team));
+	} else if (currentIndex == 4) {
+		memcpy(buffer, &this->life, sizeof(int));
+	} else if (currentIndex == 5){
+		memcpy(buffer, &this->state, sizeof(EntityState));
+	} else if (currentIndex == 6){
+		memcpy(buffer, &this->progresoConstruccion, sizeof(int));
+	}
+}
+
+void Entity::deserialize(int totalBlockCount, int currentBlock, void* blockData) {
+	if(currentBlock == 0){
+		char* nombre = this->deserializeString(blockData);
+		this->nombre = string(nombre);
+		free(nombre);
+	} else if(currentBlock == 1){
+		memcpy(&this->posicion, blockData, sizeof(SDL_Point));
+	} else if (currentBlock == 2) {
+		memcpy(&this->id, blockData, sizeof(int));
+	} else if (currentBlock == 3) {
+		memcpy(&this->team, blockData, sizeof(Team));
+	} else if (currentBlock == 4) {
+		memcpy(&this->life, blockData, sizeof(int));
+	} else if (currentBlock == 5){
+		memcpy(&this->state, blockData, sizeof(EntityState));
+	} else if (currentBlock == 6){
+		memcpy(&this->progresoConstruccion, blockData, sizeof(int));
+	}
+}
+
+char* Entity::deserializeString(void* blockData) {
+	char* toDeserialize = (char*) blockData;
+	char* string = (char*) malloc(this->serializeStringSize(toDeserialize));
+	this->serializeString(toDeserialize, (void*) string);
+	return string;
+}
+
+void Entity::serializeString(char* string, void* buffer) {
+	strcpy((char*) buffer, string);
+}
+
+int Entity::serializeStringSize(char* string) {
+	return strlen(string) + 1;
+}
+
+void Entity::update(Entity* entity) {
+	this->nombre = entity->nombre;
+	this->posicion = entity->posicion;
+	this->life = entity->life;
+	this->state = entity->state;
+	this->progresoConstruccion = entity->progresoConstruccion;
 }

@@ -375,6 +375,8 @@ void Renderer::drawFutureBuildingIfShould(){
 
 	if (this->futureBuildingView->getFuturePositionType() == FuturePositionTypeForbidden){
 		SDL_SetTextureColorMod(texture,255,0,0 );
+	} else {
+		SDL_SetTextureColorMod(texture,255,255,255 );
 	}
 
 	if(!(this->isInsideWindow(&renderQuad))){

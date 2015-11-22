@@ -33,11 +33,34 @@ void Building::receiveInteraction(Warrior* entity) {
 		return;
 	}
 
+	if (entity->getTeam() == this->getTeam()){
+		return;
+	}
+
 	this->life -= this->vidaDescontada(entity);
 	if((this->life % 100) == 0) {
 		Log().Get(TAG) << "Building receive interaction from Warrior vida: " << this->life;
 	}
 	if(!this->estaViva()){
 		this->asesino = entity->getTeam();
+	}
+}
+
+void Building::receiveInteraction(Worker* worker){
+	if (!this->estaViva()){
+		return;
+	}
+
+	if (worker->getTeam() != this->getTeam()){
+		return;
+	}
+
+	int progreso = this->getProgresoConstruccion();
+	progreso += worker->getPoderCosecha();
+	Log().Get(TAG) << "Building receive interaction from worker progreso: " << progreso;
+	this->setProgresoConstruccion(progreso);
+
+	if (this->esProgresoCompleto()){
+		worker->stopInteracting();
 	}
 }

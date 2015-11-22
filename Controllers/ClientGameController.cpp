@@ -43,10 +43,10 @@ ClientGameController::ClientGameController(Mensajero *mensajero) {
 
 	this->pendingEntity = NULL;
 	this->futureBuildingView = NULL;
+	this->constructorPendiente = NULL;
 	this->empezoPartida = false;
 	this->mouseDown = false;
 	this->posInicialMouse = {0,0};
-
 }
 
 ClientGameController::~ClientGameController() {
@@ -479,6 +479,9 @@ void ClientGameController::actualizarEntidad(Entity* tempEntity) {
 		return;
 	}
 
+//	Log().Get(TAG) << "Progreso construccion de la entidad recibida:"<<tempEntity->getProgresoConstruccion();
+
+	bool isNewEntity = false;
 	Entity* existingEntity = this->escenario->entidadConId(tempEntity->getId());
 	if (existingEntity == NULL){
 		//como no existia, tengo que crearla.
@@ -490,12 +493,19 @@ void ClientGameController::actualizarEntidad(Entity* tempEntity) {
 			Log().Get(TAG) << "No se pudo crear la entidad. Dejo q crashee para poder rastrearlo si pasa";
 		}
 		existingEntity->setId(tempEntity->getId());
+		isNewEntity = true;
 	}
 
 	existingEntity->update(tempEntity);
 
 	if (!existingEntity->estaViva()) {
 		this->eliminarEntity(existingEntity);
+	}
+
+	//mando a los workers a construir
+	if (isNewEntity && this->constructorPendiente && (this->escenario->factory->esBuilding(existingEntity->getNombre())) && (this->isEntityFromMyTeam(existingEntity))){
+		this->mensajero->interactuar(this->constructorPendiente->getId(),existingEntity->getId());
+		this->constructorPendiente = NULL;
 	}
 
 	this->updated = true;
@@ -768,7 +778,8 @@ void ClientGameController::createEntityButtonPressed(string entityName) {
 	this->limpiarConstruccion();
 
 	if (this->escenario->factory->esBuilding(entityName)){
-		this->pendingEntity = this->escenario->factory->crearEntidadParaConstruir(entityName,this->selectedEntities.front()->getPosicion(),this->selectedEntities.front()->getTeamString());
+		this->constructorPendiente = this->selectedEntities.front();
+		this->pendingEntity = this->escenario->factory->crearEntidadParaConstruir(entityName,this->constructorPendiente->getPosicion(),this->selectedEntities.front()->getTeamString());
 		return;
 	}
 

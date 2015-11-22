@@ -487,6 +487,9 @@ Entity* Escenario::crearYAgregarNuevaEntidad(const string& tipo, LogicPosition l
 	SDL_Point tile = this->mundo->getTileForPosition(posicion);
 
 	Entity* newEntity = this->factory->crearEntidad(tipo,tile,equipo,aumentarID);
+	if (this->factory->esBuilding(tipo)){
+		newEntity->setProgresoConstruccion(0);
+	}
 	//si no la puede construir porque no hay lugar la elimino y "falla" silenciosamente
 	if (!this->puedeConstruirEntidad(newEntity,newEntity->getPosicion())){
 		Log().Get(TAG) << "No se pudo crear la entidad porque no habia espacio"<<tipo;
