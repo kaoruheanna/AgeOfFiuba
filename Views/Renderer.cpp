@@ -709,9 +709,7 @@ void Renderer::setProtagonista(User *protagonista) {
 	this->topBar->setProtagonista(protagonista);
 }
 
-void Renderer::setMessagesInMenu(std::string firstMessage, std::string secondMessage) {
-	this->screenMenu->setMessages(firstMessage,secondMessage);
-}
+
 
 
 void Renderer::setMessagesInMenu(Entity* entity){

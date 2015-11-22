@@ -121,6 +121,7 @@ public:
 	virtual int getPoderAtaque();
 	virtual int getLife();
 	virtual int getEscudo();
+	virtual int getVidaInicial();;
 
 	bool canReach(Entity* entity);
 

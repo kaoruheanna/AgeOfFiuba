@@ -81,7 +81,6 @@ public:
 	void fogUpdate(list<Entity*> entidades, Team equipo);
 	FogOfWar* getFog();
 	void setProtagonista(User *protagonista);
-	void setMessagesInMenu(std::string firstMessage, std::string secondMessage);
 	void setMessagesInMenu(Entity* entity);
 	void setSelectedTilesCoordinates(bool selected,std::list<pair<SDL_Point,SDL_Point> > tiles, list<Entity*> entidad);
 	void setCartel(string message);

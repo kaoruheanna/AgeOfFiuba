@@ -26,7 +26,6 @@ public:
 	//void render(Renderer* renderer,Entity *selectedEntity);
 	void renderMenu(Renderer* renderer);
 	void renderMenuForEntity(Renderer* renderer,std::list<Entity *>selectedEntity);
-	void setMessages(std::string firstMessage, std::string secondMessage);
 	void clickEvent(int x, int y, RendererInteractionDelegate *delegate);
 	void setStatusForEntity(Entity* entity);
 

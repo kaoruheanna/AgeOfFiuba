@@ -19,44 +19,44 @@ StatusMenu::StatusMenu(int x, int y, int width, int height) {
 	this->y = y;
 	this->width = width;
 	this->height = height;
-	this->firstLabel = new TextLabel(x+60,y);
-	this->secondLabel = new TextLabel(x+60,y+20);
-	this->thirdLabel = new TextLabel(x+60,y+40);
-	this->setMessageForFirstLabel("");
-	this->setMessageForSecondLabel("");
+	this->entityNameLabel = new TextLabel(x+60,y);
+	this->entityTeamLabel = new TextLabel(x+60,y+20);
+	this->remainingLifeLabel = new TextLabel(x+60,y+40);
+	this->specialFeatureLabel = new TextLabel(x+5,y+60);
 	this->entityStatusIcon = NULL;
 	this->currentEntityName = "";
-
+	this->setStatusBlank();
 }
 
 StatusMenu::~StatusMenu() {
-	delete this->firstLabel;
-	delete this->secondLabel;
-	delete this->thirdLabel;
+	this->deleteCurrentIcon();
+	delete this->entityNameLabel;
+	delete this->entityTeamLabel;
+	delete this->remainingLifeLabel;
+	delete this->specialFeatureLabel;
 }
 
 void StatusMenu::render(Renderer* renderer) {
 	SDL_Rect point = {this->x,this->y,this->width,this->height};
 	SDL_Color color = {0xFF, 0xFF, 0xFF, 0xFF};
 	renderer->draw(point,color);
-	if (this->entityStatusIcon){
-		this->entityStatusIcon->render(renderer);
-		this->firstLabel->render(renderer);
-		this->secondLabel->render(renderer);
-		this->thirdLabel->render(renderer);
+
+
+
+	if ((!this->entityClicked) || (!this->entityClicked->estaViva())){
+		this->setStatusBlank();
 	}
 
+	this->entityStatusIcon->render(renderer);
+	this->entityNameLabel->render(renderer);
+	this->entityTeamLabel->render(renderer);
+	this->remainingLifeLabel->render(renderer);
+	this->specialFeatureLabel->render(renderer);
+
 }
 
-void StatusMenu::setMessageForFirstLabel(std::string message) {
-	this->firstLabel->setMessage(message);
-}
 
-void StatusMenu::setMessageForSecondLabel(std::string message) {
-	this->secondLabel->setMessage(message);
-}
-
-void StatusMenu::setStatusIcon(Entity* entity) {
+void StatusMenu::setStatusIcon() {
 	this->deleteCurrentIcon();
 	int wButton = 50;
 	int hButton = 50;
@@ -64,7 +64,7 @@ void StatusMenu::setStatusIcon(Entity* entity) {
 	int yButton = ((this->y) + 5);
 	Button* entityIcon = new Button(xButton, yButton, wButton, hButton);
 	this->entityStatusIcon = entityIcon;
-	this->entityStatusIcon->setEntityName(entity->getNombre());
+	this->entityStatusIcon->setEntityName(this->entityClicked->getNombre());
 
 }
 
@@ -75,40 +75,66 @@ void StatusMenu::deleteCurrentIcon() {
 	}
 }
 
+string StatusMenu::convertIntToString(int number) {
+	string Result;
+	stringstream convert;
+	convert << number;
+	Result = convert.str();
+	return Result;
+}
+
+void StatusMenu::setSpecialFeatures() {
+	if (this->entityClicked->getEscudo() > 0) {
+		this->specialFeatureLabel->setMessage(
+				"Escudo: " + (this->convertIntToString(this->entityClicked->getEscudo())));
+	} else if (this->entityClicked->getPoderAtaque() > 1) {
+		this->specialFeatureLabel->setMessage(
+				"Poder De Ataque: "
+						+ (this->convertIntToString(this->entityClicked->getPoderAtaque())));
+	} else {
+		this->specialFeatureLabel->setMessage("");
+	}
+}
+
+void StatusMenu::setLabels() {
+	this->entityNameLabel->setMessage(this->entityClicked->getNombre());
+	this->entityTeamLabel->setMessage(this->entityClicked->getTeamString());
+	this->remainingLifeLabel->setMessage(
+			"Vida restante: "
+					+ (this->convertIntToString(this->entityClicked->getLife()))
+					+ " / "
+					+ (this->convertIntToString(
+							this->entityClicked->getVidaInicial())));
+	this->setSpecialFeatures();
+}
+
 void StatusMenu::setStatusDataForEntity(Entity* entity){
+	//Si no hizo click en nada, la barra de estado debe estar vacia
 	if (!entity){
 		this->setStatusBlank();
 		return;
 	}
 
-	if (this->currentEntityName != entity->getNombre()){
-		this->setStatusIcon(entity);
-		this->currentEntityName = entity->getNombre();
+	//Si la entidad esta muerta limpio el menu
+	if (!entity->estaViva()){
+			this->setStatusBlank();
+			return;
 	}
-	this->firstLabel->setMessage(this->currentEntityName);
-
-	std::string currentEntityTeam = entity->getTeamString();
-	this->secondLabel->setMessage("Equipo: " + currentEntityTeam);
 
 
-	int Number = entity->getLife();
-	Log().Get(TAG,logWARNING) << "La vida actual de: " << entity->getNombre() << "es: " << entity->getLife();
 
-	string Result;
-	stringstream convert;
-	convert << Number;
-	Result = convert.str();
-
-	this->thirdLabel->setMessage("Vida restante: "+ Result);
-
-
+	//Si clickeo algo seteo los parametros de icono y labels
+	this->entityClicked = entity;
+	this->setStatusIcon();
+	this->setLabels();
 }
 
 void StatusMenu::setStatusBlank(){
 	this->deleteCurrentIcon();
-	this->firstLabel->setMessage("");
-	this->secondLabel->setMessage("");
-	this->thirdLabel->setMessage("");
+	this->entityNameLabel->setMessage("");
+	this->entityTeamLabel->setMessage("");
+	this->remainingLifeLabel->setMessage("");
+	this->specialFeatureLabel->setMessage("");
 	this->currentEntityName = "";
 }
 

@@ -57,10 +57,6 @@ void ScreenMenu::renderMenuForEntity(Renderer* renderer,std::list<Entity *> sele
 	}
 }
 
-void ScreenMenu::setMessages(std::string firstMessage, std::string secondMessage) {
-	this->statusMenu->setMessageForFirstLabel(firstMessage);
-	this->statusMenu->setMessageForSecondLabel(secondMessage);
-}
 
 void ScreenMenu::setStatusForEntity(Entity* entity)
 {

@@ -267,6 +267,10 @@ int Entity::getPoderAtaque() {
 	return this->propiedadesTipoUnidad.poderAtaque;
 }
 
+int Entity::getVidaInicial(){
+	return this->propiedadesTipoUnidad.vidaInicial;
+}
+
 int Entity::getLife() {
 	return this->life;
 }
