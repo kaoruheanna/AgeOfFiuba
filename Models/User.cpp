@@ -56,6 +56,16 @@ bool User::puedePagar(CostoConstruccion costo) {
 	return true;
 }
 
+void User::pagarCosto(CostoConstruccion costo){
+	if (!this->puedePagar(costo)){
+		return;
+	}
+	this->madera -= costo.costoArbol;
+	this->comida -= costo.costoComida;
+	this->oro -= costo.costoOro;
+	this->piedra -= costo.costoPiedra;
+}
+
 bool User::estaJugando() {
 	return !this->gano && !this->perdio;
 }

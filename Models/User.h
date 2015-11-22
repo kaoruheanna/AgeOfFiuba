@@ -32,6 +32,7 @@ public:
 	bool isActive();
 	void setActive(bool active);
 	bool puedePagar(CostoConstruccion costo);
+	void pagarCosto(CostoConstruccion costo);
 
 	bool estaJugando();
 	bool yaPerdio();
