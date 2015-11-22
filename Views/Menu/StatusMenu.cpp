@@ -49,10 +49,10 @@ void StatusMenu::actualizarVida(){
 
 void StatusMenu::actualizarProgreso(){
 	if (this->entityClicked->getProgresoConstruccion() < PROGRESO_COMPLETO){
+			int currentPercentage = (((this->entityClicked->getProgresoConstruccion())*100)/PROGRESO_COMPLETO);
 			this->constructionProgressLabel->setMessage("Porcentaje Terminado: "
-					+ this->convertIntToString(this->entityClicked->getProgresoConstruccion())
-					+ " / "
-					+ this->convertIntToString(PROGRESO_COMPLETO));
+					+ this->convertIntToString(currentPercentage)
+					+ "%");
 		}
 		else{
 			this->constructionProgressLabel->setMessage("");
