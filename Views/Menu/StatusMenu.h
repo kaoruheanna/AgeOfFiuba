@@ -33,6 +33,7 @@ private:
 	TextLabel *entityTeamLabel;
 	TextLabel *remainingLifeLabel;
 	TextLabel *specialFeatureLabel;
+	TextLabel *constructionProgressLabel;
 	Button* entityStatusIcon;
 	std::string currentEntityName;
 	Entity* entityClicked;
@@ -43,6 +44,8 @@ private:
 	std::string convertIntToString(int number);
 	void setSpecialFeatures();
 	void setLabels();
+	void actualizarVida();
+	void actualizarProgreso();
 };
 
 #endif /* STATUSMENU_H_ */

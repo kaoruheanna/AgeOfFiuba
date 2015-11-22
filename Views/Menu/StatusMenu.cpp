@@ -23,7 +23,9 @@ StatusMenu::StatusMenu(int x, int y, int width, int height) {
 	this->entityTeamLabel = new TextLabel(x+60,y+20);
 	this->remainingLifeLabel = new TextLabel(x+60,y+40);
 	this->specialFeatureLabel = new TextLabel(x+5,y+60);
+	this->constructionProgressLabel = new TextLabel(x+5,y+80);
 	this->entityStatusIcon = NULL;
+	this->entityClicked = NULL;
 	this->currentEntityName = "";
 	this->setStatusBlank();
 }
@@ -34,6 +36,27 @@ StatusMenu::~StatusMenu() {
 	delete this->entityTeamLabel;
 	delete this->remainingLifeLabel;
 	delete this->specialFeatureLabel;
+	delete this->constructionProgressLabel;
+}
+
+void StatusMenu::actualizarVida(){
+	this->remainingLifeLabel->setMessage(
+				"Vida restante: "
+				+ (this->convertIntToString(this->entityClicked->getLife()))
+				+ " / "
+				+ (this->convertIntToString(this->entityClicked->getVidaInicial())));
+}
+
+void StatusMenu::actualizarProgreso(){
+	if (this->entityClicked->getProgresoConstruccion() < PROGRESO_COMPLETO){
+			this->constructionProgressLabel->setMessage("Porcentaje Terminado: "
+					+ this->convertIntToString(this->entityClicked->getProgresoConstruccion())
+					+ " / "
+					+ this->convertIntToString(PROGRESO_COMPLETO));
+		}
+		else{
+			this->constructionProgressLabel->setMessage("");
+		}
 }
 
 void StatusMenu::render(Renderer* renderer) {
@@ -43,16 +66,21 @@ void StatusMenu::render(Renderer* renderer) {
 
 
 
-	if ((!this->entityClicked) || (!this->entityClicked->estaViva())){
+	if ((this->entityClicked == NULL) || (!this->entityClicked->estaViva())){
 		this->setStatusBlank();
+		this->entityClicked = NULL;
+		return;
 	}
-
-	this->entityStatusIcon->render(renderer);
-	this->entityNameLabel->render(renderer);
-	this->entityTeamLabel->render(renderer);
-	this->remainingLifeLabel->render(renderer);
-	this->specialFeatureLabel->render(renderer);
-
+	else if (this->entityStatusIcon){
+		this->entityStatusIcon->render(renderer);
+		this->entityNameLabel->render(renderer);
+		this->entityTeamLabel->render(renderer);
+		this->actualizarVida();
+		this->remainingLifeLabel->render(renderer);
+		this->specialFeatureLabel->render(renderer);
+		this->actualizarProgreso();
+		this->constructionProgressLabel->render(renderer);
+	}
 }
 
 
@@ -84,6 +112,8 @@ string StatusMenu::convertIntToString(int number) {
 }
 
 void StatusMenu::setSpecialFeatures() {
+
+	//FEATURE PODER DE ATAQUE Y ESCUDO
 	if (this->entityClicked->getEscudo() > 0) {
 		this->specialFeatureLabel->setMessage(
 				"Escudo: " + (this->convertIntToString(this->entityClicked->getEscudo())));
@@ -94,6 +124,10 @@ void StatusMenu::setSpecialFeatures() {
 	} else {
 		this->specialFeatureLabel->setMessage("");
 	}
+
+
+	//FEATURE POGRESO DE LA CONSTRUCCION
+	this->actualizarProgreso();
 }
 
 void StatusMenu::setLabels() {
@@ -131,10 +165,12 @@ void StatusMenu::setStatusDataForEntity(Entity* entity){
 
 void StatusMenu::setStatusBlank(){
 	this->deleteCurrentIcon();
+	this->entityClicked = NULL;
 	this->entityNameLabel->setMessage("");
 	this->entityTeamLabel->setMessage("");
 	this->remainingLifeLabel->setMessage("");
 	this->specialFeatureLabel->setMessage("");
+	this->constructionProgressLabel->setMessage("");
 	this->currentEntityName = "";
 }
 
