@@ -340,12 +340,10 @@ bool Escenario::tileOcupadoForEntity(TileCoordinate tile,Entity* entity){
 }
 
 void Escenario::moveEntityToPos(MobileModel* mobileModel,SDL_Point destino) {
-	Log().Get(TAG, logDEBUG) << "Trato de mover la entidad:"<<mobileModel->getNombre()<<"con el id:"<<mobileModel->getId();
 	SDL_Point origen = mobileModel->getPosicion();
 	queue <SDL_Point> camino = this->getCaminoForMobileModel(origen,destino,mobileModel);
 	recalculoCount[mobileModel->getId()] = 0;
 	mobileModel->setPath(camino);
-	Log().Get(TAG, logDEBUG) << "El personaje: " << mobileModel->getId() << " esta en " << mobileModel->getPosicion().x << "," << mobileModel->getPosicion().y << " se mueve al: " << mobileModel->getDestinationX() << " , " << mobileModel->getDestinationY() << " camino: " << camino.size();
 }
 
 int Escenario::getDistancia(Entity* from, Entity* to) {

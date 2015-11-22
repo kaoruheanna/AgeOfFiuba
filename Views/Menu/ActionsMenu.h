@@ -32,7 +32,7 @@ private:
 	int width;
 	int height;
 	list<Button*> buttons;
-	string entityName;
+	int entityID;
 	User *user;
 
 	bool isPixelInButton(int x, int y, Button *button);

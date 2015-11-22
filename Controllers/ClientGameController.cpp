@@ -648,9 +648,8 @@ void ClientGameController::moverMuchasUnidades(SDL_Point destino){
 	for (Entity* entidad: this->selectedEntities){
 		//TODO toda entidad deberia tener un destino asignado.
 		if ((!tiles.empty())) {
-				std::cout<<entidad->getNombre()<<"\n";
-				this->moverUnaUnidad(entidad, tiles.front());
-				tiles.pop();
+			this->moverUnaUnidad(entidad, tiles.front());
+			tiles.pop();
 		}
 	}
 }
@@ -780,8 +779,6 @@ void ClientGameController::createEntityButtonPressed(string entityName) {
 	this->limpiarConstruccion();
 
 	CostoConstruccion costo = this->escenario->factory->getCostoConstruccion(entityName);
-
-	Log().Get(TAG)<<"Costo-> arbol:"<<costo.costoArbol<<", comida:"<<costo.costoComida<<", piedra:"<<costo.costoPiedra<<", oro:"<<costo.costoOro;
 
 	if (this->escenario->factory->esBuilding(entityName)){
 		this->constructorPendiente = this->selectedEntities.front();

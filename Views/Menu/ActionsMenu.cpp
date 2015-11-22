@@ -20,7 +20,7 @@ ActionsMenu::ActionsMenu(int x, int y, int width, int height) {
 	this->y = y;
 	this->width = width;
 	this->height = height;
-	this->entityName = "";
+	this->entityID = 0;
 	this->user = NULL;
 }
 
@@ -65,12 +65,24 @@ bool ActionsMenu::isPixelInButton(int x, int y, Button *button){
 }
 
 void ActionsMenu::setButtonsForSelectedEntity(Entity *selectedEntity) {
-	string nombreEntidad = (selectedEntity) ? selectedEntity->getNombre() : "";
-	if (nombreEntidad == this->entityName){
+	if (!selectedEntity){
+		this->deleteButtons();
+		this->entityID = 0;
+		return;
+	}
+
+	if (selectedEntity->getTeam() != this->user->getTeam()){
+		this->deleteButtons();
+		this->entityID = selectedEntity->getId();
+		return;
+	}
+
+	if (selectedEntity->getId() == this->entityID){
 		this->updateButtons();
 		return;
 	}
-	this->entityName = nombreEntidad;
+
+	this->entityID = selectedEntity->getId();
 	this->deleteButtons();
 
 	if (!selectedEntity){
@@ -100,7 +112,7 @@ void ActionsMenu::setButtonsForSelectedEntity(Entity *selectedEntity) {
 }
 
 void ActionsMenu::updateButtons(){
-	if (this->entityName == ""){
+	if (this->entityID == 0){
 		return;
 	}
 	Escenario* escenario = EscenarioSingleton::get();
