@@ -41,6 +41,7 @@ private:
 	Mensajero* mensajero;
 	Entity* pendingEntity; //entidad a construir
 	FutureBuildingView* futureBuildingView;
+	Entity* constructorPendiente;
 	list<Entity*> selectedEntities;
 	bool shouldQuit;
 	bool serverError;
