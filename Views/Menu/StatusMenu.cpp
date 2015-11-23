@@ -66,8 +66,6 @@ void StatusMenu::render(Renderer* renderer) {
 	SDL_Color color = {0xFF, 0xFF, 0xFF, 0xFF};
 	renderer->draw(point,color);
 
-
-
 	if ((this->entityClicked == NULL) || (!this->entityClicked->estaViva())){
 		this->setStatusBlank();
 		this->entityClicked = NULL;

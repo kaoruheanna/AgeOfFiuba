@@ -779,6 +779,11 @@ void ClientGameController::setSelectedEntities(list<Entity*> listaDeEntidades){
 }
 
 void ClientGameController::setCreablesForEntities(list<Entity*> listaDeEntidades){
+	//solo pongo creables si tengo 1 entidad seleccionada
+	if (listaDeEntidades.empty() || (listaDeEntidades.size() > 1)){
+		return;
+	}
+
 	for (Entity* entidad: listaDeEntidades){
 		entidad->creables = this->getCreablesListForEntityName(entidad->getNombre());
 	}
@@ -788,11 +793,13 @@ void ClientGameController::setMessageForSelectedEntity(Entity* entity){
 	this->renderer->setMessagesInMenu(entity);
 }
 
-/*selecciona un mensaje para una lista de entidades
- * Por ahora solo toma el mensaje para la primera unidad
- * TODO inteligencia para seleccionar mensaje.
- */
 void ClientGameController::setMessageForSelectedEntities(list<Entity*> entities){
+	//solo pongo mensaje si tengo 1 entidad seleccionada
+	if (entities.empty() || (entities.size() > 1)){
+		this->setMessageForSelectedEntity(NULL);
+		return;
+	}
+
 	Entity* entity = entities.front();
 	this->setMessageForSelectedEntity(entity);
 }

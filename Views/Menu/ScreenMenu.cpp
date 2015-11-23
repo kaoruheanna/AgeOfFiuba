@@ -47,15 +47,13 @@ void ScreenMenu::renderMenu(Renderer* renderer) {
 	SDL_Color color = {0xA0, 0x52, 0x2D, 0xFF};
 	renderer->draw(rect,color);
 	this->statusMenu->render(renderer);
-	/*if (selectedEntity != NULL){
-		this->actionsMenu->render(renderer,selectedEntity);
-	}*/
 }
 
-void ScreenMenu::renderMenuForEntity(Renderer* renderer,std::list<Entity *> selectedEntity){
-	if (!selectedEntity.empty()){
-		this->actionsMenu->render(renderer,selectedEntity.front());
+void ScreenMenu::renderMenuForEntity(Renderer* renderer,std::list<Entity *> selectedEntities){
+	if (selectedEntities.empty() || (selectedEntities.size()>1)){
+		return;
 	}
+	this->actionsMenu->render(renderer,selectedEntities.front());
 }
 
 void ScreenMenu::setStatusForEntity(Entity* entity) {
