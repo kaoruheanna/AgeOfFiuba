@@ -72,6 +72,7 @@ void StatusMenu::render(Renderer* renderer) {
 		return;
 	}
 	else if (this->entityStatusIcon){
+		this->entityStatusIcon->enabled = true;
 		this->entityStatusIcon->render(renderer);
 		this->entityNameLabel->render(renderer);
 		this->entityTeamLabel->render(renderer);
@@ -94,7 +95,6 @@ void StatusMenu::setStatusIcon() {
 	Button* entityIcon = new Button(xButton, yButton, wButton, hButton);
 	this->entityStatusIcon = entityIcon;
 	this->entityStatusIcon->setEntityName(this->entityClicked->getNombre());
-
 }
 
 void StatusMenu::deleteCurrentIcon() {
