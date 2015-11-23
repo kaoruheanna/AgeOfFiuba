@@ -655,6 +655,9 @@ void Renderer::setDrawableForView(View* view){
 	if(found != this->drawablesByInstanceName.end()){
 		drawable = found->second;
 	}
+	else{
+		drawable = NULL;
+	}
 	view->setInteractingDrawable(drawable);
 
 	found = this->drawablesByInstanceName.find(view->getType() + SUFIJO_BUILDING_INCOMPLETE);

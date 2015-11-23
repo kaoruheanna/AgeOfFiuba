@@ -183,9 +183,9 @@ tipos:
    alto_frame: 121
    ancho_frame: 93
    mini_map_pixel_ref_type: 1
-   alcance: 3
+   alcance: 1
    vida_inicial: 500
-   poder_ataque: 2
+   poder_ataque: 4
    
  - nombre: ballestero
    categoria: warrior
@@ -319,9 +319,12 @@ escenario:
    - [x: 5, y: 5, tipo: molino, equipo: RED]
    - [x: 14, y: 13, tipo: caballo, equipo: RED]
    - [x: 10, y: 14, tipo: aldeano, equipo: RED]
-   - [x: 10, y: 5, tipo: arbol]
+   - [x: 10, y: 5, tipo: arbol] 
+   - [x: 9, y: 14, tipo: rey, equipo: RED]
    - [x: 20, y: 20, tipo: centro, equipo: RED]
+   - [x: 20, y: 10, tipo: casa, equipo: BLUE]
    - [x: 20, y: 30, tipo: centro, equipo: BLUE]
+   - [x: 10, y: 3, tipo: caballo, equipo: BLUE]
 
    
    protagonista:

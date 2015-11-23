@@ -31,7 +31,11 @@ void MobileView::setDrawableDeshabilitado(Drawable *drawable) {
 
 Drawable* MobileView::getDrawable(){
 	if (this->model->isInteracting()){
-		return this->interactingDrawable;
+		if (this->interactingDrawable != NULL){
+			return this->interactingDrawable;
+		}else{
+			return this->drawable;
+		}
 	}else{
 		return this->drawable;
 	}
