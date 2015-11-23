@@ -25,7 +25,7 @@ void Worker::doInteract(){
 		!activeInteractionEntity->estaViva()) {
 			return;
 	}
-	this->state = STATE_INTERACTING;
+	//this->state = STATE_INTERACTING;
 	activeInteractionEntity->receiveInteraction(this);
 }
 
@@ -39,6 +39,7 @@ int Worker::getPoderCosecha() {
 
 void Worker::receiveInteraction(Warrior* entity) {
 	if (!this->estaViva()) return;
+	entity -> setInteracting();
 	this->life = this->life - this->vidaDescontada(entity);
 	if((this->life % 100) == 0) {
 		Log().Get(TAG) << "Worker receive interaction from Warrior vida: " << this->life;

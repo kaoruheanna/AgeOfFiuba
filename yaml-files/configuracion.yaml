@@ -44,10 +44,10 @@ tipos:
    imagen: img/casa2x2.png
    miniImagen: img/tile_orange.png
    imagenBoton: img/boton-casa.png
-   ancho_base: 4
+   ancho_base: 5
    alto_base : 4
-   pixel_ref_x: 153
-   pixel_ref_y: 31
+   pixel_ref_x: 123
+   pixel_ref_y: 22
    creables:
    - aldeano
    vida_inicial: 10000
@@ -64,9 +64,9 @@ tipos:
    miniImagen: img/tile_orange.png
    imagenBoton: img/boton-arqueria.png
    ancho_base: 6
-   alto_base : 4
-   pixel_ref_x: 159
-   pixel_ref_y: 77
+   alto_base : 5
+   pixel_ref_x: 184
+   pixel_ref_y: 73
    creables:
    - soldado
 

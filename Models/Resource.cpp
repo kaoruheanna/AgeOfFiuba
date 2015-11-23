@@ -46,6 +46,7 @@ void Resource::receiveInteraction(Worker *entity) {
 		}
 
 		this->life -= entity->getPoderCosecha();
+		entity->setInteracting();
 	}
 }
 

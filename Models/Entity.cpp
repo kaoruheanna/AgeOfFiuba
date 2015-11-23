@@ -391,3 +391,7 @@ void Entity::update(Entity* entity) {
 	this->progresoConstruccion = entity->progresoConstruccion;
 	this->targetEntityPosition = entity->targetEntityPosition;
 }
+
+void Entity::setInteracting (){
+	this->state = STATE_INTERACTING;
+}
