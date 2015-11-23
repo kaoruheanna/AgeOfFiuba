@@ -50,7 +50,7 @@ tipos:
    pixel_ref_y: 22
    creables:
    - aldeano
-   vida_inicial: 10000
+   vida_inicial: 1000
    escudo: 1
    escudo_distancia: 10
    costo_oro: 1
@@ -68,17 +68,42 @@ tipos:
    pixel_ref_x: 184
    pixel_ref_y: 73
    creables:
+   - lancero
+   - ballestero  
+   
+ - nombre: barracks
+   categoria: building
+   imagen: img/barracks.png
+   miniImagen: img/tile_orange.png
+   imagenBoton: img/boton-barracks.png
+   ancho_base: 5
+   alto_base : 5
+   pixel_ref_x: 170
+   pixel_ref_y: 92
+   creables:
    - soldado
+   
+ - nombre: siegeCamp
+   categoria: building
+   imagen: img/siegecamp.png
+   miniImagen: img/tile_orange.png
+   imagenBoton: img/boton-siegecamp.png
+   ancho_base: 7
+   alto_base : 5
+   pixel_ref_x: 150
+   pixel_ref_y: 65
+   creables:
+   - bombardero
 
  - nombre: molino
    categoria: building
    imagen: img/whatermill.png
    miniImagen: img/tile_orange.png
    imagenBoton: img/boton-molino.png
-   ancho_base: 4
-   alto_base : 4
-   pixel_ref_x: 80
-   pixel_ref_y: 75
+   ancho_base: 3
+   alto_base : 3
+   pixel_ref_x: 136
+   pixel_ref_y: 64
    fps: 10
    ancho_frame: 200
    alto_frame: 145
@@ -135,6 +160,8 @@ tipos:
    - molino
    - casa
    - archeryRange
+   - barracks
+   - siegeCamp
    
  - nombre: caballo
    categoria: warrior
@@ -288,67 +315,14 @@ escenario:
    tipo: centro   
 
    entidades:
-
-   - [x: 1, y: 7, tipo: casa]
-   - [x: 20, y: 10, tipo: archeryRange, equipo: RED]
-   - [x: 1, y: 1, tipo: soldado, equipo: RED]
-   - [x: 10, y: 10, tipo: ballestero, equipo: RED]
-   - [x: 10, y: 12, tipo: rey, equipo: RED]
-   - [x: 10, y: 14, tipo: bombardero, equipo: RED]
-   - [x: 10, y: 16, tipo: lancero, equipo: RED]
-   - [x: 18, y: 9, tipo: aldeano, equipo: RED]
-   - [x: 14, y: 9, tipo: caballo, equipo: RED]
-   - [x: 14, y: 10, tipo: caballo, equipo: RED]
-   - [x: 14, y: 11, tipo: caballo, equipo: RED]
-   - [x: 14, y: 12, tipo: caballo, equipo: RED]
+   
+   - [x: 5, y: 5, tipo: molino, equipo: RED]
    - [x: 14, y: 13, tipo: caballo, equipo: RED]
-   - [x: 14, y: 14, tipo: caballo, equipo: RED]
-   - [x: 14, y: 15, tipo: caballo, equipo: RED]
-   - [x: 14, y: 16, tipo: caballo, equipo: RED]
-   - [x: 14, y: 17, tipo: caballo, equipo: RED]
-   - [x: 1, y: 2, tipo: soldado, equipo: RED]
-   - [x: 3, y: 3, tipo: soldado, equipo: RED]
+   - [x: 10, y: 14, tipo: aldeano, equipo: RED]
+   - [x: 10, y: 5, tipo: arbol]
    - [x: 20, y: 20, tipo: centro, equipo: RED]
    - [x: 20, y: 30, tipo: centro, equipo: BLUE]
-   - [x: 18, y: 27, tipo: soldado, equipo: BLUE]
-   - [x: 16, y: 30, tipo: aldeano, equipo: BLUE]
-   - [x: 12, y: 30, tipo: casa, equipo: BLUE]
-   - [x: 5, y: 10, tipo: piedra]
-   - [x: 5, y: 12, tipo: oro]
-   - [x: 5, y: 14, tipo: comida]
-   - [x: 7, y: 2, tipo: arbol]
-   - [x: 7, y: 3, tipo: arbol]
-   - [x: 7, y: 4, tipo: arbol]
-   - [x: 7, y: 5, tipo: arbol]
-   - [x: 6, y: 5, tipo: arbol]   
-   - [x: 4, y: 5, tipo: arbol]
-   - [x: 4, y: 2, tipo: arbol]
-   - [x: 4, y: 3, tipo: arbol]
-   - [x: 4, y: 4, tipo: arbol]
-   - [x: 4, y: 5, tipo: arbol]
-   - [x: 4, y: 6, tipo: arbol]
-   - [x: 4, y: 7, tipo: arbol]
-   - [x: 5, y: 7, tipo: arbol]
-   - [x: 6, y: 7, tipo: arbol]
-   - [x: 7, y: 7, tipo: arbol]
-   - [x: 8, y: 7, tipo: arbol]
-   - [x: 9, y: 7, tipo: arbol]
-   - [x: 9, y: 6, tipo: arbol]
-   - [x: 9, y: 5, tipo: arbol]
-   - [x: 9, y: 4, tipo: arbol]
-   - [x: 9, y: 3, tipo: arbol]
-   - [x: 9, y: 2, tipo: arbol]
-   - [x: 9, y: 1, tipo: arbol]
-   - [x: 11, y: 7, tipo: arbol]
-   - [x: 11, y: 6, tipo: arbol]
-   - [x: 11, y: 5, tipo: arbol]
-   - [x: 11, y: 4, tipo: arbol]
-   - [x: 11, y: 3, tipo: arbol]
-   - [x: 11, y: 2, tipo: arbol]
-   - [x: 11, y: 1, tipo: arbol]
-   - [x: 11, y: 0, tipo: arbol]
-   - [x: 5, y: 5, tipo: arbol]
-   - [x: 18, y: 18, tipo: casa]
+
    
    protagonista:
    - tipo: soldado
