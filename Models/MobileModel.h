@@ -59,8 +59,6 @@ private:
 	int destinationX;
 	int destinationY;
 	bool moving;
-	bool interacting;
-
 	int getSpeed();
 
 };

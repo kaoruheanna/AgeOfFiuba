@@ -115,6 +115,7 @@ public:
 
 	EntityState getState();
 	bool isInteracting();
+	void setInteracting();
 
 	void setTeam(Team team);
 	Team getTeam();

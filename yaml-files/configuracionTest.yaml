@@ -44,19 +44,14 @@ tipos:
    imagen: img/casa2x2.png
    miniImagen: img/tile_orange.png
    imagenBoton: img/boton-casa.png
-   ancho_base: 5
+   ancho_base: 4
    alto_base : 4
-   pixel_ref_x: 123
-   pixel_ref_y: 22
+   pixel_ref_x: 153
+   pixel_ref_y: 31
    creables:
    - aldeano
-   vida_inicial: 1000
+   vida_inicial: 10000
    escudo: 1
-   escudo_distancia: 10
-   costo_oro: 1
-   costo_piedra: 5
-   costo_arbol: 10
-   costo_comida: 0
 
  - nombre: archeryRange
    categoria: building
@@ -64,46 +59,21 @@ tipos:
    miniImagen: img/tile_orange.png
    imagenBoton: img/boton-arqueria.png
    ancho_base: 6
-   alto_base : 5
-   pixel_ref_x: 184
-   pixel_ref_y: 73
-   creables:
-   - lancero
-   - ballestero  
-   
- - nombre: barracks
-   categoria: building
-   imagen: img/barracks.png
-   miniImagen: img/tile_orange.png
-   imagenBoton: img/boton-barracks.png
-   ancho_base: 5
-   alto_base : 5
-   pixel_ref_x: 170
-   pixel_ref_y: 92
+   alto_base : 4
+   pixel_ref_x: 159
+   pixel_ref_y: 77
    creables:
    - soldado
-   
- - nombre: siegeCamp
-   categoria: building
-   imagen: img/siegecamp.png
-   miniImagen: img/tile_orange.png
-   imagenBoton: img/boton-siegecamp.png
-   ancho_base: 7
-   alto_base : 5
-   pixel_ref_x: 150
-   pixel_ref_y: 65
-   creables:
-   - bombardero
 
  - nombre: molino
    categoria: building
    imagen: img/whatermill.png
    miniImagen: img/tile_orange.png
    imagenBoton: img/boton-molino.png
-   ancho_base: 3
-   alto_base : 3
-   pixel_ref_x: 136
-   pixel_ref_y: 64
+   ancho_base: 4
+   alto_base : 4
+   pixel_ref_x: 80
+   pixel_ref_y: 75
    fps: 10
    ancho_frame: 200
    alto_frame: 145
@@ -131,10 +101,6 @@ tipos:
    alcance: 1
    vida_inicial: 250
    poder_ataque: 3
-   costo_oro: 1
-   costo_piedra: 0
-   costo_arbol: 0
-   costo_comida: 10
    
  - nombre: aldeano
    categoria: worker
@@ -160,8 +126,6 @@ tipos:
    - molino
    - casa
    - archeryRange
-   - barracks
-   - siegeCamp
    
  - nombre: caballo
    categoria: warrior
@@ -183,9 +147,9 @@ tipos:
    alto_frame: 121
    ancho_frame: 93
    mini_map_pixel_ref_type: 1
-   alcance: 1
+   alcance: 3
    vida_inicial: 500
-   poder_ataque: 4
+   poder_ataque: 2
    
  - nombre: ballestero
    categoria: warrior
@@ -268,10 +232,10 @@ tipos:
    delay: 0
    alto_frame: 66
    ancho_frame: 65
-   alto_frame_int: 81
-   ancho_frame_int: 78
-   pixel_ref_x_int: 40
-   pixel_ref_y_int: 60
+   alto_frame_int: 51
+   ancho_frame_int: 61
+   pixel_ref_x_int: 28
+   pixel_ref_y_int: 42
    mini_map_pixel_ref_type: 1
    alcance: 3
    vida_inicial: 500
@@ -296,17 +260,18 @@ tipos:
 
  - nombre: centro
    categoria: building
-   imagen: img/castle.png
+   imagen: img/whatermill.png
    miniImagen: img/tile_orange.png
-   imagenBoton: img/boton-castillo.png
-   ancho_base: 8
-   alto_base : 8
-   pixel_ref_x: 280
-   pixel_ref_y: 177
-   fps: 0
-   ancho_frame: 500
-   alto_frame: 422
-   vida_inicial: 10000
+   imagenBoton: img/boton-molino.png
+   ancho_base: 4
+   alto_base : 4
+   pixel_ref_x: 80
+   pixel_ref_y: 75
+   fps: 10
+   ancho_frame: 200
+   alto_frame: 145
+   vida_inicial: 1000
+
 
 escenario:
  - nombre: orleans
@@ -315,17 +280,15 @@ escenario:
    tipo: centro   
 
    entidades:
-   
-   - [x: 5, y: 5, tipo: molino, equipo: RED]
-   - [x: 14, y: 13, tipo: caballo, equipo: RED]
-   - [x: 10, y: 14, tipo: aldeano, equipo: RED]
-   - [x: 10, y: 5, tipo: arbol] 
-   - [x: 9, y: 14, tipo: rey, equipo: RED]
-   - [x: 20, y: 20, tipo: centro, equipo: RED]
-   - [x: 20, y: 10, tipo: casa, equipo: BLUE]
-   - [x: 20, y: 30, tipo: centro, equipo: BLUE]
-   - [x: 10, y: 3, tipo: caballo, equipo: BLUE]
 
+   - [x: 1, y: 7, tipo: casa]
+   - [x: 20, y: 10, tipo: archeryRange, equipo: RED]
+   - [x: 2, y: 10, tipo: centro, equipo: RED]
+   - [x: 1, y: 1, tipo: caballo, equipo: RED]
+   - [x: 10, y: 5, tipo: casa, equipo: BLUE]
+   - [x: 10, y: 5, tipo: centro, equipo: BLUE]
+   - [x: 5, y: 6, tipo: caballo, equipo: BLUE]
+   - [x: 7, y: 8, tipo: oro]
    
    protagonista:
    - tipo: soldado

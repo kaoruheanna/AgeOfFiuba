@@ -55,15 +55,14 @@ void Sprite::onTextureChange(){
 	}
 }
 
-AnimationStatus Sprite::getAnimation(MotionDirection currentDirection, bool currentlyMoving, bool currentlyInteracting, AnimationStatus lastStatus) {
+AnimationStatus Sprite::getAnimation(MotionDirection currentDirection, bool currentlyInMotion, AnimationStatus lastStatus) {
 	AnimationStatus newStatus;
 	newStatus.direction = currentDirection;
-	newStatus.isMoving = currentlyMoving;
-	newStatus.isInteracting = currentlyInteracting;
+	newStatus.isMoving = currentlyInMotion;
 	newStatus.animationIndex = 0;
 
 	// si no se esta moviendo no importa el animationIndex
-	if (!currentlyMoving && !currentlyInteracting){
+	if (!currentlyInMotion){
 		return newStatus;
 	}
 
@@ -79,13 +78,12 @@ AnimationStatus Sprite::getAnimation(MotionDirection currentDirection, bool curr
 	}
 	newStatus.animationIndex = index;
 
-
 	return newStatus;
 }
 
 void Sprite::animate(AnimationStatus status){
 	//por convencion, si no se esta parado usamos la ultima
-	int frameIndex = (status.isMoving || status.isInteracting) ? this->frameIndexes[status.animationIndex] : (this->framesPerAnimation - 1) ;
+	int frameIndex = (status.isMoving) ? this->frameIndexes[status.animationIndex] : (this->framesPerAnimation - 1) ;
 	this->clipRect.x = frameIndex * this->width;
 	this->clipRect.y = status.direction * this->height;
 }

@@ -195,7 +195,7 @@ void Entity::stopInteracting() {
 }
 
 void Entity::interact(Entity* entity){
-	this->state = STATE_INTERACTING; //TODO si la interaccion falla no deberia interactuar
+	//this->state = STATE_INTERACTING; //TODO si la interaccion falla no deberia interactuar
 	//el seteo no es mutuo
 	this->activeInteractionEntity = entity;
 	this->targetEntityPosition = this->activeInteractionEntity->getPosicion();
@@ -390,4 +390,8 @@ void Entity::update(Entity* entity) {
 	this->state = entity->state;
 	this->progresoConstruccion = entity->progresoConstruccion;
 	this->targetEntityPosition = entity->targetEntityPosition;
+}
+
+void Entity::setInteracting (){
+	this->state = STATE_INTERACTING;
 }

@@ -39,11 +39,12 @@ void Warrior::doInteract() {
 		return;
 	}
 
-	this->state = STATE_INTERACTING;
+	//this->state = STATE_INTERACTING;
 	this->activeInteractionEntity->receiveInteraction(this);
 }
 
 void Warrior::receiveInteraction(Warrior* entity) {
+	entity->setInteracting();
 	this->life = this->life - this->vidaDescontada(entity);
 	if((this->life % 100) == 0) {
 		Log().Get(TAG) << "Warrior receive interaction from Warrior vida: " << this->life;

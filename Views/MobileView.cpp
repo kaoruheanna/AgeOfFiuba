@@ -31,7 +31,11 @@ void MobileView::setDrawableDeshabilitado(Drawable *drawable) {
 
 Drawable* MobileView::getDrawable(){
 	if (this->model->isInteracting()){
-		return this->interactingDrawable;
+		if (this->interactingDrawable != NULL){
+			return this->interactingDrawable;
+		}else{
+			return this->drawable;
+		}
 	}else{
 		return this->drawable;
 	}
@@ -52,7 +56,7 @@ SDL_Point MobileView::getOrigin(){
 
 void MobileView::render(Renderer* renderer) {
 	MotionDirection currentDirection = (this->model->isInteracting()) ? this->getInteractingDirection() : this->getMovingDirection();
-	this->animationStatus = this->getDrawable()->getAnimation(currentDirection,this->model->isMoving(),this->model->isInteracting(),this->animationStatus);
+	this->animationStatus = this->getDrawable()->getAnimation(currentDirection,this->model->isMoving() or this->model->isInteracting(),this->animationStatus);
 	SDL_Point point = this->getOrigin();
 	this->getDrawable()->animate(this->animationStatus);
 	renderer->draw(point.x, point.y, this->getDrawable(),false);

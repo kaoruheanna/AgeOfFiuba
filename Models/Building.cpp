@@ -40,7 +40,7 @@ void Building::receiveInteraction(Warrior* entity) {
 	if (entity->getTeam() == this->getTeam()){
 		return;
 	}
-
+	entity->setInteracting();
 	this->life -= this->vidaDescontada(entity);
 	if((this->life % 100) == 0) {
 		Log().Get(TAG) << "Building receive interaction from Warrior vida: " << this->life;
@@ -62,7 +62,7 @@ void Building::receiveInteraction(Worker* worker){
 	if (this->esProgresoCompleto()){
 		worker->stopInteracting();
 	}
-
+	worker->setInteracting();
 	int progreso = this->getProgresoConstruccion();
 	progreso += worker->getPoderCosecha();
 //	Log().Get(TAG) << "Building receive interaction from worker progreso: " << progreso;

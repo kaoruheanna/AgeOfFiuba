@@ -39,7 +39,7 @@ Drawable* EntityView::getDrawable(){
 	}
 
 	if (this->model->isInteracting()){
-		return this->drawable;
+		return this->interactingDrawable;
 	}else{
 		return this->drawable;
 	}
@@ -47,7 +47,7 @@ Drawable* EntityView::getDrawable(){
 
 void EntityView::render(Renderer* renderer) {
 	SDL_Point point = this->getOrigin();
-	this->animationStatus = this->drawable->getAnimation(this->animationStatus.direction,true,false,this->animationStatus);
+	this->animationStatus = this->getDrawable()->getAnimation(this->animationStatus.direction,true,this->animationStatus);
 	this->getDrawable()->animate(this->animationStatus);
 	renderer->draw(point.x, point.y, this->getDrawable(), this->model->admiteNublado());
 }
