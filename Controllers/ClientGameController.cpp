@@ -302,7 +302,6 @@ bool ClientGameController::pollEvents(){
 			bool leftClick = (e.button.button == SDL_BUTTON_LEFT);
 			if (leftClick){
 				this->mouseDown = true;
-
 				if(this->pendingEntity != NULL){
 					if(leftClick && this->renderer->isPixelInEscenario(x,y)){
 						//construyo
@@ -328,15 +327,10 @@ bool ClientGameController::pollEvents(){
 
 		if( e.type == SDL_MOUSEMOTION && !this->serverError){
 			bool leftClick = (e.button.button == SDL_BUTTON_LEFT);
-
-
 			if (this->mouseDown){
 				int x,y;
 				SDL_GetMouseState(&x,&y);
 				this->renderer->dragLeftClickEvent(this->posInicialMouse.x,this->posInicialMouse.y,x,y);
-
-
-				this->renderer->clickEvent(x,y,leftClick,this);
 			}
 		}
 	}
@@ -579,6 +573,7 @@ bool ClientGameController::inicializado() {
 void ClientGameController::leftClickEnEscenario(int x,int y){
 	SDL_Point logicPosition = this->renderer->windowToMapPoint({x,y});
 	Entity* entidad = this->escenario->getEntidadEnPosicion(logicPosition);
+
 	if (this->selectedEntities.size() == 1 and this->selectedEntities.front() == entidad){
 		return;
 	}

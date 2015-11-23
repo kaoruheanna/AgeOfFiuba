@@ -192,11 +192,6 @@ Entity* Escenario::getEntidadEnPosicion(SDL_Point point) {
 		int minTileY = pair.first.y;
 		int maxTileY = pair.second.y;
 
-//		if (entidadReal->getNombre() == "archeryRange"){
-//			Log().Get(TAG)<<entidadReal->getNombre()<<":("<<minTileX<<","<<minTileY<<") ("<<maxTileX<<","<<maxTileY<<")";
-//			Log().Get(TAG)<<"ancho:"<<entidadReal->getAnchoBase()<<", alto:"<<entidadReal->getAltoBase();
-//		}
-
 		bool sameX = ((tile.x >= minTileX) && (tile.x <= maxTileX));
 		bool sameY = ((tile.y >= minTileY) && (tile.y <= maxTileY));
 
