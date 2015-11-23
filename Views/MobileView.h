@@ -18,7 +18,6 @@ public:
 	void setModel(MobileModel *model);
 	virtual void setDrawableDeshabilitado(Drawable *drawable);
 	Drawable* getDrawable();
-	MotionDirection getMotionDirection();
 	void render(Renderer* renderer);
 	bool hasModelWithId(int id);
 
@@ -30,6 +29,10 @@ private:
 	bool isActive;
 	MobileModel *model;
 	SDL_Point lastOrigin;
+
+	MotionDirection getMotionDirection(SDL_Point origen,SDL_Point destino, MotionDirection oldDirection);
+	MotionDirection getMovingDirection();
+	MotionDirection getInteractingDirection();
 };
 
 #endif /* MOBILEVIEW_H_ */

@@ -91,7 +91,6 @@ void ClientGameController::actualizarEntidades(list<Entity*> entidades) {
 	for (list<Entity*>::iterator it = entidades.begin(); it != entidades.end(); it++) {
 		Entity *entidadReal = *it;
 		if (!this->escenarioView->hasViewForEntityWithId(entidadReal->getId())){
-			Log().Get(TAG)<<"Agrego vista para entidad:"<<entidadReal->getId();
 			if (entidadReal->esMobileModel()){
 				this->agregarVistasParaPersonaje((MobileModel*)entidadReal);
 			} else {
@@ -459,7 +458,6 @@ void ClientGameController::actualizaPersonaje(MobileModel* tempEntity) {
 			return;
 		}
 		model->setId(tempEntity->getId());
-
 		this->updated = true;
 	}
 

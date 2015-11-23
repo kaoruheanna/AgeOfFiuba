@@ -68,6 +68,7 @@ private:
 protected:
 	string nombre;
 	SDL_Point posicion;  // posicion en el mapa (coordenadas logicas)
+	SDL_Point targetEntityPosition; //posicion en el mapa de entidad con la que interactua
 	int id;
 	Team team = TEAM_NEUTRAL;
 	EntityState state = STATE_NORMAL;
@@ -106,6 +107,7 @@ public:
 	void resetResourcesGathered();
 	bool hasGatheredResources();
 	Entity* getActiveInteractionEntity();
+	SDL_Point getTargetEntityPosition();
 	bool esBuilding();
 	bool esMobileModel();
 	void setCostoConstruccion(CostoConstruccion costo);

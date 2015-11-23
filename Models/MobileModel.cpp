@@ -136,6 +136,7 @@ void MobileModel::update(MobileModel* other) {
 	this->setMoving(other->isMoving());
 	this->state = other->state;
 	this->posicion = other->getPosicion();
+	this->targetEntityPosition = other->targetEntityPosition;
 }
 
 void MobileModel::addDestination(int destinationX, int destionationY){

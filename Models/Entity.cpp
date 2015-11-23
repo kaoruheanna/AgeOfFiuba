@@ -34,6 +34,7 @@ Entity::Entity(){
 	this->propiedadesTipoUnidad.escudo = 1;
 	this->propiedadesTipoUnidad.poderAtaque = 0;
 	this->propiedadesTipoUnidad.vidaInicial = 100;
+	this->targetEntityPosition = {0,0};
 }
 
 Entity::Entity(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base){
@@ -71,6 +72,7 @@ void Entity::Init(int id, string nombre, SDL_Point posicion, int ancho_base, int
 	this->propiedadesTipoUnidad.escudo = 1;
 	this->propiedadesTipoUnidad.poderAtaque = 0;
 	this->propiedadesTipoUnidad.vidaInicial = 100;
+	this->targetEntityPosition = {0,0};
 }
 
 Entity::~Entity(){
@@ -196,6 +198,7 @@ void Entity::interact(Entity* entity){
 	this->state = STATE_INTERACTING; //TODO si la interaccion falla no deberia interactuar
 	//el seteo no es mutuo
 	this->activeInteractionEntity = entity;
+	this->targetEntityPosition = this->activeInteractionEntity->getPosicion();
 }
 
 bool Entity::isInteracting(){
@@ -277,6 +280,10 @@ Entity* Entity::getActiveInteractionEntity() {
 	return this->activeInteractionEntity;
 }
 
+SDL_Point Entity::getTargetEntityPosition() {
+	return this->targetEntityPosition;
+}
+
 bool Entity::esMobileModel(){
 	return (this->getClass() == MOBILE_MODEL);
 }
@@ -296,7 +303,7 @@ CostoConstruccion Entity::getCostoConstruccion() {
 //Serializar
 // Metodos de serializacion
 int Entity::getTotalBlockCount() {
-	return 7;
+	return 8;
 }
 
 int Entity::getBlockSizeFromIndex(int currentIndex) {
@@ -312,8 +319,10 @@ int Entity::getBlockSizeFromIndex(int currentIndex) {
 		return sizeof(int);
 	} else if (currentIndex == 5){
 		return sizeof(EntityState);
-	} else {
+	} else if (currentIndex == 6){
 		return sizeof(int);
+	} else {
+		return sizeof(SDL_Point);
 	}
 }
 
@@ -332,6 +341,8 @@ void Entity::getBlockFromIndex(int currentIndex, void* buffer) {
 		memcpy(buffer, &this->state, sizeof(EntityState));
 	} else if (currentIndex == 6){
 		memcpy(buffer, &this->progresoConstruccion, sizeof(int));
+	} else if (currentIndex == 7){
+		memcpy(buffer, &this->targetEntityPosition, sizeof(SDL_Point));
 	}
 }
 
@@ -352,6 +363,8 @@ void Entity::deserialize(int totalBlockCount, int currentBlock, void* blockData)
 		memcpy(&this->state, blockData, sizeof(EntityState));
 	} else if (currentBlock == 6){
 		memcpy(&this->progresoConstruccion, blockData, sizeof(int));
+	} else if (currentBlock == 7){
+		memcpy(&this->targetEntityPosition, blockData, sizeof(SDL_Point));
 	}
 }
 
@@ -376,4 +389,5 @@ void Entity::update(Entity* entity) {
 	this->life = entity->life;
 	this->state = entity->state;
 	this->progresoConstruccion = entity->progresoConstruccion;
+	this->targetEntityPosition = entity->targetEntityPosition;
 }
