@@ -241,10 +241,10 @@ tipos:
    delay: 0
    alto_frame: 66
    ancho_frame: 65
-   alto_frame_int: 51
-   ancho_frame_int: 61
-   pixel_ref_x_int: 28
-   pixel_ref_y_int: 42
+   alto_frame_int: 81
+   ancho_frame_int: 78
+   pixel_ref_x_int: 40
+   pixel_ref_y_int: 60
    mini_map_pixel_ref_type: 1
    alcance: 3
    vida_inicial: 500
