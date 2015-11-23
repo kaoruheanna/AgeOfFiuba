@@ -19,6 +19,9 @@
 #include "FutureBuildingView.h"
 
 const std::string TAG = "Renderer";
+const std::string SUFIJO_FUTURE_BUILDING = "-future";
+const std::string SUFIJO_BUILDING_INCOMPLETE = "-incompleto";
+const std::string SUFIJO_INTERACTUANDO = "-interactuando";
 
 Renderer::Renderer(int screenWidth, int screenHeight, list<TipoConfig> tipos) {
 	this->window = NULL;
@@ -133,7 +136,7 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 			  bool textureLoaded = nodoDrawable->loadTextureFromFile(tipo.getImagenInteractuando(), this->sdlRenderer);
 			  if(textureLoaded){
 				  this->drawablesByInstanceName.insert(
-						  std::pair<std::string,Drawable*>(tipo.getNombre() + "-interactuando", nodoDrawable));
+						  std::pair<std::string,Drawable*>(tipo.getNombre() + SUFIJO_INTERACTUANDO, nodoDrawable));
 			  } else {
 				  Log().Get(TAG,logWARNING) << "Tipo N°" << i << " no se pudo cargar la imagen de la interaccion.";
 			  }
@@ -161,6 +164,27 @@ bool Renderer::loadMedia(list<TipoConfig> tipos) {
 		  }
 	  }
 	  i++;
+	}
+
+	//creo los drawables para future building e incompleto
+	for (list<TipoConfig>::iterator it = tipos.begin(); it != tipos.end(); ++it) {
+		TipoConfig tipo = *it;
+		if (tipo.getCategoria() == "building"){
+			Drawable *futureDrawable = this->getDrawableFromTipoConfig(tipo);
+			bool textureLoaded = futureDrawable->loadTextureFromFile(tipo.getImagen(), this->sdlRenderer);
+			if(textureLoaded){
+				 string nombre = tipo.getNombre()+SUFIJO_FUTURE_BUILDING;
+				 this->drawablesByInstanceName.insert(pair<string,Drawable*>(nombre,futureDrawable));
+			}
+
+			Drawable *incompletoDrawable = this->getDrawableFromTipoConfig(tipo);
+			textureLoaded = incompletoDrawable->loadTextureFromFile(tipo.getImagen(), this->sdlRenderer);
+			if(textureLoaded){
+				SDL_SetTextureAlphaMod(incompletoDrawable->getTexture(),80);
+				string nombre = tipo.getNombre()+SUFIJO_BUILDING_INCOMPLETE;
+				this->drawablesByInstanceName.insert(pair<string,Drawable*>(nombre,incompletoDrawable));
+			}
+		}
 	}
 
 	bool minimapSuccess = this->loadMediaForMiniMap(&tipos);
@@ -375,6 +399,8 @@ void Renderer::drawFutureBuildingIfShould(){
 
 	if (this->futureBuildingView->getFuturePositionType() == FuturePositionTypeForbidden){
 		SDL_SetTextureColorMod(texture,255,0,0 );
+	} else {
+		SDL_SetTextureColorMod(texture,255,255,255 );
 	}
 
 	if(!(this->isInsideWindow(&renderQuad))){
@@ -545,13 +571,18 @@ void Renderer::drawTextureInRect(SDL_Texture *texture,SDL_Rect rect){
 	SDL_RenderCopy(this->sdlRenderer, texture, NULL, &rect);
 }
 
-void Renderer::drawActionButtonWithNameInRect(string name, SDL_Rect rect){
+void Renderer::drawActionButtonWithNameInRect(string name, SDL_Rect rect,bool enabled){
 	std::map<std::string,Drawable *>::iterator found = this->drawablesByInstanceName.find(name);
 	Drawable* drawable = NULL;
 	if(found != this->drawablesByInstanceName.end()){
 		drawable = found->second;
 	} else {
 		drawable = this->missingImageDrawable;
+	}
+	if (enabled){
+		SDL_SetTextureColorMod(drawable->getTexture(),255,255,255 );
+	} else {
+		SDL_SetTextureColorMod(drawable->getTexture(), 84,84,84);
 	}
 	SDL_RenderCopy(this->sdlRenderer, drawable->getTexture(), NULL, &rect);
 }
@@ -620,11 +651,17 @@ void Renderer::setDrawableForView(View* view){
 	}
 	view->setDrawableDeshabilitado(drawable);
 	//Find interaction drawable
-	found = this->drawablesByInstanceName.find(view->getType() + "-interactuando");
+	found = this->drawablesByInstanceName.find(view->getType() + SUFIJO_INTERACTUANDO);
 	if(found != this->drawablesByInstanceName.end()){
 		drawable = found->second;
 	}
 	view->setInteractingDrawable(drawable);
+
+	found = this->drawablesByInstanceName.find(view->getType() + SUFIJO_BUILDING_INCOMPLETE);
+	if(found != this->drawablesByInstanceName.end()){
+		drawable = found->second;
+	}
+	view->setConstruccionIncompletaDrawable(drawable);
 }
 
 // MINIMAP
@@ -707,12 +744,8 @@ FogOfWar* Renderer::getFog(){
 
 void Renderer::setProtagonista(User *protagonista) {
 	this->topBar->setProtagonista(protagonista);
+	this->screenMenu->setUser(protagonista);
 }
-
-void Renderer::setMessagesInMenu(std::string firstMessage, std::string secondMessage) {
-	this->screenMenu->setMessages(firstMessage,secondMessage);
-}
-
 
 void Renderer::setMessagesInMenu(Entity* entity){
 	this->screenMenu->setStatusForEntity(entity);
@@ -791,27 +824,31 @@ void Renderer::clickEvent(int x, int y, bool leftClick, RendererInteractionDeleg
 }
 
 void Renderer::dragLeftClickEvent(int xi, int yi, int xf, int yf){
-	if (this->isPixelInEscenario(xi,yi)){
-		this->selectionArea.x = xi;
-		this->selectionArea.y = yi;
-		this->selectionArea.w = xf-xi;
-		this->selectionArea.h = yf-yi;
+	if (!this->isPixelInEscenario(xi,yi)){
+		return;
 	}
+
+	int minX = (xi < xf) ? xi : xf;
+	int minY = (yi < yf) ? yi : yf;
+	int width = abs(xf - xi);
+	int height = abs(yf - yi);
+
+	this->selectionArea.x = minX;
+	this->selectionArea.y = minY;
+	this->selectionArea.w = width;
+	this->selectionArea.h = height;
 }
 
 void Renderer::leftMouseUpEvent(RendererInteractionDelegate *delegate, int x, int y){
-	if (this->selectionArea.x+this->selectionArea.y+
-			this->selectionArea.w+this->selectionArea.h != 0){
-		delegate->leftMouseUp(this->selectionArea.x, this->selectionArea.y,
-					this->selectionArea.w, this->selectionArea.h);
+	if ((this->selectionArea.w > 0) && (this->selectionArea.h > 0)){
+		delegate->leftMouseUp(this->selectionArea.x, this->selectionArea.y,	this->selectionArea.w, this->selectionArea.h);
 		this->selectionArea = {0,0,0,0};
-	}
-	else{
-		if (this->isPixelInEscenario(x,y)){
-			delegate->leftClickEnEscenario(x,y);
-		}
+		return;
 	}
 
+	if (this->isPixelInEscenario(x,y)){
+		delegate->leftClickEnEscenario(x,y);
+	}
 }
 
 bool Renderer::isPixelInEscenario(int x, int y){
@@ -840,9 +877,18 @@ bool Renderer::isPixelInRect(int x, int y, SDL_Rect rect){
 
 void Renderer::setFutureBuildingView(FutureBuildingView *futureBuildingView) {
 	this->futureBuildingView = futureBuildingView;
-	if (this->futureBuildingView){
-		this->setDrawableForView(this->futureBuildingView);
+	if (!this->futureBuildingView){
+		return;
 	}
+	string nombre = this->futureBuildingView->getType()+SUFIJO_FUTURE_BUILDING;
+	std::map<std::string,Drawable *>::iterator found = this->drawablesByInstanceName.find(nombre);
+	Drawable* drawable = NULL;
+	if(found != this->drawablesByInstanceName.end()){
+		drawable = found->second;
+	} else {
+		drawable = this->missingImageDrawable;
+	}
+	futureBuildingView->setDrawable(drawable);
 }
 
 void Renderer::drawSelectionRect(){

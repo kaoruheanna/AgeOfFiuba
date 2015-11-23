@@ -52,11 +52,6 @@ tipos:
    - aldeano
    vida_inicial: 10000
    escudo: 1
-   escudo_distancia: 10
-   costo_oro: 1
-   costo_piedra: 5
-   costo_arbol: 10
-   costo_comida: 0
 
  - nombre: archeryRange
    categoria: building
@@ -106,10 +101,6 @@ tipos:
    alcance: 1
    vida_inicial: 250
    poder_ataque: 3
-   costo_oro: 1
-   costo_piedra: 0
-   costo_arbol: 0
-   costo_comida: 10
    
  - nombre: aldeano
    categoria: worker
@@ -269,17 +260,18 @@ tipos:
 
  - nombre: centro
    categoria: building
-   imagen: img/castle.png
+   imagen: img/whatermill.png
    miniImagen: img/tile_orange.png
-   imagenBoton: img/boton-castillo.png
-   ancho_base: 8
-   alto_base : 8
-   pixel_ref_x: 280
-   pixel_ref_y: 177
-   fps: 0
-   ancho_frame: 500
-   alto_frame: 422
-   vida_inicial: 10000
+   imagenBoton: img/boton-molino.png
+   ancho_base: 4
+   alto_base : 4
+   pixel_ref_x: 80
+   pixel_ref_y: 75
+   fps: 10
+   ancho_frame: 200
+   alto_frame: 145
+   vida_inicial: 1000
+
 
 escenario:
  - nombre: orleans
@@ -311,8 +303,6 @@ escenario:
    - [x: 20, y: 20, tipo: centro, equipo: RED]
    - [x: 20, y: 30, tipo: centro, equipo: BLUE]
    - [x: 18, y: 27, tipo: soldado, equipo: BLUE]
-   - [x: 16, y: 30, tipo: aldeano, equipo: BLUE]
-   - [x: 12, y: 30, tipo: casa, equipo: BLUE]
    - [x: 5, y: 10, tipo: piedra]
    - [x: 5, y: 12, tipo: oro]
    - [x: 5, y: 14, tipo: comida]

@@ -23,7 +23,8 @@ using namespace std;
 enum EntityType {
 	ENTITY,
 	MOBILE_MODEL,
-	RESOURCE
+	RESOURCE,
+	BUILDING
 };
 
 enum Team {
@@ -47,6 +48,14 @@ struct PropiedadesTipoUnidad{
 	int vidaInicial;
 	int poderAtaque;
 	int escudo;
+	int escudoDistancia;
+};
+
+struct CostoConstruccion {
+	int costoOro;
+	int costoPiedra;
+	int costoComida;
+	int costoArbol;
 };
 
 class Entity : public Serializable{
@@ -56,16 +65,18 @@ private:
 	int alto_base; //y
 	void Init(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base);
 
-
 protected:
 	string nombre;
 	SDL_Point posicion;  // posicion en el mapa (coordenadas logicas)
+	SDL_Point targetEntityPosition; //posicion en el mapa de entidad con la que interactua
 	int id;
 	Team team = TEAM_NEUTRAL;
 	EntityState state = STATE_NORMAL;
 	Entity* activeInteractionEntity;
 	int life;
 	PropiedadesTipoUnidad propiedadesTipoUnidad;
+	int progresoConstruccion;
+	CostoConstruccion costoConstruccion;
 
 	// Serializable methods
 	char* deserializeString(void* blockData);
@@ -82,10 +93,10 @@ public:
 
 	void setId(int id);
 	int getId();
-
-	//devuelve la posicion logica
-	SDL_Point getPosicion();
-
+	SDL_Point getPosicion();//devuelve la posicion logica
+	int getProgresoConstruccion();
+	void setProgresoConstruccion(int progreso);
+	bool esProgresoCompleto();
 	int getAnchoBase();
 	int getAltoBase();
 	string getNombre();
@@ -96,7 +107,11 @@ public:
 	void resetResourcesGathered();
 	bool hasGatheredResources();
 	Entity* getActiveInteractionEntity();
+	SDL_Point getTargetEntityPosition();
+	bool esBuilding();
 	bool esMobileModel();
+	void setCostoConstruccion(CostoConstruccion costo);
+	CostoConstruccion getCostoConstruccion();
 
 	EntityState getState();
 	bool isInteracting();
@@ -121,6 +136,8 @@ public:
 	virtual int getPoderAtaque();
 	virtual int getLife();
 	virtual int getEscudo();
+	virtual int getEscudoDistancia();
+	virtual int getVidaInicial();
 
 	bool canReach(Entity* entity);
 

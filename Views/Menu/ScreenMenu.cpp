@@ -10,6 +10,7 @@
 #include "StatusMenu.h"
 #include "../../GlobalConstants.h"
 #include "ActionsMenu.h"
+#include "../../Models/User.h"
 
 ScreenMenu::ScreenMenu(int width, int height) {
 	this->width = width;
@@ -46,29 +47,25 @@ void ScreenMenu::renderMenu(Renderer* renderer) {
 	SDL_Color color = {0xA0, 0x52, 0x2D, 0xFF};
 	renderer->draw(rect,color);
 	this->statusMenu->render(renderer);
-	/*if (selectedEntity != NULL){
-		this->actionsMenu->render(renderer,selectedEntity);
-	}*/
 }
 
-void ScreenMenu::renderMenuForEntity(Renderer* renderer,std::list<Entity *> selectedEntity){
-	if (!selectedEntity.empty()){
-		this->actionsMenu->render(renderer,selectedEntity.front());
+void ScreenMenu::renderMenuForEntity(Renderer* renderer,std::list<Entity *> selectedEntities){
+	if (selectedEntities.empty() || (selectedEntities.size()>1)){
+		return;
 	}
+	this->actionsMenu->render(renderer,selectedEntities.front());
 }
 
-void ScreenMenu::setMessages(std::string firstMessage, std::string secondMessage) {
-	this->statusMenu->setMessageForFirstLabel(firstMessage);
-	this->statusMenu->setMessageForSecondLabel(secondMessage);
-}
-
-void ScreenMenu::setStatusForEntity(Entity* entity)
-{
+void ScreenMenu::setStatusForEntity(Entity* entity) {
 	this->statusMenu->setStatusDataForEntity(entity);
 }
+
 void ScreenMenu::clickEvent(int x, int y, RendererInteractionDelegate *delegate) {
 	//si no esta dentro de actionsMenu no hace nada
 	this->actionsMenu->clickEvent(x,y,delegate);
 }
 
+void ScreenMenu::setUser(User *user) {
+	this->actionsMenu->setUser(user);
+}
 

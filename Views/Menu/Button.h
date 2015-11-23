@@ -21,15 +21,17 @@ public:
 	void render(Renderer* renderer);
 	void pressed(RendererInteractionDelegate *delegate);
 	void setEntityName(string name);
+	string getEntityName();
 
 	int x;
 	int y;
 	int width;
 	int height;
-
+	bool enabled;
 
 private:
 	string entityName;
+
 };
 
 #endif /* BUTTON_H_ */

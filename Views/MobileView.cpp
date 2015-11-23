@@ -51,23 +51,19 @@ SDL_Point MobileView::getOrigin(){
 }
 
 void MobileView::render(Renderer* renderer) {
-	MotionDirection currentDirection = this->getMotionDirection();
-	this->animationStatus = this->getDrawable()->getAnimation(
-			currentDirection,
-			(this->model->isMoving() or this->model->isInteracting()),
-			this->animationStatus);
+	MotionDirection currentDirection = (this->model->isInteracting()) ? this->getInteractingDirection() : this->getMovingDirection();
+	this->animationStatus = this->getDrawable()->getAnimation(currentDirection,this->model->isMoving() or this->model->isInteracting(),this->animationStatus);
 	SDL_Point point = this->getOrigin();
 	this->getDrawable()->animate(this->animationStatus);
 	renderer->draw(point.x, point.y, this->getDrawable(),false);
 }
 
-// REVISAR EL TEMA CON LA ROTACION
-MotionDirection MobileView::getMotionDirection() {
-	double deltaX = (this->origin.x - this->lastOrigin.x);
-	double deltaY = (this->origin.y - this->lastOrigin.y);
+MotionDirection MobileView::getMotionDirection(SDL_Point origen,SDL_Point destino, MotionDirection oldDirection){
+	double deltaX = (destino.x - origen.x);
+	double deltaY = (destino.y - origen.y);
 
 	if ((deltaX == 0) && (deltaY == 0)){
-		return this->animationStatus.direction;
+		return oldDirection;
 	}
 
 	double angle = (atan2(deltaY,deltaX) * 180.0 / M_PI);
@@ -107,5 +103,17 @@ MotionDirection MobileView::getMotionDirection() {
 		return WEST;
 	}
 
-	return this->animationStatus.direction;
+	return oldDirection;
+}
+
+MotionDirection MobileView::getMovingDirection(){
+	return this->getMotionDirection(this->lastOrigin,this->origin,this->animationStatus.direction);
+}
+
+MotionDirection MobileView::getInteractingDirection(){
+	return this->getMotionDirection(this->origin,this->model->getTargetEntityPosition(),this->animationStatus.direction);
+}
+
+bool MobileView::hasModelWithId(int id) {
+	return (this->model && (this->model->getId() == id));
 }

@@ -24,12 +24,20 @@ Building::Building() : Entity(0,"", {0, 0}, 1, 1) {
 
 Building::~Building() {}
 
+EntityType Building::getClass() {
+	return BUILDING;
+}
+
 void Building::interact(Entity* entity) {
 	entity->receiveInteraction(this);
 }
 
 void Building::receiveInteraction(Warrior* entity) {
 	if(!this->estaViva()) {
+		return;
+	}
+
+	if (entity->getTeam() == this->getTeam()){
 		return;
 	}
 
@@ -40,4 +48,23 @@ void Building::receiveInteraction(Warrior* entity) {
 	if(!this->estaViva()){
 		this->asesino = entity->getTeam();
 	}
+}
+
+void Building::receiveInteraction(Worker* worker){
+	if (!this->estaViva()){
+		return;
+	}
+
+	if (worker->getTeam() != this->getTeam()){
+		return;
+	}
+
+	if (this->esProgresoCompleto()){
+		worker->stopInteracting();
+	}
+
+	int progreso = this->getProgresoConstruccion();
+	progreso += worker->getPoderCosecha();
+//	Log().Get(TAG) << "Building receive interaction from worker progreso: " << progreso;
+	this->setProgresoConstruccion(progreso);
 }

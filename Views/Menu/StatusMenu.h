@@ -29,15 +29,24 @@ private:
 	int y;
 	int width;
 	int height;
-	TextLabel *firstLabel;
-	TextLabel *secondLabel;
-	TextLabel *thirdLabel;
+	TextLabel *entityNameLabel;
+	TextLabel *entityTeamLabel;
+	TextLabel *remainingLifeLabel;
+	TextLabel *attackFeatureLabel;
+	TextLabel *defenseFeatureLabel;
+	TextLabel *constructionProgressLabel;
 	Button* entityStatusIcon;
 	std::string currentEntityName;
+	Entity* entityClicked;
 
-	void setStatusIcon(Entity* entity);
+	void setStatusIcon();
 	void deleteCurrentIcon();
 	void setStatusBlank();
+	std::string convertIntToString(int number);
+	void setSpecialFeatures();
+	void setLabels();
+	void actualizarVida();
+	void actualizarProgreso();
 };
 
 #endif /* STATUSMENU_H_ */

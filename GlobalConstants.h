@@ -13,11 +13,12 @@
 const int DELAY_MILISEC = 20; //50 frames por segundo
 const int PROTAGONISTA_SPEED = 5;
 const int SCROLL_SPEED = 20;
-const int MENU_HEIGHT = 130;
+const int MENU_HEIGHT = 150;
 const int MENU_SPACING = 10;
 const int TOP_BAR_HEIGHT = 30;
 const int CARTEL_WIDTH = 300;
 const int CARTEL_HEIGHT = 100;
+const int PROGRESO_COMPLETO = 1000;
 
 // Configuracion para que aparezcan nuevos resources
 const bool GENERATE_RESOURCES = false;
@@ -48,6 +49,12 @@ const std::string NOMBRE_EQUIPO_YELLOW = "YELLOW";
 const std::string NOMBRE_CENTRO_URBANO = "centro";
 const std::string NOMBRE_REY = "rey";
 const std::string NOMBRE_BANDERA = "bandera";
+
+//recursos
+const std::string RECURSO_COMIDA = "comida";
+const std::string RECURSO_MADERA = "madera";
+const std::string RECURSO_PIEDRA = "piedra";
+const std::string RECURSO_ORO = "oro";
 
 const int  FOG_VISIBLE = 255;
 const int  FOG_VISITED = 128;

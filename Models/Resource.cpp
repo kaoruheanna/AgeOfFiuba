@@ -7,6 +7,7 @@
 
 #include "Resource.h"
 #include "../Utils/Log.h"
+#include "../GlobalConstants.h"
 
 const string TAG = "Resource";
 
@@ -31,16 +32,16 @@ void Resource::receiveInteraction(Warrior* entity) {
 
 void Resource::receiveInteraction(Worker *entity) {
 	if (this->estaViva()){
-		if (this->getNombre().compare("comida") == 0){
+		if (this->getNombre().compare(RECURSO_COMIDA) == 0){
 			entity->foodGathered = entity->getPoderCosecha();
 		}
 		else if (this->getNombre().compare("arbol") == 0){
 			entity->woodGathered = entity->getPoderCosecha();
 		}
-		else if (this->getNombre().compare("piedra") == 0){
+		else if (this->getNombre().compare(RECURSO_PIEDRA) == 0){
 			entity->stoneGathered = entity->getPoderCosecha();
 		}
-		else if (this->getNombre().compare("oro") == 0){
+		else if (this->getNombre().compare(RECURSO_ORO) == 0){
 			entity->goldGathered = entity->getPoderCosecha();
 		}
 

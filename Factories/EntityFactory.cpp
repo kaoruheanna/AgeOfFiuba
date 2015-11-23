@@ -103,6 +103,7 @@ Entity* EntityFactory::crearEntidad(const string& tipo, SDL_Point tile, bool aum
 
 	if (returnEntity) {
 		returnEntity->setPropiedadesTipoUnidad(this->tipos[tipo].getPropiedadesTipoUnidad());
+		returnEntity->setCostoConstruccion(this->tipos[tipo].getCostoConstruccion());
 		return returnEntity;
 	}
 
@@ -153,4 +154,8 @@ bool EntityFactory::esMobileModel(const string& tipo) {
 	string categoria = this->tipos[tipo].getCategoria();
 
 	return ((categoria == "warrior") || (categoria == "worker"));
+}
+
+CostoConstruccion EntityFactory::getCostoConstruccion(const string& tipo){
+	return this->tipos[tipo].getCostoConstruccion();
 }

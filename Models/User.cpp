@@ -6,14 +6,15 @@
  */
 
 #include "User.h"
+#include "../GlobalConstants.h"
 
 User::User(string name) : User() {
 	this->name = string(name);
 	this->resourceNames.clear();
-	this->resourceNames.push_back("comida");
-	this->resourceNames.push_back("madera");
-	this->resourceNames.push_back("piedra");
-	this->resourceNames.push_back("oro");
+	this->resourceNames.push_back(RECURSO_COMIDA);
+	this->resourceNames.push_back(RECURSO_MADERA);
+	this->resourceNames.push_back(RECURSO_PIEDRA);
+	this->resourceNames.push_back(RECURSO_ORO);
 }
 
 User::~User() { }
@@ -37,6 +38,32 @@ bool User::isActive() {
 
 void User::setActive(bool active) {
 	this->active = active;
+}
+
+bool User::puedePagar(CostoConstruccion costo) {
+	if (this->madera < costo.costoArbol){
+		return false;
+	}
+	if (this->comida < costo.costoComida){
+		return false;
+	}
+	if (this->oro < costo.costoOro){
+		return false;
+	}
+	if (this->piedra < costo.costoPiedra){
+		return false;
+	}
+	return true;
+}
+
+void User::pagarCosto(CostoConstruccion costo){
+	if (!this->puedePagar(costo)){
+		return;
+	}
+	this->madera -= costo.costoArbol;
+	this->comida -= costo.costoComida;
+	this->oro -= costo.costoOro;
+	this->piedra -= costo.costoPiedra;
 }
 
 bool User::estaJugando() {
@@ -69,13 +96,13 @@ void User::addResourceToCollect(string resourceName) {
 }
 
 void User::didCollectResource(string resourceName) {
-	if(resourceName.compare("comida") == 0){
+	if(resourceName.compare(RECURSO_COMIDA) == 0){
 		this->comida++;
-	} else if(resourceName.compare("madera") == 0){
+	} else if(resourceName.compare(RECURSO_MADERA) == 0){
 		this->madera++;
-	} else if(resourceName.compare("piedra") == 0){
+	} else if(resourceName.compare(RECURSO_PIEDRA) == 0){
 		this->piedra++;
-	}else if(resourceName.compare("oro") == 0){
+	}else if(resourceName.compare(RECURSO_ORO) == 0){
 		this->oro++;
 	}
 }
@@ -85,13 +112,13 @@ list<string> User::getResourcesNames() {
 }
 
 int User::getValueForResource(string resourceName) {
-	if(resourceName.compare("comida") == 0){
+	if(resourceName.compare(RECURSO_COMIDA) == 0){
 		return this->comida;
-	} else if(resourceName.compare("madera") == 0){
+	} else if(resourceName.compare(RECURSO_MADERA) == 0){
 		return this->madera;
-	} else if(resourceName.compare("piedra") == 0){
+	} else if(resourceName.compare(RECURSO_PIEDRA) == 0){
 		return this->piedra;
-	} else if(resourceName.compare("oro") == 0){
+	} else if(resourceName.compare(RECURSO_ORO) == 0){
 			return this->oro;
 	}
 	return 0;

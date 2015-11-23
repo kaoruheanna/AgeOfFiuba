@@ -10,6 +10,8 @@
 #include "Button.h"
 #include "../../Models/Entity.h"
 #include "../../Utils/Log.h"
+#include "../../Utils/EscenarioSingleton.h"
+#include "../../Models/User.h"
 
 const std::string TAG = "ActionsMenu";
 
@@ -18,7 +20,8 @@ ActionsMenu::ActionsMenu(int x, int y, int width, int height) {
 	this->y = y;
 	this->width = width;
 	this->height = height;
-	this->entityName = "";
+	this->entityID = 0;
+	this->user = NULL;
 }
 
 ActionsMenu::~ActionsMenu() {
@@ -45,11 +48,10 @@ void ActionsMenu::render(Renderer* renderer,Entity *selectedEntity) {
 void ActionsMenu::clickEvent(int x, int y, RendererInteractionDelegate *delegate) {
 	for (list<Button*>::iterator it = this->buttons.begin(); it != this->buttons.end(); it++){
 		Button *button = *it;
-		if (this->isPixelInButton(x,y,button)){
+		if (button->enabled && this->isPixelInButton(x,y,button)){
 			button->pressed(delegate);
 		}
 	}
-
 }
 
 bool ActionsMenu::isPixelInButton(int x, int y, Button *button){
@@ -63,11 +65,24 @@ bool ActionsMenu::isPixelInButton(int x, int y, Button *button){
 }
 
 void ActionsMenu::setButtonsForSelectedEntity(Entity *selectedEntity) {
-	string nombreEntidad = (selectedEntity) ? selectedEntity->getNombre() : "";
-	if (nombreEntidad == this->entityName){
+	if (!selectedEntity || (!selectedEntity->esProgresoCompleto())){
+		this->deleteButtons();
+		this->entityID = 0;
 		return;
 	}
-	this->entityName = nombreEntidad;
+
+	if (selectedEntity->getTeam() != this->user->getTeam()){
+		this->deleteButtons();
+		this->entityID = selectedEntity->getId();
+		return;
+	}
+
+	if (selectedEntity->getId() == this->entityID){
+		this->updateButtons();
+		return;
+	}
+
+	this->entityID = selectedEntity->getId();
 	this->deleteButtons();
 
 	if (!selectedEntity){
@@ -84,22 +99,41 @@ void ActionsMenu::setButtonsForSelectedEntity(Entity *selectedEntity) {
 	list<string>::iterator it;
 	for (it = selectedEntity->creables.begin();it != selectedEntity->creables.end(); it++){
 		string creable = *it;
-
 		Button *button = new Button(xButton,yButton,wButton,hButton);
 		button->setEntityName(creable);
+
+		Escenario* escenario = EscenarioSingleton::get();
+		CostoConstruccion costo = escenario->factory->getCostoConstruccion(creable);
+		button->enabled = this->user->puedePagar(costo);
 		this->buttons.push_back(button);
 
 		xButton += (wButton + padding);
 	}
 }
 
+void ActionsMenu::updateButtons(){
+	if (this->entityID == 0){
+		return;
+	}
+	Escenario* escenario = EscenarioSingleton::get();
+	for (list<Button*>::iterator it = this->buttons.begin(); it != this->buttons.end(); it++){
+		Button *button = *it;
+		if (button->getEntityName() != ""){
+			CostoConstruccion costo = escenario->factory->getCostoConstruccion(button->getEntityName());
+			button->enabled = this->user->puedePagar(costo);
+		}
+	}
+}
+
 void ActionsMenu::deleteButtons(){
-//	Log().Get(TAG) << "tenia botones: "<<this->buttons.size();
 	for (list<Button*>::iterator it = this->buttons.begin(); it != this->buttons.end(); it++){
 		Button *button = *it;
 		delete button;
 	}
 	this->buttons.clear();
-//	Log().Get(TAG) << "ahote tengo botones: "<<this->buttons.size();
+}
+
+void ActionsMenu::setUser(User *user){
+	this->user = user;
 }
 

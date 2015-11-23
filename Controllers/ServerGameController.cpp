@@ -241,7 +241,6 @@ void ServerGameController::addMensajero(Mensajero* mensajero) {
 	this->mensajerosAgregados.push_back(mensajero);
 	if(escenario->inicializacionCorrecta) {
 		mensajero->configEscenario(this->config->getPath());
-		printf("Mandar usuarios");
 		list<User*>::iterator usuario;
 		for (usuario = usuarios.begin(); usuario != usuarios.end(); ++usuario){
 			mensajero->cambioUsuario(*usuario);
@@ -415,6 +414,16 @@ void ServerGameController::mandarUsuarios() {
 }
 
 void ServerGameController::construir(Entity* tempEntity){
+	CostoConstruccion costo = this->escenario->factory->getCostoConstruccion(tempEntity->getNombre());
+	User* user = this->getUserByTeam(tempEntity->getTeam());
+	if (!user->puedePagar(costo)){
+		return;
+	}
+
 	LogicPosition logicPosition = LogicPosition(tempEntity->getPosicion().x,tempEntity->getPosicion().y);
-	this->escenario->crearYAgregarNuevaEntidad(tempEntity->getNombre(),logicPosition,tempEntity->getTeamString());
+	Entity* createdEntity = this->escenario->crearYAgregarNuevaEntidad(tempEntity->getNombre(),logicPosition,tempEntity->getTeamString());
+	if (createdEntity){
+		user->pagarCosto(costo);
+		this->debeActualizarUsuarios = true;
+	}
 }

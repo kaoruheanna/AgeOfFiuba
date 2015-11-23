@@ -32,6 +32,8 @@ public:
 	Resource* crearRecurso(const string& tipo, SDL_Point posicion);
 	bool esBuilding(const string& tipo);
 	bool esMobileModel(const string& tipo);
+	CostoConstruccion getCostoConstruccion(const string& tipo);
+
 private:
 	Map *mundo;
 	map<string, TipoConfig> tipos;

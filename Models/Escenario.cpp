@@ -192,11 +192,6 @@ Entity* Escenario::getEntidadEnPosicion(SDL_Point point) {
 		int minTileY = pair.first.y;
 		int maxTileY = pair.second.y;
 
-//		if (entidadReal->getNombre() == "archeryRange"){
-//			Log().Get(TAG)<<entidadReal->getNombre()<<":("<<minTileX<<","<<minTileY<<") ("<<maxTileX<<","<<maxTileY<<")";
-//			Log().Get(TAG)<<"ancho:"<<entidadReal->getAnchoBase()<<", alto:"<<entidadReal->getAltoBase();
-//		}
-
 		bool sameX = ((tile.x >= minTileX) && (tile.x <= maxTileX));
 		bool sameY = ((tile.y >= minTileY) && (tile.y <= maxTileY));
 
@@ -339,12 +334,10 @@ bool Escenario::tileOcupadoForEntity(TileCoordinate tile,Entity* entity){
 }
 
 void Escenario::moveEntityToPos(MobileModel* mobileModel,SDL_Point destino) {
-	Log().Get(TAG, logDEBUG) << "Trato de mover la entidad:"<<mobileModel->getNombre()<<"con el id:"<<mobileModel->getId();
 	SDL_Point origen = mobileModel->getPosicion();
 	queue <SDL_Point> camino = this->getCaminoForMobileModel(origen,destino,mobileModel);
 	recalculoCount[mobileModel->getId()] = 0;
 	mobileModel->setPath(camino);
-	Log().Get(TAG, logDEBUG) << "El personaje: " << mobileModel->getId() << " esta en " << mobileModel->getPosicion().x << "," << mobileModel->getPosicion().y << " se mueve al: " << mobileModel->getDestinationX() << " , " << mobileModel->getDestinationY() << " camino: " << camino.size();
 }
 
 int Escenario::getDistancia(Entity* from, Entity* to) {
@@ -486,6 +479,9 @@ Entity* Escenario::crearYAgregarNuevaEntidad(const string& tipo, LogicPosition l
 	SDL_Point tile = this->mundo->getTileForPosition(posicion);
 
 	Entity* newEntity = this->factory->crearEntidad(tipo,tile,equipo,aumentarID);
+	if (this->factory->esBuilding(tipo)){
+		newEntity->setProgresoConstruccion(0);
+	}
 	//si no la puede construir porque no hay lugar la elimino y "falla" silenciosamente
 	if (!this->puedeConstruirEntidad(newEntity,newEntity->getPosicion())){
 		Log().Get(TAG) << "No se pudo crear la entidad porque no habia espacio"<<tipo;

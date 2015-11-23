@@ -63,7 +63,7 @@ public:
 	void draw(int mapPositionX, int mapPositionY, Drawable* drawable, bool admiteNublado); // draw Drawable
 	void draw(SDL_Rect rect, SDL_Color color); // draw shape
 	void drawTextureInRect(SDL_Texture *texture,SDL_Rect rect);
-	void drawActionButtonWithNameInRect(string name, SDL_Rect rect);
+	void drawActionButtonWithNameInRect(string name, SDL_Rect rect,bool enabled);
 	SDL_Point mapToWindowPoint(SDL_Point mapPoint);
 	SDL_Point windowToMapPoint(SDL_Point windowPoint);
 	SDL_Point proyectedPoint(SDL_Point mapPoint, SDL_Point plano);
@@ -81,7 +81,6 @@ public:
 	void fogUpdate(list<Entity*> entidades, Team equipo);
 	FogOfWar* getFog();
 	void setProtagonista(User *protagonista);
-	void setMessagesInMenu(std::string firstMessage, std::string secondMessage);
 	void setMessagesInMenu(Entity* entity);
 	void setSelectedTilesCoordinates(bool selected,std::list<pair<SDL_Point,SDL_Point> > tiles, list<Entity*> entidad);
 	void setCartel(string message);

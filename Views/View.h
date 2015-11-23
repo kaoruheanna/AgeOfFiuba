@@ -23,10 +23,12 @@ public:
 	void setInteractingDrawable(Drawable *drawable);
 	Drawable* getDrawable();
 	virtual void setDrawableDeshabilitado(Drawable *drawable);
+	virtual void setConstruccionIncompletaDrawable(Drawable *drawable);
 	void setOrigin(int x, int y);
 	virtual SDL_Point getOrigin();
 	std::string getType();
 	virtual bool hasModelWithId(int id);
+	virtual bool isBuildingView();
 
 protected:
 	SDL_Point origin;

@@ -29,7 +29,7 @@ void FogOfWar::initialice(){
 	}
 }
 
-//pasar posicion en TILE!!!!
+
 void FogOfWar::update(list<Entity*> entidades, Team equipo){
 	this->setNublados();
 	this->TilesVisitados.clear();
@@ -50,11 +50,9 @@ void FogOfWar::update(list<Entity*> entidades, Team equipo){
 				for (int y = 0; y < alto; ++y)
 					this->setInSight(posicionX+x,posicionY+y);
 			}
-			//this->setInSight(posicionX,posicionY);
 		}
 
 	}
-	//this->setInSight(posicionX,posicionY);
 }
 
 void FogOfWar::setInSight(int posicionX, int posicionY){
