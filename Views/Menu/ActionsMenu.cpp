@@ -24,10 +24,10 @@ ActionsMenu::ActionsMenu(int x, int y, int width, int height) {
 	this->entityID = 0;
 	this->user = NULL;
 	this->buttonNameLabel = new TextLabel (x+5,y+5);
-	this->foodCostTextLabel = new TextLabel(x+270,y+20);
-	this->woodCostTextLabel = new TextLabel(x+270,y+40);
-	this->stoneCostTextLabel = new TextLabel(x+270,y+60);
-	this->goldCostTextLabel = new TextLabel(x+270,y+80);
+	this->foodCostTextLabel = new TextLabel(x+5,y+90);
+	this->woodCostTextLabel = new TextLabel(x+5,y+110);
+	this->stoneCostTextLabel = new TextLabel(x+100,y+90);
+	this->goldCostTextLabel = new TextLabel(x+100,y+110);
 
 	this->setLabelsBlank();
 }
