@@ -44,14 +44,19 @@ tipos:
    imagen: img/casa2x2.png
    miniImagen: img/tile_orange.png
    imagenBoton: img/boton-casa.png
-   ancho_base: 4
+   ancho_base: 5
    alto_base : 4
-   pixel_ref_x: 153
-   pixel_ref_y: 31
+   pixel_ref_x: 123
+   pixel_ref_y: 22
    creables:
    - aldeano
-   vida_inicial: 10000
+   vida_inicial: 1000
    escudo: 1
+   escudo_distancia: 10
+   costo_oro: 1
+   costo_piedra: 5
+   costo_arbol: 10
+   costo_comida: 0
 
  - nombre: archeryRange
    categoria: building
@@ -59,21 +64,46 @@ tipos:
    miniImagen: img/tile_orange.png
    imagenBoton: img/boton-arqueria.png
    ancho_base: 6
-   alto_base : 4
-   pixel_ref_x: 159
-   pixel_ref_y: 77
+   alto_base : 5
+   pixel_ref_x: 184
+   pixel_ref_y: 73
+   creables:
+   - lancero
+   - ballestero  
+   
+ - nombre: barracks
+   categoria: building
+   imagen: img/barracks.png
+   miniImagen: img/tile_orange.png
+   imagenBoton: img/boton-barracks.png
+   ancho_base: 5
+   alto_base : 5
+   pixel_ref_x: 170
+   pixel_ref_y: 92
    creables:
    - soldado
+   
+ - nombre: siegeCamp
+   categoria: building
+   imagen: img/siegecamp.png
+   miniImagen: img/tile_orange.png
+   imagenBoton: img/boton-siegecamp.png
+   ancho_base: 7
+   alto_base : 5
+   pixel_ref_x: 150
+   pixel_ref_y: 65
+   creables:
+   - bombardero
 
  - nombre: molino
    categoria: building
    imagen: img/whatermill.png
    miniImagen: img/tile_orange.png
    imagenBoton: img/boton-molino.png
-   ancho_base: 4
-   alto_base : 4
-   pixel_ref_x: 80
-   pixel_ref_y: 75
+   ancho_base: 3
+   alto_base : 3
+   pixel_ref_x: 136
+   pixel_ref_y: 64
    fps: 10
    ancho_frame: 200
    alto_frame: 145
@@ -81,6 +111,7 @@ tipos:
  - nombre: soldado
    categoria: warrior
    imagen: img/soldadoRomanoCaminando.png
+   imagenInteractuando: img/soldadoRomanoAtacando.png
    imagenDeshabilitado: img/soldadoAge.png
    miniImagen: img/tile_red.png
    imagenBoton: img/boton-soldadoRomano.png
@@ -88,6 +119,10 @@ tipos:
    alto_base : 1
    pixel_ref_x: 20
    pixel_ref_y: 38
+   alto_frame_int: 51
+   ancho_frame_int: 61
+   pixel_ref_x_int: 28
+   pixel_ref_y_int: 42
    fps: 35
    delay: 0
    alto_frame: 45
@@ -96,6 +131,10 @@ tipos:
    alcance: 1
    vida_inicial: 250
    poder_ataque: 3
+   costo_oro: 1
+   costo_piedra: 0
+   costo_arbol: 0
+   costo_comida: 10
    
  - nombre: aldeano
    categoria: worker
@@ -110,10 +149,10 @@ tipos:
    pixel_ref_y: 32
    alto_frame: 40
    ancho_frame: 24
-   alto_frame_int: 40
-   ancho_frame_int: 24
-   pixel_ref_x_int: 14
-   pixel_ref_y_int: 32
+   alto_frame_int: 72
+   ancho_frame_int: 70
+   pixel_ref_x_int: 42
+   pixel_ref_y_int: 50
    fps: 35
    delay: 0
    mini_map_pixel_ref_type: 1
@@ -121,10 +160,13 @@ tipos:
    - molino
    - casa
    - archeryRange
+   - barracks
+   - siegeCamp
    
  - nombre: caballo
    categoria: warrior
    imagen: img/caballoCaminando.png
+   imagenInteractuando: img/caballoAtacando.png
    imagenDeshabilitado: img/soldadoAge.png
    miniImagen: img/tile_red.png
    imagenBoton: img/boton-caballo.png
@@ -132,18 +174,23 @@ tipos:
    alto_base : 1
    pixel_ref_x: 40
    pixel_ref_y: 84
+   alto_frame_int: 103
+   ancho_frame_int: 116
+   pixel_ref_x_int: 74
+   pixel_ref_y_int: 84
    fps: 35
    delay: 0
    alto_frame: 121
    ancho_frame: 93
    mini_map_pixel_ref_type: 1
-   alcance: 3
+   alcance: 1
    vida_inicial: 500
-   poder_ataque: 2
+   poder_ataque: 4
    
  - nombre: ballestero
    categoria: warrior
    imagen: img/ballesteroCaminando.png
+   imagenInteractuando: img/ballesteroAtacando.png
    imagenDeshabilitado: img/soldadoAge.png
    miniImagen: img/tile_red.png
    imagenBoton: img/boton-ballestero.png
@@ -155,6 +202,10 @@ tipos:
    delay: 0
    alto_frame: 49
    ancho_frame: 38
+   alto_frame_int: 50
+   ancho_frame_int: 48
+   pixel_ref_x_int: 24
+   pixel_ref_y_int: 42
    mini_map_pixel_ref_type: 1
    alcance: 3
    vida_inicial: 500
@@ -181,6 +232,7 @@ tipos:
  - nombre: bombardero
    categoria: warrior
    imagen: img/bombarderoCaminando.png
+   imagenInteractuando: img/bombarderoAtacando.png
    imagenDeshabilitado: img/soldadoAge.png
    miniImagen: img/tile_red.png
    imagenBoton: img/boton-bombardero.png
@@ -192,6 +244,10 @@ tipos:
    delay: 0
    alto_frame: 53
    ancho_frame: 57
+   alto_frame_int: 53
+   ancho_frame_int: 57
+   pixel_ref_x_int: 27
+   pixel_ref_y_int: 44
    mini_map_pixel_ref_type: 1
    alcance: 3
    vida_inicial: 500
@@ -200,6 +256,7 @@ tipos:
  - nombre: lancero
    categoria: warrior
    imagen: img/lanceroCaminando.png
+   imagenInteractuando: img/lanceroAtacando.png
    imagenDeshabilitado: img/soldadoAge.png
    miniImagen: img/tile_red.png
    imagenBoton: img/boton-lancero.png
@@ -211,6 +268,10 @@ tipos:
    delay: 0
    alto_frame: 66
    ancho_frame: 65
+   alto_frame_int: 81
+   ancho_frame_int: 78
+   pixel_ref_x_int: 40
+   pixel_ref_y_int: 60
    mini_map_pixel_ref_type: 1
    alcance: 3
    vida_inicial: 500
@@ -235,17 +296,17 @@ tipos:
 
  - nombre: centro
    categoria: building
-   imagen: img/whatermill.png
+   imagen: img/castle.png
    miniImagen: img/tile_orange.png
-   imagenBoton: img/boton-molino.png
-   ancho_base: 4
-   alto_base : 4
-   pixel_ref_x: 80
-   pixel_ref_y: 75
-   fps: 10
-   ancho_frame: 200
-   alto_frame: 145
-   vida_inicial: 1000
+   imagenBoton: img/boton-castillo.png
+   ancho_base: 8
+   alto_base : 8
+   pixel_ref_x: 280
+   pixel_ref_y: 177
+   fps: 0
+   ancho_frame: 500
+   alto_frame: 422
+   vida_inicial: 10000
 
  - nombre: bandera
    categoria: building
