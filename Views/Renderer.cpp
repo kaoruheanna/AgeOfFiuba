@@ -824,27 +824,31 @@ void Renderer::clickEvent(int x, int y, bool leftClick, RendererInteractionDeleg
 }
 
 void Renderer::dragLeftClickEvent(int xi, int yi, int xf, int yf){
-	if (this->isPixelInEscenario(xi,yi)){
-		this->selectionArea.x = xi;
-		this->selectionArea.y = yi;
-		this->selectionArea.w = xf-xi;
-		this->selectionArea.h = yf-yi;
+	if (!this->isPixelInEscenario(xi,yi)){
+		return;
 	}
+
+	int minX = (xi < xf) ? xi : xf;
+	int minY = (yi < yf) ? yi : yf;
+	int width = abs(xf - xi);
+	int height = abs(yf - yi);
+
+	this->selectionArea.x = minX;
+	this->selectionArea.y = minY;
+	this->selectionArea.w = width;
+	this->selectionArea.h = height;
 }
 
 void Renderer::leftMouseUpEvent(RendererInteractionDelegate *delegate, int x, int y){
-	if (this->selectionArea.x+this->selectionArea.y+
-			this->selectionArea.w+this->selectionArea.h != 0){
-		delegate->leftMouseUp(this->selectionArea.x, this->selectionArea.y,
-					this->selectionArea.w, this->selectionArea.h);
+	if ((this->selectionArea.w > 0) && (this->selectionArea.h > 0)){
+		delegate->leftMouseUp(this->selectionArea.x, this->selectionArea.y,	this->selectionArea.w, this->selectionArea.h);
 		this->selectionArea = {0,0,0,0};
-	}
-	else{
-		if (this->isPixelInEscenario(x,y)){
-			delegate->leftClickEnEscenario(x,y);
-		}
+		return;
 	}
 
+	if (this->isPixelInEscenario(x,y)){
+		delegate->leftClickEnEscenario(x,y);
+	}
 }
 
 bool Renderer::isPixelInEscenario(int x, int y){

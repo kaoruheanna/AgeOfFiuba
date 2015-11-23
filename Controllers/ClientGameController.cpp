@@ -642,24 +642,34 @@ void ClientGameController::rightClickEnEscenario(int x, int y) {
 }
 
 void ClientGameController::leftMouseUp(int x, int y, int w, int h){
-	list<Entity*> listaDeEntidadesSeleccionadas;
-	SDL_Point mapPointInicial = this->renderer->windowToMapPoint({x,y});
-	SDL_Point mapPointFinal = this->renderer->windowToMapPoint({x+w,y+h});
-	//TODO getEntidadesEnAreaForJugador no anda 100% bien.
-	listaDeEntidadesSeleccionadas = this->escenario->getEntidadesEnAreaForJugador(mapPointInicial, mapPointFinal,this->usuario->getTeam());
-	this->setSelectedEntities(listaDeEntidadesSeleccionadas);
-	list <pair<SDL_Point,SDL_Point>> tiles = this->escenario->getTilesCoordinatesForEntities(this->selectedEntities);
-	if (!this->selectedEntities.empty()){
-		this->setMessageForSelectedEntities(listaDeEntidadesSeleccionadas);
-		tiles = this->escenario->getTilesCoordinatesForEntities(listaDeEntidadesSeleccionadas);
-		//TODO ver como devolver los creables para un conjunto de unidades.
-		this->setCreablesForEntities(this->selectedEntities);
-		//entidad->creables = this->getCreablesListForEntityName(entidad->getNombre());
-		this->renderer->setSelectedTilesCoordinates(true,tiles,listaDeEntidadesSeleccionadas);
-	}else{
-		this->renderer->setMessagesInMenu(NULL);
-		this->renderer->setSelectedTilesCoordinates(false,tiles,listaDeEntidadesSeleccionadas);
+	int maxX = x + w;
+	int maxY = y + h;
+
+	list<Entity*> seleccionadas;
+
+	list<Entity*> entidades = this->escenario->getListaEntidades();
+
+	for (list<Entity*>::iterator it = entidades.begin();it != entidades.end();it++){
+		Entity* entity = *it;
+		SDL_Point pixel = this->renderer->mapToWindowPoint(entity->getPosicion());
+		if ((pixel.x >= x) && (pixel.x <= maxX) && (pixel.y >= y) && (pixel.y <= maxY)){
+			seleccionadas.push_back(entity);
+		}
 	}
+
+	this->setSelectedEntities(seleccionadas);
+	list <pair<SDL_Point,SDL_Point>> tiles = this->escenario->getTilesCoordinatesForEntities(this->selectedEntities);
+
+	if (this->selectedEntities.empty()){
+		this->renderer->setMessagesInMenu(NULL);
+		this->renderer->setSelectedTilesCoordinates(false,tiles,seleccionadas);
+		return;
+	}
+
+	this->setMessageForSelectedEntities(this->selectedEntities);
+	tiles = this->escenario->getTilesCoordinatesForEntities(this->selectedEntities);
+	this->setCreablesForEntities(this->selectedEntities);
+	this->renderer->setSelectedTilesCoordinates(true,tiles,this->selectedEntities);
 }
 
 bool ClientGameController::isEntityFromMyTeam(Entity* entidad) {
