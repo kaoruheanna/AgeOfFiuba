@@ -47,6 +47,8 @@ private:
 	void deleteButtons();
 	void updateButtons();
 	void setLabelsBlank();
+	void renderLabels(Renderer* renderer);
+	std::string convertIntToString(int number);
 };
 
 #endif /* ACTIONSMENU_H_ */

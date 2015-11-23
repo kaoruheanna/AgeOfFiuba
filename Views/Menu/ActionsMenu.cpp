@@ -41,6 +41,14 @@ ActionsMenu::~ActionsMenu() {
 	delete this->buttonNameLabel;
 }
 
+void ActionsMenu::renderLabels(Renderer* renderer) {
+	this->foodCostTextLabel->render(renderer);
+	this->woodCostTextLabel->render(renderer);
+	this->stoneCostTextLabel->render(renderer);
+	this->goldCostTextLabel->render(renderer);
+	this->buttonNameLabel->render(renderer);
+}
+
 void ActionsMenu::render(Renderer* renderer,Entity *selectedEntity) {
 	SDL_Rect point = {this->x,this->y,this->width,this->height};
 	SDL_Color color = {0xFF, 0xFF, 0xFF, 0xFF};
@@ -57,12 +65,7 @@ void ActionsMenu::render(Renderer* renderer,Entity *selectedEntity) {
 		button->render(renderer);
 	}
 
-	this->foodCostTextLabel->render(renderer);
-	this->woodCostTextLabel->render(renderer);
-	this->stoneCostTextLabel->render(renderer);
-	this->goldCostTextLabel->render(renderer);
-	this->buttonNameLabel->render(renderer);
-
+	this->renderLabels(renderer);
 }
 
 void ActionsMenu::clickEvent(int x, int y, RendererInteractionDelegate *delegate) {
@@ -90,15 +93,25 @@ void ActionsMenu::showEntityCost(int x,int y){
 	for (list<Button*>::iterator it = this->buttons.begin(); it != this->buttons.end(); it++){
 			Button *button = *it;
 			if (this->isPixelInButton(x,y,button)){
+				Escenario* escenario = EscenarioSingleton::get();
+				CostoConstruccion costo = escenario->factory->getCostoConstruccion(button->getEntityName());
 				this->buttonNameLabel->setMessage(button->getEntityName());
-				this->foodCostTextLabel->setMessage("Comida: #comida");
-				this->woodCostTextLabel->setMessage("Madera: #madera");
-				this->stoneCostTextLabel->setMessage("Piedra: #piedra");
-				this->goldCostTextLabel->setMessage("Oro: #oro");
+				this->foodCostTextLabel->setMessage("Comida: " + this->convertIntToString(costo.costoComida));
+				this->woodCostTextLabel->setMessage("Madera: " + this->convertIntToString(costo.costoArbol));
+				this->stoneCostTextLabel->setMessage("Piedra: "+ this->convertIntToString(costo.costoPiedra));
+				this->goldCostTextLabel->setMessage("Oro: " + this->convertIntToString(costo.costoOro));
 				return;
 			}
 	}
 	this->setLabelsBlank();
+}
+
+string ActionsMenu::convertIntToString(int number) {
+	string Result;
+	stringstream convert;
+	convert << number;
+	Result = convert.str();
+	return Result;
 }
 
 bool ActionsMenu::isPixelInButton(int x, int y, Button *button){
