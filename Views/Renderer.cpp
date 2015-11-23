@@ -537,8 +537,8 @@ void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable,bool 
 			if (entity->getClass() == MOBILE_MODEL && currentTileState != NUBLADO  ){
 				int tileX = currentTile.x;
 				int	tileY = currentTile.y;
-				int selectedTileX = entity->getPosicion().x / TILE_HEIGHT_PIXELS;
-				int selectedTileY = entity->getPosicion().y / TILE_HEIGHT_PIXELS;
+				int selectedTileX = entity->getPosicion().x / TILE_SIZE;
+				int selectedTileY = entity->getPosicion().y / TILE_SIZE;
 				if (this->sonTilesIguales(tileX,tileY,selectedTileX,selectedTileY)){
 					this->setearColor(drawable);
 				}
@@ -549,8 +549,8 @@ void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable,bool 
 				int maxX = this->selectedTilesCoordinates.second.x;
 				int minY = this->selectedTilesCoordinates.first.y;
 				int maxY = this->selectedTilesCoordinates.second.y;
-				bool inRangeX = ((currentTile.x >= minX) && (currentTile.x < maxX));
-				bool inRangeY = ((currentTile.y >= minY) && (currentTile.y < maxY));
+				bool inRangeX = ((currentTile.x >= minX) && (currentTile.x <= maxX));
+				bool inRangeY = ((currentTile.y >= minY) && (currentTile.y <= maxY));
 				if (inRangeX && inRangeY){
 					this->setearColor(drawable);
 				}

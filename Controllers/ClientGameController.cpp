@@ -732,8 +732,8 @@ SDL_Point obtenerDireccionPerpendicularParaAngulo(float angulo){
 
 queue<SDL_Point> ClientGameController::obtenerTilesParaMoverse(SDL_Point destino){
 	queue<SDL_Point> listaDeTiles;
-	int x = destino.x - (destino.x%TILE_WIDTH_PIXELS) + (TILE_WIDTH_PIXELS/2);
-	int y = destino.y - (destino.y%TILE_HEIGHT_PIXELS) + (TILE_HEIGHT_PIXELS/2);
+	int x = destino.x - (destino.x%TILE_SIZE) + (TILE_SIZE/2);
+	int y = destino.y - (destino.y%TILE_SIZE) + (TILE_SIZE/2);
 	SDL_Point destinoCentrado = {x,y};
 
 	SDL_Point posMedia = this->getPosicionPromedioForSelectedEntities();
@@ -746,7 +746,6 @@ queue<SDL_Point> ClientGameController::obtenerTilesParaMoverse(SDL_Point destino
 	int i = 0;
 	while (i < cantidadDeTiles){//TODO mejorar para no tener mas de una fila
 		SDL_Point tile = {destinoCentrado.x + (dirFormacion.x*i), destinoCentrado.y + (dirFormacion.y*i)};
-		//TODO ver si el tile es valido.
 		if (this->escenario->posicionValidaParaCaminar(tile)){
 			listaDeTiles.push(tile);
 		}
