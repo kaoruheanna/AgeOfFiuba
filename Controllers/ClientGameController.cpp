@@ -266,6 +266,10 @@ bool ClientGameController::pollEvents(){
 	SDL_Event e;
 	while( SDL_PollEvent( &e ) != 0 ) {
 
+		int x,y;
+		SDL_GetMouseState(&x,&y);
+		this->renderer->sendMousePosition(x,y);
+
 		if( e.type == SDL_QUIT ) {
 			this->shouldQuit = true;
 		}

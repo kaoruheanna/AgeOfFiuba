@@ -94,6 +94,7 @@ public:
 	bool isPixelInEscenario(int x, int y);
 	bool isPixelInMenu(int x, int y);
 	void setFutureBuildingView(FutureBuildingView *futureBuildingView);
+	void sendMousePosition(int x, int y);
 
 private:
 	bool successfullInit;
@@ -142,6 +143,7 @@ private:
 	bool isPixelInRect(int x, int y, SDL_Rect rect);
 	bool sonTilesIguales(int tileX, int tileY, int selectedTileX, int selectedTileY);
 	void setearColor(Drawable* drawable);
+
 };
 
 #endif /* RENDERER_H_ */

@@ -17,6 +17,7 @@ class RendererInteractionDelegate;
 class Button;
 class Entity;
 class User;
+class TextLabel;
 
 class ActionsMenu {
 public:
@@ -25,6 +26,7 @@ public:
 	void render(Renderer* renderer,Entity *selectedEntity);
 	void clickEvent(int x, int y, RendererInteractionDelegate *delegate);
 	void setUser(User *user);
+	void showEntityCost(int x, int y);
 
 private:
 	int x;
@@ -34,11 +36,17 @@ private:
 	list<Button*> buttons;
 	int entityID;
 	User *user;
+	TextLabel* foodCostTextLabel;
+	TextLabel* woodCostTextLabel;
+	TextLabel* stoneCostTextLabel;
+	TextLabel* goldCostTextLabel;
+	TextLabel* buttonNameLabel;
 
 	bool isPixelInButton(int x, int y, Button *button);
 	void setButtonsForSelectedEntity(Entity *selectedEntity);
 	void deleteButtons();
 	void updateButtons();
+	void setLabelsBlank();
 };
 
 #endif /* ACTIONSMENU_H_ */

@@ -12,6 +12,7 @@
 #include "../../Utils/Log.h"
 #include "../../Utils/EscenarioSingleton.h"
 #include "../../Models/User.h"
+#include "TextLabel.h"
 
 const std::string TAG = "ActionsMenu";
 
@@ -22,10 +23,22 @@ ActionsMenu::ActionsMenu(int x, int y, int width, int height) {
 	this->height = height;
 	this->entityID = 0;
 	this->user = NULL;
+	this->buttonNameLabel = new TextLabel (x+5,y+5);
+	this->foodCostTextLabel = new TextLabel(x+270,y+20);
+	this->woodCostTextLabel = new TextLabel(x+270,y+40);
+	this->stoneCostTextLabel = new TextLabel(x+270,y+60);
+	this->goldCostTextLabel = new TextLabel(x+270,y+80);
+
+	this->setLabelsBlank();
 }
 
 ActionsMenu::~ActionsMenu() {
 	this->deleteButtons();
+	delete this->foodCostTextLabel;
+	delete this->woodCostTextLabel;
+	delete this->goldCostTextLabel;
+	delete this->stoneCostTextLabel;
+	delete this->buttonNameLabel;
 }
 
 void ActionsMenu::render(Renderer* renderer,Entity *selectedEntity) {
@@ -43,6 +56,13 @@ void ActionsMenu::render(Renderer* renderer,Entity *selectedEntity) {
 		Button *button = *it;
 		button->render(renderer);
 	}
+
+	this->foodCostTextLabel->render(renderer);
+	this->woodCostTextLabel->render(renderer);
+	this->stoneCostTextLabel->render(renderer);
+	this->goldCostTextLabel->render(renderer);
+	this->buttonNameLabel->render(renderer);
+
 }
 
 void ActionsMenu::clickEvent(int x, int y, RendererInteractionDelegate *delegate) {
@@ -52,6 +72,33 @@ void ActionsMenu::clickEvent(int x, int y, RendererInteractionDelegate *delegate
 			button->pressed(delegate);
 		}
 	}
+}
+
+void ActionsMenu::setLabelsBlank() {
+	this->foodCostTextLabel->setMessage("");
+	this->woodCostTextLabel->setMessage("");
+	this->stoneCostTextLabel->setMessage("");
+	this->goldCostTextLabel->setMessage("");
+	this->buttonNameLabel->setMessage("");
+}
+
+void ActionsMenu::showEntityCost(int x,int y){
+	if (this->buttons.empty()){
+		this->setLabelsBlank();
+		return;
+	}
+	for (list<Button*>::iterator it = this->buttons.begin(); it != this->buttons.end(); it++){
+			Button *button = *it;
+			if (this->isPixelInButton(x,y,button)){
+				this->buttonNameLabel->setMessage(button->getEntityName());
+				this->foodCostTextLabel->setMessage("Comida: #comida");
+				this->woodCostTextLabel->setMessage("Madera: #madera");
+				this->stoneCostTextLabel->setMessage("Piedra: #piedra");
+				this->goldCostTextLabel->setMessage("Oro: #oro");
+				return;
+			}
+	}
+	this->setLabelsBlank();
 }
 
 bool ActionsMenu::isPixelInButton(int x, int y, Button *button){
