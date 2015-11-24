@@ -333,8 +333,13 @@ void Escenario::loop() {
 }
 
 void Escenario::actualizarTileOcupadaPorPersonaje(MobileModel *model){
-	SDL_Point currentTile = this->mundo->getTileForPosition(model->getPosicion());
-	this->tilesWithIds[model->getId()] = TileCoordinate(currentTile.x,currentTile.y);
+	if(model->estaViva()){
+		SDL_Point currentTile = this->mundo->getTileForPosition(model->getPosicion());
+		this->tilesWithIds[model->getId()] = TileCoordinate(currentTile.x,currentTile.y);
+	} else {
+		// Si no esta viva una unidad no ocupa espacio
+		this->tilesWithIds.erase(model->getId());
+	}
 }
 
 bool Escenario::tileOcupadoForEntity(TileCoordinate tile,Entity* entity){
