@@ -30,6 +30,9 @@ public:
 	virtual int getBlockSizeFromIndex(int currentIndex);
 	virtual void getBlockFromIndex(int currentIndex, void* buffer);
 	virtual void deserialize(int totalBlockCount, int currentBlock, void* blockData);
+private:
+	int hardness;
+	int resourceQuantity;
 };
 
 #endif /* MODELS_RESOURCE_H_ */
