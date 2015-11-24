@@ -200,9 +200,26 @@ void ClientGameController::initWindowSizes() {
 
 	Log().Get(TAG) << "Pos inicial " << this->renderer->mainTilePosition.x << "," << this->renderer->mainTilePosition.y;
 
-	SDL_Point posicionInicial = this->renderer->mapToWindowPoint(posicionInicialProtagonista);
+	SDL_Point posicionInicial = this->posicionInicialEntidadClave();
 	this->moveToPoint({	-posicionInicial.x + this->config->pantalla.getAncho(),
 						-posicionInicial.y + (this->config->pantalla.getAlto()/2)});
+}
+
+SDL_Point ClientGameController::posicionInicialEntidadClave() {
+	SDL_Point point = {0,0};
+
+	if(this->empezoPartida) {
+		Entity* selectedEntity = this->escenario->entidadClaveParaEquipo(this->usuario->getTeam());
+
+		if(!selectedEntity){
+			Log().Get(TAG) << "No encontre entidad inicial, uso 0,0";
+		} else {
+			Log().Get(TAG) << "equipo " << this->usuario->getTeam() <<" Inicializado encontre " << selectedEntity->getNombre() << " en " << selectedEntity->getPosicion().x << "," << selectedEntity->getPosicion().y;
+		}
+
+		point = this->renderer->mapToWindowPoint(selectedEntity->getPosicion());
+	}
+	return point;
 }
 
 float ClientGameController::scrollingSpeedX(int x) {
