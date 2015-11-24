@@ -826,6 +826,14 @@ void Renderer::clickEvent(int x, int y, bool leftClick, RendererInteractionDeleg
 
 }
 
+void Renderer::sendMousePosition(int x,int y){
+	if (this->isPixelInMenu(x,y)){
+		int xMenu = x - this->menuRect.x;
+		int yMenu = y - this->menuRect.y;
+		this->screenMenu->sendMousePosition(xMenu,yMenu);
+	}
+}
+
 void Renderer::dragLeftClickEvent(int xi, int yi, int xf, int yf){
 	if (!this->isPixelInEscenario(xi,yi)){
 		return;

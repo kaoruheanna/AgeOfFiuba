@@ -127,7 +127,7 @@ void* pingear(void* args) {
 	do{
 		info->mensajero->connectionAlive = false;
 		//printf("Cliente - Checkeando conexion...\n");
-		sleep(1);
+		sleep(2);
 	} while(info->mensajero->connectionAlive);
 	printf("Cliente - Cerrando conexion...\n");
 	shutdown(info->mensajero->getSocket(), 2); // No conexion => Cerrar el socket

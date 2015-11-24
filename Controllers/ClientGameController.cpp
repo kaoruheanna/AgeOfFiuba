@@ -200,9 +200,26 @@ void ClientGameController::initWindowSizes() {
 
 	Log().Get(TAG) << "Pos inicial " << this->renderer->mainTilePosition.x << "," << this->renderer->mainTilePosition.y;
 
-	SDL_Point posicionInicial = this->renderer->mapToWindowPoint(posicionInicialProtagonista);
+	SDL_Point posicionInicial = this->posicionInicialEntidadClave();
 	this->moveToPoint({	-posicionInicial.x + this->config->pantalla.getAncho(),
 						-posicionInicial.y + (this->config->pantalla.getAlto()/2)});
+}
+
+SDL_Point ClientGameController::posicionInicialEntidadClave() {
+	SDL_Point point = {0,0};
+
+	if(this->empezoPartida) {
+		Entity* selectedEntity = this->escenario->entidadClaveParaEquipo(this->usuario->getTeam());
+
+		if(!selectedEntity){
+			Log().Get(TAG) << "No encontre entidad inicial, uso 0,0";
+		} else {
+			Log().Get(TAG) << "equipo " << this->usuario->getTeam() <<" Inicializado encontre " << selectedEntity->getNombre() << " en " << selectedEntity->getPosicion().x << "," << selectedEntity->getPosicion().y;
+		}
+
+		point = this->renderer->mapToWindowPoint(selectedEntity->getPosicion());
+	}
+	return point;
 }
 
 float ClientGameController::scrollingSpeedX(int x) {
@@ -265,6 +282,10 @@ bool ClientGameController::pollEvents(){
 	bool pressedR = false;
 	SDL_Event e;
 	while( SDL_PollEvent( &e ) != 0 ) {
+
+		int x,y;
+		SDL_GetMouseState(&x,&y);
+		this->renderer->sendMousePosition(x,y);
 
 		if( e.type == SDL_QUIT ) {
 			this->shouldQuit = true;
@@ -447,6 +468,9 @@ void ClientGameController::actualizaPersonaje(MobileModel* tempEntity) {
 
 	Entity* model = this->escenario->entidadConId(tempEntity->getId());
 	if(model == NULL){
+		if(!tempEntity->estaViva()){
+			return;
+		}
 		Log().Get(TAG) << "No existia el personaje, tiene que crearse";
 
 		LogicPosition logicPosition = LogicPosition(tempEntity->getPosicion().x,tempEntity->getPosicion().y);
@@ -503,6 +527,9 @@ void ClientGameController::actualizarEntidad(Entity* tempEntity) {
 	bool isNewEntity = false;
 	Entity* existingEntity = this->escenario->entidadConId(tempEntity->getId());
 	if (existingEntity == NULL){
+		if(!tempEntity->estaViva()){
+			return;
+		}
 		//como no existia, tengo que crearla.
 		LogicPosition logicPosition = LogicPosition(tempEntity->getPosicion().x,tempEntity->getPosicion().y);
 
@@ -531,18 +558,25 @@ void ClientGameController::actualizarEntidad(Entity* tempEntity) {
 }
 
 void ClientGameController::eliminarEntity(Entity* entityToDelete){
-	// Si estaba seleccionado, lo deselecciono
-	list<Entity*>::iterator it;
-	for (it = this->selectedEntities.begin(); it != this->selectedEntities.end(); it++) {
-		Entity* selectedEntity = *it;
-		if (selectedEntity->getId() == entityToDelete->getId()) {
-			this->selectedEntities.erase(it);
+	int deleteID = entityToDelete->getId();
+	if(this->escenario->eliminarEntidadConID(deleteID)){
+		// Lo deselecciono
+		list<Entity*>::iterator it;
+		list<Entity*> newSelection;
+		for (it = this->selectedEntities.begin(); it != this->selectedEntities.end(); ++it) {
+			Entity* selectedEntity = *it;
+			if (selectedEntity->getId() != deleteID) {
+				newSelection.push_back(selectedEntity);
+			}
 		}
-	}
-	this->escenarioView->removeEntityViewForId(entityToDelete->getId());
-	this->miniEscenarioView->removeEntityMiniViewForId(entityToDelete->getId());;
+		// Actualizar la lista de los tiles seleccionados
+		this->setSelectedEntities(newSelection);
 
-	this->escenario->eliminarEntidadConID(entityToDelete->getId());
+		this->escenarioView->removeEntityViewForId(deleteID);
+		this->miniEscenarioView->removeEntityMiniViewForId(deleteID);
+
+		delete entityToDelete;
+	}
 }
 
 void ClientGameController::configEscenario(const string path) {
@@ -577,23 +611,12 @@ void ClientGameController::leftClickEnEscenario(int x,int y){
 	if (this->selectedEntities.size() == 1 and this->selectedEntities.front() == entidad){
 		return;
 	}
-	std::pair<SDL_Point,SDL_Point> tiles;
-	list<pair<SDL_Point,SDL_Point>> listaDeTile;
-	if (entidad!=NULL){
-		this->selectedEntities.clear();
-		this->selectedEntities.push_front(entidad);
-		this->setMessageForSelectedEntity(entidad);
-		tiles = this->escenario->getTilesCoordinatesForEntity(entidad);
-		listaDeTile.push_front(tiles);
-		entidad->creables = this->getCreablesListForEntityName(entidad->getNombre());
-		this->renderer->setSelectedTilesCoordinates(true,listaDeTile,this->selectedEntities);
 
-	}else{
-		this->selectedEntities.clear();
-		this->renderer->setMessagesInMenu(NULL);
-		list<Entity*> listaVacia;
-		this->renderer->setSelectedTilesCoordinates(false,listaDeTile,listaVacia);
+	list<Entity*> selectedEntities;
+	if(entidad != NULL){
+		selectedEntities.push_back(entidad);
 	}
+	this->setSelectedEntities(selectedEntities);
 }
 
 list<string> ClientGameController::getCreablesListForEntityName(string name){
@@ -653,18 +676,6 @@ void ClientGameController::leftMouseUp(int x, int y, int w, int h){
 	}
 
 	this->setSelectedEntities(seleccionadas);
-	list <pair<SDL_Point,SDL_Point>> tiles = this->escenario->getTilesCoordinatesForEntities(this->selectedEntities);
-
-	if (this->selectedEntities.empty()){
-		this->renderer->setMessagesInMenu(NULL);
-		this->renderer->setSelectedTilesCoordinates(false,tiles,seleccionadas);
-		return;
-	}
-
-	this->setMessageForSelectedEntities(this->selectedEntities);
-	tiles = this->escenario->getTilesCoordinatesForEntities(this->selectedEntities);
-	this->setCreablesForEntities(this->selectedEntities);
-	this->renderer->setSelectedTilesCoordinates(true,tiles,this->selectedEntities);
 }
 
 bool ClientGameController::isEntityFromMyTeam(Entity* entidad) {
@@ -770,6 +781,26 @@ SDL_Point ClientGameController::getPosicionPromedioForSelectedEntities(){
 
 void ClientGameController::setSelectedEntities(list<Entity*> listaDeEntidades){
 	this->selectedEntities.swap(listaDeEntidades);
+
+	// Actualiza las vistas que los usan
+	list <pair<SDL_Point,SDL_Point>> tiles = this->escenario->getTilesCoordinatesForEntities(this->selectedEntities);
+
+	if (this->selectedEntities.empty()){
+		this->renderer->setMessagesInMenu(NULL);
+		this->renderer->setSelectedTilesCoordinates(
+			false,
+			this->escenario->getTilesCoordinatesForEntities(this->selectedEntities),
+			this->selectedEntities
+		);
+	} else {
+		this->setMessageForSelectedEntities(this->selectedEntities);
+		this->renderer->setSelectedTilesCoordinates(
+			true,
+			this->escenario->getTilesCoordinatesForEntities(this->selectedEntities),
+			this->selectedEntities
+		);
+		this->setCreablesForEntities(this->selectedEntities);
+	}
 }
 
 void ClientGameController::setCreablesForEntities(list<Entity*> listaDeEntidades){

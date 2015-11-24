@@ -31,6 +31,7 @@ TipoConfig::TipoConfig() {
 	this->propiedadesTipoUnidad.poderAtaque = 1;
 	this->propiedadesTipoUnidad.vidaInicial = 100;
 	this->propiedadesTipoUnidad.escudo = 0;
+	this->propiedadesTipoUnidad.escudoDistancia = 0;
 	this->costoConstruccion.costoArbol = 0;
 	this->costoConstruccion.costoComida = 0;
 	this->costoConstruccion.costoOro = 0;

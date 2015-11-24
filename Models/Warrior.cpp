@@ -7,6 +7,7 @@
 
 #include "Warrior.h"
 #include "../Utils/Log.h"
+#include "../GlobalConstants.h"
 
 const string TAG = "Warrior";
 
@@ -36,6 +37,9 @@ void Warrior::doInteract() {
 		return;
 	}
 	if (!this->activeInteractionEntity->estaViva()){
+		return;
+	}
+	if (this->getNombre() == NOMBRE_REY) {
 		return;
 	}
 

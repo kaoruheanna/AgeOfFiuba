@@ -69,3 +69,6 @@ void ScreenMenu::setUser(User *user) {
 	this->actionsMenu->setUser(user);
 }
 
+void ScreenMenu::sendMousePosition(int x, int y){
+	this->actionsMenu->showEntityCost(x,y);
+}

@@ -70,6 +70,7 @@ class Escenario {
 		Entity* crearEntidadFromConfig(EntidadConfig config);
 		list<Entity*> getListaEntidades(); // Se usa para agregar las vistas de las entidades
 		list<Entity*> getListaRecursos(); // Se usa para agregar las vistas de las entidades
+		Entity* entidadClaveParaEquipo(Team team);
 		bool eliminarEntidadConID(int id);
 		bool existeRecursoConID(int id);
 		Entity* entidadConId(int id);

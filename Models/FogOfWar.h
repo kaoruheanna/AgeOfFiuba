@@ -37,6 +37,8 @@ private:
 	list<SDL_Point> TilesVisitados;
 	void setInSight(int posicionX, int posicionY);
 	void setNublados();
+	void setEntidadesEnemigasInSight(const list<Entity*>& entidades,Team equipo);
+	bool isAnyTileVisible(int ancho, int alto, int posicionX,int posicionY);
 };
 
 #endif /* FOGOFWAR_H_ */

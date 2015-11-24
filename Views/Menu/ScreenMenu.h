@@ -30,6 +30,7 @@ public:
 	void clickEvent(int x, int y, RendererInteractionDelegate *delegate);
 	void setStatusForEntity(Entity* entity);
 	void setUser(User *user);
+	void sendMousePosition(int x, int y);
 
 private:
 	int width;
