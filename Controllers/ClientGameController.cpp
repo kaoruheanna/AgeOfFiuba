@@ -558,22 +558,22 @@ void ClientGameController::actualizarEntidad(Entity* tempEntity) {
 }
 
 void ClientGameController::eliminarEntity(Entity* entityToDelete){
-	if(this->escenario->eliminarEntidadConID(entityToDelete->getId())){
-		printf("matarEntity: %i\n", entityToDelete->getId());
+	int deleteID = entityToDelete->getId();
+	if(this->escenario->eliminarEntidadConID(deleteID)){
 		// Lo deselecciono
 		list<Entity*>::iterator it;
+		list<Entity*> newSelection;
 		for (it = this->selectedEntities.begin(); it != this->selectedEntities.end(); ++it) {
 			Entity* selectedEntity = *it;
-			if (selectedEntity->getId() == entityToDelete->getId()) {
-				this->selectedEntities.erase(it);
-				it = this->selectedEntities.begin();
+			if (selectedEntity->getId() != deleteID) {
+				newSelection.push_back(selectedEntity);
 			}
 		}
 		// Actualizar la lista de los tiles seleccionados
-		this->setSelectedEntities(this->selectedEntities);
+		this->setSelectedEntities(newSelection);
 
-		this->escenarioView->removeEntityViewForId(entityToDelete->getId());
-		this->miniEscenarioView->removeEntityMiniViewForId(entityToDelete->getId());
+		this->escenarioView->removeEntityViewForId(deleteID);
+		this->miniEscenarioView->removeEntityMiniViewForId(deleteID);
 
 		delete entityToDelete;
 	}
@@ -784,23 +784,23 @@ void ClientGameController::setSelectedEntities(list<Entity*> listaDeEntidades){
 	this->selectedEntities.swap(listaDeEntidades);
 
 	// Actualiza las vistas que los usan
-	list <pair<SDL_Point,SDL_Point>> tiles = this->escenario->getTilesCoordinatesForEntities(selectedEntities);
+	list <pair<SDL_Point,SDL_Point>> tiles = this->escenario->getTilesCoordinatesForEntities(this->selectedEntities);
 
 	if (this->selectedEntities.empty()){
 		this->renderer->setMessagesInMenu(NULL);
 		this->renderer->setSelectedTilesCoordinates(
 			false,
-			this->escenario->getTilesCoordinatesForEntities(selectedEntities),
-			selectedEntities
+			this->escenario->getTilesCoordinatesForEntities(this->selectedEntities),
+			this->selectedEntities
 		);
 	} else {
-		this->setMessageForSelectedEntities(selectedEntities);
+		this->setMessageForSelectedEntities(this->selectedEntities);
 		this->renderer->setSelectedTilesCoordinates(
 			true,
-			this->escenario->getTilesCoordinatesForEntities(selectedEntities),
-			selectedEntities
+			this->escenario->getTilesCoordinatesForEntities(this->selectedEntities),
+			this->selectedEntities
 		);
-		this->setCreablesForEntities(selectedEntities);
+		this->setCreablesForEntities(this->selectedEntities);
 	}
 }
 
