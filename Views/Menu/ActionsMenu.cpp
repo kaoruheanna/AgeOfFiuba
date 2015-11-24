@@ -100,6 +100,27 @@ void ActionsMenu::showEntityCost(int x,int y){
 				this->woodCostTextLabel->setMessage("Madera: " + this->convertIntToString(costo.costoArbol));
 				this->stoneCostTextLabel->setMessage("Piedra: "+ this->convertIntToString(costo.costoPiedra));
 				this->goldCostTextLabel->setMessage("Oro: " + this->convertIntToString(costo.costoOro));
+				if (this->user->comida >= costo.costoComida) {
+					this->foodCostTextLabel->setTextLabelColor(0, 0, 0);
+				} else {
+					this->foodCostTextLabel->setTextLabelColor(255, 0, 0);
+				}
+				if (this->user->madera >= costo.costoArbol){
+					this->woodCostTextLabel->setTextLabelColor(0, 0, 0);
+				} else {
+					this->woodCostTextLabel->setTextLabelColor(255, 0, 0);
+				}
+				if (this->user->piedra >= costo.costoPiedra){
+					this->stoneCostTextLabel->setTextLabelColor(0, 0, 0);
+				} else {
+					this->stoneCostTextLabel->setTextLabelColor(255, 0, 0);
+				}
+				if (this->user->oro >= costo.costoOro){
+					this->goldCostTextLabel->setTextLabelColor(0, 0, 0);
+				} else {
+					this->goldCostTextLabel->setTextLabelColor(255, 0, 0);
+				}
+
 				return;
 			}
 	}

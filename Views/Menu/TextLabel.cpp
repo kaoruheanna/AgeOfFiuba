@@ -17,6 +17,7 @@ TextLabel::TextLabel(int x, int y) {
 	this->height = 0;
 	this->texture = NULL;
 	this->message = "";
+	this->setTextLabelColor( 0, 0, 0);
 }
 
 TextLabel::~TextLabel() {
@@ -37,8 +38,7 @@ void TextLabel::render(Renderer *renderer){
 
 void TextLabel::loadTexture(SDL_Renderer *sdlRenderer,TTF_Font *font){
 	this->freeTexture();
-	SDL_Color textColor = {0,0,0};
-	SDL_Surface* surfaceMessage = TTF_RenderText_Solid(font, this->message.c_str(), textColor);
+	SDL_Surface* surfaceMessage = TTF_RenderText_Solid(font, this->message.c_str(), this->textColor);
 	if(surfaceMessage == NULL) {
 		Log().Get(TAG,logERROR) << "No se pudo cargar la surface: "<<TTF_GetError();
 		return;
@@ -55,7 +55,10 @@ void TextLabel::loadTexture(SDL_Renderer *sdlRenderer,TTF_Font *font){
 	}
 }
 
-
+void TextLabel::setTextLabelColor(Uint8 red, Uint8 green, Uint8 blue){
+	this->textColor = {red,green,blue};
+	this->freeTexture();
+}
 
 void TextLabel::setMessage(string newMessage) {
 	if (this->message == newMessage){
