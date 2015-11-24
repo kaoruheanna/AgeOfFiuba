@@ -5,6 +5,8 @@
  */
 
 #include "FogOfWar.h"
+#include "../Utils/Log.h"
+const string TAG ="FogOfWar";
 
 FogOfWar::FogOfWar(int ancho, int alto){
 	this->ancho = ancho;
@@ -29,6 +31,34 @@ void FogOfWar::initialice(){
 	}
 }
 
+bool FogOfWar::isAnyTileVisible(int ancho, int alto, int posicionX,	int posicionY) {
+	for (int x = 0; x < ancho; ++x) {
+		for (int y = 0; y < alto; ++y) {
+			if (this->getEstado(posicionX + x, posicionY + y) == VISIBLE) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+void FogOfWar::setEntidadesEnemigasInSight(const list<Entity*>& entidades,Team equipo) {
+	for (auto entity : entidades) {
+		if (entity->getTeam() != equipo) {
+			int alto = entity->getAltoBase();
+			int ancho = entity->getAnchoBase();
+			int posicionX = entity->getPosicion().x / TILE_SIZE;
+			int posicionY = entity->getPosicion().y / TILE_SIZE;
+			if (this->isAnyTileVisible(ancho, alto, posicionX, posicionY)) {
+				for (int x = 0; x < ancho; ++x) {
+					for (int y = 0; y < alto; ++y) {
+						this->setInSight(posicionX + x, posicionY + y);
+					}
+				}
+			}
+		}
+	}
+}
 
 void FogOfWar::update(list<Entity*> entidades, Team equipo){
 	this->setNublados();
@@ -53,6 +83,8 @@ void FogOfWar::update(list<Entity*> entidades, Team equipo){
 		}
 
 	}
+
+	this->setEntidadesEnemigasInSight(entidades, equipo);
 }
 
 void FogOfWar::setInSight(int posicionX, int posicionY){
