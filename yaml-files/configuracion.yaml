@@ -53,12 +53,12 @@ tipos:
    vida_inicial: 1000
    escudo: 1
    escudo_distancia: 10
-   costo_oro: 1
-   costo_piedra: 5
-   costo_arbol: 10
+   costo_oro: 0
+   costo_piedra: 0
+   costo_arbol: 100
    costo_comida: 0
 
- - nombre: archeryRange
+ - nombre: arqueria
    categoria: building
    imagen: img/archeryRange.png
    miniImagen: img/tile_orange.png
@@ -70,8 +70,15 @@ tipos:
    creables:
    - lancero
    - ballestero  
+   vida_inicial: 2000
+   escudo: 1
+   escudo_distancia: 10
+   costo_oro: 0
+   costo_piedra: 50
+   costo_arbol: 150
+   costo_comida: 0
    
- - nombre: barracks
+ - nombre: barraca
    categoria: building
    imagen: img/barracks.png
    miniImagen: img/tile_orange.png
@@ -82,8 +89,34 @@ tipos:
    pixel_ref_y: 92
    creables:
    - soldado
+   vida_inicial: 2000
+   escudo: 1
+   escudo_distancia: 10
+   costo_oro: 0
+   costo_piedra: 100
+   costo_arbol: 200
+   costo_comida: 0
+
+ - nombre: establo
+   categoria: building
+   imagen: img/stable.png
+   miniImagen: img/tile_orange.png
+   imagenBoton: img/boton-establo.png
+   ancho_base: 6
+   alto_base : 6
+   pixel_ref_x: 192
+   pixel_ref_y: 92
+   creables:
+   - caballero
+   vida_inicial: 2000
+   escudo: 1
+   escudo_distancia: 10
+   costo_oro: 0
+   costo_piedra: 200
+   costo_arbol: 200
+   costo_comida: 0
    
- - nombre: siegeCamp
+ - nombre: taller de maquinas de asedio
    categoria: building
    imagen: img/siegecamp.png
    miniImagen: img/tile_orange.png
@@ -94,6 +127,13 @@ tipos:
    pixel_ref_y: 65
    creables:
    - bombardero
+   vida_inicial: 2000
+   escudo: 1
+   escudo_distancia: 10
+   costo_oro: 0
+   costo_piedra: 50
+   costo_arbol: 200
+   costo_comida: 0
 
  - nombre: molino
    categoria: building
@@ -107,6 +147,13 @@ tipos:
    fps: 10
    ancho_frame: 200
    alto_frame: 145
+   vida_inicial: 500
+   escudo: 1
+   escudo_distancia: 1
+   costo_oro: 0
+   costo_piedra: 0
+   costo_arbol: 100
+   costo_comida: 0
 
  - nombre: soldado
    categoria: warrior
@@ -129,12 +176,12 @@ tipos:
    ancho_frame: 38
    mini_map_pixel_ref_type: 1
    alcance: 1
-   vida_inicial: 250
-   poder_ataque: 3
-   costo_oro: 1
+   vida_inicial: 100
+   poder_ataque: 5
+   costo_oro: 10
    costo_piedra: 0
    costo_arbol: 0
-   costo_comida: 10
+   costo_comida: 50
    
  - nombre: aldeano
    categoria: worker
@@ -159,11 +206,19 @@ tipos:
    creables:
    - molino
    - casa
-   - archeryRange
-   - barracks
-   - siegeCamp
+   - arqueria
+   - barraca
+   - taller de maquinas de asedio
+   - establo
+   alcance: 1
+   vida_inicial: 50
+   poder_ataque: 0
+   costo_oro: 0
+   costo_piedra: 0
+   costo_arbol: 0
+   costo_comida: 50
    
- - nombre: caballo
+ - nombre: caballero
    categoria: warrior
    imagen: img/caballoCaminando.png
    imagenInteractuando: img/caballoAtacando.png
@@ -184,8 +239,12 @@ tipos:
    ancho_frame: 93
    mini_map_pixel_ref_type: 1
    alcance: 1
-   vida_inicial: 500
-   poder_ataque: 4
+   vida_inicial: 200
+   poder_ataque: 10
+   costo_oro: 50
+   costo_piedra: 0
+   costo_arbol: 0
+   costo_comida: 100
    
  - nombre: ballestero
    categoria: warrior
@@ -208,8 +267,12 @@ tipos:
    pixel_ref_y_int: 42
    mini_map_pixel_ref_type: 1
    alcance: 3
-   vida_inicial: 500
-   poder_ataque: 2
+   vida_inicial: 100
+   poder_ataque: 3
+   costo_oro: 5
+   costo_piedra: 0
+   costo_arbol: 10
+   costo_comida: 50
    
  - nombre: rey
    categoria: warrior
@@ -225,9 +288,13 @@ tipos:
    alto_frame: 94
    ancho_frame: 89
    mini_map_pixel_ref_type: 1
-   alcance: 3
+   alcance: 1
    vida_inicial: 500
-   poder_ataque: 2
+   poder_ataque: 0
+   costo_oro: 0
+   costo_piedra: 0
+   costo_arbol: 0
+   costo_comida: 0
 
  - nombre: bombardero
    categoria: warrior
@@ -249,9 +316,13 @@ tipos:
    pixel_ref_x_int: 27
    pixel_ref_y_int: 44
    mini_map_pixel_ref_type: 1
-   alcance: 3
-   vida_inicial: 500
-   poder_ataque: 2   
+   alcance: 10
+   vida_inicial: 200
+   poder_ataque: 50 
+   costo_oro: 200
+   costo_piedra: 10
+   costo_arbol: 0
+   costo_comida: 50
    
  - nombre: lancero
    categoria: warrior
@@ -273,9 +344,13 @@ tipos:
    pixel_ref_x_int: 40
    pixel_ref_y_int: 60
    mini_map_pixel_ref_type: 1
-   alcance: 3
-   vida_inicial: 500
-   poder_ataque: 2   
+   alcance: 5
+   vida_inicial: 75
+   poder_ataque: 2
+   costo_oro: 10
+   costo_piedra: 0
+   costo_arbol: 10
+   costo_comida: 50
 
  - nombre: tierra
    imagen: img/tierra.png
@@ -294,7 +369,7 @@ tipos:
    alto_frame: 64
    ancho_frame: 72
 
- - nombre: centro
+ - nombre: centro urbano
    categoria: building
    imagen: img/castle.png
    miniImagen: img/tile_orange.png
@@ -307,27 +382,28 @@ tipos:
    ancho_frame: 500
    alto_frame: 422
    vida_inicial: 10000
+   escudo: 10
+   escudo_distancia: 100
+   costo_oro: 1000
+   costo_piedra: 5000
+   costo_arbol: 3000
+   costo_comida: 0
 
 escenario:
  - nombre: orleans
-   size_x: 40
-   size_y: 40
+   size_x: 100
+   size_y: 100
    tipo: centro   
 
    entidades:
    
    - [x: 5, y: 5, tipo: molino, equipo: RED]
-   - [x: 14, y: 13, tipo: caballo, equipo: RED]
+   - [x: 14, y: 13, tipo: caballero, equipo: RED]
    - [x: 10, y: 14, tipo: aldeano, equipo: RED]
    - [x: 10, y: 5, tipo: arbol] 
-   - [x: 9, y: 14, tipo: rey, equipo: RED]
-   - [x: 20, y: 20, tipo: centro, equipo: RED]
+   - [x: 9, y: 14, tipo: rey, equipo: RED]	
+   - [x: 20, y: 20, tipo: centro urbano, equipo: RED]
    - [x: 20, y: 10, tipo: casa, equipo: BLUE]
-   - [x: 20, y: 30, tipo: centro, equipo: BLUE]
-   - [x: 10, y: 3, tipo: caballo, equipo: BLUE]
-
-   
-   protagonista:
-   - tipo: soldado
-     x: 10
-     y: 3
+   - [x: 50, y: 30, tipo: centro urbano, equipo: BLUE]
+   - [x: 10, y: 3, tipo: caballero, equipo: BLUE]
+   - [x: 11, y: 4, tipo: rey, equipo: BLUE]
