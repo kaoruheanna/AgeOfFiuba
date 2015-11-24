@@ -158,7 +158,6 @@ bool Escenario::eliminarEntidadConID(int id) {
 		if (entidadReal->getId() == id) {
 			this->mundo->sacarEntidad(entidadReal);
 			this->entidades.erase(entidad);
-			delete entidadReal;
 			return true;
 		}
 	}
