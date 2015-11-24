@@ -124,6 +124,24 @@ list<Entity*> Escenario::getListaEntidades(){
 	return this->entidades;
 }
 
+Entity* Escenario::entidadClaveParaEquipo(Team team){
+	string tipoABuscar = escenarioConfig.getTipo();
+
+
+	for (auto entity : this->entidades) {
+		if(entity->getTeam() == team){
+			if(tipoABuscar.compare("debug") == 0 ) {
+				return entity;
+			}
+
+			if (entity->getNombre().compare(tipoABuscar)==0) {
+				return entity;
+			}
+		}
+	}
+	return NULL;
+}
+
 
 Entity* Escenario::entidadConId(int id) {
 	list<Entity*>::iterator entidad;
@@ -158,7 +176,6 @@ bool Escenario::eliminarEntidadConID(int id) {
 		if (entidadReal->getId() == id) {
 			this->mundo->sacarEntidad(entidadReal);
 			this->entidades.erase(entidad);
-			delete entidadReal;
 			return true;
 		}
 	}
