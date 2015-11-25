@@ -64,7 +64,7 @@ tipos:
    ancho_frame: 72
    vida_inicial: 500
 
- - nombre: centro urbano
+ - nombre: centro
    categoria: building
    imagen: img/castle.png
    miniImagen: img/tile_orange.png
