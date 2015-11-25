@@ -223,6 +223,8 @@ tipos:
    alcance: 1
    vida_inicial: 100
    poder_ataque: 5
+   escudo: 5
+   escudo_distancia: 5
    costo_oro: 10
    costo_piedra: 0
    costo_arbol: 0
@@ -286,6 +288,8 @@ tipos:
    alcance: 1
    vida_inicial: 200
    poder_ataque: 10
+   escudo: 10
+   escudo_distancia: 10
    costo_oro: 50
    costo_piedra: 0
    costo_arbol: 0
@@ -314,6 +318,8 @@ tipos:
    alcance: 3
    vida_inicial: 100
    poder_ataque: 3
+   escudo: 2
+   escudo_distancia: 20
    costo_oro: 5
    costo_piedra: 0
    costo_arbol: 10
@@ -336,6 +342,8 @@ tipos:
    alcance: 1
    vida_inicial: 500
    poder_ataque: 0
+   escudo: 20
+   escudo_distancia: 20
    costo_oro: 0
    costo_piedra: 0
    costo_arbol: 0
@@ -364,6 +372,8 @@ tipos:
    alcance: 10
    vida_inicial: 200
    poder_ataque: 50 
+   escudo: 2
+   escudo_distancia: 10
    costo_oro: 200
    costo_piedra: 10
    costo_arbol: 0
@@ -392,6 +402,8 @@ tipos:
    alcance: 5
    vida_inicial: 75
    poder_ataque: 2
+   escudo: 8
+   escudo_distancia: 2
    costo_oro: 10
    costo_piedra: 0
    costo_arbol: 10
