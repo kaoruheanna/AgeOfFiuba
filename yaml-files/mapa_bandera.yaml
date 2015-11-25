@@ -64,7 +64,7 @@ tipos:
    ancho_frame: 72
    vida_inicial: 500
 
- - nombre: centro urbano
+ - nombre: centro
    categoria: building
    imagen: img/castle.png
    miniImagen: img/tile_orange.png
@@ -79,6 +79,7 @@ tipos:
    vida_inicial: 10000
    escudo: 10
    escudo_distancia: 100
+   poder_ataque: 0
    costo_oro: 1000
    costo_piedra: 5000
    costo_arbol: 3000
@@ -98,6 +99,7 @@ tipos:
    vida_inicial: 1000
    escudo: 1
    escudo_distancia: 10
+   poder_ataque: 0
    costo_oro: 0
    costo_piedra: 0
    costo_arbol: 100
@@ -118,6 +120,7 @@ tipos:
    vida_inicial: 2000
    escudo: 1
    escudo_distancia: 10
+   poder_ataque: 0
    costo_oro: 0
    costo_piedra: 50
    costo_arbol: 150
@@ -137,6 +140,7 @@ tipos:
    vida_inicial: 2000
    escudo: 1
    escudo_distancia: 10
+   poder_ataque: 0
    costo_oro: 0
    costo_piedra: 100
    costo_arbol: 200
@@ -156,6 +160,7 @@ tipos:
    vida_inicial: 2000
    escudo: 1
    escudo_distancia: 10
+   poder_ataque: 0
    costo_oro: 0
    costo_piedra: 200
    costo_arbol: 200
@@ -175,6 +180,7 @@ tipos:
    vida_inicial: 2000
    escudo: 1
    escudo_distancia: 10
+   poder_ataque: 0
    costo_oro: 0
    costo_piedra: 50
    costo_arbol: 200
@@ -195,6 +201,7 @@ tipos:
    vida_inicial: 500
    escudo: 1
    escudo_distancia: 1
+   poder_ataque: 0
    costo_oro: 0
    costo_piedra: 0
    costo_arbol: 100
