@@ -11,19 +11,11 @@
 
 const string TAG = "Resource";
 
-Resource::Resource() : Entity(0,"", {0, 0}, 1, 1) {
-	this->hardness = RESOURCE_HARDNESS;
-	this->resourceQuantity = this->hardness;
-}
-Resource::Resource(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base): Entity(id,nombre, posicion, ancho_base, alto_base) {
-	this->hardness = RESOURCE_HARDNESS;
-	this->resourceQuantity = this->hardness;
-}
+Resource::Resource() : Entity(0,"", {0, 0}, 1, 1) {}
+Resource::Resource(int id, string nombre, SDL_Point posicion, int ancho_base, int alto_base): Entity(id,nombre, posicion, ancho_base, alto_base) {}
 
 Resource::Resource( const Resource& other ) : Entity(other) {
 	this->id = other.id;
-	this->hardness = RESOURCE_HARDNESS;
-	this->resourceQuantity = this->hardness;
 };
 
 Resource::~Resource() {}
@@ -40,25 +32,20 @@ void Resource::receiveInteraction(Warrior* entity) {
 
 void Resource::receiveInteraction(Worker *entity) {
 	if (this->estaViva()){
-		if (this->resourceQuantity <= 0){
-			this->life -= entity->getPoderCosecha();
-			this->resourceQuantity = this->hardness;
-			if (this->getNombre().compare(RECURSO_COMIDA) == 0){
-				entity->foodGathered = entity->getPoderCosecha();
-			}
-			else if (this->getNombre().compare(RECURSO_ARBOL) == 0){
-				entity->woodGathered = entity->getPoderCosecha();
-			}
-			else if (this->getNombre().compare(RECURSO_PIEDRA) == 0){
-				entity->stoneGathered = entity->getPoderCosecha();
-			}
-			else if (this->getNombre().compare(RECURSO_ORO) == 0){
-				entity->goldGathered = entity->getPoderCosecha();
-			}
+		if (this->getNombre().compare(RECURSO_COMIDA) == 0){
+			entity->foodGathered = entity->getPoderCosecha();
 		}
-		else{
-			this->resourceQuantity -= entity->getPoderCosecha();
+		else if (this->getNombre().compare("arbol") == 0){
+			entity->woodGathered = entity->getPoderCosecha();
 		}
+		else if (this->getNombre().compare(RECURSO_PIEDRA) == 0){
+			entity->stoneGathered = entity->getPoderCosecha();
+		}
+		else if (this->getNombre().compare(RECURSO_ORO) == 0){
+			entity->goldGathered = entity->getPoderCosecha();
+		}
+
+		this->life -= entity->getPoderCosecha();
 		entity->setInteracting();
 	}
 }

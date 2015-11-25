@@ -11,10 +11,6 @@ tipos:
  - nombre: agua
    imagen: img/agua.png
    miniImagen: img/tile_blue.png
-   
- - nombre: tierra
-   imagen: img/tierra.png
-   miniImagen: img/tile_yellow.png
 
  - nombre: piedra
    categoria: resource
@@ -24,7 +20,6 @@ tipos:
    alto_base : 1
    pixel_ref_x: 43
    pixel_ref_y: 9
-   vida_inicial: 500
    
  - nombre: comida
    categoria: resource
@@ -34,7 +29,6 @@ tipos:
    alto_base : 1
    pixel_ref_x: 42
    pixel_ref_y: 16
-   vida_inicial: 500
    
  - nombre: oro
    categoria: resource
@@ -44,42 +38,7 @@ tipos:
    alto_base : 1
    pixel_ref_x: 40
    pixel_ref_y: 8
-   vida_inicial: 500
- 
- - nombre: arbol
-   categoria: resource
-   imagen: img/tree1.png
-   miniImagen: img/tile_yellow.png
-   ancho_base: 1
-   alto_base : 1
-   pixel_ref_x: 24
-   pixel_ref_y: 48
-   fps: 5
-   delay: 1
-   alto_frame: 64
-   ancho_frame: 72
-   vida_inicial: 500
 
- - nombre: centro urbano
-   categoria: building
-   imagen: img/castle.png
-   miniImagen: img/tile_orange.png
-   imagenBoton: img/boton-castillo.png
-   ancho_base: 8
-   alto_base : 8
-   pixel_ref_x: 280
-   pixel_ref_y: 177
-   fps: 0
-   ancho_frame: 500
-   alto_frame: 422
-   vida_inicial: 10000
-   escudo: 10
-   escudo_distancia: 100
-   costo_oro: 1000
-   costo_piedra: 5000
-   costo_arbol: 3000
-   costo_comida: 0 
- 
  - nombre: casa
    categoria: building
    imagen: img/casa2x2.png
@@ -392,6 +351,43 @@ tipos:
    costo_piedra: 0
    costo_arbol: 10
    costo_comida: 50
+
+ - nombre: tierra
+   imagen: img/tierra.png
+   miniImagen: img/tile_yellow.png
+ 
+ - nombre: arbol
+   categoria: resource
+   imagen: img/tree1.png
+   miniImagen: img/tile_yellow.png
+   ancho_base: 1
+   alto_base : 1
+   pixel_ref_x: 24
+   pixel_ref_y: 48
+   fps: 5
+   delay: 1
+   alto_frame: 64
+   ancho_frame: 72
+
+ - nombre: centro urbano
+   categoria: building
+   imagen: img/castle.png
+   miniImagen: img/tile_orange.png
+   imagenBoton: img/boton-castillo.png
+   ancho_base: 8
+   alto_base : 8
+   pixel_ref_x: 280
+   pixel_ref_y: 177
+   fps: 0
+   ancho_frame: 500
+   alto_frame: 422
+   vida_inicial: 10000
+   escudo: 10
+   escudo_distancia: 100
+   costo_oro: 1000
+   costo_piedra: 5000
+   costo_arbol: 3000
+   costo_comida: 0
 
 escenario:
  - nombre: orleans
