@@ -19,6 +19,7 @@ tipos:
  - nombre: piedra
    categoria: resource
    imagen: img/piedra.png
+   imagenBoton: img/boton-piedra.png
    miniImagen: img/tile_blue.png
    ancho_base: 1
    alto_base : 1
@@ -29,6 +30,7 @@ tipos:
  - nombre: comida
    categoria: resource
    imagen: img/arbusto.png
+   imagenBoton: img/boton-comida.png
    miniImagen: img/tile_blue.png
    ancho_base: 1
    alto_base : 1
@@ -39,6 +41,7 @@ tipos:
  - nombre: oro
    categoria: resource
    imagen: img/oro.png
+   imagenBoton: img/boton-oro.png
    miniImagen: img/tile_blue.png
    ancho_base: 1
    alto_base : 1
@@ -49,6 +52,7 @@ tipos:
  - nombre: arbol
    categoria: resource
    imagen: img/tree1.png
+   imagenBoton: img/boton-arbol.png
    miniImagen: img/tile_yellow.png
    ancho_base: 1
    alto_base : 1
@@ -392,7 +396,7 @@ tipos:
    costo_piedra: 0
    costo_arbol: 10
    costo_comida: 50
-
+ 
  - nombre: bandera
    categoria: building
    imagen: img/bandera.png
