@@ -19,6 +19,7 @@ tipos:
  - nombre: piedra
    categoria: resource
    imagen: img/piedra.png
+   imagenBoton: img/boton-piedra.png
    miniImagen: img/tile_blue.png
    ancho_base: 1
    alto_base : 1
@@ -29,6 +30,7 @@ tipos:
  - nombre: comida
    categoria: resource
    imagen: img/arbusto.png
+   imagenBoton: img/boton-comida.png
    miniImagen: img/tile_blue.png
    ancho_base: 1
    alto_base : 1
@@ -39,6 +41,7 @@ tipos:
  - nombre: oro
    categoria: resource
    imagen: img/oro.png
+   imagenBoton: img/boton-oro.png
    miniImagen: img/tile_blue.png
    ancho_base: 1
    alto_base : 1
@@ -49,6 +52,7 @@ tipos:
  - nombre: arbol
    categoria: resource
    imagen: img/tree1.png
+   imagenBoton: img/boton-arbol.png
    miniImagen: img/tile_yellow.png
    ancho_base: 1
    alto_base : 1
@@ -392,7 +396,7 @@ tipos:
    costo_piedra: 0
    costo_arbol: 10
    costo_comida: 50
-
+ 
  - nombre: bandera
    categoria: building
    imagen: img/bandera.png
@@ -410,8 +414,8 @@ tipos:
 
 escenario:
  - nombre: captura_la_bandera
-   size_x: 40
-   size_y: 40
+   size_x: 100
+   size_y: 100
    tipo: bandera
 
    entidades:
@@ -419,6 +423,7 @@ escenario:
    - [x: 0, y: 0, tipo: bandera, equipo: RED]
    - [x: 5, y: 5, tipo: aldeano, equipo: RED]
    - [x: 5, y: 6, tipo: aldeano, equipo: RED]
+   - [x: 10, y: 10, tipo: centro urbano, equipo: RED]
    - [x: 6, y: 6, tipo: comida]
    - [x: 6, y: 7, tipo: comida]
    - [x: 7, y: 6, tipo: comida]
@@ -437,7 +442,9 @@ escenario:
    - [x: 32, y: 32, tipo: comida]
    - [x: 34, y: 34, tipo: aldeano, equipo: BLUE]
    - [x: 34, y: 35, tipo: aldeano, equipo: BLUE]
+   - [x: 35, y: 35, tipo: caballero, equipo: BLUE]
    - [x: 36, y: 36, tipo: bandera, equipo: BLUE]
+   - [x: 40, y: 36, tipo: centro urbano, equipo: BLUE]
    
    protagonista:
    - tipo: soldado
