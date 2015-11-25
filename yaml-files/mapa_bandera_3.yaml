@@ -1,0 +1,582 @@
+---
+pantalla:
+ - alto: 700
+ - ancho: 1200
+
+configuracion:
+ - vel_personaje: 3
+ - margen_scroll: 30
+
+tipos:
+ - nombre: agua
+   imagen: img/agua.png
+   miniImagen: img/tile_blue.png
+   
+ - nombre: tierra
+   imagen: img/tierra.png
+   miniImagen: img/tile_yellow.png
+
+ - nombre: piedra
+   categoria: resource
+   imagen: img/piedra.png
+   imagenBoton: img/boton-piedra.png
+   miniImagen: img/tile_blue.png
+   ancho_base: 1
+   alto_base : 1
+   pixel_ref_x: 43
+   pixel_ref_y: 9
+   vida_inicial: 500
+   
+ - nombre: comida
+   categoria: resource
+   imagen: img/arbusto.png
+   imagenBoton: img/boton-comida.png
+   miniImagen: img/tile_blue.png
+   ancho_base: 1
+   alto_base : 1
+   pixel_ref_x: 42
+   pixel_ref_y: 16
+   vida_inicial: 500
+   
+ - nombre: oro
+   categoria: resource
+   imagen: img/oro.png
+   imagenBoton: img/boton-oro.png
+   miniImagen: img/tile_blue.png
+   ancho_base: 1
+   alto_base : 1
+   pixel_ref_x: 40
+   pixel_ref_y: 8
+   vida_inicial: 500
+ 
+ - nombre: arbol
+   categoria: resource
+   imagen: img/tree1.png
+   imagenBoton: img/boton-arbol.png
+   miniImagen: img/tile_yellow.png
+   ancho_base: 1
+   alto_base : 1
+   pixel_ref_x: 24
+   pixel_ref_y: 48
+   fps: 5
+   delay: 1
+   alto_frame: 64
+   ancho_frame: 72
+   vida_inicial: 500
+
+ - nombre: centro urbano
+   categoria: building
+   imagen: img/castle.png
+   miniImagen: img/tile_orange.png
+   imagenBoton: img/boton-castillo.png
+   ancho_base: 8
+   alto_base : 8
+   pixel_ref_x: 280
+   pixel_ref_y: 177
+   fps: 0
+   ancho_frame: 500
+   alto_frame: 422
+   vida_inicial: 10000
+   escudo: 10
+   escudo_distancia: 100
+   costo_oro: 1000
+   costo_piedra: 5000
+   costo_arbol: 3000
+   costo_comida: 0 
+ 
+ - nombre: casa
+   categoria: building
+   imagen: img/casa2x2.png
+   miniImagen: img/tile_orange.png
+   imagenBoton: img/boton-casa.png
+   ancho_base: 5
+   alto_base : 4
+   pixel_ref_x: 123
+   pixel_ref_y: 22
+   creables:
+   - aldeano
+   vida_inicial: 1000
+   escudo: 1
+   escudo_distancia: 10
+   costo_oro: 0
+   costo_piedra: 0
+   costo_arbol: 100
+   costo_comida: 0
+
+ - nombre: arqueria
+   categoria: building
+   imagen: img/archeryRange.png
+   miniImagen: img/tile_orange.png
+   imagenBoton: img/boton-arqueria.png
+   ancho_base: 6
+   alto_base : 5
+   pixel_ref_x: 184
+   pixel_ref_y: 73
+   creables:
+   - lancero
+   - ballestero  
+   vida_inicial: 2000
+   escudo: 1
+   escudo_distancia: 10
+   costo_oro: 0
+   costo_piedra: 50
+   costo_arbol: 150
+   costo_comida: 0
+   
+ - nombre: barraca
+   categoria: building
+   imagen: img/barracks.png
+   miniImagen: img/tile_orange.png
+   imagenBoton: img/boton-barracks.png
+   ancho_base: 5
+   alto_base : 5
+   pixel_ref_x: 170
+   pixel_ref_y: 92
+   creables:
+   - soldado
+   vida_inicial: 2000
+   escudo: 1
+   escudo_distancia: 10
+   costo_oro: 0
+   costo_piedra: 100
+   costo_arbol: 200
+   costo_comida: 0
+
+ - nombre: establo
+   categoria: building
+   imagen: img/stable.png
+   miniImagen: img/tile_orange.png
+   imagenBoton: img/boton-establo.png
+   ancho_base: 6
+   alto_base : 6
+   pixel_ref_x: 192
+   pixel_ref_y: 92
+   creables:
+   - caballero
+   vida_inicial: 2000
+   escudo: 1
+   escudo_distancia: 10
+   costo_oro: 0
+   costo_piedra: 200
+   costo_arbol: 200
+   costo_comida: 0
+   
+ - nombre: taller de maquinas de asedio
+   categoria: building
+   imagen: img/siegecamp.png
+   miniImagen: img/tile_orange.png
+   imagenBoton: img/boton-siegecamp.png
+   ancho_base: 7
+   alto_base : 5
+   pixel_ref_x: 150
+   pixel_ref_y: 65
+   creables:
+   - bombardero
+   vida_inicial: 2000
+   escudo: 1
+   escudo_distancia: 10
+   costo_oro: 0
+   costo_piedra: 50
+   costo_arbol: 200
+   costo_comida: 0
+
+ - nombre: molino
+   categoria: building
+   imagen: img/whatermill.png
+   miniImagen: img/tile_orange.png
+   imagenBoton: img/boton-molino.png
+   ancho_base: 3
+   alto_base : 3
+   pixel_ref_x: 136
+   pixel_ref_y: 64
+   fps: 10
+   ancho_frame: 200
+   alto_frame: 145
+   vida_inicial: 500
+   escudo: 1
+   escudo_distancia: 1
+   costo_oro: 0
+   costo_piedra: 0
+   costo_arbol: 100
+   costo_comida: 0
+
+ - nombre: soldado
+   categoria: warrior
+   imagen: img/soldadoRomanoCaminando.png
+   imagenInteractuando: img/soldadoRomanoAtacando.png
+   imagenDeshabilitado: img/soldadoAge.png
+   miniImagen: img/tile_red.png
+   imagenBoton: img/boton-soldadoRomano.png
+   ancho_base: 1
+   alto_base : 1
+   pixel_ref_x: 20
+   pixel_ref_y: 38
+   alto_frame_int: 51
+   ancho_frame_int: 61
+   pixel_ref_x_int: 28
+   pixel_ref_y_int: 42
+   fps: 35
+   delay: 0
+   alto_frame: 45
+   ancho_frame: 38
+   mini_map_pixel_ref_type: 1
+   alcance: 1
+   vida_inicial: 100
+   poder_ataque: 5
+   escudo: 5
+   escudo_distancia: 5
+   costo_oro: 10
+   costo_piedra: 0
+   costo_arbol: 0
+   costo_comida: 50
+   
+ - nombre: aldeano
+   categoria: worker
+   imagen: img/aldeana_caminando.png
+   imagenInteractuando: img/aldeanaTrabajando.png
+   imagenDeshabilitado: img/soldadoAge.png
+   miniImagen: img/tile_red.png
+   imagenBoton: img/boton-aldeano.png
+   ancho_base: 1
+   alto_base : 1
+   pixel_ref_x: 14
+   pixel_ref_y: 32
+   alto_frame: 40
+   ancho_frame: 24
+   alto_frame_int: 72
+   ancho_frame_int: 70
+   pixel_ref_x_int: 42
+   pixel_ref_y_int: 50
+   fps: 35
+   delay: 0
+   mini_map_pixel_ref_type: 1
+   creables:
+   - molino
+   - casa
+   - arqueria
+   - barraca
+   - taller de maquinas de asedio
+   - establo
+   alcance: 1
+   vida_inicial: 50
+   poder_ataque: 0
+   costo_oro: 0
+   costo_piedra: 0
+   costo_arbol: 0
+   costo_comida: 50
+   
+ - nombre: caballero
+   categoria: warrior
+   imagen: img/caballoCaminando.png
+   imagenInteractuando: img/caballoAtacando.png
+   imagenDeshabilitado: img/soldadoAge.png
+   miniImagen: img/tile_red.png
+   imagenBoton: img/boton-caballo.png
+   ancho_base: 1
+   alto_base : 1
+   pixel_ref_x: 40
+   pixel_ref_y: 84
+   alto_frame_int: 103
+   ancho_frame_int: 116
+   pixel_ref_x_int: 74
+   pixel_ref_y_int: 84
+   fps: 35
+   delay: 0
+   alto_frame: 121
+   ancho_frame: 93
+   mini_map_pixel_ref_type: 1
+   alcance: 1
+   vida_inicial: 200
+   poder_ataque: 10
+   escudo: 10
+   escudo_distancia: 10
+   costo_oro: 50
+   costo_piedra: 0
+   costo_arbol: 0
+   costo_comida: 100
+   
+ - nombre: ballestero
+   categoria: warrior
+   imagen: img/ballesteroCaminando.png
+   imagenInteractuando: img/ballesteroAtacando.png
+   imagenDeshabilitado: img/soldadoAge.png
+   miniImagen: img/tile_red.png
+   imagenBoton: img/boton-ballestero.png
+   ancho_base: 1
+   alto_base : 1
+   pixel_ref_x: 22
+   pixel_ref_y: 38
+   fps: 35
+   delay: 0
+   alto_frame: 49
+   ancho_frame: 38
+   alto_frame_int: 50
+   ancho_frame_int: 48
+   pixel_ref_x_int: 24
+   pixel_ref_y_int: 42
+   mini_map_pixel_ref_type: 1
+   alcance: 3
+   vida_inicial: 100
+   poder_ataque: 3
+   escudo: 2
+   escudo_distancia: 20
+   costo_oro: 5
+   costo_piedra: 0
+   costo_arbol: 10
+   costo_comida: 50
+   
+ - nombre: rey
+   categoria: warrior
+   imagen: img/cabExploradorCaminando.png
+   imagenDeshabilitado: img/soldadoAge.png
+   miniImagen: img/tile_red.png
+   ancho_base: 1
+   alto_base : 1
+   pixel_ref_x: 45
+   pixel_ref_y: 68
+   fps: 35
+   delay: 0
+   alto_frame: 94
+   ancho_frame: 89
+   mini_map_pixel_ref_type: 1
+   alcance: 1
+   vida_inicial: 500
+   poder_ataque: 0
+   escudo: 20
+   escudo_distancia: 20
+   costo_oro: 0
+   costo_piedra: 0
+   costo_arbol: 0
+   costo_comida: 0
+
+ - nombre: bombardero
+   categoria: warrior
+   imagen: img/bombarderoCaminando.png
+   imagenInteractuando: img/bombarderoAtacando.png
+   imagenDeshabilitado: img/soldadoAge.png
+   miniImagen: img/tile_red.png
+   imagenBoton: img/boton-bombardero.png
+   ancho_base: 1
+   alto_base : 1
+   pixel_ref_x: 38
+   pixel_ref_y: 40
+   fps: 35
+   delay: 0
+   alto_frame: 53
+   ancho_frame: 57
+   alto_frame_int: 53
+   ancho_frame_int: 57
+   pixel_ref_x_int: 27
+   pixel_ref_y_int: 44
+   mini_map_pixel_ref_type: 1
+   alcance: 10
+   vida_inicial: 200
+   poder_ataque: 50
+   escudo: 2
+   escudo_distancia: 10 
+   costo_oro: 200
+   costo_piedra: 10
+   costo_arbol: 0
+   costo_comida: 50
+   
+ - nombre: lancero
+   categoria: warrior
+   imagen: img/lanceroCaminando.png
+   imagenInteractuando: img/lanceroAtacando.png
+   imagenDeshabilitado: img/soldadoAge.png
+   miniImagen: img/tile_red.png
+   imagenBoton: img/boton-lancero.png
+   ancho_base: 1
+   alto_base : 1
+   pixel_ref_x: 44
+   pixel_ref_y: 58
+   fps: 35
+   delay: 0
+   alto_frame: 66
+   ancho_frame: 65
+   alto_frame_int: 81
+   ancho_frame_int: 78
+   pixel_ref_x_int: 40
+   pixel_ref_y_int: 60
+   mini_map_pixel_ref_type: 1
+   alcance: 5
+   vida_inicial: 75
+   poder_ataque: 2
+   escudo: 8
+   escudo_distancia: 2
+   costo_oro: 10
+   costo_piedra: 0
+   costo_arbol: 10
+   costo_comida: 50
+ 
+ - nombre: bandera
+   categoria: building
+   imagen: img/bandera.png
+   miniImagen: img/tile_orange.png
+   imagenBoton: img/boton-molino.png
+   ancho_base: 1
+   alto_base : 1
+   pixel_ref_x: 0
+   pixel_ref_y: 40
+   fps: 10
+   ancho_frame: 43
+   alto_frame: 56
+   vida_inicial: 1
+   
+escenario:
+ - nombre: orleans
+   size_x: 70
+   size_y: 70
+   tipo: bandera   
+
+   entidades:
+   
+   - [x: 7, y: 10, tipo: aldeano, equipo: RED]
+   - [x: 16, y: 10, tipo: aldeano, equipo: RED]
+   - [x: 16, y: 14, tipo: aldeano, equipo: RED]
+   - [x: 8, y: 14, tipo: aldeano, equipo: RED]
+   - [x: 9, y: 14, tipo: soldado, equipo: RED]
+   - [x: 10, y: 10, tipo: bandera, equipo: RED]
+   - [x: 9, y: 9, tipo: caballero, equipo: RED]
+   - [x: 11, y: 11, tipo: caballero, equipo: RED]
+   - [x: 9, y: 10, tipo: caballero, equipo: RED]
+   - [x: 10, y: 9, tipo: caballero, equipo: RED]
+   - [x: 22, y: 10, tipo: oro] 
+   - [x: 22, y: 9, tipo: oro]
+   - [x: 21, y: 10, tipo: oro]
+   - [x: 20, y: 10, tipo: oro]
+   - [x: 21, y: 9, tipo: oro]
+   - [x: 22, y: 5, tipo: piedra] 
+   - [x: 22, y: 4, tipo: piedra]
+   - [x: 21, y: 5, tipo: piedra]
+   - [x: 20, y: 5, tipo: piedra]
+   - [x: 21, y: 4, tipo: piedra]
+   - [x: 2, y: 15, tipo: comida]
+   - [x: 2, y: 14, tipo: comida]
+   - [x: 2, y: 13, tipo: comida]
+   - [x: 3, y: 16, tipo: comida]
+   - [x: 3, y: 15, tipo: comida]
+   - [x: 3, y: 14, tipo: comida]
+   - [x: 3, y: 13, tipo: comida]
+   - [x: 4, y: 14, tipo: comida]
+   - [x: 3, y: 10, tipo: arbol]
+   - [x: 2, y: 10, tipo: arbol]
+   - [x: 1, y: 10, tipo: arbol]
+   - [x: 1, y: 9, tipo: arbol]
+   - [x: 1, y: 8, tipo: arbol]
+   - [x: 1, y: 7, tipo: arbol]
+   - [x: 1, y: 6, tipo: arbol]
+   - [x: 1, y: 5, tipo: arbol]
+   - [x: 1, y: 4, tipo: arbol]
+   - [x: 3, y: 9, tipo: arbol]
+   - [x: 3, y: 8, tipo: arbol]
+   - [x: 3, y: 7, tipo: arbol]
+   - [x: 3, y: 6, tipo: arbol]
+   - [x: 2, y: 11, tipo: arbol]
+   - [x: 2, y: 9, tipo: arbol]
+   - [x: 2, y: 8, tipo: arbol]
+   - [x: 2, y: 7, tipo: arbol]
+   - [x: 2, y: 6, tipo: arbol]
+   - [x: 2, y: 5, tipo: arbol]
+   - [x: 2, y: 4, tipo: arbol]
+   
+   
+   - [x: 55, y: 55, tipo: aldeano, equipo: BLUE]
+   - [x: 57, y: 55, tipo: aldeano, equipo: BLUE]
+   - [x: 57, y: 57, tipo: aldeano, equipo: BLUE]
+   - [x: 55, y: 57, tipo: aldeano, equipo: BLUE]
+   - [x: 55, y: 60, tipo: soldado, equipo: BLUE]
+   - [x: 60, y: 55, tipo: soldado, equipo: BLUE]
+   - [x: 60, y: 60, tipo: bandera, equipo: BLUE]
+   - [x: 58, y: 62, tipo: caballero, equipo: BLUE]
+   - [x: 58, y: 58, tipo: caballero, equipo: BLUE]
+   - [x: 62, y: 62, tipo: caballero, equipo: BLUE]
+   - [x: 62, y: 58, tipo: caballero, equipo: BLUE]
+   - [x: 48, y: 60, tipo: oro] 
+   - [x: 48, y: 61, tipo: oro]
+   - [x: 49, y: 60, tipo: oro]
+   - [x: 50, y: 60, tipo: oro]
+   - [x: 49, y: 61, tipo: oro]
+   - [x: 48, y: 65, tipo: piedra] 
+   - [x: 48, y: 66, tipo: piedra]
+   - [x: 49, y: 65, tipo: piedra]
+   - [x: 50, y: 65, tipo: piedra]
+   - [x: 49, y: 66, tipo: piedra]
+   - [x: 68, y: 55, tipo: comida]
+   - [x: 68, y: 56, tipo: comida]
+   - [x: 68, y: 57, tipo: comida]
+   - [x: 67, y: 54, tipo: comida]
+   - [x: 67, y: 55, tipo: comida]
+   - [x: 67, y: 56, tipo: comida]
+   - [x: 67, y: 57, tipo: comida]
+   - [x: 66, y: 56, tipo: comida]
+   - [x: 67, y: 60, tipo: arbol]
+   - [x: 68, y: 60, tipo: arbol]
+   - [x: 69, y: 60, tipo: arbol]
+   - [x: 69, y: 61, tipo: arbol]
+   - [x: 69, y: 62, tipo: arbol]
+   - [x: 69, y: 63, tipo: arbol]
+   - [x: 69, y: 64, tipo: arbol]
+   - [x: 69, y: 65, tipo: arbol]
+   - [x: 69, y: 66, tipo: arbol]
+   - [x: 67, y: 61, tipo: arbol]
+   - [x: 67, y: 62, tipo: arbol]
+   - [x: 67, y: 63, tipo: arbol]
+   - [x: 67, y: 64, tipo: arbol]
+   - [x: 68, y: 59, tipo: arbol]
+   - [x: 68, y: 61, tipo: arbol]
+   - [x: 68, y: 62, tipo: arbol]
+   - [x: 68, y: 63, tipo: arbol]
+   - [x: 68, y: 64, tipo: arbol]
+   - [x: 68, y: 65, tipo: arbol]
+   - [x: 68, y: 66, tipo: arbol]
+
+   - [x: 8, y: 55, tipo: aldeano, equipo: YELLOW]
+   - [x: 10, y: 55, tipo: aldeano, equipo: YELLOW]
+   - [x: 12, y: 55, tipo: aldeano, equipo: YELLOW]
+   - [x: 14, y: 56, tipo: aldeano, equipo: YELLOW]
+   - [x: 16, y: 56, tipo: soldado, equipo: YELLOW]
+   - [x: 10, y: 60, tipo: bandera, equipo: YELLOW]
+   - [x: 9, y: 58, tipo: caballero, equipo: YELLOW]
+   - [x: 11, y: 58, tipo: caballero, equipo: YELLOW]
+   - [x: 9, y: 63, tipo: caballero, equipo: YELLOW]
+   - [x: 11, y: 63, tipo: caballero, equipo: YELLOW]
+   - [x: 1, y: 67, tipo: oro] 
+   - [x: 2, y: 67, tipo: oro]
+   - [x: 1, y: 68, tipo: oro]
+   - [x: 2, y: 68, tipo: oro]
+   - [x: 1, y: 66, tipo: oro]
+   - [x: 1, y: 53, tipo: piedra] 
+   - [x: 2, y: 53, tipo: piedra]
+   - [x: 3, y: 53, tipo: piedra]
+   - [x: 4, y: 53, tipo: piedra]
+   - [x: 5, y: 53, tipo: piedra]
+   - [x: 16, y: 53, tipo: comida]
+   - [x: 15, y: 53, tipo: comida]
+   - [x: 14, y: 53, tipo: comida]
+   - [x: 16, y: 52, tipo: comida]
+   - [x: 15, y: 52, tipo: comida]
+   - [x: 14, y: 52, tipo: comida]
+   - [x: 16, y: 51, tipo: comida]
+   - [x: 15, y: 51, tipo: comida]
+   - [x: 14, y: 65, tipo: arbol]
+   - [x: 15, y: 65, tipo: arbol]
+   - [x: 16, y: 65, tipo: arbol]
+   - [x: 17, y: 65, tipo: arbol]
+   - [x: 18, y: 65, tipo: arbol]
+   - [x: 14, y: 64, tipo: arbol]
+   - [x: 15, y: 64, tipo: arbol]
+   - [x: 16, y: 64, tipo: arbol]
+   - [x: 17, y: 64, tipo: arbol]
+   - [x: 18, y: 64, tipo: arbol]
+   - [x: 14, y: 63, tipo: arbol]
+   - [x: 15, y: 63, tipo: arbol]
+   - [x: 16, y: 63, tipo: arbol]
+   - [x: 17, y: 63, tipo: arbol]
+   - [x: 18, y: 63, tipo: arbol]
+   - [x: 14, y: 62, tipo: arbol]
+   - [x: 15, y: 62, tipo: arbol]
+   - [x: 16, y: 62, tipo: arbol]
+   - [x: 17, y: 62, tipo: arbol]
+   - [x: 18, y: 62, tipo: arbol]
+
