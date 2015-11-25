@@ -68,7 +68,7 @@ private:
 	Team team;
 	bool active;
 	list<string> resourceNames;
-
+	static const int INITIAL_RESOURCES = 500;
 };
 
 #endif /* MODELS_USER_H_ */

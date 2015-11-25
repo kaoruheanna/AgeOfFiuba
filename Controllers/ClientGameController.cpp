@@ -537,6 +537,7 @@ void ClientGameController::actualizarEntidad(Entity* tempEntity) {
 		existingEntity = this->escenario->crearYAgregarNuevaEntidad(tempEntity->getNombre(),logicPosition,tempEntity->getTeamString(),false);
 		if (existingEntity == NULL){
 			Log().Get(TAG) << "No se pudo crear la entidad. Dejo q crashee para poder rastrearlo si pasa";
+			return;
 		}
 		existingEntity->setId(tempEntity->getId());
 		isNewEntity = true;
