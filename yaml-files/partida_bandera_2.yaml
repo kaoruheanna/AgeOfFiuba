@@ -20,6 +20,7 @@ tipos:
    alto_base : 1
    pixel_ref_x: 43
    pixel_ref_y: 9
+   vida_inicial: 2000
    
  - nombre: comida
    categoria: resource
@@ -29,6 +30,7 @@ tipos:
    alto_base : 1
    pixel_ref_x: 42
    pixel_ref_y: 16
+   vida_inicial: 2000
    
  - nombre: oro
    categoria: resource
@@ -38,6 +40,7 @@ tipos:
    alto_base : 1
    pixel_ref_x: 40
    pixel_ref_y: 8
+   vida_inicial: 2000
 
  - nombre: casa
    categoria: building
@@ -293,6 +296,7 @@ tipos:
    delay: 1
    alto_frame: 64
    ancho_frame: 72
+   vida_inicial: 2000
 
  - nombre: centro
    categoria: building
