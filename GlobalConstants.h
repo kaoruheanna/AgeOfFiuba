@@ -53,8 +53,11 @@ const std::string NOMBRE_BANDERA = "bandera";
 //recursos
 const std::string RECURSO_COMIDA = "comida";
 const std::string RECURSO_MADERA = "madera";
+const std::string RECURSO_ARBOL = "arbol"; // se tendria que cambiar por madera
 const std::string RECURSO_PIEDRA = "piedra";
 const std::string RECURSO_ORO = "oro";
+
+const int RESOURCE_HARDNESS = 50;
 
 const int  FOG_VISIBLE = 255;
 const int  FOG_VISITED = 128;
