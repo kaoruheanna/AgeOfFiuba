@@ -427,7 +427,7 @@ escenario:
  - nombre: orleans
    size_x: 70
    size_y: 70
-   tipo: bandera   
+   tipo: rey   
 
    entidades:
    
@@ -436,7 +436,7 @@ escenario:
    - [x: 16, y: 14, tipo: aldeano, equipo: RED]
    - [x: 8, y: 14, tipo: aldeano, equipo: RED]
    - [x: 9, y: 14, tipo: soldado, equipo: RED]
-   - [x: 10, y: 10, tipo: bandera, equipo: RED]
+   - [x: 10, y: 10, tipo: rey, equipo: RED]
    - [x: 9, y: 9, tipo: caballero, equipo: RED]
    - [x: 11, y: 11, tipo: caballero, equipo: RED]
    - [x: 9, y: 10, tipo: caballero, equipo: RED]
