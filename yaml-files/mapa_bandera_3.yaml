@@ -64,7 +64,7 @@ tipos:
    ancho_frame: 72
    vida_inicial: 500
 
- - nombre: centro
+ - nombre: centro urbano
    categoria: building
    imagen: img/castle.png
    miniImagen: img/tile_orange.png
@@ -79,7 +79,6 @@ tipos:
    vida_inicial: 10000
    escudo: 10
    escudo_distancia: 100
-   poder_ataque: 0
    costo_oro: 1000
    costo_piedra: 5000
    costo_arbol: 3000
@@ -99,7 +98,6 @@ tipos:
    vida_inicial: 1000
    escudo: 1
    escudo_distancia: 10
-   poder_ataque: 0
    costo_oro: 0
    costo_piedra: 0
    costo_arbol: 100
@@ -120,7 +118,6 @@ tipos:
    vida_inicial: 2000
    escudo: 1
    escudo_distancia: 10
-   poder_ataque: 0
    costo_oro: 0
    costo_piedra: 50
    costo_arbol: 150
@@ -140,7 +137,6 @@ tipos:
    vida_inicial: 2000
    escudo: 1
    escudo_distancia: 10
-   poder_ataque: 0
    costo_oro: 0
    costo_piedra: 100
    costo_arbol: 200
@@ -160,7 +156,6 @@ tipos:
    vida_inicial: 2000
    escudo: 1
    escudo_distancia: 10
-   poder_ataque: 0
    costo_oro: 0
    costo_piedra: 200
    costo_arbol: 200
@@ -180,7 +175,6 @@ tipos:
    vida_inicial: 2000
    escudo: 1
    escudo_distancia: 10
-   poder_ataque: 0
    costo_oro: 0
    costo_piedra: 50
    costo_arbol: 200
@@ -201,7 +195,6 @@ tipos:
    vida_inicial: 500
    escudo: 1
    escudo_distancia: 1
-   poder_ataque: 0
    costo_oro: 0
    costo_piedra: 0
    costo_arbol: 100
@@ -378,9 +371,9 @@ tipos:
    mini_map_pixel_ref_type: 1
    alcance: 10
    vida_inicial: 200
-   poder_ataque: 50 
+   poder_ataque: 50
    escudo: 2
-   escudo_distancia: 10
+   escudo_distancia: 10 
    costo_oro: 200
    costo_piedra: 10
    costo_arbol: 0
@@ -537,75 +530,53 @@ escenario:
    - [x: 68, y: 64, tipo: arbol]
    - [x: 68, y: 65, tipo: arbol]
    - [x: 68, y: 66, tipo: arbol]
-   
-   - [x: 35, y: 35, tipo: arbol]
-   - [x: 33, y: 33, tipo: arbol]
-   - [x: 34, y: 34, tipo: arbol]
-   - [x: 36, y: 36, tipo: arbol]
-   - [x: 37, y: 37, tipo: arbol]
-   - [x: 35, y: 34, tipo: arbol]
-   - [x: 34, y: 35, tipo: arbol]
-   - [x: 36, y: 35, tipo: arbol]
-   - [x: 35, y: 36, tipo: arbol]
-   - [x: 34, y: 36, tipo: arbol]
-   - [x: 36, y: 34, tipo: arbol]
-   
-   - [x: 28, y: 35, tipo: arbol]
-   - [x: 26, y: 33, tipo: arbol]
-   - [x: 27, y: 34, tipo: arbol]
-   - [x: 29, y: 36, tipo: arbol]
-   - [x: 30, y: 37, tipo: arbol]
-   - [x: 28, y: 34, tipo: arbol]
-   - [x: 27, y: 35, tipo: arbol]
-   - [x: 29, y: 35, tipo: arbol]
-   - [x: 28, y: 36, tipo: arbol]
-   - [x: 27, y: 36, tipo: arbol]
-   - [x: 29, y: 34, tipo: arbol]
-   
-   - [x: 42, y: 35, tipo: arbol]
-   - [x: 40, y: 33, tipo: arbol]
-   - [x: 41, y: 34, tipo: arbol]
-   - [x: 43, y: 36, tipo: arbol]
-   - [x: 44, y: 37, tipo: arbol]
-   - [x: 42, y: 34, tipo: arbol]
-   - [x: 41, y: 35, tipo: arbol]
-   - [x: 43, y: 35, tipo: arbol]
-   - [x: 42, y: 36, tipo: arbol]
-   - [x: 41, y: 36, tipo: arbol]
-   - [x: 43, y: 34, tipo: arbol]
 
-   - [x: 35, y: 42, tipo: arbol]
-   - [x: 33, y: 40, tipo: arbol]
-   - [x: 34, y: 41, tipo: arbol]
-   - [x: 36, y: 43, tipo: arbol]
-   - [x: 37, y: 44, tipo: arbol]
-   - [x: 35, y: 42, tipo: arbol]
-   - [x: 34, y: 41, tipo: arbol]
-   - [x: 36, y: 43, tipo: arbol]
-   - [x: 35, y: 42, tipo: arbol]
-   - [x: 34, y: 41, tipo: arbol]
-   - [x: 36, y: 43, tipo: arbol]
-   
-   - [x: 35, y: 28, tipo: arbol]
-   - [x: 33, y: 26, tipo: arbol]
-   - [x: 34, y: 27, tipo: arbol]
-   - [x: 36, y: 29, tipo: arbol]
-   - [x: 37, y: 30, tipo: arbol]
-   - [x: 35, y: 28, tipo: arbol]
-   - [x: 34, y: 27, tipo: arbol]
-   - [x: 36, y: 29, tipo: arbol]
-   - [x: 35, y: 28, tipo: arbol]
-   - [x: 34, y: 27, tipo: arbol]
-   - [x: 36, y: 19, tipo: arbol]
-   
-   - [x: 31, y: 35, tipo: arbol]
-   - [x: 32, y: 33, tipo: arbol]
-   - [x: 38, y: 34, tipo: arbol]
-   - [x: 39, y: 36, tipo: arbol]
-   
-   - [x: 31, y: 39, tipo: arbol]
-   - [x: 32, y: 38, tipo: arbol]
-   - [x: 38, y: 32, tipo: arbol]
-   - [x: 39, y: 31, tipo: arbol]
-   
+   - [x: 8, y: 55, tipo: aldeano, equipo: GREEN]
+   - [x: 10, y: 55, tipo: aldeano, equipo: GREEN]
+   - [x: 12, y: 55, tipo: aldeano, equipo: GREEN]
+   - [x: 14, y: 56, tipo: aldeano, equipo: GREEN]
+   - [x: 16, y: 56, tipo: soldado, equipo: GREEN]
+   - [x: 10, y: 60, tipo: bandera, equipo: GREEN]
+   - [x: 9, y: 58, tipo: caballero, equipo: GREEN]
+   - [x: 11, y: 58, tipo: caballero, equipo: GREEN]
+   - [x: 9, y: 63, tipo: caballero, equipo: GREEN]
+   - [x: 11, y: 63, tipo: caballero, equipo: GREEN]
+   - [x: 1, y: 67, tipo: oro] 
+   - [x: 2, y: 67, tipo: oro]
+   - [x: 1, y: 68, tipo: oro]
+   - [x: 2, y: 68, tipo: oro]
+   - [x: 1, y: 66, tipo: oro]
+   - [x: 1, y: 53, tipo: piedra] 
+   - [x: 2, y: 53, tipo: piedra]
+   - [x: 3, y: 53, tipo: piedra]
+   - [x: 4, y: 53, tipo: piedra]
+   - [x: 5, y: 53, tipo: piedra]
+   - [x: 16, y: 53, tipo: comida]
+   - [x: 15, y: 53, tipo: comida]
+   - [x: 14, y: 53, tipo: comida]
+   - [x: 16, y: 52, tipo: comida]
+   - [x: 15, y: 52, tipo: comida]
+   - [x: 14, y: 52, tipo: comida]
+   - [x: 16, y: 51, tipo: comida]
+   - [x: 15, y: 51, tipo: comida]
+   - [x: 14, y: 65, tipo: arbol]
+   - [x: 15, y: 65, tipo: arbol]
+   - [x: 16, y: 65, tipo: arbol]
+   - [x: 17, y: 65, tipo: arbol]
+   - [x: 18, y: 65, tipo: arbol]
+   - [x: 14, y: 64, tipo: arbol]
+   - [x: 15, y: 64, tipo: arbol]
+   - [x: 16, y: 64, tipo: arbol]
+   - [x: 17, y: 64, tipo: arbol]
+   - [x: 18, y: 64, tipo: arbol]
+   - [x: 14, y: 63, tipo: arbol]
+   - [x: 15, y: 63, tipo: arbol]
+   - [x: 16, y: 63, tipo: arbol]
+   - [x: 17, y: 63, tipo: arbol]
+   - [x: 18, y: 63, tipo: arbol]
+   - [x: 14, y: 62, tipo: arbol]
+   - [x: 15, y: 62, tipo: arbol]
+   - [x: 16, y: 62, tipo: arbol]
+   - [x: 17, y: 62, tipo: arbol]
+   - [x: 18, y: 62, tipo: arbol]
 
