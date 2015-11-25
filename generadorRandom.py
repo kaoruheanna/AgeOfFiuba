@@ -23,7 +23,8 @@
 #  
 import random
 
-def generarMapa (ancho, alto, nJugadores):
+def generarMapa (ancho, alto):
+	
 	
 	
 	
