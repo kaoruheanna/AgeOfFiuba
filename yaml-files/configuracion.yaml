@@ -392,7 +392,21 @@ tipos:
    costo_piedra: 0
    costo_arbol: 10
    costo_comida: 50
-
+ 
+ - nombre: bandera
+   categoria: building
+   imagen: img/bandera.png
+   miniImagen: img/tile_orange.png
+   imagenBoton: img/boton-molino.png
+   ancho_base: 1
+   alto_base : 1
+   pixel_ref_x: 0
+   pixel_ref_y: 40
+   fps: 10
+   ancho_frame: 43
+   alto_frame: 56
+   vida_inicial: 1
+   
 escenario:
  - nombre: orleans
    size_x: 100

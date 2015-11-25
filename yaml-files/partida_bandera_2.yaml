@@ -410,8 +410,8 @@ tipos:
 
 escenario:
  - nombre: captura_la_bandera
-   size_x: 40
-   size_y: 40
+   size_x: 100
+   size_y: 100
    tipo: bandera
 
    entidades:
@@ -419,6 +419,7 @@ escenario:
    - [x: 0, y: 0, tipo: bandera, equipo: RED]
    - [x: 5, y: 5, tipo: aldeano, equipo: RED]
    - [x: 5, y: 6, tipo: aldeano, equipo: RED]
+   - [x: 10, y: 10, tipo: centro urbano, equipo: RED]
    - [x: 6, y: 6, tipo: comida]
    - [x: 6, y: 7, tipo: comida]
    - [x: 7, y: 6, tipo: comida]
@@ -437,7 +438,9 @@ escenario:
    - [x: 32, y: 32, tipo: comida]
    - [x: 34, y: 34, tipo: aldeano, equipo: BLUE]
    - [x: 34, y: 35, tipo: aldeano, equipo: BLUE]
+   - [x: 35, y: 35, tipo: caballero, equipo: BLUE]
    - [x: 36, y: 36, tipo: bandera, equipo: BLUE]
+   - [x: 40, y: 36, tipo: centro urbano, equipo: BLUE]
    
    protagonista:
    - tipo: soldado
