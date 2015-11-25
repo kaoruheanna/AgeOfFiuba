@@ -32,7 +32,7 @@ ScreenMenu::ScreenMenu(int width, int height) {
 	this->actionsMenu = new ActionsMenu(
 		elementsX,
 		MENU_SPACING,
-		width/3,
+		width * 0.4,
 		elementsHeight
 	);
 }
