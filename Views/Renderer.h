@@ -65,7 +65,7 @@ public:
 	void drawTextureInRect(SDL_Texture *texture,SDL_Rect rect);
 	void drawActionButtonWithNameInRect(string name, SDL_Rect rect,bool enabled);
 	SDL_Point mapToWindowPoint(SDL_Point mapPoint);
-	SDL_Point windowToMapPoint(SDL_Point windowPoint);
+	SDL_Point windowToMapPoint(SDL_Point windowPoint); // convierte pixel a unidad logica del mapa
 	SDL_Point proyectedPoint(SDL_Point mapPoint, SDL_Point plano);
 	bool canDraw();
 	void addView(View* view);

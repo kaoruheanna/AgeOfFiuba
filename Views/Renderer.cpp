@@ -439,8 +439,13 @@ SDL_Point Renderer::mapToWindowPoint(SDL_Point mapPoint){
 	return windowPoint;
 }
 
+// convierte pixel a unidad logica del mapa
 SDL_Point Renderer::windowToMapPoint(SDL_Point windowPoint){
-	SDL_Point centeredWindow = {windowPoint.x, windowPoint.y};
+	int x = windowPoint.x;
+	// para que tenga en cuenta donde empieza el mapa
+	int y = windowPoint.y - this->escenarioRect.y;
+
+	SDL_Point centeredWindow = {x,y};
 	// Ajustar la pantalla a la posicion del 0,0
 	centeredWindow.x -= this->mainTilePosition.x;
 	centeredWindow.y -= this->mainTilePosition.y;
@@ -809,7 +814,7 @@ void Renderer::clickEvent(int x, int y, bool leftClick, RendererInteractionDeleg
 		if (leftClick){
 			delegate->leftClickEnEscenario(x,y);
 		} else {
-			delegate->rightClickEnEscenario(x,y-32); //TODO hay que ver si esta bien el click.
+			delegate->rightClickEnEscenario(x,y);
 		}
 		return;
 	}
@@ -835,6 +840,9 @@ void Renderer::sendMousePosition(int x,int y){
 }
 
 void Renderer::dragLeftClickEvent(int xi, int yi, int xf, int yf){
+	yi -= this->escenarioRect.y;
+	yf -= this->escenarioRect.y;
+
 	if (!this->isPixelInEscenario(xi,yi)){
 		return;
 	}
