@@ -182,18 +182,11 @@ SDL_Point MobileModel::getNextPosition(){
 }
 
 void MobileModel::setPath(queue<SDL_Point> new_path){
-	this->clearPath();
-	while(!new_path.empty()){
-		SDL_Point point = new_path.front();
-		new_path.pop();
-		this->path.push(point);
-	}
+	this->path = new_path;
 }
 
 void MobileModel::clearPath(){
-	while(!this->path.empty()){
-		this->path.pop();
-	}
+	this->path = queue<SDL_Point>();
 }
 
 int MobileModel::getLargoCamino() {
