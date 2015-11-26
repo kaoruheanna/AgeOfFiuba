@@ -145,12 +145,18 @@ void MobileModel::addDestination(int destinationX, int destionationY){
 }
 
 SDL_Point MobileModel::getNextDestination(){
+	if(this->path.empty()){
+		return this->getPosicion();
+	}
 	SDL_Point destination = this->path.front();
 	this->path.pop();
 	return destination;
 }
 
 SDL_Point MobileModel::getFinalDestination(){
+	if(this->path.empty()){
+		return this->getPosicion();
+	}
 	SDL_Point destination = this->path.back();
 	return destination;
 }
@@ -176,12 +182,18 @@ SDL_Point MobileModel::getNextPosition(){
 }
 
 void MobileModel::setPath(queue<SDL_Point> new_path){
-	this->path.swap(new_path);
+	this->clearPath();
+	while(!new_path.empty()){
+		SDL_Point point = new_path.front();
+		new_path.pop();
+		this->path.push(point);
+	}
 }
 
 void MobileModel::clearPath(){
-	queue<SDL_Point,deque<SDL_Point>> empty;
-	this->path.swap(empty);
+	while(!this->path.empty()){
+		this->path.pop();
+	}
 }
 
 int MobileModel::getLargoCamino() {

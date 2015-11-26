@@ -20,6 +20,13 @@ class Mensajero;
 
 using namespace std;
 
+class EntidadAMover {
+public:
+	int entidadId;
+	SDL_Point destino;
+	string username;
+};
+
 class ServerGameController : public EscenarioDelagate, public Mensajero{
 public:
 	ServerGameController(GameConfiguration *config);
@@ -55,6 +62,7 @@ private:
 	GameConfiguration *config;
 	list<Mensajero*> mensajeros;
 	list<User*> usuarios;
+	list<EntidadAMover*> entidadesParaMover;
 
 	void loopEscenario();
 	void obtenerEventos();

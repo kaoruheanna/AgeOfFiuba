@@ -101,7 +101,21 @@ void ServerGameController::enviarComienzo() {
 }
 
 void ServerGameController::obtenerEventos() {
-
+	if(this->entidadesParaMover.empty()){
+		return;
+	}
+	list<EntidadAMover*> entidadesAMover(this->entidadesParaMover);
+	this->entidadesParaMover.clear();
+	while(!entidadesAMover.empty()){
+		EntidadAMover* entidadAMover = entidadesAMover.front();
+		entidadesAMover.pop_front();
+		MobileModel* oldModel = this->getMobileModelForUser(entidadAMover->entidadId, entidadAMover->username);
+		if(oldModel != NULL){
+			oldModel->stopInteracting();
+			this->escenario->moveEntityToPos(oldModel, entidadAMover->destino);
+		}
+		delete entidadAMover;
+	}
 }
 
 void ServerGameController::enviarEventos() {
@@ -202,15 +216,12 @@ void ServerGameController::actualizarProtagonista(){
 }
 
 void ServerGameController::moverEntidad(MobileModel* newModel, string username) {
-	// TODO volver a hacer sincronico
-	MobileModel* oldModel = this->getMobileModelForUser(newModel->getId(), username);
-	if(oldModel == NULL){
-		// TODO mandar error de que no le pertenece la entidad
-		return;
-	}
-	oldModel->stopInteracting();
-	SDL_Point destino = {newModel->getDestinationX(),newModel->getDestinationY()};
-	this->escenario->moveEntityToPos(oldModel,destino);
+	EntidadAMover* entidad = new EntidadAMover();
+	entidad->entidadId = newModel->getId();
+	entidad->username = string(username);
+	entidad->destino.x = newModel->getDestinationX();
+	entidad->destino.y = newModel->getDestinationY();
+	this->entidadesParaMover.push_back(entidad);
 }
 
 void ServerGameController::interactuar(int selectedEntityId, int targetEntityId) {
