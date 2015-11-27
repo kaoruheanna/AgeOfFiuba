@@ -261,7 +261,14 @@ void Escenario::loop() {
 
 			// Si se cruza con otro usuario, lo freno y borro el camino
 			if (this->tileOcupadoForEntity(newTile,model)){
-				Log().Get(TAG) << "Recalcular camino para " << model->getId() << " pos: " << oldPosition.x << "," << oldPosition.y;
+				// Espera hasta 10 loops por que se abra el camino (para que no funcione tan lento el juego)
+				model->setPosicion(oldPosition);
+
+				recalculoCount[model->getId()]++;
+				if(recalculoCount[model->getId()] > 10){
+					model->olvidarCamino();
+				}
+				/*Log().Get(TAG) << "Recalcular camino para " << model->getId() << " pos: " << oldPosition.x << "," << oldPosition.y;
 				SDL_Point destino = model->getFinalDestination();
 				model->setPosicion(oldPosition);
 				queue <SDL_Point> camino = this->getCaminoForMobileModel(oldPosition,destino,model);
@@ -278,7 +285,7 @@ void Escenario::loop() {
 					} else {
 						model->olvidarCamino();
 					}
-				}
+				}*/
 			} else {
 				actualizarPersonajes = true;
 			}
