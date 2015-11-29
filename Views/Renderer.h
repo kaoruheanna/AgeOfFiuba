@@ -32,6 +32,7 @@ class MiniView;
 class TopBar;
 class Cartel;
 class FutureBuildingView;
+class Entity;
 
 class RendererInteractionDelegate {
 public:
@@ -44,10 +45,13 @@ public:
 	virtual void checkSelectedInTeam(){};
 };
 
-struct DrawableWithState {
-	Drawable* drawable;
-	SDL_Rect rect;
-	bool hasRect;
+struct DrawableToOrder {
+	Drawable *drawable;
+	SDL_Point logicPosition;
+	bool hasClipRect;
+	SDL_Rect clipRect;
+	SDL_Point minTile;
+	SDL_Point maxTile;
 };
 
 class Renderer {
@@ -61,6 +65,7 @@ public:
 	void close();
 	void drawViews();
 	void draw(int mapPositionX, int mapPositionY, Drawable* drawable, bool admiteNublado); // draw Drawable
+	void draw(int mapPositionX, int mapPositionY, Drawable* drawable,bool admiteNublado, Entity* model);
 	void draw(SDL_Rect rect, SDL_Color color); // draw shape
 	void drawTextureInRect(SDL_Texture *texture,SDL_Rect rect);
 	void drawActionButtonWithNameInRect(string name, SDL_Rect rect,bool enabled);
@@ -100,7 +105,7 @@ private:
 	bool successfullInit;
 	SDL_Window* window;
 	SDL_Renderer* sdlRenderer;
-	list< pair<SDL_Point,DrawableWithState> > drawablesToPaint;
+	list<DrawableToOrder> drawablesToPaint;
 	std::map<std::string, Drawable*> drawablesByInstanceName;
 	std::map<std::string, Drawable*> drawablesInteractByInstanceName;
 	Drawable* missingImageDrawable;

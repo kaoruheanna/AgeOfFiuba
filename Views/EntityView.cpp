@@ -49,7 +49,7 @@ void EntityView::render(Renderer* renderer) {
 	SDL_Point point = this->getOrigin();
 	this->animationStatus = this->getDrawable()->getAnimation(this->animationStatus.direction,true,this->animationStatus);
 	this->getDrawable()->animate(this->animationStatus);
-	renderer->draw(point.x, point.y, this->getDrawable(), this->model->admiteNublado());
+	renderer->draw(point.x, point.y, this->getDrawable(), this->model->admiteNublado(),this->model);
 }
 
 bool EntityView::hasModelWithId(int id) {

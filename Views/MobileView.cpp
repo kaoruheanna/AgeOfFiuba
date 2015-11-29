@@ -59,7 +59,7 @@ void MobileView::render(Renderer* renderer) {
 	this->animationStatus = this->getDrawable()->getAnimation(currentDirection,this->model->isMoving() or this->model->isInteracting(),this->animationStatus);
 	SDL_Point point = this->getOrigin();
 	this->getDrawable()->animate(this->animationStatus);
-	renderer->draw(point.x, point.y, this->getDrawable(),false);
+	renderer->draw(point.x, point.y, this->getDrawable(),false,this->model);
 }
 
 MotionDirection MobileView::getMotionDirection(SDL_Point origen,SDL_Point destino, MotionDirection oldDirection){

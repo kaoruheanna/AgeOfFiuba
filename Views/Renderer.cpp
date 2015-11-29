@@ -17,6 +17,8 @@
 #include "TopBar/TopBar.h"
 #include "Cartel/Cartel.h"
 #include "FutureBuildingView.h"
+#include "../Models/Entity.h"
+#include "../Utils/EscenarioSingleton.h"
 
 const std::string TAG = "Renderer";
 const std::string SUFIJO_FUTURE_BUILDING = "-future";
@@ -310,13 +312,25 @@ void Renderer::close() {
 }
 
 // Start drawing from left to right scaning from top to bottom
-bool drawOrder (pair<SDL_Point, DrawableWithState> first,pair<SDL_Point, DrawableWithState> second) {
-	SDL_Point firstPoint = first.first;
-	SDL_Point secondPoint = second.first;
-	if((firstPoint.x + firstPoint.y) < (secondPoint.x + secondPoint.y)){
+bool drawOrder (DrawableToOrder firstToOrder,DrawableToOrder secondToOrder) {
+	if ((firstToOrder.maxTile.x <= secondToOrder.minTile.x)){
 		return true;
 	}
-	return (firstPoint.x < secondPoint.x);
+
+	if ((firstToOrder.maxTile.y <= secondToOrder.minTile.y)){
+		return true;
+	}
+
+	if ((firstToOrder.minTile.x >= secondToOrder.maxTile.x)){
+		return false;
+	}
+
+	if ((firstToOrder.minTile.y >= secondToOrder.maxTile.y)){
+		return false;
+	}
+
+	//Si llegue hasta aca se solapan en algun punto
+	return false;
 }
 
 void Renderer::drawViews() {
@@ -348,17 +362,18 @@ void Renderer::drawEscenario() {
 	// Order the views in the "paintor style" drawing
 	this->drawablesToPaint.sort(drawOrder);
 
-	list< pair<SDL_Point, DrawableWithState> >::iterator toPaint;
-	for(toPaint = this->drawablesToPaint.begin(); toPaint != this->drawablesToPaint.end(); ++toPaint) {
-		Drawable* drawable = toPaint->second.drawable;
-		SDL_Point windowPoint = this->mapToWindowPoint(toPaint->first);
+	list<DrawableToOrder>::iterator it;
+	for(it = this->drawablesToPaint.begin(); it != this->drawablesToPaint.end(); ++it) {
+		DrawableToOrder toOrder = *it;
+		Drawable* drawable = toOrder.drawable;
+		SDL_Point windowPoint = this->mapToWindowPoint(toOrder.logicPosition);
 		SDL_Rect renderQuad = drawable->getRectToDraw(windowPoint.x, windowPoint.y);
 		SDL_Rect* clipRect = NULL;
-		if(toPaint->second.hasRect){
-			clipRect = &toPaint->second.rect;
+		if(toOrder.hasClipRect){
+			clipRect = &(toOrder.clipRect);
 		}
 
-		SDL_Point currentTile = { toPaint->first.x / TILE_HEIGHT_PIXELS, toPaint->first.y / TILE_HEIGHT_PIXELS };
+		SDL_Point currentTile = { toOrder.logicPosition.x / TILE_HEIGHT_PIXELS, toOrder.logicPosition.y / TILE_HEIGHT_PIXELS };
 		EstadoDeVisibilidad currentTileState = this->fog->getEstado(currentTile.x,currentTile.y);
 
 		if (currentTileState != OCULTO){
@@ -498,6 +513,10 @@ bool Renderer::sonTilesIguales(int tileX, int tileY, int selectedTileX, int sele
 
 // draw Drawable
 void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable,bool admiteNublado) {
+	this->draw(mapPositionX,mapPositionY,drawable,admiteNublado,NULL);
+}
+
+void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable,bool admiteNublado, Entity* model) {
 	SDL_Point mapRect = { mapPositionX, mapPositionY };
 	SDL_Point windowPoint = this->mapToWindowPoint(mapRect);
 	SDL_Rect renderQuad = drawable->getRectToDraw(windowPoint.x, windowPoint.y);
@@ -521,13 +540,22 @@ void Renderer::draw(int mapPositionX, int mapPositionY, Drawable* drawable,bool 
 
 	if(this->drawablesByInstanceName.find(TILE_DEFAULT_NAME)->second != drawable){
 		// si no es un tile, lo guarda para dibujar despues
-		DrawableWithState state;
-		state.drawable = drawable;
-		state.hasRect = (drawable->getClipRect() != NULL);
-		if(state.hasRect){
-			state.rect = *drawable->getClipRect();
+		DrawableToOrder toOrder;
+		toOrder.logicPosition = mapRect;
+		toOrder.drawable = drawable;
+		toOrder.hasClipRect = (drawable->getClipRect() != NULL);
+		if(toOrder.hasClipRect){
+			toOrder.clipRect = *drawable->getClipRect();
 		}
-		this->drawablesToPaint.push_back(pair<SDL_Point, DrawableWithState>(mapRect, state));
+
+		Escenario *escenario = EscenarioSingleton::get();
+		if ((model != NULL) && (escenario != NULL)){
+			std::pair<SDL_Point,SDL_Point> tilesForEntity = escenario->getTilesCoordinatesForEntity(model);
+			toOrder.minTile = tilesForEntity.first;
+			toOrder.maxTile = tilesForEntity.second;
+		}
+
+		this->drawablesToPaint.push_back(toOrder);
 		return;
 	}
 
